@@ -118,6 +118,8 @@ class QuizMaster_Controller_Front
     public function handleShortCode($id)
     {
         $view = new QuizMaster_View_FrontQuiz();
+        $view = apply_filters( 'quizmaster_view_load', $view, 'FrontQuiz' );
+        $view = apply_filters( 'quizmaster_view_load_front_quiz', $view );
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
@@ -156,6 +158,7 @@ class QuizMaster_Controller_Front
         $view->category = $categoryMapper->fetchByQuiz($quiz->getId());
         $view->forms = $formMapper->fetch($quiz->getId());
 
+        $view = apply_filters( 'quizmaster_view_before_render', $view );
         if ($maxQuestion) {
             $view->showMaxQuestion();
         } else {
