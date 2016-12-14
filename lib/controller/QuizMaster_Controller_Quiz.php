@@ -55,7 +55,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         add_screen_option('per_page', array(
             'label' => __('Quiz', 'quizmaster'),
             'default' => 20,
-            'option' => 'wp_pro_quiz_quiz_overview_per_page'
+            'option' => 'quizmaster_quiz_overview_per_page'
         ));
     }
 
@@ -275,7 +275,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $m = new QuizMaster_Model_QuizMapper();
         $categoryMapper = new QuizMaster_Model_CategoryMapper();
 
-        $per_page = (int)get_user_option('wp_pro_quiz_quiz_overview_per_page');
+        $per_page = (int)get_user_option('quizmaster_quiz_overview_per_page');
         if (empty($per_page) || $per_page < 1) {
             $per_page = 20;
         }
@@ -798,10 +798,10 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             $statistics = new QuizMaster_Controller_Statistics();
             $statistics->save($quiz);
 
-            do_action('wp_pro_quiz_completed_quiz');
+            do_action('quizmaster_completed_quiz');
 
             if ($is100P) {
-                do_action('wp_pro_quiz_completed_quiz_100_percent');
+                do_action('quizmaster_completed_quiz_100_percent');
             }
 
             return json_encode(array());
@@ -830,10 +830,10 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             $statistics = new QuizMaster_Controller_Statistics();
             $statistics->save($quiz);
 
-            do_action('wp_pro_quiz_completed_quiz');
+            do_action('quizmaster_completed_quiz');
 
             if ($is100P) {
-                do_action('wp_pro_quiz_completed_quiz_100_percent');
+                do_action('quizmaster_completed_quiz_100_percent');
             }
 
             if (get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {

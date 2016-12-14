@@ -7,7 +7,7 @@ class QuizMaster_Plugin_BpAchievementsV2
     {
         add_filter('dpa_get_addedit_action_descriptions_category_name', array($this, 'setCategoryName'), 10, 2);
 
-        add_action('wp_pro_quiz_completed_quiz', array($this, 'quizFinished'));
+        add_action('quizmaster_completed_quiz', array($this, 'quizFinished'));
     }
 
     public function setCategoryName($category_name, $category)
@@ -23,7 +23,7 @@ class QuizMaster_Plugin_BpAchievementsV2
 
     public function quizFinished()
     {
-        do_action('wp_pro_quiz_quiz_finished');
+        do_action('quizmaster_quiz_finished');
     }
 
     public static function install()
@@ -37,13 +37,13 @@ class QuizMaster_Plugin_BpAchievementsV2
         $actions = array(
             array(
                 'category' => 'QuizMaster',
-                'name' => 'wp_pro_quiz_quiz_finished',
+                'name' => 'quizmaster_quiz_finished',
                 'description' => __('The user completed a quiz.', 'quizmaster')
             )
         );
 
         foreach ($actions as $action) {
-            if ($wpdb->get_var("SELECT id FROM {$wpdb->prefix}achievements_actions WHERE name = 'wp_pro_quiz_quiz_finished'") === null) {
+            if ($wpdb->get_var("SELECT id FROM {$wpdb->prefix}achievements_actions WHERE name = 'quizmaster_quiz_finished'") === null) {
                 $wpdb->insert($wpdb->prefix . 'achievements_actions', $action);
             }
         }
@@ -59,15 +59,15 @@ class QuizMaster_Plugin_BpAchievementsV2
             return false;
         }
 
-        return $wpdb->delete($wpdb->prefix . 'achievements_actions', array('name' => 'wp_pro_quiz_quiz_finished'));
+        return $wpdb->delete($wpdb->prefix . 'achievements_actions', array('name' => 'quizmaster_quiz_finished'));
     }
 }
 
-function dpa_handle_action_wp_pro_quiz_quiz_finished()
+function dpa_handle_action_quizmaster_quiz_finished()
 {
     $func_get_args = func_get_args();
 
     if (function_exists('dpa_handle_action')) {
-        dpa_handle_action('wp_pro_quiz_quiz_finished', $func_get_args);
+        dpa_handle_action('quizmaster_quiz_finished', $func_get_args);
     }
 }

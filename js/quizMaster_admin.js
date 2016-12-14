@@ -29,7 +29,7 @@ jQuery(document).ready(function ($) {
         //
         //function ajaxPost(func, data, success) {
         //	var d = {
-        //		action: 'wp_pro_quiz_admin_ajax',
+        //		action: 'quizmaster_admin_ajax',
         //		func: func,
         //		data: data
         //	};
@@ -564,7 +564,7 @@ jQuery(document).ready(function ($) {
     //		saveSort: function() {
     //
     //			var data = {
-    //				action: 'wp_pro_quiz_update_sort',
+    //				action: 'quizmaster_update_sort',
     //				sort: methode.parseSortArray()
     //			};
     //
@@ -597,7 +597,7 @@ jQuery(document).ready(function ($) {
     //			var location = window.location.pathname + window.location.search;
     //			var url = location.replace('admin.php', 'admin-ajax.php') + '&action=load_question';
     //			var data = {
-    //				action: 'wp_pro_quiz_load_question',
+    //				action: 'quizmaster_load_question',
     //				excludeId: 1
     //			};
     //
@@ -677,7 +677,7 @@ jQuery(document).ready(function ($) {
 
         function ajaxPost(func, data, success) {
             var d = {
-                action: 'wp_pro_quiz_admin_ajax',
+                action: 'quizmaster_admin_ajax',
                 func: func,
                 data: data
             };
@@ -844,7 +844,7 @@ jQuery(document).ready(function ($) {
                 //url = url.replace('action=edit', 'action=reset_lock');
                 //
                 //$.post(url, {
-                //    action: 'wp_pro_quiz_reset_lock'
+                //    action: 'quizmaster_reset_lock'
                 //}, function (data) {
                 //    $('#resetLockMsg').show('fast').delay(2000).hide('fast');
                 //});
@@ -1220,7 +1220,7 @@ jQuery(document).ready(function ($) {
                 var location = window.location.pathname + window.location.search;
                 var url = location.replace('admin.php', 'admin-ajax.php') + '&action=load_statistics';
                 var data = {
-                    action: 'wp_pro_quiz_load_statistics',
+                    action: 'quizmaster_load_statistics',
                     userId: userId
                 };
 
@@ -1273,7 +1273,7 @@ jQuery(document).ready(function ($) {
                 var location = window.location.pathname + window.location.search;
                 var url = location.replace('admin.php', 'admin-ajax.php') + '&action=load_statistics';
                 var data = {
-                    action: 'wp_pro_quiz_load_statistics',
+                    action: 'quizmaster_load_statistics',
                     overview: true,
                     pageLimit: $('#quizMaster_pageLimit').val(),
                     onlyCompleted: Number($('#quizMaster_onlyCompleted').is(':checked')),
@@ -1360,7 +1360,7 @@ jQuery(document).ready(function ($) {
                 var location = window.location.pathname + window.location.search;
                 var url = location.replace('admin.php', 'admin-ajax.php') + '&action=reset';
                 var data = {
-                    action: 'wp_pro_quiz_statistics',
+                    action: 'quizmaster_statistics',
                     userId: userId,
                     'complete': complete
                 };
@@ -1491,7 +1491,7 @@ jQuery(document).ready(function ($) {
     $.fn.quizMaster_toplist = function () {
         function ajaxPost(func, data, success) {
             var d = {
-                action: 'wp_pro_quiz_admin_ajax',
+                action: 'quizmaster_admin_ajax',
                 func: func,
                 data: data
             };
@@ -1517,7 +1517,7 @@ jQuery(document).ready(function ($) {
                 //var url = location.replace('admin.php', 'admin-ajax.php') + '&action=load_toplist';
                 var th = this;
                 var data = {
-                    //action: 'wp_pro_quiz_load_toplist',
+                    //action: 'quizmaster_load_toplist',
                     sort: elements.sort.val(),
                     limit: elements.pageLimit.val(),
                     page: elements.currentPage.val(),
@@ -1810,7 +1810,7 @@ jQuery(document).ready(function ($) {
 
             ajaxPost: function (func, data, success) {
                 var d = {
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: func,
                     data: data
                 };

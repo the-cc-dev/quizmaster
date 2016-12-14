@@ -95,7 +95,7 @@ class QuizMaster_Helper_Upgrade
 
         $results = $wpdb->get_results("
 			SELECT id, answer_data 
-			FROM {$wpdb->prefix}wp_pro_quiz_question
+			FROM {$wpdb->prefix}quizmaster_question
 			WHERE answer_type = 'cloze_answer' AND answer_points_activated = 1", ARRAY_A);
 
         foreach ($results as $row) {
@@ -114,7 +114,7 @@ class QuizMaster_Helper_Upgrade
                     }
                 }
 
-                $wpdb->update($wpdb->prefix . 'wp_pro_quiz_question', array('points' => $points),
+                $wpdb->update($wpdb->prefix . 'quizmaster_question', array('points' => $points),
                     array('id' => $row['id']));
             }
         }
@@ -126,7 +126,7 @@ class QuizMaster_Helper_Upgrade
 
         $results = $wpdb->get_results("
 				SELECT id, answer_data, answer_type, answer_points_activated, points
-				FROM {$wpdb->prefix}wp_pro_quiz_question", ARRAY_A);
+				FROM {$wpdb->prefix}quizmaster_question", ARRAY_A);
 
         foreach ($results as $row) {
             if ($row['points']) {
@@ -161,7 +161,7 @@ class QuizMaster_Helper_Upgrade
                     $points = 1;
                 }
 
-                $wpdb->update($wpdb->prefix . 'wp_pro_quiz_question', array('points' => $points),
+                $wpdb->update($wpdb->prefix . 'quizmaster_question', array('points' => $points),
                     array('id' => $row['id']));
             }
         }

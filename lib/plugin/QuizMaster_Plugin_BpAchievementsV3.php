@@ -6,8 +6,8 @@ class QuizMaster_Plugin_BpAchievementsV3 extends DPA_Extension
     public function __construct()
     {
         $this->actions = array(
-            'wp_pro_quiz_completed_quiz' => __('The user completed a quiz.', 'quizmaster'),
-            'wp_pro_quiz_completed_quiz_100_percent' => __('The user completed a quiz with 100 percent.', 'quizmaster')
+            'quizmaster_completed_quiz' => __('The user completed a quiz.', 'quizmaster'),
+            'quizmaster_completed_quiz_100_percent' => __('The user completed a quiz with 100 percent.', 'quizmaster')
         );
 
         $this->contributors = array(
@@ -20,10 +20,10 @@ class QuizMaster_Plugin_BpAchievementsV3 extends DPA_Extension
 
         $this->description = __('A powerful and beautiful quiz plugin for WordPress.', 'quizmaster');
         $this->id = 'quizmaster';
-        $this->image_url = QUIZMASTER_URL . '/img/wp_pro_quiz.jpg';
+        $this->image_url = QUIZMASTER_URL . '/img/quizmaster.jpg';
         $this->name = __('QuizMaster', 'quizmaster');
         //$this->rss_url         = '';
-        $this->small_image_url = QUIZMASTER_URL . '/img/wp_pro_quiz_small.jpg';
+        $this->small_image_url = QUIZMASTER_URL . '/img/quizmaster_small.jpg';
         $this->version = 5;
         $this->wporg_url = 'http://wordpress.org/extend/plugins/quizmaster/';
     }

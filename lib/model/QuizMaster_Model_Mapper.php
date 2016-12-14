@@ -34,7 +34,7 @@ class QuizMaster_Model_Mapper
         global $wpdb;
 
         $this->_wpdb = $wpdb;
-        $this->_prefix = $wpdb->prefix . 'wp_pro_quiz_';
+        $this->_prefix = $wpdb->prefix . 'quizmaster_';
 
         $this->_tableQuestion = $this->_prefix . 'question';
         $this->_tableMaster = $this->_prefix . 'master';

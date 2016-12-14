@@ -44,7 +44,7 @@ class QuizMaster_View_QuestionOverall extends QuizMaster_View_View {
 
 		var ajaxPost = function(func, data, success) {
 			var d = {
-				action: 'wp_pro_quiz_admin_ajax',
+				action: 'quizmaster_admin_ajax',
 				func: func,
 				data: data
 			};

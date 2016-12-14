@@ -28,7 +28,7 @@ class QuizMaster_View_GlobalHelperTabs
         ob_end_clean();
 
         return array(
-            'id' => 'wp_pro_quiz_help_tab_1',
+            'id' => 'quizmaster_help_tab_1',
             'title' => __('QuizMaster', 'quizmaster'),
             'content' => $content,
         );

@@ -54,9 +54,9 @@ function quizMaster_fetchToplist() {
                 return;
 
             jQuery.post(QuizMasterGlobal.ajaxurl, {
-                //action: 'wp_pro_quiz_show_front_toplist',
+                //action: 'quizmaster_show_front_toplist',
                 //quizIds: quizIds
-                action: 'wp_pro_quiz_admin_ajax',
+                action: 'quizmaster_admin_ajax',
                 func: 'showFrontToplist',
                 data: {
                     quizIds: quizIds

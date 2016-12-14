@@ -79,7 +79,7 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         add_screen_option('per_page', array(
             'label' => __('Questions', 'quizmaster'),
             'default' => 20,
-            'option' => 'wp_pro_quiz_question_overview_per_page'
+            'option' => 'quizmaster_question_overview_per_page'
         ));
     }
 
@@ -476,7 +476,7 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         $view = new QuizMaster_View_QuestionOverall();
         $view->quiz = $m->fetch($this->_quizId);
 
-        $per_page = (int)get_user_option('wp_pro_quiz_question_overview_per_page');
+        $per_page = (int)get_user_option('quizmaster_question_overview_per_page');
         if (empty($per_page) || $per_page < 1) {
             $per_page = 20;
         }

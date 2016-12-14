@@ -1471,14 +1471,14 @@ quizMasterReady(function () {
                 var formData = formClass.getFormData();
 
                 //plugin.methode.ajax({
-                //    action: 'wp_pro_quiz_completed_quiz',
+                //    action: 'quizmaster_completed_quiz',
                 //    quizId: config.quizId,
                 //    results: results,
                 //    forms: formData
                 //});
 
                 plugin.methode.ajax({
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: 'completedQuiz',
                     data: {
                         quizId: config.quizId,
@@ -1669,10 +1669,10 @@ quizMasterReady(function () {
                 quizStatus.loadLock = 1;
 
                 plugin.methode.ajax({
-                    //action: 'wp_pro_quiz_check_lock',
+                    //action: 'quizmaster_check_lock',
                     //quizId: config.quizId
 
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: 'quizCheckLock',
                     data: {
                         quizId: config.quizId
@@ -1706,7 +1706,7 @@ quizMasterReady(function () {
 
             loadQuizData: function () {
                 plugin.methode.ajax({
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: 'loadQuizData',
                     data: {
                         quizId: config.quizId
@@ -1722,7 +1722,7 @@ quizMasterReady(function () {
                 });
 
                 //plugin.methode.ajax({
-                //    action: 'wp_pro_quiz_load_quiz_data',
+                //    action: 'quizmaster_load_quiz_data',
                 //    quizId: config.quizId
                 //}, function (json) {
                 //    if (json.toplist) {
@@ -1798,7 +1798,7 @@ quizMasterReady(function () {
                 var $addBox = $e.find('.quizMaster_addBox').hide();
 
                 plugin.methode.ajax({
-                    //action: 'wp_pro_quiz_add_toplist',
+                    //action: 'quizmaster_add_toplist',
                     //quizId: config.quizId,
                     //token: toplistData.token,
                     //name: $addBox.find('input[name="quizMaster_toplistName"]').val(),
@@ -1808,7 +1808,7 @@ quizMasterReady(function () {
                     //points: results.comp.points,
                     //totalPoints: config.globalPoints
 
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: 'addInToplist',
                     data: {
                         quizId: config.quizId,
@@ -1925,7 +1925,7 @@ quizMasterReady(function () {
 
             loadQuizDataAjax: function (quizStart) {
                 plugin.methode.ajax({
-                    action: 'wp_pro_quiz_admin_ajax',
+                    action: 'quizmaster_admin_ajax',
                     func: 'quizLoadData',
                     data: {
                         quizId: config.quizId

@@ -22,8 +22,8 @@ define('QUIZMASTER_PLUGIN_PATH', QUIZMASTER_PATH . '/plugin');
 
 $uploadDir = wp_upload_dir();
 
-define('QUIZMASTER_CAPTCHA_DIR', $uploadDir['basedir'] . '/wp_pro_quiz_captcha');
-define('QUIZMASTER_CAPTCHA_URL', $uploadDir['baseurl'] . '/wp_pro_quiz_captcha');
+define('QUIZMASTER_CAPTCHA_DIR', $uploadDir['basedir'] . '/quizmaster_captcha');
+define('QUIZMASTER_CAPTCHA_URL', $uploadDir['baseurl'] . '/quizmaster_captcha');
 
 spl_autoload_register('quizMaster_autoload');
 
@@ -86,7 +86,7 @@ function quizMaster_pluginLoaded()
 function quizMaster_achievementsV3()
 {
     if (function_exists('achievements')) {
-        achievements()->extensions->wp_pro_quiz = new QuizMaster_Plugin_BpAchievementsV3();
+        achievements()->extensions->quizmaster = new QuizMaster_Plugin_BpAchievementsV3();
 
         do_action('quizMaster_achievementsV3');
     }
