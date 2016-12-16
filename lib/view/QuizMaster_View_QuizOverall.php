@@ -297,10 +297,6 @@ class QuizMaster_View_QuizOverall extends QuizMaster_View_View
         $this->showSetQuizCategoryListBox();
         ?>
 
-        <div id="quizMaster_tab_donat" style="display: none;" class="hide-if-no-js screen-meta-toggle">
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KCZPNURT6RYXY" class="button show-settings" target="_blank"><?php _e('Donate', 'quizmaster'); ?></a>
-        </div>
-
         <div class="wrap quizMaster_quizOverall" style="">
             <h2>
                 <?php _e('Quiz overview', 'quizmaster'); ?>

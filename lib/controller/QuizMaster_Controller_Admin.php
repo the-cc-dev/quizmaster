@@ -87,11 +87,13 @@ class QuizMaster_Controller_Admin
         $pages = array();
 
         $pages[] = add_menu_page(
-            'QuizMaster',
-            'QuizMaster',
-            'quizMaster_show',
-            'quizMaster',
-            array($this, 'route'));
+          'QuizMaster',
+          'QuizMaster',
+          'quizMaster_show',
+          'quizMaster',
+          array($this, 'route'),
+          'dashicons-welcome-learn-more'
+        );
 
         $pages[] = add_submenu_page(
             'quizMaster',

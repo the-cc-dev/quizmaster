@@ -1,6 +1,6 @@
 === QuizMaster ===
 Contributors: goldhat
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KCZPNURT6RYXY
+Donate link: https://goldhat.ca/donate/
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 3.3
 Tested up to: 4.3
@@ -12,7 +12,7 @@ A powerful and beautiful quiz plugin for WordPress.
 
 == Description ==
 
-A powerful and beautiful quiz plugin for WordPress.
+Free, highly extendable quiz plugin for WordPress.
 
 = Functions =
 * Single Choice
