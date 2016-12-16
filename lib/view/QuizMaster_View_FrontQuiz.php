@@ -53,111 +53,29 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return !empty($v) || $v === '0';
     }
 
-    public function show($preview = false)
-    {
-        $this->loadButtonNames();
+    public function show($preview = false) {
+      $this->loadButtonNames();
+      $question_count = count($this->question);
+      $result = $this->quiz->getResultText();
 
-        $question_count = count($this->question);
+      if (!$this->quiz->isResultGradeEnabled()) {
+        $result = array(
+          'text' => array($result),
+          'prozent' => array(0)
+        );
+      }
 
-        $result = $this->quiz->getResultText();
+      $resultsProzent = json_encode($result['prozent']);
 
-        if (!$this->quiz->isResultGradeEnabled()) {
-            $result = array(
-                'text' => array($result),
-                'prozent' => array(0)
-            );
-        }
+      $resultReplace = array();
+      foreach ($this->forms as $form) {
+        /* @var $form QuizMaster_Model_Form */
+        $resultReplace['$form{' . $form->getSort() . '}'] = '<span class="quizMaster_resultForm" data-form_id="' . $form->getFormId() . '"></span>';
+      }
 
-        $resultsProzent = json_encode($result['prozent']);
-
-        $resultReplace = array();
-
-        foreach ($this->forms as $form) {
-            /* @var $form QuizMaster_Model_Form */
-
-            $resultReplace['$form{' . $form->getSort() . '}'] = '<span class="quizMaster_resultForm" data-form_id="' . $form->getFormId() . '"></span>';
-        }
-
-        foreach ($result['text'] as &$text) {
-            $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
-        }
-
-        ?>
-        <div class="quizMaster_content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
-            <?php
-
-            if (!$this->quiz->isTitleHidden()) {
-                echo '<h2>', $this->quiz->getName(), '</h2>';
-            }
-
-            $this->showTimeLimitBox();
-            $this->showCheckPageBox($question_count);
-            $this->showInfoPageBox();
-            $this->showStartQuizBox();
-            $this->showLockBox();
-            $this->showLoadQuizBox();
-            $this->showStartOnlyRegisteredUserBox();
-            $this->showPrerequisiteBox();
-            $this->showResultBox($result, $question_count);
-
-            if ($this->quiz->getToplistDataShowIn() == QuizMaster_Model_Quiz::QUIZ_TOPLIST_SHOW_IN_BUTTON) {
-                $this->showToplistInButtonBox();
-            }
-
-            $this->showReviewBox($question_count);
-            $this->showQuizAnker();
-
-            $quizData = $this->showQuizBox($question_count);
-
-            ?>
-        </div>
-        <?php
-
-        $bo = $this->createOption($preview);
-
-        /*
-         * old function
-         *
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
-                $('#quizMaster_<?php echo $this->quiz->getId(); ?>').quizMasterFront({
-                    quizId: <?php echo (int)$this->quiz->getId(); ?>,
-                    mode: <?php echo (int)$this->quiz->getQuizModus(); ?>,
-                    globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
-                    timelimit: <?php echo (int)$this->quiz->getTimeLimit(); ?>,
-                    resultsGrade: <?php echo $resultsProzent; ?>,
-                    bo: <?php echo $bo ?>,
-                    qpp: <?php echo $this->quiz->getQuestionsPerPage(); ?>,
-                    catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
-                    formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,
-                    lbn: <?php echo json_encode(($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide()) ? $this->_buttonNames['quiz_summary'] : $this->_buttonNames['finish_quiz']); ?>,
-                    json: <?php echo json_encode($quizData['json']); ?>
-                });
-            });
-        </script>
-        */
-        ?>
-        <script type="text/javascript">
-            window.quizMasterInitList = window.quizMasterInitList || [];
-
-            window.quizMasterInitList.push({
-                id: '#quizMaster_<?php echo $this->quiz->getId(); ?>',
-                init: {
-                    quizId: <?php echo (int)$this->quiz->getId(); ?>,
-                    mode: <?php echo (int)$this->quiz->getQuizModus(); ?>,
-                    globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
-                    timelimit: <?php echo (int)$this->quiz->getTimeLimit(); ?>,
-                    resultsGrade: <?php echo $resultsProzent; ?>,
-                    bo: <?php echo $bo ?>,
-                    qpp: <?php echo $this->quiz->getQuestionsPerPage(); ?>,
-                    catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
-                    formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,
-                    lbn: <?php echo json_encode(($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide()) ? $this->_buttonNames['quiz_summary'] : $this->_buttonNames['finish_quiz']); ?>,
-                    json: <?php echo json_encode($quizData['json']); ?>
-                }
-            });
-        </script>
-        <?php
+      foreach ($result['text'] as &$text) {
+        $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
+      }
     }
 
     private function createOption($preview)
