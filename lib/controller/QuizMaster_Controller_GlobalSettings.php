@@ -44,7 +44,7 @@ class QuizMaster_Controller_GlobalSettings extends QuizMaster_Controller_Control
             if (isset($this->_post['databaseFix'])) {
                 QuizMaster_View_View::admin_notices(__('Database repaired', 'quizmaster'), 'info');
 
-                $DbUpgradeHelper = new QuizMasterHelper_DbUpgrade();
+                $DbUpgradeHelper = new QuizMaster_Helper_DbUpgrade();
                 $DbUpgradeHelper->databaseDelta();
             }
         }

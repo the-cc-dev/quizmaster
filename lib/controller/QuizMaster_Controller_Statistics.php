@@ -144,7 +144,7 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
             if ($form->getType() != QuizMaster_Model_Form::FORM_TYPE_DATE) {
                 $str = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : '';
 
-                if (!QuizMasterHelper_Form::valid($form, $str)) {
+                if (!QuizMaster_Helper_Form::valid($form, $str)) {
                     return null;
                 }
 
@@ -152,7 +152,7 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
             } else {
                 $date = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : array();
 
-                $dateStr = QuizMasterHelper_Form::validData($form, $date);
+                $dateStr = QuizMaster_Helper_Form::validData($form, $date);
 
                 if ($dateStr === null) {
                     return null;
@@ -266,7 +266,7 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
             $result = round(100 * $model->getPoints() / $model->getGPoints(), 2) . '%';
 
             $model->setResult($result);
-            $model->setFormatTime(QuizMasterHelper_Until::convertTime($model->getCreateTime(),
+            $model->setFormatTime(QuizMaster_Helper_Until::convertTime($model->getCreateTime(),
                 get_option('quizMaster_statisticTimeFormat', 'Y/m/d g:i A')));
 
             $model->setFormatCorrect($model->getCorrectCount() . ' (' . round(100 * $model->getCorrectCount() / $sum,
@@ -281,7 +281,7 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
                 /* @var $form QuizMaster_Model_Form */
                 if ($form->isShowInStatistic()) {
                     $formOverview[] = $formData != null && isset($formData[$form->getFormId()])
-                        ? QuizMasterHelper_Form::formToString($form, $formData[$form->getFormId()])
+                        ? QuizMaster_Helper_Form::formToString($form, $formData[$form->getFormId()])
                         : '----';
                 }
             }

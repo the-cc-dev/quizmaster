@@ -28,10 +28,10 @@ class QuizMaster_Controller_ImportExport extends QuizMaster_Controller_Controlle
         }
 
         if (isset($this->_post ['exportType']) && $this->_post ['exportType'] == 'xml') {
-            $export = new QuizMasterHelper_ExportXml();
+            $export = new QuizMaster_Helper_ExportXml();
             $filename = 'QuizMasterexport_' . time() . '.xml';
         } else {
-            $export = new QuizMasterHelper_Export();
+            $export = new QuizMaster_Helper_Export();
             $filename = 'QuizMasterexport_' . time() . '.wpq';
         }
 
@@ -58,10 +58,10 @@ class QuizMaster_Controller_ImportExport extends QuizMaster_Controller_Controlle
         if (isset($_FILES, $_FILES['import']) && substr($_FILES['import']['name'],
                 -3) == 'xml' || isset($this->_post['importType']) && $this->_post['importType'] == 'xml'
         ) {
-            $import = new QuizMasterHelper_ImportXml();
+            $import = new QuizMaster_Helper_ImportXml();
             $importType = 'xml';
         } else {
-            $import = new QuizMasterHelper_Import();
+            $import = new QuizMaster_Helper_Import();
             $importType = 'wpq';
         }
 

@@ -45,7 +45,7 @@ class QuizMaster_Controller_Toplist extends QuizMaster_Controller_Controller
         );
 
         if ($quiz->isToplistDataCaptcha() && $userId == 0) {
-            $captcha = QuizMasterHelper_Captcha::getInstance();
+            $captcha = QuizMaster_Helper_Captcha::getInstance();
 
             if ($captcha->isSupported()) {
                 $data['captcha']['img'] = QUIZMASTER_CAPTCHA_URL . '/' . $captcha->createImage();
@@ -122,7 +122,7 @@ class QuizMaster_Controller_Toplist extends QuizMaster_Controller_Controller
             }
 
             if ($quiz->isToplistDataCaptcha()) {
-                $captcha = QuizMasterHelper_Captcha::getInstance();
+                $captcha = QuizMaster_Helper_Captcha::getInstance();
 
                 if ($captcha->isSupported()) {
                     if (!$captcha->check($prefix, $captchaAnswer)) {
@@ -199,7 +199,7 @@ class QuizMaster_Controller_Toplist extends QuizMaster_Controller_Controller
                 'name' => $tp->getName(),
                 'email' => $tp->getEmail(),
                 'type' => $tp->getUserId() ? 'R' : 'UR',
-                'date' => QuizMasterHelper_Until::convertTime($tp->getDate(),
+                'date' => QuizMaster_Helper_Until::convertTime($tp->getDate(),
                     get_option('quizMaster_toplistDataFormat', 'Y/m/d g:i A')),
                 'points' => $tp->getPoints(),
                 'result' => $tp->getResult()
@@ -235,7 +235,7 @@ class QuizMaster_Controller_Toplist extends QuizMaster_Controller_Controller
         $r = $ctn->handleAddInToplist($quiz);
 
         if ($quiz->isToplistActivated() && $quiz->isToplistDataCaptcha() && get_current_user_id() == 0) {
-            $captcha = QuizMasterHelper_Captcha::getInstance();
+            $captcha = QuizMaster_Helper_Captcha::getInstance();
 
             if ($captcha->isSupported()) {
                 $captcha->remove($prefix);
@@ -276,7 +276,7 @@ class QuizMaster_Controller_Toplist extends QuizMaster_Controller_Controller
             foreach ($toplist as $tp) {
                 $j[$quizId][] = array(
                     'name' => $tp->getName(),
-                    'date' => QuizMasterHelper_Until::convertTime($tp->getDate(),
+                    'date' => QuizMaster_Helper_Until::convertTime($tp->getDate(),
                         get_option('quizMaster_toplistDataFormat', 'Y/m/d g:i A')),
                     'points' => $tp->getPoints(),
                     'result' => $tp->getResult()
