@@ -105,8 +105,8 @@ class QuizMaster_Controller_Admin
 
         $pages[] = add_submenu_page(
             'quizMaster',
-            __('Support & More', 'quizmaster'),
-            __('Support & More', 'quizmaster'),
+            __('Help & Support', 'quizmaster'),
+            __('Help & Support', 'quizmaster'),
             'quizMaster_show',
             'quizMaster_wpq_support',
             array($this, 'route'));

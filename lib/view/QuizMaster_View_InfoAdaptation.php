@@ -7,40 +7,28 @@ class QuizMaster_View_InfoAdaptation extends QuizMaster_View_View
         ?>
 
         <div class="wrap">
-            <h2><?php _e('QuizMaster special modification', 'quizmaster'); ?></h2>
+            <h2><?php _e('QuizMaster Professional Custom Development', 'quizmaster'); ?></h2>
 
-            <p><?php _e('You need special QuizMaster modification for your website?', 'quizmaster'); ?></p>
+            <p><?php _e('Do you require development help integrating QuizMaster into your website, or want to extend QuizMaster with a custom addon?', 'quizmaster'); ?></p>
 
-            <h3><?php _e('We offer you:', 'quizmaster'); ?></h3>
+            <h3><?php _e('GoldHat Group (goldhat.ca) is the official developer of QuizMaster. We can provide you with the following services:', 'quizmaster'); ?></h3>
             <ol style="list-style-type: disc;">
-                <li><?php _e('Design adaption for your theme', 'quizmaster'); ?></li>
-                <li><?php _e('Creation of additional modules for your needs', 'quizmaster'); ?></li>
-                <li style="display: none;"><?php _e('Premium Support', 'quizmaster'); ?></li>
+                <li><?php _e('Theme integration and custom theming', 'quizmaster'); ?></li>
+                <li><?php _e('Development of custom addons', 'quizmaster'); ?></li>
+                <li><?php _e('Support for your QuizMaster powered site', 'quizmaster'); ?></li>
             </ol>
 
             <h3><?php _e('Contact us:', 'quizmaster'); ?></h3>
             <ol style="list-style-type: disc;">
-                <li><?php _e('Send us an e-mail', 'quizmaster'); ?> <a href="mailto:quizmaster@it-gecko.de"
-                                                                        style="font-weight: bold;">quizmaster@it-gecko.de</a>
+                <li><?php _e('Contact us via email', 'quizmaster'); ?> <a href="mailto:contact@goldhat.ca" style="font-weight: bold;">contact@goldhat.ca</a>
                 </li>
-                <li><?php _e('The e-mail must be written in english or german', 'quizmaster'); ?></li>
-                <li><?php _e('Explain your wish detailed and exactly as possible', 'quizmaster'); ?>
-                    <ol style="list-style-type: disc;">
-                        <li><?php _e('You can send us screenshots, sketches and attachments', 'quizmaster'); ?></li>
-                    </ol>
+                <li><?php _e('The more clear your requirements the easier it will be to evaluate time and cost', 'quizmaster'); ?>
                 </li>
-                <li><?php _e('Send us your full name and your web address (webpage-URL)', 'quizmaster'); ?></li>
-                <li><?php _e('If you wish design adaption, we additionally need the name of your theme',
-                        'quizmaster'); ?></li>
+                <li><?php _e('Our rates vary between $50/hour to $80/hour (USD) based on the type of work and whether the code produced can be repurposed to make QuizMaster better for all.', 'quizmaster'); ?></li>
             </ol>
 
             <p>
-                <?php _e('After receiving your e-mail we will verify your request on feasibility. After this you will receive e-mail from us with further details and offer.',
-                    'quizmaster'); ?>
-            </p>
-
-            <p>
-                <?php _e('Extended support in first 6 months. Reported bugs and updates of QuizMaster are supported. Exception are major releases (update of main version)',
+                <?php _e('We strive to reply to your email within 24-hours. If you do not hear a reply after 2 business days or more it is likely because of a delivery issue, in that even please try resending or get our attention on GitHub (open an issue) or visit https://goldhat.ca and open a live chat.',
                     'quizmaster'); ?>
             </p>
         </div>
