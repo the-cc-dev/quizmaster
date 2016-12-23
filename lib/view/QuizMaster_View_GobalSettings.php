@@ -168,65 +168,7 @@ class QuizMaster_View_GobalSettings extends QuizMaster_View_View
                             </fieldset>
                         </td>
                     </tr>
-
-                    <tr>
-                        <th scope="row">
-                            <?php _e('Category management', 'quizmaster'); ?>
-                        </th>
-                        <td>
-                            <fieldset>
-                                <legend class="screen-reader-text">
-                                    <span><?php _e('Category management', 'quizmaster'); ?></span>
-                                </legend>
-                                <select name="category">
-                                    <?php foreach ($this->category as $cat) {
-                                        echo '<option value="' . $cat->getCategoryId() . '">' . $cat->getCategoryName() . '</option>';
-
-                                    } ?>
-                                </select>
-
-                                <div style="padding-top: 5px;">
-                                    <input type="text" value="" name="categoryEditText">
-                                </div>
-                                <div style="padding-top: 5px;">
-                                    <input type="button" value="<?php _e('Delete', 'quizmaster'); ?>"
-                                           name="categoryDelete" class="button-secondary">
-                                    <input type="button" value="<?php _e('Edit', 'quizmaster'); ?>" name="categoryEdit"
-                                           class="button-secondary">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <th scope="row">
-                            <?php _e('Quiz Category management', 'quizmaster'); ?>
-                        </th>
-                        <td>
-                            <fieldset>
-                                <legend class="screen-reader-text">
-                                    <span><?php _e('Quiz Category management', 'quizmaster'); ?></span>
-                                </legend>
-                                <select name="categoryQuiz">
-                                    <?php foreach ($this->categoryQuiz as $cat) {
-                                        echo '<option value="' . $cat->getCategoryId() . '">' . $cat->getCategoryName() . '</option>';
-
-                                    } ?>
-                                </select>
-
-                                <div style="padding-top: 5px;">
-                                    <input type="text" value="" name="categoryQuizEditText">
-                                </div>
-                                <div style="padding-top: 5px;">
-                                    <input type="button" value="<?php _e('Delete', 'quizmaster'); ?>"
-                                           name="categoryQuizDelete" class="button-secondary">
-                                    <input type="button" value="<?php _e('Edit', 'quizmaster'); ?>"
-                                           name="categoryQuizEdit" class="button-secondary">
-                                </div>
-                            </fieldset>
-                        </td>
-                    </tr>
-
+                    
                     <tr>
                         <th scope="row">
                             <?php _e('Quiz template management', 'quizmaster'); ?>
