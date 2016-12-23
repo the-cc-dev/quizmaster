@@ -30,11 +30,12 @@ spl_autoload_register('quizMaster_autoload');
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
+add_action('init', 'quizmasterAddPostTypes');
 
 if (is_admin()) {
-    new QuizMaster_Controller_Admin();
+  new QuizMaster_Controller_Admin();
 } else {
-    new QuizMaster_Controller_Front();
+  new QuizMaster_Controller_Front();
 }
 
 function quizMaster_autoload($class)
@@ -73,14 +74,15 @@ function quizMaster_autoload($class)
     }
 }
 
-function quizMaster_pluginLoaded()
-{
+function quizMaster_pluginLoaded() {
 
     load_plugin_textdomain('quizmaster', false, QUIZMASTER_PPATH . '/languages');
 
     if (get_option('quizMaster_version') !== QUIZMASTER_VERSION) {
         QuizMaster_Helper_Upgrade::upgrade();
     }
+
+
 }
 
 function quizMaster_achievementsV3()
@@ -158,4 +160,73 @@ function quizmaster_locate_template( $template_name, $template_path = '', $defau
 	endif;
 
 	return apply_filters( 'quizmaster_locate_template', $template, $template_name, $template_path, $default_path );
+}
+
+function quizmasterAddPostTypes() {
+  register_post_type( 'quizmaster_quiz',
+    array(
+      'labels' => array(
+        'name' => __( 'Quizzes' ),
+        'singular_name' => __( 'Quiz' )
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'rewrite' => array('slug' => 'quiz'),
+      'show_in_menu' => 'quizMaster'
+    )
+  );
+
+  register_post_type( 'quizmaster_question',
+    array(
+      'labels' => array(
+        'name' => __( 'Questions' ),
+        'singular_name' => __( 'Question' )
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'rewrite' => array('slug' => 'question'),
+      'show_in_menu' => 'quizMaster'
+    )
+  );
+}
+
+add_action( 'init', 'quizmasterRegisterTaxonomies' );
+
+function quizmasterRegisterTaxonomies() {
+	register_taxonomy(
+		'quizmaster_quiz_category',
+		'quizmaster_quiz',
+		array(
+			'label' => __( 'Quiz Category' ),
+			'rewrite' => array( 'slug' => 'quiz-category' ),
+			'hierarchical' => true,
+		)
+	);
+  register_taxonomy(
+		'quizmaster_quiz_tag',
+		'quizmaster_quiz',
+		array(
+			'label' => __( 'Quiz Tag' ),
+			'rewrite' => array( 'slug' => 'quiz-tag' ),
+			'hierarchical' => false,
+		)
+	);
+  register_taxonomy(
+		'quizmaster_question_category',
+		'quizmaster_question',
+		array(
+			'label' => __( 'Question Category' ),
+			'rewrite' => array( 'slug' => 'question-category' ),
+			'hierarchical' => true,
+		)
+	);
+  register_taxonomy(
+		'quizmaster_question_tag',
+		'quizmaster_question',
+		array(
+			'label' => __( 'Question Tag' ),
+			'rewrite' => array( 'slug' => 'question-tag' ),
+			'hierarchical' => false,
+		)
+	);
 }
