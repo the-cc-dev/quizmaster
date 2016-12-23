@@ -230,3 +230,15 @@ function quizmasterRegisterTaxonomies() {
 		)
 	);
 }
+
+add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
+function quizmasterAcfSettingsPath( $path ) {
+  return QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/';
+}
+
+add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
+function quizmasterAcfSettingsDir( $dir ) {
+  return QUIZMASTER_URL . '/acf/advanced-custom-fields-pro/';
+}
+
+include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
