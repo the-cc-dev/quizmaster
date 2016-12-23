@@ -231,6 +231,8 @@ function quizmasterRegisterTaxonomies() {
 	);
 }
 
+/* ACF Integration */
+
 add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
 function quizmasterAcfSettingsPath( $path ) {
   return QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/';
@@ -242,3 +244,12 @@ function quizmasterAcfSettingsDir( $dir ) {
 }
 
 include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
+
+/* Options Pages */
+$option_page = acf_add_options_page(array(
+		'page_title' 	=> 'QuizMaster Settings',
+		'menu_title' 	=> 'QuizMaster Settings',
+		'menu_slug' 	=> 'quizmaster-settings',
+    'parent_slug' => 'quizMaster',
+ 		'capability' 	=> 'edit_posts',
+	));

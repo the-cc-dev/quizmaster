@@ -129,14 +129,6 @@ class QuizMaster_Controller_Admin
 
         $pages[] = add_submenu_page(
             'quizMaster',
-            __('Global Settings', 'quizmaster'),
-            __('Global Settings', 'quizmaster'),
-            'quizMaster_change_settings',
-            'quizMaster_glSettings',
-            array($this, 'route'));
-
-        $pages[] = add_submenu_page(
-            'quizMaster',
             __('Help & Support', 'quizmaster'),
             __('Help & Support', 'quizmaster'),
             'quizMaster_show',
@@ -206,9 +198,6 @@ class QuizMaster_Controller_Admin
                 break;
             case 'importExport':
                 $c = new QuizMaster_Controller_ImportExport();
-                break;
-            case 'glSettings':
-                $c = new QuizMaster_Controller_GlobalSettings();
                 break;
             case 'styleManager':
                 $c = new QuizMaster_Controller_StyleManager();
