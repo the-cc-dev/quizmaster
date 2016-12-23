@@ -8,12 +8,11 @@
  */
 class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
 {
-    private $_clozeTemp = array();
-    private $_assessmetTemp = array();
+    public $_clozeTemp = array();
+    public $_assessmetTemp = array();
+    public $_buttonNames = array();
 
-    private $_buttonNames = array();
-
-    private function loadButtonNames()
+    public function loadButtonNames()
     {
         if (!empty($this->_buttonNames)) {
             return;
@@ -39,7 +38,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
      *
      * @return array
      */
-    private function getFreeCorrect($data)
+    public function getFreeCorrect($data)
     {
         $t = str_replace("\r\n", "\n", strtolower($data->getAnswer()));
         $t = str_replace("\r", "\n", $t);
@@ -48,24 +47,25 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return array_values(array_filter(array_map('trim', $t), array($this, 'removeEmptyElements')));
     }
 
-    private function removeEmptyElements($v)
+    public function removeEmptyElements($v)
     {
         return !empty($v) || $v === '0';
     }
 
     public function show($preview = false) {
       $this->loadButtonNames();
-      $question_count = count($this->question);
-      $result = $this->quiz->getResultText();
+      $this->question_count = count($this->question);
+      $this->result = $this->quiz->getResultText();
+      $this->preview = $preview;
 
       if (!$this->quiz->isResultGradeEnabled()) {
-        $result = array(
-          'text' => array($result),
+        $this->result = array(
+          'text' => array($this->result),
           'prozent' => array(0)
         );
       }
 
-      $resultsProzent = json_encode($result['prozent']);
+      $this->resultsProzent = json_encode($this->result['prozent']);
 
       $resultReplace = array();
       foreach ($this->forms as $form) {
@@ -73,12 +73,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         $resultReplace['$form{' . $form->getSort() . '}'] = '<span class="quizMaster_resultForm" data-form_id="' . $form->getFormId() . '"></span>';
       }
 
-      foreach ($result['text'] as &$text) {
+      foreach ($this->result['text'] as &$text) {
         $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
       }
+
+      print quizmaster_get_template( 'front-quiz.php', array('view' => $this));
     }
 
-    private function createOption($preview)
+    public function createOption($preview)
     {
         $bo = 0;
 
@@ -182,14 +184,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return $quizData;
     }
 
-    private function showQuizAnker()
+    public function showQuizAnker()
     {
         ?>
         <div class="quizMaster_quizAnker" style="display: none;"></div>
         <?php
     }
 
-    private function showAddToplist()
+    public function showAddToplist()
     {
         ?>
         <div class="quizMaster_addToplist" style="display: none;">
@@ -233,7 +235,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function fetchCloze($answer_text)
+    public function fetchCloze($answer_text)
     {
         preg_match_all('#\{(.*?)(?:\|(\d+))?(?:[\s]+)?\}#im', $answer_text, $matches, PREG_SET_ORDER);
 
@@ -275,14 +277,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return $data;
     }
 
-    private function clozeCallback($t)
+    public function clozeCallback($t)
     {
         $a = array_shift($this->_clozeTemp);
 
         return $a === null ? '' : $a;
     }
 
-    private function fetchAssessment($answerText, $quizId, $questionId)
+    public function fetchAssessment($answerText, $quizId, $questionId)
     {
         preg_match_all('#\{(.*?)\}#im', $answerText, $matches);
 
@@ -314,14 +316,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return $data;
     }
 
-    private function assessmentCallback($t)
+    public function assessmentCallback($t)
     {
         $a = array_shift($this->_assessmetTemp);
 
         return $a === null ? '' : $a;
     }
 
-    private function showFormBox()
+    public function showFormBox()
     {
         $info = '<div class="quizMaster_invalidate">' . __('You must fill out this field.', 'quizmaster') . '</div>';
 
@@ -438,7 +440,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showLockBox()
+    public function showLockBox()
     {
         ?>
         <div style="display: none;" class="quizMaster_lock">
@@ -449,7 +451,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showStartOnlyRegisteredUserBox()
+    public function showStartOnlyRegisteredUserBox()
     {
         ?>
         <div style="display: none;" class="quizMaster_startOnlyRegisteredUser">
@@ -460,7 +462,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showPrerequisiteBox()
+    public function showPrerequisiteBox()
     {
         ?>
         <div style="display: none;" class="quizMaster_prerequisite">
@@ -472,7 +474,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showCheckPageBox($questionCount)
+    public function showCheckPageBox($questionCount)
     {
         ?>
         <div class="quizMaster_checkPage" style="display: none;">
@@ -512,7 +514,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showInfoPageBox()
+    public function showInfoPageBox()
     {
         ?>
         <div class="quizMaster_infopage" style="display: none;">
@@ -533,7 +535,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showStartQuizBox()
+    public function showStartQuizBox()
     {
         ?>
         <div class="quizMaster_text">
@@ -555,7 +557,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showTimeLimitBox()
+    public function showTimeLimitBox()
     {
         ?>
         <div style="display: none;" class="quizMaster_time_limit">
@@ -565,7 +567,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showReviewBox($questionCount)
+    public function showReviewBox($questionCount)
     {
         ?>
         <div class="quizMaster_reviewDiv" style="display: none;">
@@ -606,7 +608,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showResultBox($result, $questionCount)
+    public function showResultBox($result, $questionCount)
     {
         ?>
         <div style="display: none;" class="quizMaster_results">
@@ -709,7 +711,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showToplistInButtonBox()
+    public function showToplistInButtonBox()
     {
         ?>
         <div class="quizMaster_toplistShowInButton" style="display: none;">
@@ -718,7 +720,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    private function showQuizBox($questionCount)
+    public function showQuizBox($questionCount)
     {
         $globalPoints = 0;
         $json = array();
@@ -1063,7 +1065,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => $catPoints);
     }
 
-    private function showLoadQuizBox()
+    public function showLoadQuizBox()
     {
         ?>
         <div style="display: none;" class="quizMaster_loadQuiz">
