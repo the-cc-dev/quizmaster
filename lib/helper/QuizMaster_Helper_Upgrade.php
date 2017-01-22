@@ -62,14 +62,6 @@ class QuizMaster_Helper_Upgrade
         $role->add_cap('quizMaster_export');
         $role->add_cap('quizMaster_change_settings');
         $role->add_cap('quizMaster_toplist_edit');
-
-        //ACHIEVEMENTS Version 2.x.x
-        if (defined('ACHIEVEMENTS_IS_INSTALLED') && ACHIEVEMENTS_IS_INSTALLED === 1 && defined('ACHIEVEMENTS_VERSION')) {
-            $version = ACHIEVEMENTS_VERSION;
-            if ($version{0} == '2') {
-                QuizMaster_Plugin_BpAchievementsV2::install();
-            }
-        }
     }
 
     private static function updateV19()
@@ -94,7 +86,7 @@ class QuizMaster_Helper_Upgrade
         global $wpdb;
 
         $results = $wpdb->get_results("
-			SELECT id, answer_data 
+			SELECT id, answer_data
 			FROM {$wpdb->prefix}quizmaster_question
 			WHERE answer_type = 'cloze_answer' AND answer_points_activated = 1", ARRAY_A);
 
