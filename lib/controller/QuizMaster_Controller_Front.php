@@ -31,9 +31,9 @@ class QuizMaster_Controller_Front
 
         wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
 
-        if ($this->_settings->isJsLoadInHead()) {
-            $this->loadJsScripts(false, true, true);
-        }
+
+        $this->loadJsScripts(false, true, true);
+
     }
 
     private function loadJsScripts($footer = true, $quiz = true, $toplist = false)
@@ -78,15 +78,6 @@ class QuizMaster_Controller_Front
             }
         }
 
-        if (!$this->_settings->isTouchLibraryDeactivate()) {
-            wp_enqueue_script(
-                'jquery-ui-touch-punch',
-                plugins_url('js/jquery.ui.touch-punch.min.js', QUIZMASTER_FILE),
-                array('jquery-ui-sortable'),
-                '0.2.2',
-                $footer
-            );
-        }
     }
 
     public function shortcode($attr)
@@ -94,9 +85,7 @@ class QuizMaster_Controller_Front
         $id = $attr[0];
         $content = '';
 
-        if (!$this->_settings->isJsLoadInHead()) {
-            $this->loadJsScripts();
-        }
+        $this->loadJsScripts();
 
         if (is_numeric($id)) {
             ob_start();
@@ -106,10 +95,6 @@ class QuizMaster_Controller_Front
             $content = ob_get_contents();
 
             ob_end_clean();
-        }
-
-        if ($this->_settings->isAddRawShortcode()) {
-            return '[raw]' . $content . '[/raw]';
         }
 
         return $content;
@@ -140,7 +125,9 @@ class QuizMaster_Controller_Front
                 $value = ceil($count * $value / 100);
             }
 
+            // TESTQM
             $question = $questionMapper->fetchAll($id, true, $value);
+
             $maxQuestion = true;
 
         } else {
@@ -211,11 +198,10 @@ class QuizMaster_Controller_Front
         $view->show();
     }
 
+    // delete
     private function loadSettings()
     {
-        $mapper = new QuizMaster_Model_GlobalSettingsMapper();
 
-        $this->_settings = $mapper->fetchAll();
     }
 
     public static function ajaxQuizLoadData($data)

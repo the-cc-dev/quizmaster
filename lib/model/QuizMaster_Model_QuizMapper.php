@@ -28,28 +28,30 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper
      * @param $id
      * @return QuizMaster_Model_Quiz
      */
-    public function fetch($id)
-    {
-        $results = $this->_wpdb->get_row(
-            $this->_wpdb->prepare(
-                "SELECT
-									m.*,
-									c.category_name  
-								FROM
-									{$this->_table} AS m
-									LEFT JOIN {$this->_tableCategory} AS c
-										ON c.category_id = m.category_id
-								WHERE
-									id = %d",
-                $id),
-            ARRAY_A
-        );
+    public function fetch($id) {
 
-        if ($results['result_grade_enabled']) {
-            $results['result_text'] = unserialize($results['result_text']);
-        }
+      // $results must be array with keys matching setters in model
+      $fields = get_fields($id);
 
-        return new QuizMaster_Model_Quiz($results);
+      /*
+      print '<pre>';
+      var_dump( $fields );
+      print '</pre>';
+      */
+
+      $fields['id'] = $id;
+      $fields['name'] = get_the_title( $id );
+      $fields['text'] = $fields['quizDescription'];
+
+      $quizModel = new QuizMaster_Model_Quiz( $fields );
+
+      /*
+      print '<pre>';
+      var_dump( $quizModel );
+      print '</pre>';
+      */
+
+      return $quizModel;
     }
 
     /**
@@ -61,10 +63,10 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper
 
         $results = $this->_wpdb->get_results(
             "
-				SELECT 
+				SELECT
 					m.*,
-					c.category_name 
-				FROM 
+					c.category_name
+				FROM
 					{$this->_table} AS m
 					LEFT JOIN {$this->_tableCategory} AS c
 						ON c.category_id = m.category_id
@@ -399,7 +401,7 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper
 
         return $this->_wpdb->query($this->_wpdb->prepare(
             "UPDATE {$this->_tableMaster}
-			SET `statistics_on` = 1, `statistics_ip_lock` = %d 
+			SET `statistics_on` = 1, `statistics_ip_lock` = %d
 			WHERE `statistics_on` = 0 AND id IN(" . $quizIds . ")"
             , $lockIpTime));
     }
@@ -409,17 +411,17 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper
         return $this->_wpdb->query(
             $this->_wpdb->prepare(
                 "DELETE
-					m, q, l, p, t, f, sr, s 
-				FROM 
-					{$this->_tableMaster} AS m 
-					LEFT JOIN {$this->_tableQuestion} AS q ON(q.quiz_id = m.id) 
-					LEFT JOIN {$this->_tableLock} AS l ON(l.quiz_id = m.id) 
-					LEFT JOIN {$this->_tablePrerequisite} AS p ON(p.prerequisite_quiz_id = m.id) 
-					LEFT JOIN {$this->_tableToplist} AS t ON(t.quiz_id = m.id) 
+					m, q, l, p, t, f, sr, s
+				FROM
+					{$this->_tableMaster} AS m
+					LEFT JOIN {$this->_tableQuestion} AS q ON(q.quiz_id = m.id)
+					LEFT JOIN {$this->_tableLock} AS l ON(l.quiz_id = m.id)
+					LEFT JOIN {$this->_tablePrerequisite} AS p ON(p.prerequisite_quiz_id = m.id)
+					LEFT JOIN {$this->_tableToplist} AS t ON(t.quiz_id = m.id)
 					LEFT JOIN {$this->_tableForm} AS f ON(f.quiz_id = m.id)
-					LEFT JOIN {$this->_tableStatisticRef} AS sr ON(sr.quiz_id = m.id) 
-						LEFT JOIN {$this->_tableStatistic} AS s ON(s.statistic_ref_id = sr.statistic_ref_id) 
-				WHERE 
+					LEFT JOIN {$this->_tableStatisticRef} AS sr ON(sr.quiz_id = m.id)
+						LEFT JOIN {$this->_tableStatistic} AS s ON(s.statistic_ref_id = sr.statistic_ref_id)
+				WHERE
 					m.id = %d"
                 , $quizId)
         );
@@ -432,7 +434,7 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper
         return $this->_wpdb->query($this->_wpdb->prepare(
             "UPDATE
 					{$this->_tableMaster}
-				SET 
+				SET
 					`category_id` = %d
 				WHERE id IN(" . $quizIds . ")"
             , $categoryId));

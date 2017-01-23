@@ -206,43 +206,36 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
      *
      * @return QuizMaster_Model_Question[]
      */
-    public function fetchAll($quizId, $rand = false, $max = 0)
-    {
+    public function fetchAll($quizId, $rand = false, $max = 0) {
 
+        /*
         if ($rand) {
             $orderBy = 'ORDER BY RAND()';
         } else {
             $orderBy = 'ORDER BY sort ASC';
         }
+        */
 
-        $limit = '';
+        $results = array();
 
-        if ($max > 0) {
-            $limit = 'LIMIT 0, ' . ((int)$max);
+        $query = new WP_Query(array(
+          'post_type'       => 'quizmaster_question',
+          'post_status'     => 'publish',
+          'posts_per_page'  => -1,
+        ));
+
+        while ( $query->have_posts() ) {
+          $query->the_post();
+          $post_id = get_the_ID();
+          $fields = get_fields( $post_id );
+          $fields['id'] = $post_id;
+          $model = new QuizMaster_Model_Question( $fields );
+          $a[] = $model;
         }
 
-        $a = array();
-        $results = $this->_wpdb->get_results(
-            $this->_wpdb->prepare(
-                'SELECT
-								q.*,
-								c.category_name 
-							FROM 
-								' . $this->_table . ' AS q
-								LEFT JOIN ' . $this->_tableCategory . ' AS c
-									ON c.category_id = q.category_id
-							WHERE
-								quiz_id = %d AND q.online = 1
-							' . $orderBy . '
-							' . $limit
-                , $quizId),
-            ARRAY_A);
-
-        foreach ($results as $row) {
-            $model = new QuizMaster_Model_Question($row);
-
-            $a[] = $model;
-        }
+        print '<pre>';
+        var_dump( $a );
+        print '</pre>';
 
         return $a;
     }
