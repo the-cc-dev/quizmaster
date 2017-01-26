@@ -2,7 +2,7 @@
     <?php
 
     if (!$view->quiz->isTitleHidden()) {
-        echo '<h2>', $view->quiz->getName(), '</h2>';
+      echo '<h2>', $view->quiz->getName(), '</h2>';
     }
 
     $view->showTimeLimitBox();

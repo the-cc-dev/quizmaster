@@ -125,23 +125,27 @@ class QuizMaster_Controller_Front
                 $value = ceil($count * $value / 100);
             }
 
-            // TESTQM
             $question = $questionMapper->fetchAll($id, true, $value);
-
             $maxQuestion = true;
 
         } else {
-            $question = $questionMapper->fetchAll($id);
+          $question = $questionMapper->fetchAll($id);
         }
 
         if (empty($quiz) || empty($question)) {
             echo '';
-
             return;
         }
 
         $view->quiz = $quiz;
         $view->question = $question;
+
+        /*
+        print '<pre>';
+        var_dump( $view->question );
+        print '</pre>';
+        */
+
         $view->category = $categoryMapper->fetchByQuiz($quiz->getId());
         $view->forms = $formMapper->fetch($quiz->getId());
 

@@ -57,113 +57,12 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
             $questionId));
     }
 
-    public function save(QuizMaster_Model_Question $question, $auto = false)
-    {
-        $sort = null;
+    public function save(QuizMaster_Model_Question $question) {
 
-        if ($auto && $question->getId()) {
-            $statisticMapper = new QuizMaster_Model_StatisticMapper();
-
-            if ($statisticMapper->isStatisticByQuestionId($question->getId())) {
-                $this->setOnlineOff($question->getId());
-                $question->setQuizId($this->getQuizId($question->getId()));
-                $sort = $this->getSortByQuestionId($question->getId());
-                $question->setId(0);
-            }
-        }
-
-        if ($question->getId() != 0) {
-            $this->_wpdb->update(
-                $this->_table,
-                array(
-                    'title' => $question->getTitle(),
-                    'points' => $question->getPoints(),
-                    'question' => $question->getQuestion(),
-                    'correct_msg' => $question->getCorrectMsg(),
-                    'incorrect_msg' => $question->getIncorrectMsg(),
-                    'correct_same_text' => (int)$question->isCorrectSameText(),
-                    'tip_enabled' => (int)$question->isTipEnabled(),
-                    'tip_msg' => $question->getTipMsg(),
-                    'answer_type' => $question->getAnswerType(),
-                    'show_points_in_box' => (int)$question->isShowPointsInBox(),
-                    'answer_points_activated' => (int)$question->isAnswerPointsActivated(),
-                    'answer_data' => $question->getAnswerData(true),
-                    'category_id' => $question->getCategoryId(),
-                    'answer_points_diff_modus_activated' => (int)$question->isAnswerPointsDiffModusActivated(),
-                    'disable_correct' => (int)$question->isDisableCorrect(),
-                    'matrix_sort_answer_criteria_width' => $question->getMatrixSortAnswerCriteriaWidth()
-                ),
-                array('id' => $question->getId()),
-                array('%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%s', '%d', '%d', '%d', '%d'),
-                array('%d'));
-        } else {
-            $this->_wpdb->insert($this->_table, array(
-                'quiz_id' => $question->getQuizId(),
-                'online' => 1,
-                'sort' => $sort !== null ? $sort : ($this->getMaxSort($question->getQuizId()) + 1),
-                'title' => $question->getTitle(),
-                'points' => $question->getPoints(),
-                'question' => $question->getQuestion(),
-                'correct_msg' => $question->getCorrectMsg(),
-                'incorrect_msg' => $question->getIncorrectMsg(),
-                'correct_same_text' => (int)$question->isCorrectSameText(),
-                'tip_enabled' => (int)$question->isTipEnabled(),
-                'tip_msg' => $question->getTipMsg(),
-                'answer_type' => $question->getAnswerType(),
-                'show_points_in_box' => (int)$question->isShowPointsInBox(),
-                'answer_points_activated' => (int)$question->isAnswerPointsActivated(),
-                'answer_data' => $question->getAnswerData(true),
-                'category_id' => $question->getCategoryId(),
-                'answer_points_diff_modus_activated' => (int)$question->isAnswerPointsDiffModusActivated(),
-                'disable_correct' => (int)$question->isDisableCorrect(),
-                'matrix_sort_answer_criteria_width' => $question->getMatrixSortAnswerCriteriaWidth()
-            ),
-                array(
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%d',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d'
-                )
-            );
-
-            $question->setId($this->_wpdb->insert_id);
-        }
-
-        return $question;
     }
 
-    public function fetch($id)
-    {
-
-        $row = $this->_wpdb->get_row(
-            $this->_wpdb->prepare(
-                "SELECT
-					*
-				FROM
-					" . $this->_table . "
-				WHERE
-					id = %d AND online = 1",
-                $id),
-            ARRAY_A
-        );
-
+    public function fetch($id) {
         $model = new QuizMaster_Model_Question($row);
-
         return $model;
     }
 
@@ -218,6 +117,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
         $results = array();
 
+        // get all questions
         $query = new WP_Query(array(
           'post_type'       => 'quizmaster_question',
           'post_status'     => 'publish',
@@ -229,13 +129,39 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
           $post_id = get_the_ID();
           $fields = get_fields( $post_id );
           $fields['id'] = $post_id;
+
+          /*
+          print '<pre>';
+          var_dump($fields);
+          print '</pre>';
+          */
+
+          // set answer data
+          $acfAnswerData = $fields['answerData'];
+          $answerData = array();
+          foreach( $acfAnswerData as $acfAnswer ) {
+            $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+          }
+
+          $fields['answerData'] = $answerData;
+
+          /*
+          print '<pre>';
+          var_dump( $answerData );
+          print '</pre>';
+          */
+
           $model = new QuizMaster_Model_Question( $fields );
           $a[] = $model;
         }
 
+        /*
         print '<pre>';
+        $q = $a[0];
+        // print $q->getAnswerType();
         var_dump( $a );
         print '</pre>';
+        */
 
         return $a;
     }
