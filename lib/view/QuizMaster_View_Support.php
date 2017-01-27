@@ -1,6 +1,6 @@
 <?php
 
-class QuizMaster_View_WpqSupport extends QuizMaster_View_View
+class QuizMaster_View_Support extends QuizMaster_View_View
 {
 
     public function show()

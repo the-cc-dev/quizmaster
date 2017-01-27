@@ -95,6 +95,8 @@ class QuizMaster_Controller_Admin
           'dashicons-welcome-learn-more'
         );
 
+        /*
+
         add_submenu_page(
           'quizMaster',
           'Question Categories',
@@ -127,17 +129,27 @@ class QuizMaster_Controller_Admin
           'edit-tags.php?taxonomy=quizmaster_quiz_tag'
         );
 
+        */
+
         $pages[] = add_submenu_page(
+          'quizMaster',
+          __('Categories & Tags', 'quizmaster'),
+          __('Categories & Tags', 'quizmaster'),
+          'quizMaster_show',
+          'quizmaster-categories-tags',
+          array($this, 'route'));
+
+          $pages[] = add_submenu_page(
             'quizMaster',
             __('Help & Support', 'quizmaster'),
             __('Help & Support', 'quizmaster'),
             'quizMaster_show',
-            'quizMaster_wpq_support',
+            'quizmaster-support',
             array($this, 'route'));
 
         foreach ($pages as $p) {
-            add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));
-            add_action('load-' . $p, array($this, 'routeLoadAction'));
+          add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));
+          add_action('load-' . $p, array($this, 'routeLoadAction'));
         }
     }
 
@@ -176,7 +188,7 @@ class QuizMaster_Controller_Admin
         $module = isset($_GET['module']) ? $_GET['module'] : 'overallView';
 
         if (isset($_GET['page'])) {
-            if (preg_match('#quizMaster_(.+)#', trim($_GET['page']), $matches)) {
+            if (preg_match('#quizmaster-(.+)#', trim($_GET['page']), $matches)) {
                 $module = $matches[1];
             }
         }
@@ -184,6 +196,9 @@ class QuizMaster_Controller_Admin
         $c = null;
 
         switch ($module) {
+            case 'categories-tags':
+                $c = new QuizMaster_Controller_Taxonomies();
+                break;
             case 'overallView':
                 $c = new QuizMaster_Controller_Quiz();
                 break;
@@ -205,8 +220,8 @@ class QuizMaster_Controller_Admin
             case 'toplist':
                 $c = new QuizMaster_Controller_Toplist();
                 break;
-            case 'wpq_support':
-                $c = new QuizMaster_Controller_WpqSupport();
+            case 'support':
+                $c = new QuizMaster_Controller_Support();
                 break;
             case 'info_adaptation':
                 $c = new QuizMaster_Controller_InfoAdaptation();

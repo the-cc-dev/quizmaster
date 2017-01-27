@@ -248,7 +248,7 @@ include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
 /* Options Pages */
 $option_page = acf_add_options_page(array(
 		'page_title' 	=> 'QuizMaster Settings',
-		'menu_title' 	=> 'QuizMaster Settings',
+		'menu_title' 	=> 'Settings',
 		'menu_slug' 	=> 'quizmaster-settings',
     'parent_slug' => 'quizMaster',
  		'capability' 	=> 'edit_posts',
