@@ -141,12 +141,15 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
           $fields['id'] = $quizQuestionID;
 
           // set answer data
-          $acfAnswerData = $fields['answerData'];
-          $answerData = array();
-          foreach( $acfAnswerData as $acfAnswer ) {
-            $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+          switch( $fields['answerType'] ) {
+            case 'single':
+            case 'multiple':
+              $answerData = $this->loadAnswerDataClassic( $fields );
+              break;
+            case 'free_answer':
+              $answerData = $this->loadAnswerDataFreeChoice( $fields );
+              break;
           }
-
           $fields['answerData'] = $answerData;
 
           /*
@@ -169,6 +172,26 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
         return $a;
     }
+
+    // MOVE TO QUESTION MODEL
+    public function loadAnswerDataFreeChoice( $fields ) {
+      $acfAnswerData = array(
+        'answer' => $fields['free_choice_answers']
+      );
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataClassic( $fields ) {
+      $acfAnswerData = $fields['answerData'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      }
+      return $answerData;
+    }
+
+
 
     /**
      * @param $quizId

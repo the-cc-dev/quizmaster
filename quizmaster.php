@@ -253,3 +253,26 @@ $option_page = acf_add_options_page(array(
     'parent_slug' => 'quizMaster',
  		'capability' 	=> 'edit_posts',
 	));
+
+/* Single Quiz Template */
+add_filter('single_template', 'quizmaster_quiz_template');
+
+function quizmaster_quiz_template($single) {
+  global $wp_query, $post;
+  $quizTemplatePath = '/templates/quiz.php';
+
+  /* Checks for single template by post type */
+  if ($post->post_type == "quizmaster_quiz") {
+
+    return quizmaster_locate_template( 'quiz.php' );
+
+    /*
+    if(file_exists(QUIZMASTER_PATH . $quizTemplatePath)) {
+      return QUIZMASTER_PATH . $quizTemplatePath;
+    }
+    */
+
+  }
+
+  return $single;
+}
