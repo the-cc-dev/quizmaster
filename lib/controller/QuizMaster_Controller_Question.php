@@ -105,43 +105,6 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         return $templateMapper->save($template);
     }
 
-    private function getPostQuestionModel($quizId, $questionId)
-    {
-        $questionMapper = new QuizMaster_Model_QuestionMapper();
-
-        $post = QuizMaster_Controller_Request::getPost();
-
-        $post['id'] = $questionId;
-        $post['quizId'] = $quizId;
-        $post['title'] = isset($post['title']) ? trim($post['title']) : '';
-
-        $clearPost = $this->clearPost($post);
-
-        $post['answerData'] = $clearPost['answerData'];
-
-        if (empty($post['title'])) {
-            $count = $questionMapper->count($quizId);
-
-            $post['title'] = sprintf(__('Question: %d', 'quizmaster'), $count + 1);
-        }
-
-        if ($post['answerType'] === 'assessment_answer') {
-            $post['answerPointsActivated'] = 1;
-        }
-
-        if (isset($post['answerPointsActivated'])) {
-            if (isset($post['answerPointsDiffModusActivated'])) {
-                $post['points'] = $clearPost['maxPoints'];
-            } else {
-                $post['points'] = $clearPost['points'];
-            }
-        }
-
-        $post['categoryId'] = $post['category'] > 0 ? $post['category'] : 0;
-
-        return new QuizMaster_Model_Question($post);
-    }
-
     public function copyQuestion($quizId)
     {
 
@@ -252,84 +215,6 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         }
 
         $this->showAction();
-    }
-
-    public function clearPost($post)
-    {
-
-        if ($post['answerType'] == 'cloze_answer' && isset($post['answerData']['cloze'])) {
-            preg_match_all('#\{(.*?)(?:\|(\d+))?(?:[\s]+)?\}#im', $post['answerData']['cloze']['answer'], $matches);
-
-            $points = 0;
-            $maxPoints = 0;
-
-            foreach ($matches[2] as $match) {
-                if (empty($match)) {
-                    $match = 1;
-                }
-
-                $points += $match;
-                $maxPoints = max($maxPoints, $match);
-            }
-
-            return array(
-                'points' => $points,
-                'maxPoints' => $maxPoints,
-                'answerData' => array(new QuizMaster_Model_AnswerTypes($post['answerData']['cloze']))
-            );
-        }
-
-        if ($post['answerType'] == 'assessment_answer' && isset($post['answerData']['assessment'])) {
-            preg_match_all('#\{(.*?)\}#im', $post['answerData']['assessment']['answer'], $matches);
-
-            $points = 0;
-            $maxPoints = 0;
-
-            foreach ($matches[1] as $match) {
-                preg_match_all('#\[([^\|\]]+)(?:\|(\d+))?\]#im', $match, $ms);
-
-                $points += count($ms[1]);
-                $maxPoints = max($maxPoints, count($ms[1]));
-            }
-
-            return array(
-                'points' => $points,
-                'maxPoints' => $maxPoints,
-                'answerData' => array(new QuizMaster_Model_AnswerTypes($post['answerData']['assessment']))
-            );
-        }
-
-        unset($post['answerData']['cloze']);
-        unset($post['answerData']['assessment']);
-
-        if (isset($post['answerData']['none'])) {
-            unset($post['answerData']['none']);
-        }
-
-        $answerData = array();
-        $points = 0;
-        $maxPoints = 0;
-
-        foreach ($post['answerData'] as $k => $v) {
-            if (trim($v['answer']) == '') {
-                if ($post['answerType'] != 'matrix_sort_answer') {
-                    continue;
-                } else {
-                    if (trim($v['sort_string']) == '') {
-                        continue;
-                    }
-                }
-            }
-
-            $answerType = new QuizMaster_Model_AnswerTypes($v);
-            $points += $answerType->getPoints();
-
-            $maxPoints = max($maxPoints, $answerType->getPoints());
-
-            $answerData[] = $answerType;
-        }
-
-        return array('points' => $points, 'maxPoints' => $maxPoints, 'answerData' => $answerData);
     }
 
     public function clear($a)
