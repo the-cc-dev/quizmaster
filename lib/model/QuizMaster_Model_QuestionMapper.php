@@ -117,24 +117,28 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
         $results = array();
 
+        $quizPost = get_post( $quizId );
+        $quizQuestions = get_field( 'quiz_questions', $quizId );
+
+        /*
+        print '<pre>';
+        var_dump( $quizQuestions );
+        print '</pre>';
+        */
+
         // get all questions
+        /*
         $query = new WP_Query(array(
           'post_type'       => 'quizmaster_question',
           'post_status'     => 'publish',
           'posts_per_page'  => -1,
         ));
+        */
 
-        while ( $query->have_posts() ) {
-          $query->the_post();
-          $post_id = get_the_ID();
-          $fields = get_fields( $post_id );
-          $fields['id'] = $post_id;
-
-          /*
-          print '<pre>';
-          var_dump($fields);
-          print '</pre>';
-          */
+        foreach( $quizQuestions as $qq ) {
+          $quizQuestionID = $qq['quiz_question'];
+          $fields = get_fields( $quizQuestionID );
+          $fields['id'] = $quizQuestionID;
 
           // set answer data
           $acfAnswerData = $fields['answerData'];

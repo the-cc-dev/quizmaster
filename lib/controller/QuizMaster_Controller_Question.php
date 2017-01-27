@@ -83,82 +83,6 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         ));
     }
 
-    private function addEditQuestion($quizId)
-    {
-        $questionId = isset($_GET['questionId']) ? (int)$_GET['questionId'] : 0;
-
-        if ($questionId) {
-            if (!current_user_can('quizMaster_edit_quiz')) {
-                wp_die(__('You do not have sufficient permissions to access this page.'));
-            }
-        } else {
-            if (!current_user_can('quizMaster_add_quiz')) {
-                wp_die(__('You do not have sufficient permissions to access this page.'));
-            }
-        }
-
-        $quizMapper = new QuizMaster_Model_QuizMapper();
-        $questionMapper = new QuizMaster_Model_QuestionMapper();
-        $cateoryMapper = new QuizMaster_Model_CategoryMapper();
-        $templateMapper = new QuizMaster_Model_TemplateMapper();
-
-        if ($questionId && $questionMapper->existsAndWritable($questionId) == 0) {
-            QuizMaster_View_View::admin_notices(__('Question not found', 'quizmaster'), 'error');
-
-            return;
-        }
-
-        $question = new QuizMaster_Model_Question();
-
-        if (isset($this->_post['template']) || (isset($this->_post['templateLoad']) && isset($this->_post['templateLoadId']))) {
-            if (isset($this->_post['template'])) {
-                $template = $this->saveTemplate();
-            } else {
-                $template = $templateMapper->fetchById($this->_post['templateLoadId']);
-            }
-
-            $data = $template->getData();
-
-            if ($data !== null) {
-                /** @var QuizMaster_Model_Question $question */
-                $question = $data['question'];
-                $question->setId($questionId);
-                $question->setQuizId($quizId);
-            }
-        } else {
-            if (isset($this->_post['submit'])) {
-                if ($questionId) {
-                    QuizMaster_View_View::admin_notices(__('Question edited', 'quizmaster'), 'info');
-                } else {
-                    QuizMaster_View_View::admin_notices(__('Question added', 'quizmaster'), 'info');
-                }
-
-                $question = $questionMapper->save($this->getPostQuestionModel($quizId, $questionId), true);
-                $questionId = $question->getId();
-
-            } else {
-                if ($questionId) {
-                    $question = $questionMapper->fetch($questionId);
-                }
-            }
-        }
-
-        $view = new QuizMaster_View_QuestionEdit();
-        $view->categories = $cateoryMapper->fetchAll();
-        $view->quiz = $quizMapper->fetch($quizId);
-        $view->templates = $templateMapper->fetchAll(QuizMaster_Model_Template::TEMPLATE_TYPE_QUESTION, false);
-        $view->question = $question;
-        $view->answerData = $this->setAnswerObject($question);
-
-        $view->header = $questionId ? __('Edit question', 'quizmaster') : __('New question', 'quizmaster');
-
-        if ($view->question->isAnswerPointsActivated()) {
-            $view->question->setPoints(1);
-        }
-
-        $view->show();
-    }
-
     private function saveTemplate()
     {
         $questionModel = $this->getPostQuestionModel(0, 0);
@@ -328,31 +252,6 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         }
 
         $this->showAction();
-    }
-
-    private function setAnswerObject(QuizMaster_Model_Question $question = null)
-    {
-        //Defaults
-        $data = array(
-            'sort_answer' => array(new QuizMaster_Model_AnswerTypes()),
-            'classic_answer' => array(new QuizMaster_Model_AnswerTypes()),
-            'matrix_sort_answer' => array(new QuizMaster_Model_AnswerTypes()),
-            'cloze_answer' => array(new QuizMaster_Model_AnswerTypes()),
-            'free_answer' => array(new QuizMaster_Model_AnswerTypes()),
-            'assessment_answer' => array(new QuizMaster_Model_AnswerTypes())
-        );
-
-        if ($question !== null) {
-            $type = $question->getAnswerType();
-            $type = ($type == 'single' || $type == 'multiple') ? 'classic_answer' : $type;
-            $answerData = $question->getAnswerData();
-
-            if (isset($data[$type]) && $answerData !== null) {
-                $data[$type] = $question->getAnswerData();
-            }
-        }
-
-        return $data;
     }
 
     public function clearPost($post)
