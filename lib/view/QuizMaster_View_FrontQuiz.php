@@ -608,8 +608,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    public function showResultBox($result, $questionCount)
-    {
+    public function showResultBox($result, $questionCount) {
         ?>
         <div style="display: none;" class="quizMaster_results">
             <h4 class="quizMaster_header"><?php _e('Results', 'quizmaster'); ?></h4>
@@ -711,27 +710,25 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    public function showToplistInButtonBox()
-    {
-        ?>
-        <div class="quizMaster_toplistShowInButton" style="display: none;">
-            <?php echo do_shortcode('[QuizMaster_toplist ' . $this->quiz->getId() . ' q="true"]'); ?>
-        </div>
-        <?php
+    public function showToplistInButtonBox() {
+      ?>
+      <div class="quizMaster_toplistShowInButton" style="display: none;">
+          <?php echo do_shortcode('[QuizMaster_toplist ' . $this->quiz->getId() . ' q="true"]'); ?>
+      </div>
+      <?php
     }
 
     public function showQuizBox($questionCount) {
+      quizmaster_get_template('quiz-question-item.php',
+        array(
+          'view'          => $this,
+          'questionCount' => $questionCount,
+        )
+      );
 
-        quizmaster_get_template('quiz-question-item.php',
-          array(
-            'view'          => $this,
-            'questionCount' => $questionCount,
-          )
-        );
-
-        $globalPoints = $this->setGlobalPoints( $this->question );
-        $json = $this->setQuizJson( $this->question );
-        return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
+      $globalPoints = $this->setGlobalPoints( $this->question );
+      $json = $this->setQuizJson( $this->question );
+      return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
     }
 
     public function setGlobalPoints( $questions ) {

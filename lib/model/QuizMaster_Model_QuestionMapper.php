@@ -107,33 +107,10 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
      */
     public function fetchAll($quizId, $rand = false, $max = 0) {
 
-        /*
-        if ($rand) {
-            $orderBy = 'ORDER BY RAND()';
-        } else {
-            $orderBy = 'ORDER BY sort ASC';
-        }
-        */
-
         $results = array();
 
         $quizPost = get_post( $quizId );
         $quizQuestions = get_field( 'quiz_questions', $quizId );
-
-        /*
-        print '<pre>';
-        var_dump( $quizQuestions );
-        print '</pre>';
-        */
-
-        // get all questions
-        /*
-        $query = new WP_Query(array(
-          'post_type'       => 'quizmaster_question',
-          'post_status'     => 'publish',
-          'posts_per_page'  => -1,
-        ));
-        */
 
         foreach( $quizQuestions as $qq ) {
           $quizQuestionID = $qq['quiz_question'];
@@ -150,25 +127,11 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
               $answerData = $this->loadAnswerDataFreeChoice( $fields );
               break;
           }
+
           $fields['answerData'] = $answerData;
-
-          /*
-          print '<pre>';
-          var_dump( $answerData );
-          print '</pre>';
-          */
-
           $model = new QuizMaster_Model_Question( $fields );
           $a[] = $model;
         }
-
-        /*
-        print '<pre>';
-        $q = $a[0];
-        // print $q->getAnswerType();
-        var_dump( $a );
-        print '</pre>';
-        */
 
         return $a;
     }
