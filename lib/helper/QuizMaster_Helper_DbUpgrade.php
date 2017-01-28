@@ -44,9 +44,7 @@ class QuizMaster_Helper_DbUpgrade
         return QuizMaster_Helper_DbUpgrade::QUIZMASTER_DB_VERSION;
     }
 
-    public function delete()
-    {
-        $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_category`');
+    public function delete() {
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_form`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_lock`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_master`');
@@ -708,16 +706,7 @@ class QuizMaster_Helper_DbUpgrade
         return 17;
     }
 
-    private function upgradeDbV17()
-    {
-
-        $this->_wpdb->query('
-			CREATE TABLE IF NOT EXISTS `' . $this->_wpdb->prefix . 'quizmaster_category` (
-			  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			  `category_name` varchar(200) NOT NULL,
-			  PRIMARY KEY (`category_id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-		');
+    private function upgradeDbV17() {
 
         $this->_wpdb->query('
 			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
@@ -976,12 +965,7 @@ class QuizMaster_Helper_DbUpgrade
         return 22;
     }
 
-    private function upgradeDbV22()
-    {
-        $this->_wpdb->query('
-			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_category
-				ADD  `type` ENUM(  \'QUESTION\',  \'QUIZ\' ) NOT NULL DEFAULT  \'QUESTION\';
-		');
+    private function upgradeDbV22() {
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_master
@@ -990,9 +974,6 @@ class QuizMaster_Helper_DbUpgrade
 
         $this->_wpdb->query('UPDATE ' . $this->_wpdb->prefix . 'quizmaster_master
 				SET category_id = 0');
-
-        $this->_wpdb->query('UPDATE ' . $this->_wpdb->prefix . 'quizmaster_category
-				SET type = \'QUESTION\'');
 
         return 23;
     }
