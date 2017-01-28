@@ -45,7 +45,6 @@ class QuizMaster_Helper_DbUpgrade
     }
 
     public function delete() {
-        $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_form`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_lock`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_master`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_prerequisite`');
@@ -64,26 +63,13 @@ class QuizMaster_Helper_DbUpgrade
         $this->databaseDelta();
     }
 
-    public function databaseDelta()
-    {
-        if (!function_exists('dbDelta')) {
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        }
+    public function databaseDelta() {
 
-        dbDelta("
+      if (!function_exists('dbDelta')) {
+          require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+      }
 
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_form (
-			  form_id int(11) NOT NULL AUTO_INCREMENT,
-			  quiz_id int(11) NOT NULL,
-			  fieldname varchar(100) NOT NULL,
-			  type tinyint(4) NOT NULL,
-			  required tinyint(1) unsigned NOT NULL,
-			  sort tinyint(4) NOT NULL,
-			  show_in_statistic tinyint(1) unsigned NOT NULL,
-			  data mediumtext,
-			  PRIMARY KEY  (form_id),
-			  KEY quiz_id (quiz_id)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+      dbDelta("
 
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_prerequisite (
 			  prerequisite_quiz_id int(11) NOT NULL,
@@ -933,20 +919,6 @@ class QuizMaster_Helper_DbUpgrade
 		');
 
         $this->_wpdb->query('
-			CREATE TABLE `' . $this->_wpdb->prefix . 'quizmaster_form` (
-			  `form_id` int(11) NOT NULL AUTO_INCREMENT,
-			  `quiz_id` int(11) NOT NULL,
-			  `fieldname` varchar(100) NOT NULL,
-			  `type` tinyint(4) NOT NULL,
-			  `required` tinyint(1) unsigned NOT NULL,
-			  `sort` tinyint(4) NOT NULL,
-			  `data` mediumtext,
-			  PRIMARY KEY (`form_id`),
-			  KEY `quiz_id` (`quiz_id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-		');
-
-        $this->_wpdb->query('
 			CREATE TABLE `' . $this->_wpdb->prefix . 'quizmaster_template` (
 			  `template_id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(200) NOT NULL,
@@ -1022,12 +994,7 @@ class QuizMaster_Helper_DbUpgrade
         return 24;
     }
 
-    private function upgradeDbV24()
-    {
-        $this->_wpdb->query('
-			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_form
-				ADD  `show_in_statistic` TINYINT( 1 ) UNSIGNED NOT NULL AFTER  `sort` ;
-		');
+    private function upgradeDbV24() {
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_statistic
