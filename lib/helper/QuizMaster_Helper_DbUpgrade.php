@@ -46,9 +46,7 @@ class QuizMaster_Helper_DbUpgrade
 
     public function delete() {
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_lock`');
-        $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_master`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_prerequisite`');
-        $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_question`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_statistic`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_statistic_ref`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_template`');
@@ -76,32 +74,6 @@ class QuizMaster_Helper_DbUpgrade
 			  quiz_id int(11) NOT NULL,
 			  PRIMARY KEY  (prerequisite_quiz_id,quiz_id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_question (
-			  id int(11) NOT NULL AUTO_INCREMENT,
-			  quiz_id int(11) NOT NULL,
-			  online tinyint(1) unsigned NOT NULL,
-			  sort smallint(5) unsigned NOT NULL,
-			  title varchar(200) NOT NULL,
-			  points int(11) NOT NULL,
-			  question text NOT NULL,
-			  correct_msg text NOT NULL,
-			  incorrect_msg text NOT NULL,
-			  correct_same_text tinyint(1) NOT NULL,
-			  tip_enabled tinyint(1) NOT NULL,
-			  tip_msg text NOT NULL,
-			  answer_type varchar(50) NOT NULL,
-			  show_points_in_box tinyint(1) NOT NULL,
-			  answer_points_activated tinyint(1) NOT NULL,
-			  answer_data longtext NOT NULL,
-			  category_id int(10) unsigned NOT NULL,
-			  answer_points_diff_modus_activated tinyint(1) unsigned NOT NULL,
-			  disable_correct tinyint(1) unsigned NOT NULL,
-			  matrix_sort_answer_criteria_width tinyint(3) unsigned NOT NULL,
-			  PRIMARY KEY  (id),
-			  KEY quiz_id (quiz_id),
-			  KEY category_id (category_id)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_statistic (
 			  statistic_ref_id int(10) unsigned NOT NULL,
@@ -151,16 +123,7 @@ class QuizMaster_Helper_DbUpgrade
 		");
     }
 
-    private function upgradeDbV1()
-    {
-
-        $this->_wpdb->query('
-			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_master`
-				ADD  `back_button` TINYINT( 1 ) NOT NULL AFTER  `answer_random`,
-				ADD  `check_answer` TINYINT( 1 ) NOT NULL AFTER  `answer_random`,
-				ADD  `result_text` TEXT NOT NULL AFTER  `text`
-		');
-
+    private function upgradeDbV1() {
         return 2;
     }
 
@@ -177,12 +140,6 @@ class QuizMaster_Helper_DbUpgrade
 				ADD  `incorrect_count` INT UNSIGNED NOT NULL AFTER  `incorrect_msg` ,
 				ADD  `correct_count` INT UNSIGNED NOT NULL AFTER  `incorrect_msg` ,
 				ADD  `correct_same_text` TINYINT( 1 ) NOT NULL AFTER  `incorrect_msg`
-		');
-
-        $this->_wpdb->query('
-			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
- 				ADD  `statistics_on` TINYINT( 1 ) NOT NULL ,
- 				ADD  `statistics_ip_lock` INT UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('
@@ -236,16 +193,9 @@ class QuizMaster_Helper_DbUpgrade
         }
     }
 
-    private function upgradeDbV5()
-    {
+    private function upgradeDbV5() {
 
         $this->upgradeFixDbV4();
-
-        $this->_wpdb->query('
-			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
-				ADD  `result_grade_enabled` TINYINT( 1 ) NOT NULL AFTER  `result_text`
-		');
-
         return 6;
     }
 
