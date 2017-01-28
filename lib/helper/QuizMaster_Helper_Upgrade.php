@@ -71,14 +71,13 @@ class QuizMaster_Helper_Upgrade
         $role->add_cap('quizMaster_toplist_edit');
     }
 
-    private static function updateDb()
-    {
-        $db = new QuizMaster_Helper_DbUpgrade();
-        $v = $db->upgrade(get_option('quizMaster_dbVersion', false));
+    private static function updateDb() {
+      $db = new QuizMaster_Helper_DbUpgrade();
+      $v = $db->upgrade( get_option('quizMaster_dbVersion', false) );
 
-        if (add_option('quizMaster_dbVersion', $v) === false) {
-            update_option('quizMaster_dbVersion', $v);
-        }
+      if (add_option('quizMaster_dbVersion', $v) === false) {
+        update_option('quizMaster_dbVersion', $v);
+      }
     }
 
     private static function updateV20()

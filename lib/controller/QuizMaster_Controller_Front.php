@@ -108,7 +108,6 @@ class QuizMaster_Controller_Front
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
-        $categoryMapper = new QuizMaster_Model_CategoryMapper();
         $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
@@ -146,7 +145,7 @@ class QuizMaster_Controller_Front
         print '</pre>';
         */
 
-        $view->category = $categoryMapper->fetchByQuiz($quiz->getId());
+        $view->category = array();
         $view->forms = $formMapper->fetch($quiz->getId());
 
         $view = apply_filters( 'quizmaster_view_before_render', $view );

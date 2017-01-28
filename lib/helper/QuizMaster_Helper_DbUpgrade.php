@@ -73,13 +73,7 @@ class QuizMaster_Helper_DbUpgrade
         }
 
         dbDelta("
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_category (
-			  category_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-			  category_name varchar(200) NOT NULL, 
-			  type enum('QUESTION','QUIZ') NOT NULL DEFAULT 'QUESTION',
-			  PRIMARY KEY  (category_id)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_form (
 			  form_id int(11) NOT NULL AUTO_INCREMENT,
 			  quiz_id int(11) NOT NULL,
@@ -92,78 +86,13 @@ class QuizMaster_Helper_DbUpgrade
 			  PRIMARY KEY  (form_id),
 			  KEY quiz_id (quiz_id)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_lock (
-			  quiz_id int(11) NOT NULL,
-			  lock_ip varchar(100) NOT NULL,
-			  user_id bigint(20) unsigned NOT NULL,
-			  lock_type tinyint(3) unsigned NOT NULL,
-			  lock_date int(11) NOT NULL,
-			  PRIMARY KEY  (quiz_id,lock_ip,user_id,lock_type)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-			
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_master (
-			  id int(11) NOT NULL AUTO_INCREMENT,
-			  name varchar(200) NOT NULL,
-			  text text NOT NULL,
-			  result_text text NOT NULL,
-			  result_grade_enabled tinyint(1) NOT NULL,
-			  title_hidden tinyint(1) NOT NULL,
-			  btn_restart_quiz_hidden tinyint(1) NOT NULL,
-			  btn_view_question_hidden tinyint(1) NOT NULL,
-			  question_random tinyint(1) NOT NULL,
-			  answer_random tinyint(1) NOT NULL,
-			  time_limit int(11) NOT NULL,
-			  statistics_on tinyint(1) NOT NULL,
-			  statistics_ip_lock int(10) unsigned NOT NULL,
-			  show_points tinyint(1) NOT NULL,
-			  quiz_run_once tinyint(1) NOT NULL,
-			  quiz_run_once_type tinyint(4) NOT NULL,
-			  quiz_run_once_cookie tinyint(1) NOT NULL,
-			  quiz_run_once_time int(10) unsigned NOT NULL,
-			  numbered_answer tinyint(1) NOT NULL,
-			  hide_answer_message_box tinyint(1) NOT NULL,
-			  disabled_answer_mark tinyint(1) NOT NULL,
-			  show_max_question tinyint(1) NOT NULL,
-			  show_max_question_value int(10) unsigned NOT NULL,
-			  show_max_question_percent tinyint(1) NOT NULL,
-			  toplist_activated tinyint(1) NOT NULL,
-			  toplist_data text NOT NULL,
-			  show_average_result tinyint(1) NOT NULL,
-			  prerequisite tinyint(1) NOT NULL,
-			  quiz_modus tinyint(3) unsigned NOT NULL,
-			  show_review_question tinyint(1) NOT NULL,
-			  quiz_summary_hide tinyint(1) NOT NULL,
-			  skip_question_disabled tinyint(1) NOT NULL,
-			  email_notification tinyint(3) unsigned NOT NULL,
-			  user_email_notification tinyint(1) unsigned NOT NULL,
-			  show_category_score tinyint(1) unsigned NOT NULL,
-			  hide_result_correct_question tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  hide_result_quiz_time tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  hide_result_points tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  autostart tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  forcing_question_solve tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  hide_question_position_overview tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  hide_question_numbering tinyint(1) unsigned NOT NULL DEFAULT '0',
-			  form_activated tinyint(1) unsigned NOT NULL,
-			  form_show_position tinyint(3) unsigned NOT NULL,
-			  start_only_registered_user tinyint(1) unsigned NOT NULL,
-			  questions_per_page tinyint(3) unsigned NOT NULL,
-			  sort_categories tinyint(1) unsigned NOT NULL,
-			  show_category tinyint(1) unsigned NOT NULL,
-			  category_id int(10) unsigned NOT NULL,
-			  admin_email text NOT NULL,
-  			  user_email text NOT NULL,
-			  plugin_container text,
-			  PRIMARY KEY  (id)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_prerequisite (
 			  prerequisite_quiz_id int(11) NOT NULL,
 			  quiz_id int(11) NOT NULL,
 			  PRIMARY KEY  (prerequisite_quiz_id,quiz_id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_question (
 			  id int(11) NOT NULL AUTO_INCREMENT,
 			  quiz_id int(11) NOT NULL,
@@ -189,7 +118,7 @@ class QuizMaster_Helper_DbUpgrade
 			  KEY quiz_id (quiz_id),
 			  KEY category_id (category_id)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_statistic (
 			  statistic_ref_id int(10) unsigned NOT NULL,
 			  question_id int(11) NOT NULL,
@@ -202,7 +131,7 @@ class QuizMaster_Helper_DbUpgrade
 			  answer_data text,
 			  PRIMARY KEY  (statistic_ref_id,question_id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_statistic_ref (
 			  statistic_ref_id int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  quiz_id int(11) NOT NULL,
@@ -214,7 +143,7 @@ class QuizMaster_Helper_DbUpgrade
 			  KEY quiz_id (quiz_id,user_id),
 			  KEY time (create_time)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_template (
 			  template_id int(11) NOT NULL AUTO_INCREMENT,
 			  name varchar(200) NOT NULL,
@@ -222,7 +151,7 @@ class QuizMaster_Helper_DbUpgrade
 			  data text NOT NULL,
 			  PRIMARY KEY  (template_id)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-			
+
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_toplist (
 			  toplist_id int(11) NOT NULL AUTO_INCREMENT,
 			  quiz_id int(11) NOT NULL,
@@ -425,7 +354,7 @@ class QuizMaster_Helper_DbUpgrade
             if (!in_array('btn_view_question_hidden', $names)) {
                 $this->_wpdb->query('
 					ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
-						ADD  `btn_view_question_hidden` TINYINT( 1 ) NOT NULL AFTER  `btn_restart_quiz_hidden` 
+						ADD  `btn_view_question_hidden` TINYINT( 1 ) NOT NULL AFTER  `btn_restart_quiz_hidden`
 				');
             }
         }
@@ -457,7 +386,7 @@ class QuizMaster_Helper_DbUpgrade
 				ADD  `quiz_run_once` TINYINT( 1 ) NOT NULL ,
 				ADD  `quiz_run_once_type` TINYINT NOT NULL ,
 				ADD  `quiz_run_once_cookie` TINYINT( 1 ) NOT NULL ,
-				ADD  `quiz_run_once_time` INT UNSIGNED NOT NULL 
+				ADD  `quiz_run_once_time` INT UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('
@@ -476,7 +405,7 @@ class QuizMaster_Helper_DbUpgrade
 			INSERT INTO `' . $this->_wpdb->prefix . 'quizmaster_statistic` (quiz_id, question_id, user_id, correct_count, incorrect_count, hint_count)
 				SELECT
 					question.quiz_id, id, 0, question.correct_count, question.incorrect_count, tip_count
-				FROM 
+				FROM
 					`' . $this->_wpdb->prefix . 'quizmaster_question` as question
 				WHERE
 					question.correct_count > 0 OR question.incorrect_count > 0 OR tip_count > 0
@@ -491,7 +420,7 @@ class QuizMaster_Helper_DbUpgrade
         $this->_wpdb->query('
 			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
 				ADD  `question_on_single_page` TINYINT( 1 ) NOT NULL ,
-				ADD  `numbered_answer` TINYINT( 1 ) NOT NULL 
+				ADD  `numbered_answer` TINYINT( 1 ) NOT NULL
 		');
 
         return 11;
@@ -503,8 +432,8 @@ class QuizMaster_Helper_DbUpgrade
         $this->_wpdb->query('
 			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_question`
 				ADD  `points_per_answer` TINYINT( 1 ) NOT NULL ,
-				ADD  `points_answer` INT UNSIGNED NOT NULL , 
-				ADD  `show_points_in_box` TINYINT( 1 ) NOT NULL 
+				ADD  `points_answer` INT UNSIGNED NOT NULL ,
+				ADD  `show_points_in_box` TINYINT( 1 ) NOT NULL
 		');
 
         $this->_wpdb->query('
@@ -571,7 +500,7 @@ class QuizMaster_Helper_DbUpgrade
 
         $this->_wpdb->query('
 			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_question`
-				CHANGE  `sort`  `sort` SMALLINT UNSIGNED NOT NULL 
+				CHANGE  `sort`  `sort` SMALLINT UNSIGNED NOT NULL
 		');
 
         return 15;
@@ -582,28 +511,28 @@ class QuizMaster_Helper_DbUpgrade
 
         $this->_wpdb->query('
 			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_question`
-				ADD	`answer_points_activated` tinyint(1) NOT NULL, 
+				ADD	`answer_points_activated` tinyint(1) NOT NULL,
  				ADD	`answer_data` longtext NOT NULL
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_statistic`
-				ADD `points` int(10) unsigned NOT NULL 
+				ADD `points` int(10) unsigned NOT NULL
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
-				ADD `toplist_activated` tinyint(1) NOT NULL, 
-  				ADD `toplist_data` text NOT NULL, 
-  				ADD `show_average_result` tinyint(1) NOT NULL,  
-  				ADD `prerequisite` tinyint(1) NOT NULL 
+				ADD `toplist_activated` tinyint(1) NOT NULL,
+  				ADD `toplist_data` text NOT NULL,
+  				ADD `show_average_result` tinyint(1) NOT NULL,
+  				ADD `prerequisite` tinyint(1) NOT NULL
 		');
 
         $this->_wpdb->query('
 			CREATE TABLE IF NOT EXISTS `' . $this->_wpdb->prefix . 'quizmaster_prerequisite` (
-			 	`prerequisite_quiz_id` int(11) NOT NULL, 
-			 	`quiz_id` int(11) NOT NULL, 
-			  	PRIMARY KEY (`prerequisite_quiz_id`,`quiz_id`) 
+			 	`prerequisite_quiz_id` int(11) NOT NULL,
+			 	`quiz_id` int(11) NOT NULL,
+			  	PRIMARY KEY (`prerequisite_quiz_id`,`quiz_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		');
 
@@ -796,7 +725,7 @@ class QuizMaster_Helper_DbUpgrade
 				ADD  `show_review_question` TINYINT( 1 ) NOT NULL ,
 				ADD  `quiz_summary_hide` TINYINT( 1 ) NOT NULL ,
 				ADD  `skip_question_disabled` TINYINT( 1 ) NOT NULL ,
-				ADD  `email_notification` TINYINT UNSIGNED NOT NULL 
+				ADD  `email_notification` TINYINT UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('
@@ -826,9 +755,9 @@ class QuizMaster_Helper_DbUpgrade
 
         $this->_wpdb->query('
 			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
-				 DROP `check_answer`, 
-				 DROP `back_button`, 
-				 DROP `question_on_single_page` 
+				 DROP `check_answer`,
+				 DROP `back_button`,
+				 DROP `question_on_single_page`
 		');
 
         return 18;
@@ -868,9 +797,9 @@ class QuizMaster_Helper_DbUpgrade
 
         $this->_wpdb->query('
 			INSERT INTO ' . $this->_wpdb->prefix . 'quizmaster_statistic_ref
-				
+
 				(quiz_id, user_id, create_time, is_old)
-				
+
 				SELECT s.quiz_id, s.user_id, ' . time() . ' AS create_time, 1 AS is_old
 				FROM ' . $this->_wpdb->prefix . 'quizmaster_statistic AS s
 				GROUP BY quiz_id, user_id
@@ -880,17 +809,17 @@ class QuizMaster_Helper_DbUpgrade
 			UPDATE ' . $this->_wpdb->prefix . 'quizmaster_statistic AS s
 				LEFT JOIN ' . $this->_wpdb->prefix . 'quizmaster_statistic_ref AS sf
 					ON s.quiz_id = sf.quiz_id AND s.user_id = sf.user_id
-				
-				SET s.statistic_ref_id = sf.statistic_ref_id 
+
+				SET s.statistic_ref_id = sf.statistic_ref_id
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_statistic
-				DROP PRIMARY KEY , 
-				ADD PRIMARY KEY (  `statistic_ref_id` ,  `question_id` ) , 
-				DROP  `quiz_id` , 
-				DROP  `user_id` , 
-				ADD  `question_time` INT UNSIGNED NOT NULL 
+				DROP PRIMARY KEY ,
+				ADD PRIMARY KEY (  `statistic_ref_id` ,  `question_id` ) ,
+				DROP  `quiz_id` ,
+				DROP  `user_id` ,
+				ADD  `question_time` INT UNSIGNED NOT NULL
 		');
 
         //end
@@ -898,8 +827,8 @@ class QuizMaster_Helper_DbUpgrade
         //Master
         $this->_wpdb->query("
 			ALTER TABLE  " . $this->_wpdb->prefix . "quizmaster_master
-				ADD  `user_email_notification` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0', 
-				ADD  `show_category_score` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0', 
+				ADD  `user_email_notification` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
+				ADD  `show_category_score` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
 				ADD  `hide_result_correct_question` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
 		 		ADD  `hide_result_quiz_time` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
  				ADD  `hide_result_points` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0'
@@ -928,8 +857,8 @@ class QuizMaster_Helper_DbUpgrade
     {
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_question
-				ADD `answer_points_diff_modus_activated` TINYINT( 1 ) UNSIGNED NOT NULL, 
-				ADD `disable_correct` TINYINT( 1 ) UNSIGNED NOT NULL 
+				ADD `answer_points_diff_modus_activated` TINYINT( 1 ) UNSIGNED NOT NULL,
+				ADD `disable_correct` TINYINT( 1 ) UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('
@@ -990,28 +919,28 @@ class QuizMaster_Helper_DbUpgrade
     {
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_master
-				ADD  `form_activated` TINYINT( 1 ) UNSIGNED NOT NULL , 
-				ADD  `form_show_position` TINYINT UNSIGNED NOT NULL , 
-				ADD  `start_only_registered_user` TINYINT( 1 ) UNSIGNED NOT NULL , 
-				ADD  `questions_per_page` TINYINT UNSIGNED NOT NULL , 
-				ADD  `sort_categories` TINYINT( 1 ) UNSIGNED NOT NULL , 
-				ADD  `show_category` TINYINT( 1 ) UNSIGNED NOT NULL 
+				ADD  `form_activated` TINYINT( 1 ) UNSIGNED NOT NULL ,
+				ADD  `form_show_position` TINYINT UNSIGNED NOT NULL ,
+				ADD  `start_only_registered_user` TINYINT( 1 ) UNSIGNED NOT NULL ,
+				ADD  `questions_per_page` TINYINT UNSIGNED NOT NULL ,
+				ADD  `sort_categories` TINYINT( 1 ) UNSIGNED NOT NULL ,
+				ADD  `show_category` TINYINT( 1 ) UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_statistic
-				ADD  `answer_data` TEXT NULL DEFAULT NULL 
+				ADD  `answer_data` TEXT NULL DEFAULT NULL
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_statistic_ref
-				ADD  `form_data` TEXT NULL DEFAULT NULL 
+				ADD  `form_data` TEXT NULL DEFAULT NULL
 		');
 
         $this->_wpdb->query('
 			ALTER TABLE  ' . $this->_wpdb->prefix . 'quizmaster_question
-				ADD  `online` TINYINT( 1 ) UNSIGNED NOT NULL AFTER  `quiz_id`  , 
-				ADD  `matrix_sort_answer_criteria_width` TINYINT( 3 ) UNSIGNED NOT NULL 
+				ADD  `online` TINYINT( 1 ) UNSIGNED NOT NULL AFTER  `quiz_id`  ,
+				ADD  `matrix_sort_answer_criteria_width` TINYINT( 3 ) UNSIGNED NOT NULL
 		');
 
         $this->_wpdb->query('

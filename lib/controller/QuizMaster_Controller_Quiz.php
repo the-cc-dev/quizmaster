@@ -775,7 +775,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         $lockMapper = new QuizMaster_Model_LockMapper();
         $quizMapper = new QuizMaster_Model_QuizMapper();
-        $categoryMapper = new QuizMaster_Model_CategoryMapper();
         $formMapper = new QuizMaster_Model_FormMapper();
 
         $is100P = $data['results']['comp']['result'] == 100;
@@ -783,10 +782,11 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $quiz = $quizMapper->fetch($data['quizId']);
 
         if ($quiz === null || $quiz->getId() <= 0) {
-            return json_encode(array());
+          return json_encode(array('charter'=>454));
         }
 
-        $categories = $categoryMapper->fetchByQuiz($quiz->getId());
+        return json_encode(array('charter'=>482));
+
         $forms = $formMapper->fetch($quiz->getId());
 
         $ctr->setResultCookie($quiz);

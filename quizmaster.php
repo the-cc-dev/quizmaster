@@ -10,10 +10,8 @@ Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '1.0.0');
-
+define('QUIZMASTER_VERSION', '0.37');
 define('QUIZMASTER_DEV', false);
-
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
@@ -26,6 +24,8 @@ define('QUIZMASTER_CAPTCHA_DIR', $uploadDir['basedir'] . '/quizmaster_captcha');
 define('QUIZMASTER_CAPTCHA_URL', $uploadDir['baseurl'] . '/quizmaster_captcha');
 
 spl_autoload_register('quizMaster_autoload');
+
+delete_option('quizMaster_dbVersion');
 
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
 
@@ -258,21 +258,20 @@ $option_page = acf_add_options_page(array(
 add_filter('single_template', 'quizmaster_quiz_template');
 
 function quizmaster_quiz_template($single) {
-  global $wp_query, $post;
-  $quizTemplatePath = '/templates/quiz.php';
-
-  /* Checks for single template by post type */
+  global $post;
   if ($post->post_type == "quizmaster_quiz") {
-
     return quizmaster_locate_template( 'quiz.php' );
-
-    /*
-    if(file_exists(QUIZMASTER_PATH . $quizTemplatePath)) {
-      return QUIZMASTER_PATH . $quizTemplatePath;
-    }
-    */
-
   }
+  return $single;
+}
 
+/* Single Question Template */
+add_filter('single_template', 'quizmaster_question_template');
+
+function quizmaster_question_template($single) {
+  global $post;
+  if ($post->post_type == "quizmaster_question") {
+    return quizmaster_locate_template( 'question.php' );
+  }
   return $single;
 }
