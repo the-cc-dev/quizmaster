@@ -62,8 +62,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
     }
 
     public function fetch($id) {
-        $model = new QuizMaster_Model_Question($row);
-        return $model;
+      $model = new QuizMaster_Model_Question($row);
+      return $model;
     }
 
     /**
@@ -197,8 +197,6 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
       }
       return $answerData;
     }
-
-
 
     /**
      * @param $quizId
@@ -336,18 +334,4 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
         return $a;
     }
 
-    public function setMultipeCategories($questionIds, $categoryId)
-    {
-        $categoryId = $categoryId < 0 ? 0 : $categoryId;
-
-        $questionIds = implode(', ', array_map('intval', (array)$questionIds));
-
-        return $this->_wpdb->query($this->_wpdb->prepare(
-            "UPDATE
-					{$this->_table}
-				SET
-					`category_id` = %d
-				WHERE id IN(" . $questionIds . ")"
-            , $categoryId));
-    }
 }

@@ -782,10 +782,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $quiz = $quizMapper->fetch($data['quizId']);
 
         if ($quiz === null || $quiz->getId() <= 0) {
-          return json_encode(array('charter'=>454));
+          return json_encode(array());
         }
-
-        return json_encode(array('charter'=>482));
 
         $forms = $formMapper->fetch($quiz->getId());
 
@@ -795,16 +793,16 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             isset($data['forms']) ? $data['forms'] : array());
 
         if (!$ctr->isPreLockQuiz($quiz)) {
-            $statistics = new QuizMaster_Controller_Statistics();
-            $statistics->save($quiz);
 
-            do_action('quizmaster_completed_quiz');
+          $statistics = new QuizMaster_Controller_Statistics();
+          $statistics->save($quiz);
+          do_action('quizmaster_completed_quiz');
 
-            if ($is100P) {
-                do_action('quizmaster_completed_quiz_100_percent');
-            }
+          if ($is100P) {
+            do_action('quizmaster_completed_quiz_100_percent');
+          }
 
-            return json_encode(array());
+          return json_encode(array());
         }
 
         $lockMapper->deleteOldLock(60 * 60 * 24 * 7, $data['quizId'], time(), QuizMaster_Model_Lock::TYPE_QUIZ,
@@ -817,48 +815,49 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $cookieJson = null;
 
         if (isset($ctr->_cookie['quizMaster_lock']) && get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {
-            $cookieJson = json_decode($ctr->_cookie['quizMaster_lock'], true);
+          $cookieJson = json_decode($ctr->_cookie['quizMaster_lock'], true);
 
-            if ($cookieJson !== false) {
-                if (isset($cookieJson[$data['quizId']]) && $cookieJson[$data['quizId']] == $cookieTime) {
-                    $lockCookie = true;
-                }
+          if ($cookieJson !== false) {
+            if (isset($cookieJson[$data['quizId']]) && $cookieJson[$data['quizId']] == $cookieTime) {
+              $lockCookie = true;
             }
+          }
         }
 
         if (!$lockIp && !$lockCookie) {
-            $statistics = new QuizMaster_Controller_Statistics();
-            $statistics->save($quiz);
 
-            do_action('quizmaster_completed_quiz');
+          $statistics = new QuizMaster_Controller_Statistics();
+          $statistics->save($quiz);
 
-            if ($is100P) {
-                do_action('quizmaster_completed_quiz_100_percent');
-            }
+          do_action('quizmaster_completed_quiz');
 
-            if (get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {
-                $cookieData = array();
+          if ($is100P) {
+              do_action('quizmaster_completed_quiz_100_percent');
+          }
 
-                if ($cookieJson !== null || $cookieJson !== false) {
-                    $cookieData = $cookieJson;
-                }
+          if (get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {
+              $cookieData = array();
 
-                $cookieData[$data['quizId']] = $quiz->getQuizRunOnceTime();
-                $url = parse_url(get_bloginfo('url'));
+              if ($cookieJson !== null || $cookieJson !== false) {
+                  $cookieData = $cookieJson;
+              }
 
-                setcookie('quizMaster_lock', json_encode($cookieData), time() + 60 * 60 * 24 * 60,
-                    empty($url['path']) ? '/' : $url['path']);
-            }
+              $cookieData[$data['quizId']] = $quiz->getQuizRunOnceTime();
+              $url = parse_url(get_bloginfo('url'));
 
-            $lock = new QuizMaster_Model_Lock();
+              setcookie('quizMaster_lock', json_encode($cookieData), time() + 60 * 60 * 24 * 60,
+                  empty($url['path']) ? '/' : $url['path']);
+          }
 
-            $lock->setUserId(get_current_user_id());
-            $lock->setQuizId($data['quizId']);
-            $lock->setLockDate(time());
-            $lock->setLockIp($ctr->getIp());
-            $lock->setLockType(QuizMaster_Model_Lock::TYPE_QUIZ);
+          $lock = new QuizMaster_Model_Lock();
 
-            $lockMapper->insert($lock);
+          $lock->setUserId(get_current_user_id());
+          $lock->setQuizId($data['quizId']);
+          $lock->setLockDate(time());
+          $lock->setLockIp($ctr->getIp());
+          $lock->setLockType(QuizMaster_Model_Lock::TYPE_QUIZ);
+
+          $lockMapper->insert($lock);
         }
 
         return json_encode(array());

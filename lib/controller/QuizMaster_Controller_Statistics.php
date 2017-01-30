@@ -59,64 +59,63 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
      * @param QuizMaster_Model_Quiz $quiz
      * @return void|boolean
      */
-    public function save($quiz = null)
-    {
-        $quizId = $this->_post['quizId'];
-        $array = $this->_post['results'];
-        $lockIp = $this->getIp();
-        $userId = get_current_user_id();
+    public function save($quiz = null) {
+      $quizId = $this->_post['quizId'];
+      $array = $this->_post['results'];
+      $lockIp = $this->getIp();
+      $userId = get_current_user_id();
 
-        if ($lockIp === false) {
-            return false;
+      if ($lockIp === false) {
+        return false;
+      }
+
+      if ($quiz === null) {
+        $quizMapper = new QuizMaster_Model_QuizMapper();
+        $quiz = $quizMapper->fetch($quizId);
+      }
+
+      if (!$quiz->isStatisticsOn()) {
+        return false;
+      }
+
+      $values = $this->makeDataList($quizId, $array, $quiz->getQuizModus());
+      $formValues = $this->makeFormData($quiz, isset($this->_post['forms']) ? $this->_post['forms'] : null);
+
+      if ($values === false) {
+        return false;
+      }
+
+      if ($quiz->getStatisticsIpLock() > 0) {
+        $lockMapper = new QuizMaster_Model_LockMapper();
+        $lockTime = $quiz->getStatisticsIpLock() * 60;
+
+        $lockMapper->deleteOldLock($lockTime, $quiz->getId(), time(), QuizMaster_Model_Lock::TYPE_STATISTIC);
+
+        if ($lockMapper->isLock($quizId, $lockIp, $userId, QuizMaster_Model_Lock::TYPE_STATISTIC)) {
+          return false;
         }
 
-        if ($quiz === null) {
-            $quizMapper = new QuizMaster_Model_QuizMapper();
-            $quiz = $quizMapper->fetch($quizId);
-        }
+        $lock = new QuizMaster_Model_Lock();
+        $lock->setQuizId($quizId)
+          ->setLockIp($lockIp)
+          ->setUserId($userId)
+          ->setLockType(QuizMaster_Model_Lock::TYPE_STATISTIC)
+          ->setLockDate(time());
 
-        if (!$quiz->isStatisticsOn()) {
-            return false;
-        }
+        $lockMapper->insert($lock);
+      }
 
-        $values = $this->makeDataList($quizId, $array, $quiz->getQuizModus());
-        $formValues = $this->makeFormData($quiz, isset($this->_post['forms']) ? $this->_post['forms'] : null);
+      $statisticRefModel = new QuizMaster_Model_StatisticRefModel();
 
-        if ($values === false) {
-            return false;
-        }
+      $statisticRefModel->setCreateTime(time());
+      $statisticRefModel->setUserId($userId);
+      $statisticRefModel->setQuizId($quizId);
+      $statisticRefModel->setFormData($formValues);
 
-        if ($quiz->getStatisticsIpLock() > 0) {
-            $lockMapper = new QuizMaster_Model_LockMapper();
-            $lockTime = $quiz->getStatisticsIpLock() * 60;
+      $statisticRefMapper = new QuizMaster_Model_StatisticRefMapper();
+      $statisticRefMapper->statisticSave($statisticRefModel, $values);
 
-            $lockMapper->deleteOldLock($lockTime, $quiz->getId(), time(), QuizMaster_Model_Lock::TYPE_STATISTIC);
-
-            if ($lockMapper->isLock($quizId, $lockIp, $userId, QuizMaster_Model_Lock::TYPE_STATISTIC)) {
-                return false;
-            }
-
-            $lock = new QuizMaster_Model_Lock();
-            $lock->setQuizId($quizId)
-                ->setLockIp($lockIp)
-                ->setUserId($userId)
-                ->setLockType(QuizMaster_Model_Lock::TYPE_STATISTIC)
-                ->setLockDate(time());
-
-            $lockMapper->insert($lock);
-        }
-
-        $statisticRefModel = new QuizMaster_Model_StatisticRefModel();
-
-        $statisticRefModel->setCreateTime(time());
-        $statisticRefModel->setUserId($userId);
-        $statisticRefModel->setQuizId($quizId);
-        $statisticRefModel->setFormData($formValues);
-
-        $statisticRefMapper = new QuizMaster_Model_StatisticRefMapper();
-        $statisticRefMapper->statisticSave($statisticRefModel, $values);
-
-        return true;
+      return true;
     }
 
     /**
@@ -124,99 +123,99 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
      * @param $data
      * @return array|null
      */
-    private function makeFormData($quiz, $data)
-    {
-        if (!$quiz->isFormActivated() || empty($data)) {
+    private function makeFormData($quiz, $data) {
+
+      if (!$quiz->isFormActivated() || empty($data)) {
+        return null;
+      }
+
+      $formMapper = new QuizMaster_Model_FormMapper();
+
+      $forms = $formMapper->fetch($quiz->getId());
+
+      if (empty($forms)) {
+        return null;
+      }
+
+      $formArray = array();
+
+      foreach ($forms as $form) {
+        if ($form->getType() != QuizMaster_Model_Form::FORM_TYPE_DATE) {
+          $str = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : '';
+
+          if (!QuizMaster_Helper_Form::valid($form, $str)) {
+              return null;
+          }
+
+          $formArray[$form->getFormId()] = trim($str);
+        } else {
+          $date = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : array();
+
+          $dateStr = QuizMaster_Helper_Form::validData($form, $date);
+
+          if ($dateStr === null) {
             return null;
+          }
+
+          $formArray[$form->getFormId()] = $dateStr;
         }
+      }
 
-        $formMapper = new QuizMaster_Model_FormMapper();
-
-        $forms = $formMapper->fetch($quiz->getId());
-
-        if (empty($forms)) {
-            return null;
-        }
-
-        $formArray = array();
-
-        foreach ($forms as $form) {
-            if ($form->getType() != QuizMaster_Model_Form::FORM_TYPE_DATE) {
-                $str = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : '';
-
-                if (!QuizMaster_Helper_Form::valid($form, $str)) {
-                    return null;
-                }
-
-                $formArray[$form->getFormId()] = trim($str);
-            } else {
-                $date = isset($data[$form->getFormId()]) ? $data[$form->getFormId()] : array();
-
-                $dateStr = QuizMaster_Helper_Form::validData($form, $date);
-
-                if ($dateStr === null) {
-                    return null;
-                }
-
-                $formArray[$form->getFormId()] = $dateStr;
-            }
-        }
-
-        return $formArray;
+      return $formArray;
     }
 
-    private function makeDataList($quizId, $array, $modus)
-    {
-        $questionMapper = new QuizMaster_Model_QuestionMapper();
+    private function makeDataList($quizId, $array, $modus) {
 
-        $question = $questionMapper->fetchAllList($quizId, array('id', 'points'));
+      $questionMapper = new QuizMaster_Model_QuestionMapper();
 
-        $ids = array();
+      $question = $questionMapper->fetchAllList($quizId, array('id', 'points'));
 
-        foreach ($question as $q) {
-            if (!isset($array[$q['id']])) {
-                continue;
-            }
+      $ids = array();
 
-            $ids[] = $q['id'];
-            $v = $array[$q['id']];
-
-            if (!isset($v) || $v['points'] > $q['points'] || $v['points'] < 0) {
-                return false;
-            }
+      foreach ($question as $q) {
+        if (!isset($array[$q['id']])) {
+            continue;
         }
 
-        $avgTime = null;
+        $ids[] = $q['id'];
+        $v = $array[$q['id']];
 
-        if ($modus == QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) {
-            $avgTime = ceil($array['comp']['quizTime'] / count($question));
-        }
-
-        unset($array['comp']);
-
-        $ak = array_keys($array);
-
-        if (array_diff($ids, $ak) !== array_diff($ak, $ids)) {
+        if (!isset($v) || $v['points'] > $q['points'] || $v['points'] < 0) {
             return false;
         }
+      }
 
-        $values = array();
+      $avgTime = null;
 
-        foreach ($array as $k => $v) {
-            $s = new QuizMaster_Model_Statistic();
-            $s->setQuestionId($k);
-            $s->setHintCount(isset($v['tip']) ? 1 : 0);
-            $s->setSolvedCount(isset($v['solved']) && $v['solved'] ? 1 : 0);
-            $s->setCorrectCount($v['correct'] ? 1 : 0);
-            $s->setIncorrectCount($v['correct'] ? 0 : 1);
-            $s->setPoints($v['points']);
-            $s->setQuestionTime($avgTime === null ? $v['time'] : $avgTime);
-            $s->setAnswerData(isset($v['data']) ? $v['data'] : null);
+      if ($modus == QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) {
+        $avgTime = ceil($array['comp']['quizTime'] / count($question));
+      }
 
-            $values[] = $s;
-        }
+      unset($array['comp']);
 
-        return $values;
+      $ak = array_keys($array);
+
+      if (array_diff($ids, $ak) !== array_diff($ak, $ids)) {
+        return false;
+      }
+
+      $values = array();
+
+      foreach ($array as $k => $v) {
+        $s = new QuizMaster_Model_Statistic();
+        $s->setQuestionId($k);
+        $s->setHintCount(isset($v['tip']) ? 1 : 0);
+        $s->setSolvedCount(isset($v['solved']) && $v['solved'] ? 1 : 0);
+        $s->setCorrectCount($v['correct'] ? 1 : 0);
+        $s->setIncorrectCount($v['correct'] ? 0 : 1);
+        $s->setPoints($v['points']);
+        $s->setQuestionTime($avgTime === null ? $v['time'] : $avgTime);
+        $s->setAnswerData(isset($v['data']) ? $v['data'] : null);
+
+        $values[] = $s;
+      }
+
+      return $values;
     }
 
     private function getIp()
