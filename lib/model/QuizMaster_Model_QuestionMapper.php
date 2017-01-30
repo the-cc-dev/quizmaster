@@ -126,6 +126,18 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
             case 'free_answer':
               $answerData = $this->loadAnswerDataFreeChoice( $fields );
               break;
+            case 'sort_answer':
+              $answerData = $this->loadAnswerDataSortingChoice( $fields );
+              break;
+            case 'matrix_sort_answer':
+              $answerData = $this->loadAnswerDataMatrixSortingAnswer( $fields );
+              break;
+            case 'cloze_answer':
+              $answerData = $this->loadAnswerDataCloze( $fields );
+              break;
+            case 'assessment_answer':
+              $answerData = $this->loadAnswerDataAssessment( $fields );
+              break;
           }
 
           $fields['answerData'] = $answerData;
@@ -137,11 +149,43 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
     }
 
     // MOVE TO QUESTION MODEL
+    public function loadAnswerDataAssessment( $fields ) {
+      $acfAnswerData['answer'] = $fields['assessment_answer'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataCloze( $fields ) {
+      $acfAnswerData['answer'] = $fields['cloze_answer'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
     public function loadAnswerDataFreeChoice( $fields ) {
       $acfAnswerData = array(
         'answer' => $fields['free_choice_answers']
       );
       $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataMatrixSortingAnswer( $fields ) {
+      $acfAnswerData = $fields['matrix_sorting_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $acfAnswer['answer']      = $acfAnswer['criterion'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      }
+      return $answerData;
+    }
+
+    public function loadAnswerDataSortingChoice( $fields ) {
+      $acfAnswerData = $fields['sorting_choice_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $acfAnswer['answer'] = $acfAnswer['sorting_choice_answer'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      }
       return $answerData;
     }
 
