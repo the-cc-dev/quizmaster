@@ -169,7 +169,6 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
       $questionMapper = new QuizMaster_Model_QuestionMapper();
 
       $question = $questionMapper->fetchAllList($quizId, array('id', 'points'));
-
       $ids = array();
 
       foreach ($question as $q) {

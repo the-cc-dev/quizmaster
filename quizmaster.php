@@ -275,3 +275,14 @@ function quizmaster_question_template($single) {
   }
   return $single;
 }
+
+/* Statistics Link in Quiz Table */
+add_filter('post_row_actions','statisticsRow', 10, 2);
+function statisticsRow($actions, $post){
+    //check for your post type
+    if ($post->post_type =="quizmaster_quiz"){
+      $statsUrl = admin_url('admin.php?page=quizMaster&module=statistics&id=' . $post->ID);
+      $actions['statistics'] = '<a href="'. $statsUrl .'">Statistics</a>';
+    }
+    return $actions;
+}

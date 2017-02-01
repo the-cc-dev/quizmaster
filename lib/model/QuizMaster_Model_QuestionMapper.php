@@ -98,6 +98,26 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
         return is_array($id) ? $a : (isset($a[0]) ? $a[0] : null);
     }
 
+    /*
+     * Return list of questions associated with question
+     */
+    public function fetchAllList($quizId, $list, $sort = false) {
+
+      $results = array();
+      $quizPost = get_post( $quizId );
+      $quizQuestions = get_field( 'quiz_questions', $quizId );
+      foreach( $quizQuestions as $qq ) {
+        $quizQuestionID = $qq['quiz_question'];
+        $fields = get_fields( $quizQuestionID );
+        $results[] = array(
+          'id'      => $quizQuestionID,
+          'points'  => $fields['points'],
+        );
+      }
+      return $results;
+
+    }
+
     /**
      * @param $quizId
      * @param bool $rand
@@ -107,7 +127,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
      */
     public function fetchAll($quizId, $rand = false, $max = 0) {
 
-        $results = array();
+        $a = array();
 
         $quizPost = get_post( $quizId );
         $quizQuestions = get_field( 'quiz_questions', $quizId );
@@ -277,25 +297,6 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
             'questions' => $r,
             'count' => $count ? $count : 0
         );
-    }
-
-    public function fetchAllList($quizId, $list, $sort = false)
-    {
-        $sort = $sort ? 'ORDER BY sort' : '';
-
-        $results = $this->_wpdb->get_results(
-            $this->_wpdb->prepare(
-                'SELECT
-								' . implode(', ', (array)$list) . '
-							FROM
-								' . $this->_tableQuestion . '
-							WHERE
-								quiz_id = %d AND online = 1
-							' . $sort
-                , $quizId),
-            ARRAY_A);
-
-        return $results;
     }
 
     public function count($quizId)
