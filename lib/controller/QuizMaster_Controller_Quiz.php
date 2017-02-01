@@ -554,118 +554,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         }
     }
 
-    /**
-     * @param QuizMaster_Model_Quiz $quiz
-     * @param $result
-     * @param QuizMaster_Model_Category[] $categories
-     * @param QuizMaster_Model_Form[] $forms
-     * @param $inputForms
-     */
-    private function emailNote(QuizMaster_Model_Quiz $quiz, $result, $categories, $forms, $inputForms)
-    {
-        $user = wp_get_current_user();
-
-        $r = array(
-            '$userId' => $user->ID,
-            '$username' => $user->display_name,
-            '$quizname' => $quiz->getName(),
-            '$result' => $result['result'] . '%',
-            '$points' => $result['points'],
-            '$ip' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP),
-            '$categories' => empty($result['cats']) ? '' : $this->setCategoryOverview($result['cats'], $categories)
-        );
-
-        if ($quiz->isFormActivated() && $forms !== null) {
-            foreach ($forms as $form) {
-                $value = '';
-
-                if ($form->getType() == QuizMaster_Model_Form::FORM_TYPE_DATE) {
-                    if (isset($inputForms[$form->getFormId()])) {
-                        $value = $inputForms[$form->getFormId()]['day'] . '-' . $inputForms[$form->getFormId()]['month']
-                            . '-' . $inputForms[$form->getFormId()]['year'];
-                    }
-                } else {
-                    $value = isset($inputForms[$form->getFormId()]) ? $inputForms[$form->getFormId()] : '';
-                }
-
-                $r['$form{' . $form->getSort() . '}'] = esc_html($value);
-            }
-        }
-
-        if ($user->ID == 0) {
-            $r['$username'] = $r['$ip'];
-        }
-
-        if ($quiz->isUserEmailNotification()) {
-            $userEmail = $quiz->getUserEmail();
-
-            $userAdress = null;
-
-            if ($userEmail->isToUser() && get_current_user_id() > 0) {
-                $userAdress = $user->user_email;
-            } else {
-                if ($userEmail->isToForm() && $quiz->isFormActivated()) {
-                    foreach ($forms as $form) {
-                        if ($form->getSort() == $userEmail->getTo()) {
-                            if (isset($inputForms[$form->getFormId()])) {
-                                $userAdress = $inputForms[$form->getFormId()];
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (!empty($userAdress) && filter_var($userAdress, FILTER_VALIDATE_EMAIL) !== false) {
-                $msg = str_replace(array_keys($r), $r, $userEmail->getMessage());
-
-                $headers = '';
-                $email = $userEmail->getFrom();
-
-                if (!empty($email)) {
-                    $headers = 'From: ' . $userEmail->getFrom();
-                }
-
-                if ($userEmail->isHtml()) {
-                    add_filter('wp_mail_content_type', array($this, 'htmlEmailContent'));
-                }
-
-                wp_mail($userAdress, $userEmail->getSubject(), $msg, $headers);
-
-                if ($userEmail->isHtml()) {
-                    remove_filter('wp_mail_content_type', array($this, 'htmlEmailContent'));
-                }
-            }
-        }
-
-        if ($quiz->getEmailNotification() == QuizMaster_Model_Quiz::QUIZ_EMAIL_NOTE_ALL
-            || (get_current_user_id() > 0 && $quiz->getEmailNotification() == QuizMaster_Model_Quiz::QUIZ_EMAIL_NOTE_REG_USER)
-        ) {
-
-            $adminEmail = $quiz->getAdminEmail();
-
-            $msg = str_replace(array_keys($r), $r, $adminEmail->getMessage());
-
-            $headers = '';
-            $email = $adminEmail->getFrom();
-
-            if (!empty($email)) {
-                $headers = 'From: ' . $adminEmail->getFrom();
-            }
-
-            if ($adminEmail->isHtml()) {
-                add_filter('wp_mail_content_type', array($this, 'htmlEmailContent'));
-            }
-
-            wp_mail($adminEmail->getTo(), $adminEmail->getSubject(), $msg, $headers);
-
-            if ($adminEmail->isHtml()) {
-                remove_filter('wp_mail_content_type', array($this, 'htmlEmailContent'));
-            }
-        }
-    }
-
     public function htmlEmailContent()
     {
         return 'text/html';
@@ -788,9 +676,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $forms = $formMapper->fetch($quiz->getId());
 
         $ctr->setResultCookie($quiz);
-
-        $ctr->emailNote($quiz, $data['results']['comp'], $categories, $forms,
-            isset($data['forms']) ? $data['forms'] : array());
 
         if (!$ctr->isPreLockQuiz($quiz)) {
 

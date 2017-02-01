@@ -188,6 +188,18 @@ function quizmasterAddPostTypes() {
       'show_in_menu' => 'quizMaster'
     )
   );
+
+  register_post_type( 'quizmaster_email',
+    array(
+      'labels' => array(
+        'name' => __( 'Emails' ),
+        'singular_name' => __( 'Email' )
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_menu' => 'quizMaster'
+    )
+  );
 }
 
 add_action( 'init', 'quizmasterRegisterTaxonomies' );
