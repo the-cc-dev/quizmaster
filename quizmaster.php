@@ -85,16 +85,27 @@ function quizMaster_pluginLoaded() {
 
 }
 
-function quizMaster_achievementsV3()
-{
-    if (function_exists('achievements')) {
-        achievements()->extensions->quizmaster = new QuizMaster_Plugin_BpAchievementsV3();
-
-        do_action('quizMaster_achievementsV3');
-    }
+/**
+ * Get template.
+ *
+ * Search for the template and include the file.
+ *
+ * @since 1.0.0
+ *
+ * @see wcpt_locate_template()
+ *
+ * @param string 	$template_name			Template to load.
+ * @param array 	$args					Args passed for the template file.
+ * @param string 	$string $template_path	Path to templates.
+ * @param string	$default_path			Default path to template files.
+ */
+function quizmaster_parse_template( $template_name, $args = array(), $tempate_path = '', $default_path = '' ) {
+  ob_start();
+  quizmaster_get_template( $template_name, $args, $template_path, $default_path );
+  $contents = ob_get_contents();
+  ob_end_clean();
+  return $contents;
 }
-
-add_action('dpa_ready', 'quizMaster_achievementsV3');
 
 /**
  * Get template.
@@ -297,39 +308,4 @@ function statisticsRow($actions, $post){
       $actions['statistics'] = '<a href="'. $statsUrl .'">Statistics</a>';
     }
     return $actions;
-}
-
-// how do we know which trigger, in the method?
-// https://codex.wordpress.org/Function_Reference/did_action
-add_action('quizmaster_completed_quiz', 'sendEmailCompletedQuiz' );
-function sendEmailCompletedQuiz() {
-  $trigger = 'completed_quiz';
-
-  define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
-  define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
-
-  $posts = get_posts(array(
-  	'numberposts'	=> -1,
-  	'post_type'		=> 'quizmaster_email',
-  	'meta_query'	=> array(
-  		'relation'		=> 'AND',
-  		array(
-  			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
-  			'value'	  	=> $trigger,
-  			'compare' 	=> '=',
-  		),
-  		array(
-  			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
-  			'value'	  	=> '1',
-  			'compare' 	=> '=',
-  		),
-  	),
-  ));
-
-  foreach( $post as $email ) {
-    // call email controller
-    // load the email template (by key)
-    // send email
-  }
-
 }

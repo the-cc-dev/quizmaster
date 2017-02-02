@@ -8,13 +8,22 @@ class QuizMaster_Controller_Front
      */
     private $_settings = null;
 
-    public function __construct()
-    {
-        $this->loadSettings();
+    public function __construct() {
+      $this->loadSettings();
 
-        add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
-        add_shortcode('QuizMaster', array($this, 'shortcode'));
-        add_shortcode('QuizMastertoplist', array($this, 'shortcodeToplist'));
+      add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
+      add_shortcode('QuizMaster', array($this, 'shortcode'));
+      add_shortcode('QuizMastertoplist', array($this, 'shortcodeToplist'));
+
+      // init controller email
+      $emailCtr = new QuizMaster_Controller_Email();
+
+      add_action('quizmaster_completed_quiz', array( $this, 'hookTest' ));
+    }
+
+    public static function hookTest() {
+      print "8923749327432";
+      die();
     }
 
     public function loadDefaultScripts()

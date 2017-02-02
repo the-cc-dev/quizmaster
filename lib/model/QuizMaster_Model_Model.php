@@ -1,18 +1,44 @@
 <?php
 
-class QuizMaster_Model_Model
-{
+class QuizMaster_Model_Model {
 
     /**
      * @var QuizMaster_Model_QuizMapper
      */
     protected $_mapper = null;
 
-    public function __construct($array = null) {
-      $this->setModelData($array);
+    public function __construct($data = null) {
+      if( is_array( $data )) {
+        $this->setModelData( $data );
+      } else {
+        $this->setModelByID( $data );
+      }
+
+    }
+
+    public function setModelByID( $id ) {
+      $fields = get_fields( $id );
+      $fields['id'] = $id;
+      $fields = $this->stripFieldPrefixes( $fields );
+      $fields = $this->processFieldsDuringModelSet( $fields );
+      $this->setModelData( $fields );
+    }
+
+    /*
+     * Override to alter the fields before setting model data
+     */
+    public function processFieldsDuringModelSet( $fields ) {
+      return $fields;
     }
 
     public function setModelData($array) {
+
+      /*
+      print '<pre>';
+      var_dump( $array );
+      print '</pre>';
+      */
+
       if ($array != null) {
         $n = explode(' ', implode('', array_map('ucfirst', explode('_', implode(' _', array_keys($array))))));
         $a = array_combine($n, $array);
@@ -58,4 +84,14 @@ class QuizMaster_Model_Model
 
         return $this;
     }
+
+    public function stripFieldPrefixes( $fields ) {
+      $fieldPrefix = $this->getFieldPrefix();
+      foreach( $fields as $key => $val ) {
+        $key = str_replace( $fieldPrefix, '', $key );
+        $fields[$key] = $val;
+      }
+      return $fields;
+    }
+
 }

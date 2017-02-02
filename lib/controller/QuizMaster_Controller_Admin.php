@@ -5,15 +5,18 @@ class QuizMaster_Controller_Admin
 
     protected $_ajax;
 
-    public function __construct()
-    {
+    public function __construct() {
 
-        $this->_ajax = new QuizMaster_Controller_Ajax();
-        $this->_ajax->init();
+      $this->_ajax = new QuizMaster_Controller_Ajax();
+      $this->_ajax->init();
 
-        add_action('admin_menu', array($this, 'register_page'));
+      add_action('admin_menu', array($this, 'register_page'));
 
-        add_filter('set-screen-option', array($this, 'setScreenOption'), 10, 3);
+      add_filter('set-screen-option', array($this, 'setScreenOption'), 10, 3);
+
+      // init controller email
+      $emailCtr = new QuizMaster_Controller_Email();
+      
     }
 
     public function setScreenOption($status, $option, $value)

@@ -2,124 +2,109 @@
 
 class QuizMaster_Model_Email extends QuizMaster_Model_Model
 {
-    protected $_to = '';
-    protected $_toUser = false;
-    protected $_toForm = false;
+    protected $_id = 0;
+
     protected $_from = '';
-    protected $_subject = '';
     protected $_html = false;
     protected $_message = '';
+    protected $_headers = '';
 
-    public function setTo($_to)
-    {
-        $this->_to = (string)$_to;
+    protected $_key = '';
+    protected $_enabled = '';
+    protected $_trigger = '';
+    protected $_recipients = '';
+    protected $_subject = '';
+    protected $_type = 'html';
 
-        return $this;
+    public function getFieldPrefix() {
+      return 'qm_email_';
     }
 
-    public function getTo()
-    {
-        return $this->_to;
+    public function setId($_id) {
+      $this->_id = (int)$_id;
+      return $this;
     }
 
-    public function setToUser($_toUser)
-    {
-        $this->_toUser = (bool)$_toUser;
-
-        return $this;
+    public function getId() {
+      return $this->_id;
     }
 
-    public function isToUser()
-    {
-        return $this->_toUser;
+    public function getHeaders() {
+      $headers = 'From: ' . $this->getFrom();
+      return $headers;
     }
 
-    public function setToForm($_toForm)
-    {
-        $this->_toForm = (bool)$_toForm;
-
-        return $this;
+    public function setFrom($_from) {
+      $this->_from = (string)$_from;
+      return $this;
     }
 
-    public function isToForm()
-    {
-        return $this->_toForm;
+    public function getFrom() {
+      return $this->_from;
     }
 
-    public function setFrom($_from)
-    {
-        $this->_from = (string)$_from;
-
-        return $this;
+    public function getSubject() {
+      return $this->_subject;
     }
 
-    public function getFrom()
-    {
-        return $this->_from;
+    public function setHtml($_html) {
+      $this->_html = (bool)$_html;
+      return $this;
     }
 
-    public function setSubject($_subject)
-    {
-        $this->_subject = (string)$_subject;
-
-        return $this;
+    public function isHtml() {
+      return $this->_html;
     }
 
-    public function getSubject()
-    {
-        return $this->_subject;
+    public function setMessage($_message) {
+      $this->_message = (string)$_message;
+      return $this;
     }
 
-    public function setHtml($_html)
-    {
-        $this->_html = (bool)$_html;
-
-        return $this;
+    public function setKey( $_key ) {
+      $this->_key = (string)$_key;
+      return $this;
     }
 
-    public function isHtml()
-    {
-        return $this->_html;
+    public function setEnabled( $_enabled ) {
+      $this->_enabled = (bool)$_enabled;
+      return $this;
     }
 
-    public function setMessage($_message)
-    {
-        $this->_message = (string)$_message;
-
-        return $this;
+    public function setTrigger( $_trigger ) {
+      $this->_trigger = (string)$_trigger;
+      return $this;
     }
 
-    public function getMessage()
-    {
-        return $this->_message;
+    public function setRecipients( $_recipients ) {
+      $this->_recipients = (string)$_recipients;
+      return $this;
     }
 
-    public static function getDefault($adminEmail)
-    {
-        $email = new QuizMaster_Model_Email();
-
-        if ($adminEmail) {
-            $email->setSubject(__('QuizMaster: One user completed a quiz', 'quizmaster'));
-            $email->setMessage(__('QuizMaster
-
-The user "$username" has completed "$quizname" the quiz.
-
-Points: $points
-Result: $result
-
-', 'quizmaster'));
-        } else {
-            $email->setSubject(__('QuizMaster: One user completed a quiz', 'quizmaster'));
-            $email->setMessage(__('QuizMaster
-
-You have completed the quiz "$quizname".
-
-Points: $points
-Result: $result
-
-', 'quizmaster'));
-        }
-
-        return $email;
+    public function getRecipients() {
+      return $this->_recipients;
     }
+
+    public function setSubject( $_subject ) {
+      $this->_subject = (string)$_subject;
+      return $this;
+    }
+
+    public function setType( $_type ) {
+      $this->_type = (string)$_type;
+      return $this;
+    }
+
+    public function getMessage() {
+      return $this->_message;
+    }
+
+    /*
+     * Override to alter the fields before setting model data
+     */
+    public function processFieldsDuringModelSet( $fields ) {
+      $fields['email_key'] = $fields['qm_email_key'];
+      return $fields;
+    }
+
 }
