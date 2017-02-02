@@ -298,3 +298,38 @@ function statisticsRow($actions, $post){
     }
     return $actions;
 }
+
+// how do we know which trigger, in the method?
+// https://codex.wordpress.org/Function_Reference/did_action
+add_action('quizmaster_completed_quiz', 'sendEmailCompletedQuiz' );
+function sendEmailCompletedQuiz() {
+  $trigger = 'completed_quiz';
+
+  define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
+  define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
+
+  $posts = get_posts(array(
+  	'numberposts'	=> -1,
+  	'post_type'		=> 'quizmaster_email',
+  	'meta_query'	=> array(
+  		'relation'		=> 'AND',
+  		array(
+  			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
+  			'value'	  	=> $trigger,
+  			'compare' 	=> '=',
+  		),
+  		array(
+  			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
+  			'value'	  	=> '1',
+  			'compare' 	=> '=',
+  		),
+  	),
+  ));
+
+  foreach( $post as $email ) {
+    // call email controller
+    // load the email template (by key)
+    // send email
+  }
+
+}
