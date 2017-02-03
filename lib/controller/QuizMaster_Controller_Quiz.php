@@ -478,7 +478,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
           $statistics = new QuizMaster_Controller_Statistics();
           $statistics->save($quiz);
-          do_action('quizmaster_completed_quiz');
+          do_action('quizmaster_completed_quiz', $quiz);
 
           if ($is100P) {
             do_action('quizmaster_completed_quiz_100_percent');
@@ -511,7 +511,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
           $statistics = new QuizMaster_Controller_Statistics();
           $statistics->save($quiz);
 
-          do_action('quizmaster_completed_quiz');
+          do_action('quizmaster_completed_quiz', $quiz);
 
           if ($is100P) {
               do_action('quizmaster_completed_quiz_100_percent');

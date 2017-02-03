@@ -20,6 +20,10 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model
       return 'qm_email_';
     }
 
+    public function getKey() {
+      return $this->_key;
+    }
+
     public function setId($_id) {
       $this->_id = (int)$_id;
       return $this;

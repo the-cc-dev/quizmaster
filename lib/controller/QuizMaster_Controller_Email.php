@@ -3,12 +3,44 @@
 class QuizMaster_Controller_Email {
 
   private $email = false;
+  private $quiz  = false;
 
   const QUIZMASTER_EMAIL_TRIGGER_FIELD = 'qm_email_trigger';
   const QUIZMASTER_EMAIL_ENABLED_FIELD = 'qm_email_enabled';
 
   public function __construct() {
     $this->addEmailTriggers();
+    $this->addShortcodes();
+  }
+
+  public function addShortcodes() {
+    add_shortcode('quizdata', array($this, 'quizDataShortcode'));
+  }
+
+  public function quizDataShortcode( $atts ) {
+
+    //var_dump( $atts );
+    //var_dump( $this->quiz );
+
+    // normalize attribute keys, lowercase
+    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+    // override default attributes with user attributes
+    $args = shortcode_atts([
+      'data' => '',
+    ], $atts, 'quizdata');
+
+    $data = $args['data'];
+
+    switch( $data ) {
+      case "quiztitle":
+        $content = $this->quiz->getName();
+        break;
+    }
+
+
+
+    return $content;
   }
 
   public function addEmailTriggers() {
@@ -25,11 +57,18 @@ class QuizMaster_Controller_Email {
   }
 
   public function setMessage() {
-    $msg = quizmaster_parse_template('emails/student_completion.php');
+    $msg = $this->parseTemplate();
     $this->email->setMessage( $msg );
   }
 
-  public function sendEmailCompletedQuiz() {
+  public function parseTemplate() {
+    $templateName = str_replace( '_', '-', $this->email->getKey() );
+    $template = 'emails/' . $templateName;
+    $content = quizmaster_parse_template( $template . '.php' );
+    return do_shortcode( $content );
+  }
+
+  public function sendEmailCompletedQuiz( $quiz ) {
 
     $trigger = 'completed_quiz';
 
@@ -56,6 +95,7 @@ class QuizMaster_Controller_Email {
 
     foreach( $posts as $emailPost ) {
       $this->email = new QuizMaster_Model_Email( $emailPost->ID );
+      $this->quiz = $quiz;
       $this->setMessage();
       $this->send();
     }
