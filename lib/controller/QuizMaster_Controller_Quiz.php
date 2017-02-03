@@ -2,61 +2,8 @@
 
 class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 {
-    public function route()
-    {
-        $action = isset($_GET['action']) ? $_GET['action'] : 'show';
+    public function route() {
 
-        switch ($action) {
-            case 'show':
-                $this->showAction();
-                break;
-            case 'addEdit':
-                $this->addEditQuiz();
-                break;
-            case 'delete':
-                if (isset($_GET['id'])) {
-                    $this->deleteAction($_GET['id']);
-                }
-                break;
-            case 'deleteMulti':
-                $this->deleteMultiAction();
-                break;
-            default:
-                $this->showAction();
-                break;
-        }
-    }
-
-    public function routeAction()
-    {
-        $action = isset($_GET['action']) ? $_GET['action'] : 'show';
-
-        switch ($action) {
-            default:
-                $this->showActionHook();
-                break;
-        }
-    }
-
-    private function showActionHook()
-    {
-        if (!empty($_REQUEST['_wp_http_referer'])) {
-            wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI'])));
-            exit;
-        }
-
-        if (!class_exists('WP_List_Table')) {
-            require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
-        }
-
-        add_filter('manage_' . get_current_screen()->id . '_columns',
-            array('QuizMaster_View_QuizOverallTable', 'getColumnDefs'));
-
-        add_screen_option('per_page', array(
-            'label' => __('Quiz', 'quizmaster'),
-            'default' => 20,
-            'option' => 'quizmaster_quiz_overview_per_page'
-        ));
     }
 
     public function isLockQuiz()
@@ -135,193 +82,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         }
 
         return $data;
-    }
-
-    private function getCurrentPage()
-    {
-        $pagenum = isset($_REQUEST['paged']) ? absint($_REQUEST['paged']) : 0;
-
-        return max(1, $pagenum);
-    }
-
-    private function showAction()
-    {
-        if (!current_user_can('quizMaster_show')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
-        }
-
-        $view = new QuizMaster_View_QuizOverall();
-
-        $m = new QuizMaster_Model_QuizMapper();
-        $categoryMapper = new QuizMaster_Model_CategoryMapper();
-
-        $per_page = (int)get_user_option('quizmaster_quiz_overview_per_page');
-        if (empty($per_page) || $per_page < 1) {
-            $per_page = 20;
-        }
-
-        $current_page = $this->getCurrentPage();
-        $search = isset($_GET['s']) ? trim($_GET['s']) : '';
-        $orderBy = isset($_GET['orderby']) ? trim($_GET['orderby']) : '';
-        $order = isset($_GET['order']) ? trim($_GET['order']) : '';
-        $offset = ($current_page - 1) * $per_page;
-        $limit = $per_page;
-        $filter = array();
-
-        if (isset($_GET['cat'])) {
-            $filter['cat'] = $_GET['cat'];
-        }
-
-        $result = $m->fetchTable($orderBy, $order, $search, $limit, $offset, $filter);
-
-        $view->quizItems = $result['quiz'];
-        $view->quizCount = $result['count'];
-        $view->categoryItems = $categoryMapper->fetchAll(QuizMaster_Model_Category::CATEGORY_TYPE_QUIZ);;
-        $view->perPage = $per_page;
-
-        $view->show();
-    }
-
-    private function formHandler($quizId, $post)
-    {
-        if (!isset($post['form'])) {
-            return false;
-        }
-
-        $form = $post['form'];
-
-        unset($form[0]);
-
-        if (empty($form)) {
-            return false;
-        }
-
-        $formMapper = new QuizMaster_Model_FormMapper();
-
-        $deleteIds = array();
-        $forms = array();
-        $sort = 0;
-
-        foreach ($form as $f) {
-            $f['fieldname'] = trim($f['fieldname']);
-
-            if (empty($f['fieldname'])) {
-                continue;
-            }
-
-            if ((int)$f['form_id'] && (int)$f['form_delete']) {
-                $deleteIds[] = (int)$f['form_id'];
-                continue;
-            }
-
-            $f['sort'] = $sort++;
-            $f['quizId'] = $quizId;
-
-            if ($f['type'] == QuizMaster_Model_Form::FORM_TYPE_SELECT || $f['type'] == QuizMaster_Model_Form::FORM_TYPE_RADIO) {
-                if (!empty($f['data'])) {
-                    $items = explode("\n", $f['data']);
-                    $f['data'] = array();
-
-                    foreach ($items as $item) {
-                        $item = trim($item);
-
-                        if (!empty($item)) {
-                            $f['data'][] = $item;
-                        }
-                    }
-                }
-            }
-
-            if (empty($f['data']) || !is_array($f['data'])) {
-                $f['data'] = null;
-            }
-
-            $forms[] = new QuizMaster_Model_Form($f);
-        }
-
-        if (!empty($deleteIds)) {
-            $formMapper->deleteForm($deleteIds, $quizId);
-        }
-
-        $formMapper->update($forms);
-
-        return !empty($forms);
-    }
-
-    private function deleteAction($id)
-    {
-        if (!current_user_can('quizMaster_delete_quiz')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
-        }
-
-        $m = new QuizMaster_Model_QuizMapper();
-
-        $m->deleteAll($id);
-
-        QuizMaster_View_View::admin_notices(__('Quiz deleted', 'quizmaster'), 'info');
-
-        $this->showAction();
-    }
-
-    private function deleteMultiAction()
-    {
-        if (!current_user_can('quizMaster_delete_quiz')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
-        }
-
-        $m = new QuizMaster_Model_QuizMapper();
-
-        if (!empty($_POST['ids'])) {
-            foreach ($_POST['ids'] as $id) {
-                $m->deleteAll($id);
-            }
-        }
-
-        QuizMaster_View_View::admin_notices(__('Quiz deleted', 'quizmaster'), 'info');
-
-        $this->showAction();
-    }
-
-    private function checkValidit($post)
-    {
-        return (isset($post['name']) && !empty($post['name']) && isset($post['text']) && !empty($post['text']));
-    }
-
-    private function filterResultTextGrade($post)
-    {
-        $activ = array_keys($post['resultTextGrade']['activ'], '1');
-        $result = array();
-
-        foreach ($activ as $k) {
-            $result['text'][] = $post['resultTextGrade']['text'][$k];
-            $result['prozent'][] = (float)str_replace(',', '.', $post['resultTextGrade']['prozent'][$k]);
-        }
-
-        return $result;
-    }
-
-    private function setResultCookie(QuizMaster_Model_Quiz $quiz)
-    {
-        $prerequisite = new QuizMaster_Model_PrerequisiteMapper();
-
-        if (get_current_user_id() == 0 && $prerequisite->isQuizId($quiz->getId())) {
-            $cookieData = array();
-
-            if (isset($this->_cookie['quizMaster_result'])) {
-                $d = json_decode($this->_cookie['quizMaster_result'], true);
-
-                if ($d !== null && is_array($d)) {
-                    $cookieData = $d;
-                }
-            }
-
-            $cookieData[$quiz->getId()] = 1;
-
-            $url = parse_url(get_bloginfo('url'));
-
-            setcookie('quizMaster_result', json_encode($cookieData), time() + 60 * 60 * 24 * 300,
-                empty($url['path']) ? '/' : $url['path']);
-        }
     }
 
     public function isPreLockQuiz(QuizMaster_Model_Quiz $quiz)
@@ -544,4 +304,24 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         return json_encode(array());
     }
+
+    private function setResultCookie(QuizMaster_Model_Quiz $quiz)
+    {
+        $prerequisite = new QuizMaster_Model_PrerequisiteMapper();
+        if (get_current_user_id() == 0 && $prerequisite->isQuizId($quiz->getId())) {
+            $cookieData = array();
+            if (isset($this->_cookie['quizMaster_result'])) {
+                $d = json_decode($this->_cookie['quizMaster_result'], true);
+                if ($d !== null && is_array($d)) {
+                    $cookieData = $d;
+                }
+            }
+            $cookieData[$quiz->getId()] = 1;
+            $url = parse_url(get_bloginfo('url'));
+            setcookie('quizMaster_result', json_encode($cookieData), time() + 60 * 60 * 24 * 300,
+                empty($url['path']) ? '/' : $url['path']);
+        }
+    }
+
+
 }

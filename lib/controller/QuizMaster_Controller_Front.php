@@ -12,8 +12,11 @@ class QuizMaster_Controller_Front
       $this->loadSettings();
 
       add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
+
+      /* add shortcodes */
       add_shortcode('QuizMaster', array($this, 'shortcode'));
       add_shortcode('QuizMastertoplist', array($this, 'shortcodeToplist'));
+      add_shortcode('quizmaster_student_report', array($this, 'studentReportShortcode'));
 
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
@@ -21,9 +24,32 @@ class QuizMaster_Controller_Front
       add_action('quizmaster_completed_quiz', array( $this, 'hookTest' ));
     }
 
-    public static function hookTest() {
-      print "8923749327432";
-      die();
+    /* Student Report Shortcode */
+    public function studentReportShortcode() {
+
+      $content = 'student report!';
+
+      if( !is_user_logged_in() ) {
+        return false;
+      }
+      $user = wp_get_current_user();
+
+      // get params
+      $quiz_id = $_GET['quiz'];
+      $ref_id  = $_GET['ref'];
+
+      // show completed quiz table
+      if( !$quiz_id ) {
+        $studentReportCtr = new QuizMaster_Controller_StudentReport;
+        return $studentReportCtr->getCompletedQuizTable();
+      }
+
+      // show quiz review
+      if( $quiz_id ) {
+        $quizReview = new PQC_Quiz_Review_Controller;
+        return $quizReview->getQuizReviewList( $quiz_id, $ref_id );
+      }
+
     }
 
     public function loadDefaultScripts()

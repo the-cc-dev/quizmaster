@@ -36,6 +36,11 @@ class QuizMaster_Controller_Email {
       case "quiztitle":
         $content = $this->quiz->getName();
         break;
+      case "quizlink":
+        $content = '<a href="' . $this->quiz->getPermalink() . '">';
+        $content .= $this->quiz->getName();
+        $content .= '</a>';
+        break;
     }
 
 
