@@ -161,8 +161,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $quizId = (int)$data['quizId'];
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
-        $toplistController = new QuizMaster_Controller_Toplist();
-        $statisticController = new QuizMaster_Controller_Statistics();
+        $score = new QuizMaster_Controller_Score();
 
         $quiz = $quizMapper->fetch($quizId);
         $data = array();
@@ -171,8 +170,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             return json_encode(array());
         }
 
-        $data['toplist'] = $toplistController->getAddToplist($quiz);
-        $data['averageResult'] = $statisticController->getAverageResult($quizId);
+        $data['averageResult'] = $score->getAverageResult($quizId);
 
         return json_encode($data);
     }
@@ -236,8 +234,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         if (!$ctr->isPreLockQuiz($quiz)) {
 
-          $statistics = new QuizMaster_Controller_Statistics();
-          $statistics->save($quiz);
+          $score = new QuizMaster_Controller_Score();
+          $score->save($quiz);
           do_action('quizmaster_completed_quiz', $quiz);
 
           if ($is100P) {
@@ -268,8 +266,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         if (!$lockIp && !$lockCookie) {
 
-          $statistics = new QuizMaster_Controller_Statistics();
-          $statistics->save($quiz);
+          $score = new QuizMaster_Controller_Score();
+          $score->save($quiz);
 
           do_action('quizmaster_completed_quiz', $quiz);
 

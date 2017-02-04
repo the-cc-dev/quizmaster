@@ -1,17 +1,16 @@
 <?php
 
-class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
-{
-    public function route()
-    {
-        $action = (isset($_GET['action'])) ? $_GET['action'] : 'show';
+class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller {
 
-        switch ($action) {
-            case 'show':
-            default:
-                $this->showNew($_GET['id']);
-        }
+  public function route() {
+    $action = (isset($_GET['action'])) ? $_GET['action'] : 'show';
+
+    switch ($action) {
+      case 'show':
+      default:
+        $this->showNew($_GET['id']);
     }
+  }
 
     public function getAverageResult($quizId)
     {
@@ -32,7 +31,9 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        $view = new QuizMaster_View_StatisticsNew();
+        QuizMaster_Controller_Scores::scoreListTable();
+
+        $view = new QuizMaster_View_Scores();
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
 
@@ -217,8 +218,7 @@ class QuizMaster_Controller_Statistics extends QuizMaster_Controller_Controller
       return $values;
     }
 
-    private function getIp()
-    {
+    private function getIp() {
         if (get_current_user_id() > 0) {
             return '0';
         } else {

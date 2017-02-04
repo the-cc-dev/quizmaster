@@ -183,7 +183,8 @@ function quizmasterAddPostTypes() {
       'public' => true,
       'has_archive' => true,
       'rewrite' => array('slug' => 'quiz'),
-      'show_in_menu' => 'quizMaster'
+      'show_in_menu' => 'quizMaster',
+      'supports' => array('revisions'),
     )
   );
 
@@ -196,7 +197,8 @@ function quizmasterAddPostTypes() {
       'public' => true,
       'has_archive' => true,
       'rewrite' => array('slug' => 'question'),
-      'show_in_menu' => 'quizMaster'
+      'show_in_menu' => 'quizMaster',
+      'supports' => array('revisions'),
     )
   );
 
@@ -211,6 +213,19 @@ function quizmasterAddPostTypes() {
       'show_in_menu' => 'quizMaster'
     )
   );
+
+  register_post_type( 'quizmaster_score',
+    array(
+      'labels' => array(
+        'name' => __( 'Quiz Scores' ),
+        'singular_name' => __( 'Quiz Score' )
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_menu' => 'quizMaster'
+    )
+  );
+
 }
 
 add_action( 'init', 'quizmasterRegisterTaxonomies' );
@@ -308,4 +323,30 @@ function statisticsRow($actions, $post){
       $actions['statistics'] = '<a href="'. $statsUrl .'">Statistics</a>';
     }
     return $actions;
+}
+
+/* Activate Revisions for Quizzes & Questions */
+add_filter( 'wp_revisions_to_keep', 'filter_function_name', 10, 2 );
+function filter_function_name( $num, $post ) {
+  if( $post->post_type == 'quizmaster_quiz' || $post->post_type == 'quizmaster_question' ) {
+    return -1;
+  }
+  return $num;
+}
+
+
+add_filter('manage_posts_columns', 'quizmaster_columns_head');
+function quizmaster_columns_head( $columns ) {
+  return array_merge($columns,
+    array('score' => 'Score')
+  );
+}
+
+add_action('manage_posts_custom_column', 'quizmaster_columns_content', 10, 2);
+function quizmaster_columns_content( $column, $post_id ) {
+  switch ( $column ) {
+    case 'score' :
+      echo get_field( 'qm_scores_score', $post_id );
+      break;
+    }
 }

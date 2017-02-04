@@ -58,11 +58,8 @@ class QuizMaster_Controller_Ajax {
       'questionaLoadCopyQuestion' => array('QuizMaster_Controller_Question', 'ajaxLoadCopyQuestion'),
       'loadQuizData' => array('QuizMaster_Controller_Quiz', 'ajaxLoadQuizData'),
       'resetLock' => array('QuizMaster_Controller_Quiz', 'ajaxResetLock'),
-      'adminToplist' => array('QuizMaster_Controller_Toplist', 'ajaxAdminToplist'),
       'completedQuiz' => array('QuizMaster_Controller_Quiz', 'ajaxCompletedQuiz'),
       'quizCheckLock' => array('QuizMaster_Controller_Quiz', 'ajaxQuizCheckLock'),
-      'addInToplist' => array('QuizMaster_Controller_Toplist', 'ajaxAddInToplist'),
-      'showFrontToplist' => array('QuizMaster_Controller_Toplist', 'ajaxShowFrontToplist')
     );
 
     //nopriv
@@ -71,9 +68,7 @@ class QuizMaster_Controller_Ajax {
       'loadQuizData' => array('QuizMaster_Controller_Quiz', 'ajaxLoadQuizData'),
       'completedQuiz' => array('QuizMaster_Controller_Quiz', 'ajaxCompletedQuiz'),
       'quizCheckLock' => array('QuizMaster_Controller_Quiz', 'ajaxQuizCheckLock'),
-      'addInToplist' => array('QuizMaster_Controller_Toplist', 'ajaxAddInToplist'),
-      'showFrontToplist' => array('QuizMaster_Controller_Toplist', 'ajaxShowFrontToplist')
     );
   }
-  
+
 }

@@ -16,7 +16,7 @@ class QuizMaster_Controller_Admin
 
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
-      
+
     }
 
     public function setScreenOption($status, $option, $value)
@@ -214,14 +214,14 @@ class QuizMaster_Controller_Admin
             case 'statistics':
                 $c = new QuizMaster_Controller_Statistics();
                 break;
+            case 'scores':
+              $c = new QuizMaster_Controller_Scores();
+              break;
             case 'importExport':
                 $c = new QuizMaster_Controller_ImportExport();
                 break;
             case 'styleManager':
                 $c = new QuizMaster_Controller_StyleManager();
-                break;
-            case 'toplist':
-                $c = new QuizMaster_Controller_Toplist();
                 break;
             case 'support':
                 $c = new QuizMaster_Controller_Support();
