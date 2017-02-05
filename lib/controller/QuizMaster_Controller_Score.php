@@ -50,17 +50,21 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       return false;
     }
 
-    $questionScores = $this->makeDataList($quizId, $array, $quiz->getQuizModus());
+    $scores = $this->makeDataList($quizId, $array, $quiz->getQuizModus());
 
     //var_dump( "Q SCORES" );
     //var_dump( $questionScores );
 
+    var_dump( $scores );
 
-    if ($questionScores === false) {
+    if ($scores === false) {
       return false;
     }
 
     if ($quiz->getStatisticsIpLock() > 0) {
+
+      print 66;
+
       $lockMapper = new QuizMaster_Model_LockMapper();
       $lockTime = $quiz->getStatisticsIpLock() * 60;
 
@@ -80,14 +84,13 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $lockMapper->insert($lock);
     }
 
+    var_dump('saving score!');
+
     // load score model
     $score = new QuizMaster_Model_Score();
     $score->setUserId($userId);
     $score->setQuizId($quizId);
-    $score->setQuestionScores($questionScores);
-
-    //$statisticRefMapper = new QuizMaster_Model_ScoreMapper();
-    //$statisticRefMapper->statisticSave($score, $values);
+    $score->setScores($scores);
     $score->save();
 
     return true;
@@ -164,6 +167,18 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     }
 
     return 0;
+  }
+
+  public static function loadById( $id ) {
+    $post = get_post( $id );
+    $fields = get_fields( $id );
+
+    $scoreModel = new QuizMaster_Model_Score( $id );
+
+    print '<pre>';
+    var_dump( $scoreModel );
+    print '</pre>';
+
   }
 
 

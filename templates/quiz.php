@@ -1,11 +1,10 @@
 <?php
 /**
- * The template for displaying all single posts
+ * The template for displaying quiz scores
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
- * @package WordPress
- * @subpackage Twenty_Seventeen
+ * @package QuizMaster
  * @since 1.0
  * @version 1.0
  */

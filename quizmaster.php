@@ -300,6 +300,9 @@ function quizmaster_quiz_template($single) {
   if ($post->post_type == "quizmaster_quiz") {
     return quizmaster_locate_template( 'quiz.php' );
   }
+  if ($post->post_type == "quizmaster_score") {
+    return quizmaster_locate_template( 'score.php' );
+  }
   return $single;
 }
 
