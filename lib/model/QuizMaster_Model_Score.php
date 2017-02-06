@@ -2,21 +2,18 @@
 
 class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
-  protected $_id = 0;
-  protected $_quizId = 0;
-  protected $_userId = 0;
-  protected $_scores = array();
+  protected $_id          = 0;
+  protected $_quizId      = 0;
+  protected $_userId      = 0;
+  protected $_scores      = array();
 
   public function setScores( $scores ) {
     $this->_scores = $scores;
   }
 
-  public function getScores( $format = 'array' ) {
-
-    var_dump( $this->_scores );
-
+  public function getScores( $format = 'objects' ) {
     switch( $format ) {
-      case "array":
+      case "objects":
         return $this->_scores;
         break;
       case "json":
@@ -63,19 +60,21 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function createPost() {
+
+    print "createPost running";
+
     $post = array(
       'post_type'     => 'quizmaster_score',
-      'post_title'    => 'Score for Quiz ID',
+      'post_title'    => 'Score for Quiz #' . $this->getQuizId() . ' taken by User #' . $this->getUserId(),
       'post_status'   => 'publish',
       'post_author'   => 1,
     );
     $this->_id = wp_insert_post( $post );
+
+    print $this->_id;
   }
 
   public function updateFields() {
-
-    print 'updatingFields()';
-
     update_field('qm_score_user', $this->getUserId(), $this->getID());
     update_field('qm_score_quiz', $this->getQuizId(), $this->getID());
     update_field('qm_score_scores', $this->getScores('json'), $this->getID());
@@ -87,7 +86,17 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   public function processFieldsDuringModelSet( $fields ) {
     $fields['quiz_id'] = $fields['quiz'];
     $fields['user_id'] = $fields['user'];
+    $fields['scores'] = $this->loadScoreQuestionsFromJson( $fields['scores'] );
     return $fields;
+  }
+
+  public function loadScoreQuestionsFromJson( $scoreJson ) {
+    $scoresArray = json_decode( $scoreJson, TRUE );
+    $scores = array();
+    foreach( $scoresArray as $scoreSingle ) {
+      $scores[] = new QuizMaster_Model_ScoreQuestion( $scoreSingle );
+    }
+    return $scores;
   }
 
   public function getFieldPrefix() {

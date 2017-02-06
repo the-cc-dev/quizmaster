@@ -4,7 +4,6 @@ class QuizMaster_Controller_StudentReport {
 
   public function getCompletedQuizTable() {
 
-    $statisticRefMapper = new QuizMaster_Model_StatisticRefMapper();
     $formMapper = new QuizMaster_Model_FormMapper();
     $forms = $formMapper->fetch(1);
 

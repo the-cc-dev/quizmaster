@@ -165,74 +165,62 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
         return $this->_tipMsg;
     }
 
-    public function setPoints($_points)
-    {
-        $this->_points = (int)$_points;
-
-        return $this;
+    public function setPoints($_points) {
+      $this->_points = (int)$_points;
+      return $this;
     }
 
-    public function getPoints()
-    {
-        return $this->_points;
+    public function getPoints() {
+      return $this->_points;
     }
 
-    public function setShowPointsInBox($_showPointsInBox)
-    {
-        $this->_showPointsInBox = (bool)$_showPointsInBox;
-
-        return $this;
+    public function setShowPointsInBox($_showPointsInBox) {
+      $this->_showPointsInBox = (bool)$_showPointsInBox;
+      return $this;
     }
 
-    public function isShowPointsInBox()
-    {
-        return $this->_showPointsInBox;
+    public function isShowPointsInBox() {
+      return $this->_showPointsInBox;
     }
 
-    public function setAnswerPointsActivated($_answerPointsActivated)
-    {
-        $this->_answerPointsActivated = (bool)$_answerPointsActivated;
-
-        return $this;
+    public function setAnswerPointsActivated($_answerPointsActivated) {
+      $this->_answerPointsActivated = (bool)$_answerPointsActivated;
+      return $this;
     }
 
-    public function isAnswerPointsActivated()
-    {
-        return $this->_answerPointsActivated;
+    public function isAnswerPointsActivated() {
+      return $this->_answerPointsActivated;
     }
 
-    public function setAnswerData($_answerData)
-    {
-        $this->_answerData = $_answerData;
-
-        return $this;
+    public function setAnswerData($_answerData) {
+      $this->_answerData = $_answerData;
+      return $this;
     }
 
     /**
      * @param bool|false $serialize
      * @return QuizMaster_Model_AnswerTypes[]|null|string
      */
-    public function getAnswerData($serialize = false)
-    {
-        if ($this->_answerData === null) {
-            return null;
-        }
+    public function getAnswerData($serialize = false) {
+      if ($this->_answerData === null) {
+          return null;
+      }
 
-        if (is_array($this->_answerData) || $this->_answerData instanceof QuizMaster_Model_AnswerTypes) {
-            if ($serialize) {
-                return @serialize($this->_answerData);
-            }
-        } else {
-            if (!$serialize) {
-                if (QuizMaster_Helper_Until::saveUnserialize($this->_answerData, $into) === false) {
-                    return null;
-                }
+      if (is_array($this->_answerData) || $this->_answerData instanceof QuizMaster_Model_AnswerTypes) {
+          if ($serialize) {
+              return @serialize($this->_answerData);
+          }
+      } else {
+          if (!$serialize) {
+              if (QuizMaster_Helper_Until::saveUnserialize($this->_answerData, $into) === false) {
+                  return null;
+              }
 
-                $this->_answerData = $into;
-            }
-        }
+              $this->_answerData = $into;
+          }
+      }
 
-        return $this->_answerData;
+      return $this->_answerData;
     }
 
     public function setCategoryId($_categoryId)
@@ -294,4 +282,13 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
     {
         return $this->_matrixSortAnswerCriteriaWidth;
     }
+
+    public function getFieldPrefix() {
+      return 'qm_qe_';
+    }
+
+    public function processFieldsDuringModelSet( $fields ) {
+      return $fields;
+    }
+
 }

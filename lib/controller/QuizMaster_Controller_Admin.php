@@ -45,7 +45,6 @@ class QuizMaster_Controller_Admin
             'no_nummber_points' => __('No number in the field "Points" or less than 1', 'quizmaster'),
             'no_nummber_points_new' => __('No number in the field "Points" or less than 0', 'quizmaster'),
             'no_selected_quiz' => __('No quiz selected', 'quizmaster'),
-            'reset_statistics_msg' => __('Do you really want to reset the statistic?', 'quizmaster'),
             'no_data_available' => __('No data available', 'quizmaster'),
             'no_sort_element_criterion' => __('No sort element in the criterion', 'quizmaster'),
             'dif_points' => __('"Different points for every answer" is not possible at "Free" choice', 'quizmaster'),
@@ -210,9 +209,6 @@ class QuizMaster_Controller_Admin
                 break;
             case 'preview':
                 $c = new QuizMaster_Controller_Preview();
-                break;
-            case 'statistics':
-                $c = new QuizMaster_Controller_Statistics();
                 break;
             case 'scores':
               $c = new QuizMaster_Controller_Scores();

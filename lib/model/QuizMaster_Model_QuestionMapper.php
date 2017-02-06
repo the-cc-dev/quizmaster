@@ -111,7 +111,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
         $fields = get_fields( $quizQuestionID );
         $results[] = array(
           'id'      => $quizQuestionID,
-          'points'  => $fields['points'],
+          'points'  => $fields['qm_qe_points'],
         );
       }
       return $results;

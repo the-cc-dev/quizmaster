@@ -351,5 +351,37 @@ function quizmaster_columns_content( $column, $post_id ) {
     case 'score' :
       echo get_field( 'qm_scores_score', $post_id );
       break;
-    }
+  }
+}
+
+/* Quiz Score Columns */
+add_filter('manage_edit-quizmaster_score_columns', 'quizmaster_score_columns');
+function quizmaster_score_columns( $columns ) {
+  return array_merge($columns,
+    array(
+      'quiz' => 'Quiz',
+      'user' => 'User'
+    )
+  );
+}
+
+add_filter('manage_quizmaster_score_posts_custom_column', 'quizmaster_score_column_content', 10, 2);
+function quizmaster_score_column_content( $column, $post_id ) {
+  switch ( $column ) {
+    case 'quiz' :
+      $quizId = get_field( 'qm_score_quiz', $post_id );
+      print get_the_title( $quizId );
+      break;
+    case 'user' :
+      $user = get_field( 'qm_score_user', $post_id );
+      print $user['display_name'];
+      break;
+  }
+}
+
+add_filter('manage_edit-quizmaster_score_sortable_columns', 'quizmaster_score_sortable_column');
+function quizmaster_score_sortable_column( $columns ) {
+  $columns['quiz'] = 'quiz';
+  $columns['user'] = 'user';
+  return $columns;
 }

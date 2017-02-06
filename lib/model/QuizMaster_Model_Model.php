@@ -88,8 +88,9 @@ class QuizMaster_Model_Model {
     public function stripFieldPrefixes( $fields ) {
       $fieldPrefix = $this->getFieldPrefix();
       foreach( $fields as $key => $val ) {
-        $key = str_replace( $fieldPrefix, '', $key );
-        $fields[$key] = $val;
+        $newKey = str_replace( $fieldPrefix, '', $key );
+        $fields[$newKey] = $val;
+        unset( $fields[$key] );
       }
       return $fields;
     }

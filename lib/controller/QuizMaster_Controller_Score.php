@@ -2,34 +2,16 @@
 
 class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
-  public function setAnswerData($_answerData) {
-      $this->_answerData = $_answerData;
+  protected $_score = '';
 
-      return $this;
+  public function getScore() {
+    return $this->_score;
   }
 
-  public function getAnswerData()
-  {
-      return $this->_answerData;
+  public function setScore( $score ) {
+    $this->_score = $score;
   }
 
-  public function setSolvedCount($_solvedCount)
-  {
-      $this->_solvedCount = (int)$_solvedCount;
-
-      return $this;
-  }
-
-  public function getSolvedCount() {
-      return $this->_solvedCount;
-  }
-
-
-  /**
-   *
-   * @param QuizMaster_Model_Quiz $quiz
-   * @return void|boolean
-   */
   public function save($quiz = null) {
 
     $quizId = $this->_post['quizId'];
@@ -50,11 +32,9 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       return false;
     }
 
-    $scores = $this->makeDataList($quizId, $array, $quiz->getQuizModus());
+    $scores = $this->makeScoreList($quizId, $array, $quiz->getQuizModus());
 
-    //var_dump( "Q SCORES" );
-    //var_dump( $questionScores );
-
+    var_dump( "Q SCORES" );
     var_dump( $scores );
 
     if ($scores === false) {
@@ -62,8 +42,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     }
 
     if ($quiz->getStatisticsIpLock() > 0) {
-
-      print 66;
 
       $lockMapper = new QuizMaster_Model_LockMapper();
       $lockTime = $quiz->getStatisticsIpLock() * 60;
@@ -84,8 +62,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $lockMapper->insert($lock);
     }
 
-    var_dump('saving score!');
-
     // load score model
     $score = new QuizMaster_Model_Score();
     $score->setUserId($userId);
@@ -96,14 +72,15 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     return true;
   }
 
-  private function makeDataList($quizId, $array, $modus) {
+  private function makeScoreList($quizId, $array, $modus) {
 
     $questionMapper = new QuizMaster_Model_QuestionMapper();
 
-    $question = $questionMapper->fetchAllList($quizId, array('id', 'points'));
+    $questions = $questionMapper->fetchAllList($quizId, array('id', 'points'));
+
     $ids = array();
 
-    foreach ($question as $q) {
+    foreach ($questions as $q) {
       if (!isset($array[$q['id']])) {
         continue;
       }
@@ -119,7 +96,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $avgTime = null;
 
     if ($modus == QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) {
-      $avgTime = ceil($array['comp']['quizTime'] / count($question));
+      $avgTime = ceil($array['comp']['quizTime'] / count($questions));
     }
 
     unset($array['comp']);
@@ -158,26 +135,30 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
   }
 
   public function getAverageResult($quizId) {
-    $statisticRefMapper = new QuizMaster_Model_StatisticRefMapper();
+    $scoreMapper = new QuizMaster_Model_ScoreMapper();
 
-    $result = $statisticRefMapper->fetchFrontAvg($quizId);
+    /*
+    $result = $scoreMapper->fetchFrontAvg($quizId);
 
     if (isset($result['g_points']) && $result['g_points']) {
       return round(100 * $result['points'] / $result['g_points'], 2);
     }
+    */
 
     return 0;
   }
 
   public static function loadById( $id ) {
+
+    $scoreCtr = new QuizMaster_Controller_Score;
+
     $post = get_post( $id );
     $fields = get_fields( $id );
 
-    $scoreModel = new QuizMaster_Model_Score( $id );
+    $score = new QuizMaster_Model_Score( $id );
+    $scoreCtr->setScore( $score );
 
-    print '<pre>';
-    var_dump( $scoreModel );
-    print '</pre>';
+    return $scoreCtr;
 
   }
 
