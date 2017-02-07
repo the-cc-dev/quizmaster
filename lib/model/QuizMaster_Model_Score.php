@@ -2,10 +2,52 @@
 
 class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
-  protected $_id          = 0;
-  protected $_quizId      = 0;
-  protected $_userId      = 0;
-  protected $_scores      = array();
+  protected $_id                  = 0;
+  protected $_quizId              = 0;
+  protected $_userId              = 0;
+  protected $_scores              = array();
+  protected $_totalQCount         = 0;
+  protected $_totalQCorrect       = 0;
+  protected $_totalQIncorrect     = 0;
+  protected $_totalPointsPossible = 0;
+  protected $_totalPointsEarned   = 0;
+  protected $_totalTime           = 0;
+  protected $_totalHints          = 0;
+  protected $_totalsJson          = ''; // json string holding totals array
+
+  public function setTotalsJson( $totals ) {
+    $this->_totalsJson = json_encode( $totals );
+  }
+
+  public function getTotalsJson() {
+    return $this->_totalsJson;
+  }
+
+  public function setTotals( $totals ) {
+    if( !is_array( $totals )) {
+      $totals = json_decode( $totals, true );
+    }
+    $this->_totalQCount = $totals['qCount'];
+    $this->_totalQCorrect = $totals['qCorrect'];
+    $this->_totalQIncorrect = $totals['qIncorrect'];
+    $this->_totalPointsPossible = $totals['pointsPossible'];
+    $this->_totalPointsEarned = $totals['pointsEarned'];
+    $this->_totalTime = $totals['time'];
+    $this->_totalHints = $totals['hints'];
+    $this->setTotalsJson( $this->getTotals() );
+  }
+
+  public function getTotals() {
+    return array(
+      'qCount'          => $this->_totalQCount,
+      'qCorrect'        => $this->_totalQCorrect,
+      'qIncorrect'      => $this->_totalQIncorrect,
+      'pointsPossible'  => $this->_totalPointsPossible,
+      'pointsEarned'    => $this->_totalPointsEarned,
+      'time'            => $this->_totalTime,
+      'hints'           => $this->_totalHints,
+    );
+  }
 
   public function setScores( $scores ) {
     $this->_scores = $scores;
@@ -49,9 +91,12 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     return $this->_userId;
   }
 
-  // replace with post create time
+  public function getCreateDate() {
+    return get_post_time('Y-m-d', TRUE, $this->getId());
+  }
+
   public function getCreateTime() {
-    return $this->_createTime;
+    return get_post_time('U', TRUE, $this->getId());
   }
 
   public function save() {
@@ -60,9 +105,6 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function createPost() {
-
-    print "createPost running";
-
     $post = array(
       'post_type'     => 'quizmaster_score',
       'post_title'    => 'Score for Quiz #' . $this->getQuizId() . ' taken by User #' . $this->getUserId(),
@@ -70,14 +112,13 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
       'post_author'   => 1,
     );
     $this->_id = wp_insert_post( $post );
-
-    print $this->_id;
   }
 
   public function updateFields() {
     update_field('qm_score_user', $this->getUserId(), $this->getID());
     update_field('qm_score_quiz', $this->getQuizId(), $this->getID());
     update_field('qm_score_scores', $this->getScores('json'), $this->getID());
+    update_field('qm_score_totals', $this->getTotalsJson(), $this->getID());
   }
 
   /*
@@ -87,6 +128,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     $fields['quiz_id'] = $fields['quiz'];
     $fields['user_id'] = $fields['user'];
     $fields['scores'] = $this->loadScoreQuestionsFromJson( $fields['scores'] );
+    $fields['totalsJson'] = $fields['totals'];
     return $fields;
   }
 

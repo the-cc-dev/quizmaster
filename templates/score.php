@@ -35,7 +35,6 @@ get_header(); ?>
 				</tr>
 
 				<?php foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) :
-
 					$scoreView->setActiveScoreQuestion( $scoreQuestion );
 
 				?>

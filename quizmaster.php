@@ -337,36 +337,25 @@ function filter_function_name( $num, $post ) {
   return $num;
 }
 
-
-add_filter('manage_posts_columns', 'quizmaster_columns_head');
-function quizmaster_columns_head( $columns ) {
-  return array_merge($columns,
-    array('score' => 'Score')
-  );
-}
-
-add_action('manage_posts_custom_column', 'quizmaster_columns_content', 10, 2);
-function quizmaster_columns_content( $column, $post_id ) {
-  switch ( $column ) {
-    case 'score' :
-      echo get_field( 'qm_scores_score', $post_id );
-      break;
-  }
-}
-
 /* Quiz Score Columns */
-add_filter('manage_edit-quizmaster_score_columns', 'quizmaster_score_columns');
+add_filter('manage_quizmaster_score_posts_columns', 'quizmaster_score_columns');
 function quizmaster_score_columns( $columns ) {
+  $columns['date'] = 'Taken At';
   return array_merge($columns,
     array(
-      'quiz' => 'Quiz',
-      'user' => 'User'
+      'quiz'    => 'Quiz',
+      'user'    => 'User',
+      'points'  => 'Points',
+      'correct' => 'Correct'
     )
   );
 }
 
 add_filter('manage_quizmaster_score_posts_custom_column', 'quizmaster_score_column_content', 10, 2);
 function quizmaster_score_column_content( $column, $post_id ) {
+
+  $score = new QuizMaster_Model_Score( $post_id );
+
   switch ( $column ) {
     case 'quiz' :
       $quizId = get_field( 'qm_score_quiz', $post_id );
@@ -376,12 +365,69 @@ function quizmaster_score_column_content( $column, $post_id ) {
       $user = get_field( 'qm_score_user', $post_id );
       print $user['display_name'];
       break;
+    case 'points' :
+      $totals = $score->getTotals();
+      print $totals['pointsEarned'];
+      break;
+    case 'correct' :
+      $totals = $score->getTotals();
+      print $totals['qCorrect'] . '/' . $totals['qCount'];
+      break;
   }
 }
 
 add_filter('manage_edit-quizmaster_score_sortable_columns', 'quizmaster_score_sortable_column');
 function quizmaster_score_sortable_column( $columns ) {
-  $columns['quiz'] = 'quiz';
-  $columns['user'] = 'user';
+  $columns['quiz']   = 'quiz';
+  $columns['user']   = 'user';
+  $columns['points'] = 'points';
   return $columns;
+}
+
+/* Quiz Scores Filters */
+add_action( 'restrict_manage_posts', 'quizmaster_score_filter_quiz' );
+function quizmaster_score_filter_quiz() {
+  $type = 'post';
+  if (isset($_GET['post_type'])) {
+    $type = $_GET['post_type'];
+  }
+
+  //only add filter to post type you want
+  if( 'quizmaster_score' == $type ) {
+    $values = array(
+      'label' => 'value',
+      'label1' => 'value1',
+      'label2' => 'value2',
+    );
+  ?>
+    <select name="quiz">
+    <option value=""><?php _e('All quizzes', 'quizmaster'); ?></option>
+    <?php
+      $current_v = isset($_GET['quiz'])? $_GET['quiz']:'';
+      foreach ($values as $label => $value) {
+        printf
+          (
+            '<option value="%s"%s>%s</option>',
+            $value,
+            $value == $current_v? ' selected="selected"':'',
+            $label
+          );
+        }
+      ?>
+      </select>
+      <?php
+  }
+}
+
+add_filter( 'parse_query', 'quizmaster_posts_filter' );
+function quizmaster_posts_filter( $query ){
+    global $pagenow;
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+      $type = $_GET['post_type'];
+    }
+    if ( 'quizmaster_quiz' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['quiz']) && $_GET['quiz'] != '') {
+      $query->query_vars['meta_key'] = 'qm_score_quiz';
+      $query->query_vars['meta_value'] = $_GET['quiz'];
+    }
 }

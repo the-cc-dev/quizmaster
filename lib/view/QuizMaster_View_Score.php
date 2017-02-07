@@ -90,21 +90,4 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
     $this->_activeQuestion = new QuizMaster_Model_Question( $questionId );
   }
 
-  public function show() {
-    quizmaster_get_template( 'reports/scores.php', array( 'view' => $this));
-    quizmaster_get_template( 'reports/score-list-table.php', array( 'view' => $this));
-  }
-
-  public function showHistory() {
-    quizmaster_get_template( 'reports/score-history.php', array( 'view' => $this));
-  }
-
-  public function showModalWindow() {
-    quizmaster_get_template( 'reports/score-modal.php', array( 'view' => $this));
-  }
-
-  public function showTabOverview() {
-    quizmaster_get_template( 'reports/score-tab.php', array( 'view' => $this));
-  }
-
 }

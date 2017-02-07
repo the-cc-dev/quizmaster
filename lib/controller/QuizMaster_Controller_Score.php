@@ -34,8 +34,10 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $scores = $this->makeScoreList($quizId, $array, $quiz->getQuizModus());
 
+    /*
     var_dump( "Q SCORES" );
     var_dump( $scores );
+    */
 
     if ($scores === false) {
       return false;
@@ -67,9 +69,42 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $score->setUserId($userId);
     $score->setQuizId($quizId);
     $score->setScores($scores);
+
+    $totals = $this->calcTotals( $scores );
+    $score->setTotals( $totals );
+
     $score->save();
 
     return true;
+  }
+
+  private function calcTotals( $scores ) {
+
+    $totals = array(
+      'qCount'          => 0,
+      'qCorrect'        => 0,
+      'qIncorrect'      => 0,
+      'pointsPossible'  => 0,
+      'pointsEarned'    => 0,
+      'time'            => 0,
+      'hints'           => 0,
+    );
+
+    foreach( $scores as $score ) {
+      $totals['qCorrect']         += $score->getCorrectCount();
+      $totals['qIncorrect']       += $score->getIncorrectCount();
+      $totals['pointsPossible']   += $score->getPossiblePoints();
+      $totals['pointsEarned']     += $score->getPoints();
+      $totals['time']             += $score->getQuestionTime();
+      $totals['hints']            += $score->getHintCount();
+    }
+
+    $totals['qCount'] = $totals['qCorrect'] + $totals['qIncorrect'];
+
+    var_dump($totals);
+
+    return $totals;
+
   }
 
   private function makeScoreList($quizId, $array, $modus) {
