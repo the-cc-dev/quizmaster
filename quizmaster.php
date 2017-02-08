@@ -3,7 +3,7 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 1.0.0
+Version: 0.0.2
 Author: Joel Milne, GoldHat Group
 Author URI: https://goldhat.ca
 Text Domain: quizmaster
@@ -443,7 +443,7 @@ function quizmaster_score_filter_quiz() {
 
 add_action( 'pre_get_posts', 'quizmaster_posts_filter', 10, 1 );
 function quizmaster_posts_filter( $query ){
-  
+
   global $pagenow;
   if( $pagenow != 'edit.php' ) {
     return $query;
