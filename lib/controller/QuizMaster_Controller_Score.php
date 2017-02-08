@@ -16,6 +16,12 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $quizId = $this->_post['quizId'];
     $array = $this->_post['results'];
+
+    // load revision
+    $quizRevisions = wp_get_post_revisions( $quizId );
+    $quizScoringRevision = reset( $quizRevisions );
+    $quizId = $quizScoringRevision->ID;
+
     $lockIp = $this->getIp();
     $userId = get_current_user_id();
 
@@ -28,16 +34,19 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $quiz = $quizMapper->fetch($quizId);
     }
 
+    var_dump( $quiz );
+
     if (!$quiz->isStatisticsOn()) {
+      print 37;
       return false;
     }
 
     $scores = $this->makeScoreList($quizId, $array, $quiz->getQuizModus());
 
-    /*
+
     var_dump( "Q SCORES" );
     var_dump( $scores );
-    */
+
 
     if ($scores === false) {
       return false;
@@ -72,6 +81,10 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $totals = $this->calcTotals( $scores );
     $score->setTotals( $totals );
+
+    print '<pre>';
+    var_dump($score);
+    print '</pre>';
 
     $score->save();
 
@@ -145,8 +158,14 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $values = array();
 
     foreach ($array as $k => $v) {
+
+      // load revision
+      $qRevisions = wp_get_post_revisions( $k );
+      $qScoringRevision = reset( $qRevisions );
+      $qId = $qScoringRevision->ID;
+
       $s = new QuizMaster_Model_ScoreQuestion();
-      $s->setQuestionId($k);
+      $s->setQuestionId($qId);
       $s->setHintCount(isset($v['tip']) ? 1 : 0);
       $s->setSolvedCount(isset($v['solved']) && $v['solved'] ? 1 : 0);
       $s->setCorrectCount($v['correct'] ? 1 : 0);

@@ -210,9 +210,6 @@ class QuizMaster_Controller_Admin
             case 'preview':
                 $c = new QuizMaster_Controller_Preview();
                 break;
-            case 'scores':
-              $c = new QuizMaster_Controller_Scores();
-              break;
             case 'importExport':
                 $c = new QuizMaster_Controller_ImportExport();
                 break;
