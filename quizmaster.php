@@ -184,7 +184,7 @@ function quizmasterAddPostTypes() {
       'has_archive' => true,
       'rewrite' => array('slug' => 'quiz'),
       'show_in_menu' => 'quizMaster',
-      'supports' => array('revisions'),
+      'supports' => array('title', 'revisions'),
     )
   );
 
@@ -198,7 +198,7 @@ function quizmasterAddPostTypes() {
       'has_archive' => true,
       'rewrite' => array('slug' => 'question'),
       'show_in_menu' => 'quizMaster',
-      'supports' => array('revisions'),
+      'supports' => array('title', 'revisions'),
     )
   );
 
@@ -430,4 +430,47 @@ function quizmaster_posts_filter( $query ){
       $query->query_vars['meta_key'] = 'qm_score_quiz';
       $query->query_vars['meta_value'] = $_GET['quiz'];
     }
+}
+
+add_action( 'save_post', 'revisionTest', 50, 3 );
+function revisionTest( $post_id, $post, $update ) {
+
+  // exit if not quiz or question type
+  $types = array('quizmaster_quiz', 'quizmaster_question');
+  if( !in_array( $post->post_type, $types ) ) {
+    return;
+  }
+
+  // Autosave, do nothing
+  if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+    return;
+  // AJAX? Not used here
+  if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+    return;
+
+  // exit if currently saving the revision
+  if( false !== wp_is_post_revision( $post_id ) ) {
+    return;
+  }
+
+  $revision_id = wp_save_post_revision( $post_id );
+
+  if( !$revision_id ) {
+    return;
+  }
+
+  acf_copy_postmeta( $post_id, $revision_id );
+
+  return $post_id;
+
+}
+
+function generateRandomString($length = 10) {
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $charactersLength = strlen($characters);
+  $randomString = '';
+  for ($i = 0; $i < $length; $i++) {
+      $randomString .= $characters[rand(0, $charactersLength - 1)];
+  }
+  return $randomString;
 }
