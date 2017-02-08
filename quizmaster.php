@@ -394,28 +394,53 @@ function quizmaster_score_filter_quiz() {
 
   //only add filter to post type you want
   if( 'quizmaster_score' == $type ) {
-    $values = array(
-      'label' => 'value',
-      'label1' => 'value1',
-      'label2' => 'value2',
-    );
-  ?>
-    <select name="quiz">
-    <option value=""><?php _e('All quizzes', 'quizmaster'); ?></option>
-    <?php
-      $current_v = isset($_GET['quiz'])? $_GET['quiz']:'';
-      foreach ($values as $label => $value) {
-        printf
-          (
-            '<option value="%s"%s>%s</option>',
-            $value,
-            $value == $current_v? ' selected="selected"':'',
-            $label
-          );
-        }
-      ?>
-      </select>
-      <?php
+
+    // load quizzes
+    $quizMapper = new QuizMaster_Model_QuizMapper;
+    $quizzes = $quizMapper->fetchAll();
+    if( !$quizzes ) {
+      return;
+    }
+
+    // make values array
+    $values = array();
+    foreach( $quizzes as $quiz ) {
+      $values[ $quiz->getId() ] = get_the_title( $quiz->getId() );
+    }
+
+    // selected quiz
+    $selectedQuiz = isset($_GET['quiz'])? $_GET['quiz']:'';
+
+    // filter select
+    quizmaster_get_template('/reports/score-filter.php', array(
+      'selectName' => 'quiz',
+      'values' => $values,
+      'defaultLabel' => 'All quizzes',
+      'selected' => $selectedQuiz,
+    ));
+
+
+    $users = get_users( 'orderby=nicename' );
+
+    $values = array();
+    foreach( $users as $user ) {
+
+
+
+      $values[ $user->ID ] = $user->data->user_nicename;
+    }
+
+    // selected user
+    $selectedUser = isset($_GET['user'])? $_GET['user']:'';
+
+    // filter select
+    quizmaster_get_template('/reports/score-filter.php', array(
+      'selectName' => 'user',
+      'values' => $values,
+      'defaultLabel' => 'All users',
+      'selected' => $selectedUser,
+    ));
+
   }
 }
 

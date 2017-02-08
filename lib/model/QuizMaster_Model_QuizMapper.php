@@ -25,8 +25,8 @@ class QuizMaster_Model_QuizMapper extends QuizMaster_Model_Mapper {
       'orderby' => 'ASC',
       'posts_per_page'=> -1
     );
-    $wp_query = new WP_Query($args);
-    if( !$wp_query->have_posts() ) {
+    $query = new WP_Query($args);
+    if( !$query->have_posts() ) {
       return false;
     }
     foreach( $query->posts as $post ) {
