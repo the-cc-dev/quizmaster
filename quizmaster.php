@@ -413,7 +413,7 @@ function quizmaster_score_filter_quiz() {
 
     // filter select
     quizmaster_get_template('/reports/score-filter.php', array(
-      'selectName' => 'quiz',
+      'selectName' => 'qm_quiz',
       'values' => $values,
       'defaultLabel' => 'All quizzes',
       'selected' => $selectedQuiz,
@@ -424,9 +424,6 @@ function quizmaster_score_filter_quiz() {
 
     $values = array();
     foreach( $users as $user ) {
-
-
-
       $values[ $user->ID ] = $user->data->user_nicename;
     }
 
@@ -435,7 +432,7 @@ function quizmaster_score_filter_quiz() {
 
     // filter select
     quizmaster_get_template('/reports/score-filter.php', array(
-      'selectName' => 'user',
+      'selectName' => 'qm_user',
       'values' => $values,
       'defaultLabel' => 'All users',
       'selected' => $selectedUser,
@@ -444,19 +441,46 @@ function quizmaster_score_filter_quiz() {
   }
 }
 
-add_filter( 'parse_query', 'quizmaster_posts_filter' );
+add_action( 'pre_get_posts', 'quizmaster_posts_filter', 10, 1 );
 function quizmaster_posts_filter( $query ){
-    global $pagenow;
-    $type = 'post';
-    if (isset($_GET['post_type'])) {
-      $type = $_GET['post_type'];
-    }
-    if ( 'quizmaster_quiz' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['quiz']) && $_GET['quiz'] != '') {
-      $query->query_vars['meta_key'] = 'qm_score_quiz';
-      $query->query_vars['meta_value'] = $_GET['quiz'];
-    }
+  
+  global $pagenow;
+  if( $pagenow != 'edit.php' ) {
+    return $query;
+  }
+
+  if( !$query->is_main_query() ) return;
+  if( !is_admin() ) return;
+
+  $type = 'post';
+  if (isset($_GET['post_type'])) {
+    $type = $_GET['post_type'];
+  }
+
+  $metaQuery = $query->get('meta_query');
+
+  if ( 'quizmaster_score' == $type && isset($_GET['qm_quiz']) && $_GET['qm_quiz'] != 0) {
+    $metaQuery[] = array(
+      'key'       => 'qm_score_quiz',
+      'value'     => $_GET['qm_quiz'],
+      'compare'   => '='
+    );
+  }
+
+  if ( 'quizmaster_score' == $type && isset($_GET['qm_user']) && $_GET['qm_user'] != 0) {
+    $metaQuery[] = array(
+      'key'       => 'qm_score_user',
+      'value'     => $_GET['qm_user'],
+      'compare'   => '='
+    );
+  }
+
+  $query->set('meta_query', $metaQuery);
+
 }
 
+
+/* Revision Cloning */
 add_action( 'save_post', 'revisionTest', 50, 3 );
 function revisionTest( $post_id, $post, $update ) {
 
