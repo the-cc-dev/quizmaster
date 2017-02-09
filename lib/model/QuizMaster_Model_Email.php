@@ -86,7 +86,22 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model
     }
 
     public function getRecipients() {
-      return $this->_recipients;
+      // parse any shortcodes that return recipients
+      $recipients = do_shortcode( $this->_recipients );
+      return $this->validateEmailList( $recipients );
+    }
+
+    // validates each email in a list and returns a list only of valid
+    private function validateEmailList( $emailList ) {
+      $validEmails = '';
+      $emailList = str_replace(' ', '', $emailList);
+      $emailsArray = explode( ',' $emailList );
+      foreach( $emailsArray as $e ) {
+        if (filter_var($e, FILTER_VALIDATE_EMAIL)) {
+          $validEmails .= $e . ',';
+        }
+      }
+      return substr( $validEmails, 0, -1);
     }
 
     public function setSubject( $_subject ) {

@@ -15,6 +15,12 @@ class QuizMaster_Controller_Email {
 
   public function addShortcodes() {
     add_shortcode('quizdata', array($this, 'quizDataShortcode'));
+    add_shortcode('quiztaker_email', array($this, 'quizTakerEmailShortcode'));
+  }
+
+  public function quizTakerEmailShortcode() {
+    $user = wp_get_current_user();
+    return $user->user_email;
   }
 
   public function quizDataShortcode( $atts ) {
