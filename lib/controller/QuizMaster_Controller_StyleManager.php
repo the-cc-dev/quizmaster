@@ -13,7 +13,7 @@ class QuizMaster_Controller_StyleManager extends QuizMaster_Controller_Controlle
 
         wp_enqueue_style(
             'quizMaster_front_style',
-            plugins_url('css/quizMaster_front.min.css', QUIZMASTER_FILE),
+            plugins_url('css/quizMaster_front.css', QUIZMASTER_FILE),
             array(),
             QUIZMASTER_VERSION
         );

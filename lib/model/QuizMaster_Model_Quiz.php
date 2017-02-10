@@ -111,10 +111,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
     //0.33
     protected $_pluginContainer = null;
 
-    public function getPermalink() {
-      return get_permalink( $this->_id );
-    }
-
     public function setId($_id)
     {
         $this->_id = (int)$_id;

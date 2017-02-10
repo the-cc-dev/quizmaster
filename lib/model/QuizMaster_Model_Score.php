@@ -14,6 +14,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   protected $_totalTime           = 0;
   protected $_totalHints          = 0;
   protected $_totalsJson          = ''; // json string holding totals array
+  protected $_post                = '';
 
   public function setTotalsJson( $totals ) {
     $this->_totalsJson = json_encode( $totals );
@@ -47,6 +48,15 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
       'time'            => $this->_totalTime,
       'hints'           => $this->_totalHints,
     );
+  }
+
+  public function getPointsEarned() {
+    return $this->_totalPointsEarned;
+  }
+
+  public function getCorrectRatio() {
+    $totals = $this->getTotals();
+    return $totals['qCorrect'] . '/' . $totals['qCount'];
   }
 
   public function setScores( $scores ) {
@@ -135,6 +145,9 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   public function loadScoreQuestionsFromJson( $scoreJson ) {
     $scoresArray = json_decode( $scoreJson, TRUE );
     $scores = array();
+    if( empty($scoresArray)) {
+      return $scores;
+    }
     foreach( $scoresArray as $scoreSingle ) {
       $scores[] = new QuizMaster_Model_ScoreQuestion( $scoreSingle );
     }

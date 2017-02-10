@@ -34,19 +34,11 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $quiz = $quizMapper->fetch($quizId);
     }
 
-    var_dump( $quiz );
-
     if (!$quiz->isStatisticsOn()) {
-      print 37;
       return false;
     }
 
     $scores = $this->makeScoreList($quizId, $array, $quiz->getQuizModus());
-
-
-    var_dump( "Q SCORES" );
-    var_dump( $scores );
-
 
     if ($scores === false) {
       return false;
@@ -81,14 +73,10 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $totals = $this->calcTotals( $scores );
     $score->setTotals( $totals );
-
-    print '<pre>';
-    var_dump($score);
-    print '</pre>';
-
     $score->save();
 
-    return true;
+    $this->setScore( $score );
+    return $this->getScore();
   }
 
   private function calcTotals( $scores ) {
@@ -113,9 +101,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     }
 
     $totals['qCount'] = $totals['qCorrect'] + $totals['qIncorrect'];
-
-    var_dump($totals);
-
     return $totals;
 
   }

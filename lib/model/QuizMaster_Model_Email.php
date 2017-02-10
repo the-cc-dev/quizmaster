@@ -95,7 +95,7 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model
     private function validateEmailList( $emailList ) {
       $validEmails = '';
       $emailList = str_replace(' ', '', $emailList);
-      $emailsArray = explode( ',' $emailList );
+      $emailsArray = explode( ',', $emailList );
       foreach( $emailsArray as $e ) {
         if (filter_var($e, FILTER_VALIDATE_EMAIL)) {
           $validEmails .= $e . ',';

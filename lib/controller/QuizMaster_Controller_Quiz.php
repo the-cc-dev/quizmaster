@@ -236,7 +236,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
           $score = new QuizMaster_Controller_Score();
           $score->save($quiz);
-          do_action('quizmaster_completed_quiz', $quiz);
+          do_action( 'quizmaster_completed_quiz', $quiz, $score->getScore() );
 
           if ($is100P) {
             do_action('quizmaster_completed_quiz_100_percent');
@@ -267,12 +267,9 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         if (!$lockIp && !$lockCookie) {
 
           $score = new QuizMaster_Controller_Score();
-
-          var_dump( $score );
-
           $score->save($quiz);
 
-          do_action('quizmaster_completed_quiz', $quiz);
+          do_action('quizmaster_completed_quiz', $quiz, $score->getScore() );
 
           if ($is100P) {
               do_action('quizmaster_completed_quiz_100_percent');

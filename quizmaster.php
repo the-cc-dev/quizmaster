@@ -11,7 +11,7 @@ Domain Path: /languages
 */
 
 define('QUIZMASTER_VERSION', '0.37');
-define('QUIZMASTER_DEV', false);
+define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
@@ -28,6 +28,8 @@ spl_autoload_register('quizMaster_autoload');
 delete_option('quizMaster_dbVersion');
 
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
+register_activation_hook( __FILE__, 'createDefaultEmails' );
+register_activation_hook( __FILE__, 'createStudentReportPage' );
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
 add_action('init', 'quizmasterAddPostTypes');
@@ -283,6 +285,10 @@ function quizmasterAcfSettingsDir( $dir ) {
 
 include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
 
+if( !QUIZMASTER_DEV ) {
+  include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
+}
+
 /* Options Pages */
 $option_page = acf_add_options_page(array(
 		'page_title' 	=> 'QuizMaster Settings',
@@ -522,4 +528,45 @@ function generateRandomString($length = 10) {
       $randomString .= $characters[rand(0, $charactersLength - 1)];
   }
   return $randomString;
+}
+
+function createDefaultEmails() {
+  createDefaultEmailStudentCompletion();
+}
+
+function createDefaultEmailStudentCompletion() {
+  $post = array(
+    'post_type'     => 'quizmaster_email',
+    'post_title'    => "Student Completion Email",
+    'post_status'   => 'publish',
+    'post_author'   => 1,
+  );
+  $post_id = wp_insert_post( $post );
+  update_field('qm_email_key', 'student_completion', $post_id);
+  update_field('qm_email_enabled', 1, $post_id);
+  update_field('qm_email_trigger', 'completed_quiz', $post_id);
+  update_field('qm_email_from', get_option('admin_email'), $post_id);
+  update_field('qm_email_recipients', '[quiztaker_email]', $post_id);
+  update_field('qm_email_subject', 'You Completed a Quiz', $post_id);
+  update_field('qm_email_type', 'html', $post_id);
+}
+
+function createStudentReportPage() {
+  $post = array(
+    'post_type'     => 'page',
+    'post_title'    => "Student Report",
+    'post_status'   => 'publish',
+    'post_content'  => '[quizmaster_student_report]',
+    'post_author'   => 1,
+  );
+  $post_id = wp_insert_post( $post );
+  setStudentReportPageOption( $post_id );
+}
+
+function setStudentReportPageOption( $post_id ) {
+  update_field( 'qm_student_report_page', $post_id, 'option' );
+}
+
+function getStudentReportPageOption() {
+  return get_field('qm_student_report_page', 'option');
 }

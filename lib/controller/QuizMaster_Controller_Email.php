@@ -4,6 +4,7 @@ class QuizMaster_Controller_Email {
 
   private $email = false;
   private $quiz  = false;
+  private $score  = false;
 
   const QUIZMASTER_EMAIL_TRIGGER_FIELD = 'qm_email_trigger';
   const QUIZMASTER_EMAIL_ENABLED_FIELD = 'qm_email_enabled';
@@ -25,9 +26,6 @@ class QuizMaster_Controller_Email {
 
   public function quizDataShortcode( $atts ) {
 
-    //var_dump( $atts );
-    //var_dump( $this->quiz );
-
     // normalize attribute keys, lowercase
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
 
@@ -47,6 +45,11 @@ class QuizMaster_Controller_Email {
         $content .= $this->quiz->getName();
         $content .= '</a>';
         break;
+      case "scorelink":
+        $content = '<a href="' . $this->score->getPermalink() . '">';
+        $content .= 'Your Quiz Score';
+        $content .= '</a>';
+        break;
     }
 
 
@@ -55,7 +58,7 @@ class QuizMaster_Controller_Email {
   }
 
   public function addEmailTriggers() {
-    add_action('quizmaster_completed_quiz', array( $this, 'sendEmailCompletedQuiz' ));
+    add_action('quizmaster_completed_quiz', array( $this, 'sendEmailCompletedQuiz' ), 10, 2);
   }
 
   public function send() {
@@ -65,6 +68,7 @@ class QuizMaster_Controller_Email {
       $this->email->getMessage(),
       $this->email->getHeaders()
     );
+    print "Email Sent";
   }
 
   public function setMessage() {
@@ -79,7 +83,7 @@ class QuizMaster_Controller_Email {
     return do_shortcode( $content );
   }
 
-  public function sendEmailCompletedQuiz( $quiz ) {
+  public function sendEmailCompletedQuiz( $quiz, $score ) {
 
     $trigger = 'completed_quiz';
 
@@ -105,8 +109,9 @@ class QuizMaster_Controller_Email {
     ));
 
     foreach( $posts as $emailPost ) {
-      $this->email = new QuizMaster_Model_Email( $emailPost->ID );
-      $this->quiz = $quiz;
+      $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
+      $this->quiz   = $quiz;
+      $this->score  = $score;
       $this->setMessage();
       $this->send();
     }

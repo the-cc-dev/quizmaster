@@ -18,10 +18,31 @@ class QuizMaster_Model_Model {
 
     public function setModelByID( $id ) {
       $fields = get_fields( $id );
-      $fields['id'] = $id;
       $fields = $this->stripFieldPrefixes( $fields );
+      $fields['id'] = $id;
+      $fields['post'] = get_post( $id );
       $fields = $this->processFieldsDuringModelSet( $fields );
       $this->setModelData( $fields );
+    }
+
+    public function setPost( $post ) {
+      $this->_post = $post;
+    }
+
+    public function getDate() {
+      return get_the_date( 'Y-m-d H:i:s', $this->getId() );
+    }
+
+    public function getPost() {
+      return $this->_post;
+    }
+
+    public function setId( $id ) {
+      $this->_id = $id;
+    }
+
+    public function getPermalink() {
+      return get_permalink( $this->_id );
     }
 
     /*
@@ -32,26 +53,10 @@ class QuizMaster_Model_Model {
     }
 
     public function setModelData($array) {
-
-      /*
-      print '<pre>';
-      var_dump( $array );
-      print '</pre>';
-      */
-
       if ($array != null) {
         $n = explode(' ', implode('', array_map('ucfirst', explode('_', implode(' _', array_keys($array))))));
         $a = array_combine($n, $array);
         foreach ($a as $k => $v) {
-
-          /*
-          print '<pre>';
-          var_dump( $k );
-          var_dump( $v );
-          print '</pre>';
-          die();
-          */
-
           $this->{'set' . $k}($v);
         }
       }
@@ -78,15 +83,14 @@ class QuizMaster_Model_Model {
      * @param QuizMaster_Model_QuizMapper $mapper
      * @return QuizMaster_Model_Model
      */
-    public function setMapper($mapper)
-    {
+    public function setMapper($mapper) {
         $this->_mapper = $mapper;
-
         return $this;
     }
 
     public function stripFieldPrefixes( $fields ) {
       $fieldPrefix = $this->getFieldPrefix();
+
       foreach( $fields as $key => $val ) {
         $newKey = str_replace( $fieldPrefix, '', $key );
         $fields[$newKey] = $val;

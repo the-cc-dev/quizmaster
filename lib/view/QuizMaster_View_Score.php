@@ -90,4 +90,25 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
     $this->_activeQuestion = new QuizMaster_Model_Question( $questionId );
   }
 
+  public function listTable( $scores ) {
+    return quizmaster_parse_template( 'reports/score-table.php',
+      array(
+        'scores' => $scores,
+        'view' => $this,
+      ));
+  }
+
+  public function getQuizTitle( $score ) {
+    $quizId = $score->getQuizId();
+    return get_the_title( $quizId );
+  }
+
+  public function getUserDisplayName( $score ) {
+    $user = $score->getUserId();
+  }
+
+  public function getLink( $score, $text ) {
+    return '<a href="' . get_permalink( $score->getId() ) . '">' . $text . '</a>';
+  }
+
 }

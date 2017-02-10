@@ -21,7 +21,6 @@ class QuizMaster_Controller_Front
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
 
-      add_action('quizmaster_completed_quiz', array( $this, 'hookTest' ));
     }
 
     /* Student Report Shortcode */
@@ -30,7 +29,7 @@ class QuizMaster_Controller_Front
       $content = 'student report!';
 
       if( !is_user_logged_in() ) {
-        return false;
+        return quizmaster_parse_template( 'reports/student-login.php');
       }
       $user = wp_get_current_user();
 
@@ -173,13 +172,6 @@ class QuizMaster_Controller_Front
 
         $view->quiz = $quiz;
         $view->question = $question;
-
-        /*
-        print '<pre>';
-        var_dump( $view->question );
-        print '</pre>';
-        */
-
         $view->category = array();
         $view->forms = $formMapper->fetch($quiz->getId());
 
