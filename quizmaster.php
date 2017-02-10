@@ -30,9 +30,10 @@ delete_option('quizMaster_dbVersion');
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
 register_activation_hook( __FILE__, 'createDefaultEmails' );
 register_activation_hook( __FILE__, 'createStudentReportPage' );
+register_activation_hook( __FILE__, 'addTeacherRole' );
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
-add_action('init', 'quizmasterAddPostTypes');
+add_action('init', 'quizmasterAddPostTypes', 10, 2);
 
 if (is_admin()) {
   new QuizMaster_Controller_Admin();
@@ -187,6 +188,8 @@ function quizmasterAddPostTypes() {
       'rewrite' => array('slug' => 'quiz'),
       'show_in_menu' => 'quizMaster',
       'supports' => array('title', 'revisions'),
+      'capability_type' => array('quiz', 'quizzes'),
+      'map_meta_cap' => false,
     )
   );
 
@@ -570,3 +573,35 @@ function setStudentReportPageOption( $post_id ) {
 function getStudentReportPageOption() {
   return get_field('qm_student_report_page', 'option');
 }
+
+/* Teachers */
+function addTeacherRole() {
+  $admins = get_role('administrator');
+  $admins->add_cap( 'edit_quizzes' );
+  $admins->add_cap( 'edit_other_quizzes' );
+  $admins->add_cap( 'publish_quizzes' );
+  $admins->add_cap( 'create_quizzes' );
+  $admins->add_cap( 'read_private_quizzes' );
+
+  $capabilities = array(
+    'read'            => true,
+    'edit_posts'      => true,
+    'publish_posts'   => true,
+    'edit_quizzes'    => true,
+    'publish_quizzes' => true,
+    'create_quizzes'  => true,
+    'delete_quizzes'  => true,
+    'quizMaster_show' => true,
+  );
+
+  add_role( 'teacher', 'Teacher', $capabilities );
+
+}
+
+/*
+$teacher = get_role('teacher');
+print '<pre>';
+var_dump( $teacher->capabilities );
+print '</pre>';
+remove_role('teacher');
+*/
