@@ -14,6 +14,8 @@ $scoreView = new QuizMaster_View_Score;
 $scoreModel = $scoreCtr->getScore();
 $scoreView->setScoreQuestions( $scoreModel->getScores() );
 
+$totals = $scoreModel->getTotals();
+
 get_header(); ?>
 
 <div class="wrap">
@@ -22,6 +24,39 @@ get_header(); ?>
 
 			<h2>Quiz <?php print $scoreModel->getQuizId(); ?></h2>
 			<h3>User <?php print $scoreModel->getUserId(); ?></h3>
+
+			<!-- Score Summary -->
+			<div class="score-summary">
+				<h2><?php print __('Score Summary', 'quizmaster'); ?></h2>
+
+				<div class="quizmaster-score-summary-item">
+					<h3>Result (%)</h3>
+					<?php print $scoreModel->getScoreResult(); ?>
+				</div>
+
+				<div class="quizmaster-score-summary-item">
+					<h3>Questions Corrent/Incorrect</h3>
+					<?php print $scoreModel->getCorrectRatio(); ?>
+				</div>
+
+				<div class="quizmaster-score-summary-item">
+					<h3>Hints Used</h3>
+					<?php print $scoreModel->getTotalHints(); ?>
+				</div>
+
+				<div class="quizmaster-score-summary-item">
+					<h3>Completion Time</h3>
+					<?php print $scoreModel->getTotalTime(); ?>
+				</div>
+
+				<div class="quizmaster-score-summary-item">
+					<h3>Total Questions Solved</h3>
+					<?php print $scoreModel->getTotalSolved(); ?>
+				</div>
+
+			</div>
+
+			<!-- Score Details Table -->
 			<table>
 				<tr>
 					<th>Question</th>
@@ -64,10 +99,6 @@ get_header(); ?>
 					</tr>
 				</tfoot>
 			</table>
-
-			<div class="score-summary">
-				<?php print $scoreView->getScoreResult(); ?>
-			</div>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

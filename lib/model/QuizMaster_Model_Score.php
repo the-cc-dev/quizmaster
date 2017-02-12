@@ -12,6 +12,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   protected $_totalPointsPossible = 0;
   protected $_totalPointsEarned   = 0;
   protected $_totalTime           = 0;
+  protected $_totalSolved         = 0;
   protected $_totalHints          = 0;
   protected $_totalsJson          = ''; // json string holding totals array
   protected $_post                = '';
@@ -34,6 +35,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     $this->_totalPointsPossible = $totals['pointsPossible'];
     $this->_totalPointsEarned = $totals['pointsEarned'];
     $this->_totalTime = $totals['time'];
+    $this->_totalSolved = $totals['solved'];
     $this->_totalHints = $totals['hints'];
     $this->setTotalsJson( $this->getTotals() );
   }
@@ -46,12 +48,45 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
       'pointsPossible'  => $this->_totalPointsPossible,
       'pointsEarned'    => $this->_totalPointsEarned,
       'time'            => $this->_totalTime,
+      'solved'          => $this->_totalSolved,
       'hints'           => $this->_totalHints,
     );
   }
 
+  public function getTotalQuestionCount() {
+    return $this->_totalQCount;
+  }
+
+  public function getTotalQuestionsCorrect() {
+    return $this->_totalQCorrect;
+  }
+
+  public function getTotalQuestionsIncorrect() {
+    return $this->_totalQIncorrect;
+  }
+
+  public function getTotalPointsPossible() {
+    return $this->_totalPointsPossible;
+  }
+
   public function getPointsEarned() {
     return $this->_totalPointsEarned;
+  }
+
+  public function getTotalPointsEarned() {
+    return $this->_totalPointsEarned;
+  }
+
+  public function getTotalTime() {
+    return $this->_totalTime;
+  }
+
+  public function getTotalSolved() {
+    return $this->_totalSolved;
+  }
+
+  public function getTotalHints() {
+    return $this->_totalHints;
   }
 
   public function getCorrectRatio() {
@@ -61,6 +96,10 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
   public function setScores( $scores ) {
     $this->_scores = $scores;
+  }
+
+  public function setTotalSolved( $solved ) {
+    $_totalSolved = $solved;
   }
 
   public function getScores( $format = 'objects' ) {
@@ -156,6 +195,10 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
   public function getFieldPrefix() {
     return 'qm_score_';
+  }
+
+  public function getScoreResult() {
+    return round(( 100 * $this->getTotalPointsEarned() / $this->getTotalPointsPossible() ), 2) . '%';
   }
 
 }

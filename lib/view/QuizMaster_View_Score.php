@@ -12,7 +12,7 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
   protected $_activeQuestion = '';
 
   public function getScoreResult() {
-    return round(( 100 * $this->getScoreTotal( 'possiblePoints' ) / $this->getScoreTotal( 'points' ) ), 2) . '%';
+    return round(( 100 * $this->getScoreTotal( 'points' ) / $this->getScoreTotal( 'possiblePoints' ) ), 2) . '%';
   }
 
   public function setActiveScoreQuestion( $scoreQuestion ) {

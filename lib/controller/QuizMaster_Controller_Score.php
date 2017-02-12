@@ -88,6 +88,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       'pointsPossible'  => 0,
       'pointsEarned'    => 0,
       'time'            => 0,
+      'solved'          => 0,
       'hints'           => 0,
     );
 
@@ -97,6 +98,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $totals['pointsPossible']   += $score->getPossiblePoints();
       $totals['pointsEarned']     += $score->getPoints();
       $totals['time']             += $score->getQuestionTime();
+      $totals['solved']           += $score->getSolvedCount();
       $totals['hints']            += $score->getHintCount();
     }
 
