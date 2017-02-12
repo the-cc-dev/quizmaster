@@ -18,7 +18,9 @@ class QuizMaster_Model_Model {
 
     public function setModelByID( $id ) {
       $fields = get_fields( $id );
-      $fields = $this->stripFieldPrefixes( $fields );
+      if( !empty( $fields )) {
+        $fields = $this->stripFieldPrefixes( $fields );
+      }
       $fields['id'] = $id;
       $fields['post'] = get_post( $id );
       $fields = $this->processFieldsDuringModelSet( $fields );
@@ -89,6 +91,7 @@ class QuizMaster_Model_Model {
     }
 
     public function stripFieldPrefixes( $fields ) {
+
       $fieldPrefix = $this->getFieldPrefix();
 
       foreach( $fields as $key => $val ) {

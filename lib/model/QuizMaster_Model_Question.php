@@ -84,7 +84,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
     public function setQuestion($_question)
     {
         $this->_question = (string)$_question;
-
         return $this;
     }
 

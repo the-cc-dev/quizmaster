@@ -6,8 +6,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
     }
 
-    public function isLockQuiz()
-    {
+    public function isLockQuiz() {
         $quizId = (int)$this->_post['quizId'];
         $userId = get_current_user_id();
         $data = array();
@@ -156,8 +155,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         return json_encode(array());
     }
 
-    public static function ajaxLoadQuizData($data)
-    {
+    public static function ajaxLoadQuizData($data) {
         $quizId = (int)$data['quizId'];
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
@@ -167,7 +165,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $data = array();
 
         if ($quiz === null || $quiz->getId() <= 0) {
-            return json_encode(array());
+          return json_encode(array());
         }
 
         $data['averageResult'] = $score->getAverageResult($quizId);

@@ -61,8 +61,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
     }
 
-    public function fetch($id) {
-      $model = new QuizMaster_Model_Question($row);
+    public function fetch( $id ) {
+      $model = new QuizMaster_Model_Question( $id );
       return $model;
     }
 
@@ -70,36 +70,19 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
      * @param $id
      * @return QuizMaster_Model_Question|QuizMaster_Model_Question[]|null
      */
-    public function fetchById($id)
-    {
+    public function fetchById($id) {
+      $ids = array_map('intval', (array)$id);
+      $a = array();
 
-        $ids = array_map('intval', (array)$id);
-        $a = array();
+      foreach ($results as $row) {
+        $a[] = new QuizMaster_Model_Question($row);
+      }
 
-        if (empty($ids)) {
-            return null;
-        }
-
-        $results = $this->_wpdb->get_results(
-            "SELECT
-					*
-				FROM
-					" . $this->_table . "
-				WHERE
-					id IN(" . implode(', ', $ids) . ") AND online = 1",
-            ARRAY_A
-        );
-
-        foreach ($results as $row) {
-            $a[] = new QuizMaster_Model_Question($row);
-
-        }
-
-        return is_array($id) ? $a : (isset($a[0]) ? $a[0] : null);
+      return is_array($id) ? $a : (isset($a[0]) ? $a[0] : null);
     }
 
     /*
-     * Return list of questions associated with question
+     * Return list of questions associated with quiz
      */
     public function fetchAllList($quizId, $list, $sort = false) {
 
@@ -107,7 +90,11 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
       $quizPost = get_post( $quizId );
       $quizQuestions = get_field( 'quiz_questions', $quizId );
       foreach( $quizQuestions as $qq ) {
+
         $quizQuestionID = $qq['quiz_question'];
+
+        // $question = new QuizMaster_Model_Question( $quizQuestionID );
+
         $fields = get_fields( $quizQuestionID );
         $results[] = array(
           'id'      => $quizQuestionID,
@@ -160,8 +147,10 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
               break;
           }
 
-          $fields['answerData'] = $answerData;
-          $model = new QuizMaster_Model_Question( $fields );
+          // $fields['answerData'] = $answerData;
+          // $model = new QuizMaster_Model_Question( $fields );
+          $model = new QuizMaster_Model_Question( $quizQuestionID );
+          $model->setAnswerData( $answerData );
           $a[] = $model;
         }
 

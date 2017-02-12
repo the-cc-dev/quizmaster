@@ -538,6 +538,12 @@ function createDefaultEmails() {
 }
 
 function createDefaultEmailStudentCompletion() {
+
+  $emailCtr = new QuizMaster_Controller_Email;
+  if( $emailCtr->emailExists('student_completion') ) {
+    return;
+  }
+
   $post = array(
     'post_type'     => 'quizmaster_email',
     'post_title'    => "Student Completion Email",
@@ -605,3 +611,10 @@ var_dump( $teacher->capabilities );
 print '</pre>';
 remove_role('teacher');
 */
+
+function quizmaster_camelize($input, $separator = '_') {
+  return str_replace($separator, '', ucwords($input, $separator));
+}
+function quizmaster_simplify_key( $key ) {
+  return str_replace( 'quizmaster_', '', $key);
+}

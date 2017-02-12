@@ -12,6 +12,7 @@ class QuizMaster_Controller_Email {
   public function __construct() {
     $this->addEmailTriggers();
     $this->addShortcodes();
+    add_filter('acf/load_field/name=qm_email_trigger', array( $this, 'loadEmailTriggerList'));
   }
 
   public function addShortcodes() {
@@ -58,7 +59,31 @@ class QuizMaster_Controller_Email {
   }
 
   public function addEmailTriggers() {
-    add_action('quizmaster_completed_quiz', array( $this, 'sendEmailCompletedQuiz' ), 10, 2);
+    $defaultTriggers = $this->getDefaultEmailTriggers();
+    $registeredTriggers = apply_filters('quizmaster_email_triggers', $defaultTriggers);
+    foreach( $registeredTriggers as $trigger => $label ) {
+      $triggerKey = quizmaster_simplify_key( $trigger );
+      $triggerKey = quizmaster_camelize( $triggerKey );
+      $callback = array( $this, 'sendEmail' . $triggerKey );
+      $callback = apply_filters('quizmaster_email_trigger_callback', $callback, $trigger );
+      add_action( $trigger, $callback, 10, 2);
+    }
+  }
+
+  public function loadEmailTriggerList( $field ) {
+    $defaultTriggers = $this->getDefaultEmailTriggers();
+    $registeredTriggers = apply_filters('quizmaster_email_triggers', $defaultTriggers);
+    foreach( $registeredTriggers as $trigger => $label ) {
+      $field['choices'][ $trigger ] = $label;
+    }
+    return $field;
+  }
+
+  private function getDefaultEmailTriggers() {
+    return array(
+      'quizmaster_completed_quiz' => 'Quiz Completion',
+      'quizmaster_completed_quiz_100_percent' => 'Quiz Completion with 100% Score',
+    );
   }
 
   public function send() {
@@ -85,7 +110,7 @@ class QuizMaster_Controller_Email {
 
   public function sendEmailCompletedQuiz( $quiz, $score ) {
 
-    $trigger = 'completed_quiz';
+    $trigger = 'quizmaster_completed_quiz';
 
     define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
     define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
@@ -116,6 +141,85 @@ class QuizMaster_Controller_Email {
       $this->send();
     }
 
+  }
+
+  public function sendEmailCompletedQuiz100Percent( $quiz, $score ) {
+
+    $trigger = 'quizmaster_completed_quiz_100_percent';
+
+    define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
+    define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
+
+    $posts = get_posts(array(
+    	'numberposts'	=> -1,
+    	'post_type'		=> 'quizmaster_email',
+    	'meta_query'	=> array(
+    		'relation'		=> 'AND',
+    		array(
+    			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
+    			'value'	  	=> $trigger,
+    			'compare' 	=> '=',
+    		),
+    		array(
+    			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
+    			'value'	  	=> '1',
+    			'compare' 	=> '=',
+    		),
+    	),
+    ));
+
+    foreach( $posts as $emailPost ) {
+      $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
+      $this->quiz   = $quiz;
+      $this->score  = $score;
+      $this->setMessage();
+      $this->send();
+    }
+
+  }
+
+  public function getEmailsByTrigger( $trigger ) {
+    $posts = get_posts(array(
+    	'numberposts'	=> -1,
+    	'post_type'		=> 'quizmaster_email',
+    	'meta_query'	=> array(
+    		'relation'		=> 'AND',
+    		array(
+    			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
+    			'value'	  	=> $trigger,
+    			'compare' 	=> '=',
+    		),
+    		array(
+    			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
+    			'value'	  	=> '1',
+    			'compare' 	=> '=',
+    		),
+    	),
+    ));
+    return $posts;
+  }
+
+  public function getEmailsByKey( $key ) {
+    $posts = get_posts(array(
+    	'numberposts'	=> -1,
+    	'post_type'		=> 'quizmaster_email',
+    	'meta_query'	=> array(
+    		'relation'		=> 'AND',
+    		array(
+    			'key'	 	    => 'qm_email_key',
+    			'value'	  	=> $key,
+    			'compare' 	=> '=',
+    		),
+    	),
+    ));
+    return $posts;
+  }
+
+  public function emailExists( $key ) {
+    $emails = $this->getEmailsByKey( $key );
+    if( !empty( $emails )) {
+      return true;
+    }
   }
 
 }
