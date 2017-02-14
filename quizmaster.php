@@ -523,16 +523,6 @@ function revisionTest( $post_id, $post, $update ) {
 
 }
 
-function generateRandomString($length = 10) {
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $charactersLength = strlen($characters);
-  $randomString = '';
-  for ($i = 0; $i < $length; $i++) {
-      $randomString .= $characters[rand(0, $charactersLength - 1)];
-  }
-  return $randomString;
-}
-
 function createDefaultEmails() {
   createDefaultEmailStudentCompletion();
 }
@@ -617,4 +607,33 @@ function quizmaster_camelize($input, $separator = '_') {
 }
 function quizmaster_simplify_key( $key ) {
   return str_replace( 'quizmaster_', '', $key);
+}
+
+function generateRandomString($length = 10) {
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $charactersLength = strlen($characters);
+  $randomString = '';
+  for ($i = 0; $i < $length; $i++) {
+    $randomString .= $characters[rand(0, $charactersLength - 1)];
+  }
+  return $randomString;
+}
+
+function generateAccessCode() {
+  $code = generateRandomString( 8 );
+  return strtoupper( $code );
+}
+
+add_filter('acf/load_field/name=qmqz_access_code', 'setQuizAccessCodeReadonly');
+function setQuizAccessCodeReadonly( $field ) {
+  $field['readonly'] = true;
+  return $field;
+}
+
+add_filter('acf/load_value/name=qmqz_access_code', 'makeQuizAccessCode', 10, 3);
+function makeQuizAccessCode( $value, $post_id, $field ) {
+  if( empty( $value )) {
+    return generateAccessCode();
+  }
+  return $value;
 }

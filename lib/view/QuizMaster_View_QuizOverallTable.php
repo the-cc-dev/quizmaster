@@ -89,11 +89,6 @@ class QuizMaster_View_QuizOverallTable extends WP_List_Table
                     'quizmaster') . '</a>', $item['ID']);
         }
 
-        if (current_user_can('quizMaster_toplist_edit')) {
-            $actions['quizMaster_leaderboard'] = sprintf('<a href="?page=quizMaster&module=toplist&id=%s">' . __('Leaderboard',
-                    'quizmaster') . '</a>', $item['ID']);
-        }
-
         return sprintf('<a class="row-title" href="?page=quizMaster&module=question&quiz_id=%1$s">%2$s</a> %3$s',
             $item['ID'], $item['name'], $this->row_actions($actions));
     }
@@ -164,7 +159,6 @@ class QuizMaster_View_QuizOverallTable extends WP_List_Table
                 'name' => $q->getName(),
                 'category' => $q->getCategoryName(),
                 'shortcode' => '[QuizMaster ' . $q->getId() . ']',
-                'shortcode_leaderboard' => $q->isToplistActivated() ? '[QuizMaster_toplist ' . $q->getId() . ']' : ''
             );
         }
 

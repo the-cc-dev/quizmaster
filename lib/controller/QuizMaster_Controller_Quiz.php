@@ -7,6 +7,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
     }
 
     public function isLockQuiz() {
+
         $quizId = (int)$this->_post['quizId'];
         $userId = get_current_user_id();
         $data = array();
@@ -76,8 +77,13 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         }
 
+        // lock quiz if user not logged in
         if ($quiz->isStartOnlyRegisteredUser()) {
             $data['startUserLock'] = (int)!is_user_logged_in();
+        }
+
+        if ($quiz->isStartOnlyByAccessCode()) {
+          $data['startUserLock'] = 1;
         }
 
         return $data;
@@ -173,14 +179,11 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         return json_encode($data);
     }
 
-    public static function ajaxQuizCheckLock()
-    {
-        // workaround ...
-        $_POST = $_POST['data'];
-
-        $quizController = new QuizMaster_Controller_Quiz();
-
-        return json_encode($quizController->isLockQuiz());
+    public static function ajaxQuizCheckLock() {
+      // workaround ...
+      $_POST = $_POST['data'];
+      $quizController = new QuizMaster_Controller_Quiz();
+      return json_encode($quizController->isLockQuiz());
     }
 
     public static function ajaxResetLock($data)

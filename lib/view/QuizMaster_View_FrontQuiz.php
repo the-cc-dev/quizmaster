@@ -24,10 +24,10 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
             'quiz_summary' => __('Quiz-summary', 'quizmaster'),
             'finish_quiz' => __('Finish quiz', 'quizmaster'),
             'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
-            'lock_box_msg' => __('You have already completed the quiz before. Hence you can not start it again.',
-                'quizmaster'),
+            'lock_box_msg' => __('You have already completed the quiz before. Hence you can not start it again.', 'quizmaster'),
             'only_registered_user_msg' => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
-            'prerequisite_msg' => __('You have to finish following quiz, to start this quiz:', 'quizmaster')
+            'prerequisite_msg' => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
+            'only_access_code_msg' => __('You must enter an access code to take this quiz:', 'quizmaster')
         );
 
         $this->_buttonNames = ((array)apply_filters('quizMaster_filter_frontButtonNames', $names, $this)) + $names;
@@ -87,10 +87,9 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         $bo |= ((int)$this->quiz->isAnswerRandom()) << 0;
         $bo |= ((int)$this->quiz->isQuestionRandom()) << 1;
         $bo |= ((int)$this->quiz->isDisabledAnswerMark()) << 2;
-        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isPrerequisite() || $this->quiz->isStartOnlyRegisteredUser())) << 3;
+        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isPrerequisite() || $this->quiz->isStartOnlyRegisteredUser() || $this->quiz->isStartOnlyByAccessCode())) << 3;
         $bo |= ((int)$preview) << 4;
         $bo |= ((int)get_option('quizMaster_corsActivated')) << 5;
-        $bo |= ((int)$this->quiz->isToplistDataAddAutomatic()) << 6;
         $bo |= ((int)$this->quiz->isShowReviewQuestion()) << 7;
         $bo |= ((int)$this->quiz->isQuizSummaryHide()) << 8;
         $bo |= ((int)(!$this->quiz->isSkipQuestionDisabled() && $this->quiz->isShowReviewQuestion())) << 9;
@@ -138,11 +137,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
             $this->showStartOnlyRegisteredUserBox();
             $this->showPrerequisiteBox();
             $this->showResultBox($result, $question_count);
-
-            if ($this->quiz->getToplistDataShowIn() == QuizMaster_Model_Quiz::QUIZ_TOPLIST_SHOW_IN_BUTTON) {
-                $this->showToplistInButtonBox();
-            }
-
             $this->showReviewBox($question_count);
             $this->showQuizAnker();
             ?>
@@ -188,50 +182,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
     {
         ?>
         <div class="quizMaster_quizAnker" style="display: none;"></div>
-        <?php
-    }
-
-    public function showAddToplist()
-    {
-        ?>
-        <div class="quizMaster_addToplist" style="display: none;">
-            <span style="font-weight: bold;"><?php _e('Your result has been entered into leaderboard',
-                    'quizmaster'); ?></span>
-
-            <div style="margin-top: 6px;">
-                <div class="quizMaster_addToplistMessage" style="display: none;"><?php _e('Loading',
-                        'quizmaster'); ?></div>
-                <div class="quizMaster_addBox">
-                    <div>
-						<span>
-							<label>
-                                <?php _e('Name', 'quizmaster'); ?>: <input type="text" placeholder="<?php _e('Name',
-                                    'quizmaster'); ?>" name="quizMaster_toplistName" maxlength="15" size="16"
-                                                                            style="width: 150px;">
-                            </label>
-							<label>
-                                <?php _e('E-Mail', 'quizmaster'); ?>: <input type="email"
-                                                                              placeholder="<?php _e('E-Mail',
-                                                                                  'quizmaster'); ?>"
-                                                                              name="quizMaster_toplistEmail" size="20"
-                                                                              style="width: 150px;">
-                            </label>
-						</span>
-
-                        <div style="margin-top: 5px;">
-                            <label>
-                                <?php _e('Captcha', 'quizmaster'); ?>: <input type="text" name="quizMaster_captcha"
-                                                                               size="8" style="width: 50px;">
-                            </label>
-                            <input type="hidden" name="quizMaster_captchaPrefix" value="0">
-                            <img alt="captcha" src="" class="quizMaster_captchaImg" style="vertical-align: middle;">
-                        </div>
-                    </div>
-                    <input class="quizMaster_button2" type="submit" value="<?php _e('Send', 'quizmaster'); ?>"
-                           name="quizMaster_toplistAdd">
-                </div>
-            </div>
-        </div>
         <?php
     }
 
@@ -451,12 +401,21 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    public function showStartOnlyRegisteredUserBox()
-    {
+    public function showStartOnlyRegisteredUserBox() {
         ?>
         <div style="display: none;" class="quizMaster_startOnlyRegisteredUser">
             <p>
                 <?php echo $this->_buttonNames['only_registered_user_msg']; ?>
+            </p>
+        </div>
+        <?php
+    }
+
+    public function showStartOnlyAccessCodeBox() {
+        ?>
+        <div style="display: none;" class="quizMaster_startOnlyAccessCode">
+            <p>
+                <?php echo $this->_buttonNames['only_access_code_msg']; ?>
             </p>
         </div>
         <?php
@@ -683,15 +642,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
                     <?php } ?>
                 </ul>
             </div>
-            <?php
-            if ($this->quiz->isToplistActivated()) {
-                if ($this->quiz->getToplistDataShowIn() == QuizMaster_Model_Quiz::QUIZ_TOPLIST_SHOW_IN_NORMAL) {
-                    echo do_shortcode('[QuizMaster_toplist ' . $this->quiz->getId() . ' q="true"]');
-                }
 
-                $this->showAddToplist();
-            }
-            ?>
             <div style="margin: 10px 0px;">
                 <?php if (!$this->quiz->isBtnRestartQuizHidden()) { ?>
                     <input class="quizMaster_button" type="button" name="restartQuiz"
@@ -701,21 +652,9 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
                     <input class="quizMaster_button" type="button" name="reShowQuestion"
                            value="<?php _e('View questions', 'quizmaster'); ?>">
                 <?php } ?>
-                <?php if ($this->quiz->isToplistActivated() && $this->quiz->getToplistDataShowIn() == QuizMaster_Model_Quiz::QUIZ_TOPLIST_SHOW_IN_BUTTON) { ?>
-                    <input class="quizMaster_button" type="button" name="showToplist"
-                           value="<?php _e('Show leaderboard', 'quizmaster'); ?>">
-                <?php } ?>
             </div>
         </div>
         <?php
-    }
-
-    public function showToplistInButtonBox() {
-      ?>
-      <div class="quizMaster_toplistShowInButton" style="display: none;">
-          <?php echo do_shortcode('[QuizMaster_toplist ' . $this->quiz->getId() . ' q="true"]'); ?>
-      </div>
-      <?php
     }
 
     public function showQuizBox($questionCount) {

@@ -13,13 +13,9 @@
     $view->showLockBox();
     $view->showLoadQuizBox();
     $view->showStartOnlyRegisteredUserBox();
+    $view->showStartOnlyAccessCodeBox();
     $view->showPrerequisiteBox();
     $view->showResultBox($view->result, $view->question_count);
-
-    if ($view->quiz->getToplistDataShowIn() == QuizMaster_Model_Quiz::QUIZ_TOPLIST_SHOW_IN_BUTTON) {
-        $view->showToplistInButtonBox();
-    }
-
     $view->showReviewBox($view->question_count);
     $view->showQuizAnker();
 

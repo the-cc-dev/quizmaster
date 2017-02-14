@@ -9,13 +9,11 @@ class QuizMaster_Controller_Front
     private $_settings = null;
 
     public function __construct() {
-      $this->loadSettings();
-
+      
       add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
 
       /* add shortcodes */
       add_shortcode('QuizMaster', array($this, 'shortcode'));
-      add_shortcode('QuizMastertoplist', array($this, 'shortcodeToplist'));
       add_shortcode('quizmaster_student_report', array($this, 'studentReportShortcode'));
 
       // init controller email
@@ -66,11 +64,11 @@ class QuizMaster_Controller_Front
         wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
 
 
-        $this->loadJsScripts(false, true, true);
+        $this->loadJsScripts(false, true);
 
     }
 
-    private function loadJsScripts($footer = true, $quiz = true, $toplist = false)
+    private function loadJsScripts($footer = true, $quiz = true)
     {
         if ($quiz) {
             wp_enqueue_script(
@@ -89,27 +87,6 @@ class QuizMaster_Controller_Front
                     'quizmaster'),
                 'fieldsNotFilled' => __('All fields have to be filled.', 'quizmaster')
             ));
-        }
-
-        if ($toplist) {
-            wp_enqueue_script(
-                'quizMaster_front_javascript_toplist',
-                plugins_url('js/quizMaster_toplist' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
-                array('jquery-ui-sortable'),
-                QUIZMASTER_VERSION,
-                $footer
-            );
-
-            if (!wp_script_is('quizMaster_front_javascript')) {
-                wp_localize_script('quizMaster_front_javascript_toplist', 'QuizMasterGlobal', array(
-                    'ajaxurl' => admin_url('admin-ajax.php'),
-                    'loadData' => __('Loading', 'quizmaster'),
-                    'questionNotSolved' => __('You must answer this question.', 'quizmaster'),
-                    'questionsNotSolved' => __('You must answer all questions before you can completed the quiz.',
-                        'quizmaster'),
-                    'fieldsNotFilled' => __('All fields have to be filled.', 'quizmaster')
-                ));
-            }
         }
 
     }
@@ -181,57 +158,6 @@ class QuizMaster_Controller_Front
         } else {
             $view->show();
         }
-    }
-
-    public function shortcodeToplist($attr)
-    {
-        $id = $attr[0];
-        $content = '';
-
-        if (!$this->_settings->isJsLoadInHead()) {
-            $this->loadJsScripts(true, false, true);
-        }
-
-        if (is_numeric($id)) {
-            ob_start();
-
-            $this->handleShortCodeToplist($id, isset($attr['q']));
-
-            $content = ob_get_contents();
-
-            ob_end_clean();
-        }
-
-        if ($this->_settings->isAddRawShortcode() && !isset($attr['q'])) {
-            return '[raw]' . $content . '[/raw]';
-        }
-
-        return $content;
-    }
-
-    private function handleShortCodeToplist($quizId, $inQuiz = false)
-    {
-        $quizMapper = new QuizMaster_Model_QuizMapper();
-        $view = new QuizMaster_View_FrontToplist();
-
-        $quiz = $quizMapper->fetch($quizId);
-
-        if ($quiz->getId() <= 0 || !$quiz->isToplistActivated()) {
-            echo '';
-
-            return;
-        }
-
-        $view->quiz = $quiz;
-        $view->points = $quizMapper->sumQuestionPoints($quizId);
-        $view->inQuiz = $inQuiz;
-        $view->show();
-    }
-
-    // delete
-    private function loadSettings()
-    {
-
     }
 
     public static function ajaxQuizLoadData($data)

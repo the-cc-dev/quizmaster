@@ -130,24 +130,7 @@ class QuizMaster_Helper_ExportXml
             $this->booleanToTrueOrFalse($quiz->isShowMaxQuestion())));
         $showMaxQuestion->setAttribute('showMaxQuestionValue', $quiz->getShowMaxQuestionValue());
         $showMaxQuestion->setAttribute('showMaxQuestionPercent',
-            $this->booleanToTrueOrFalse($quiz->isShowMaxQuestionPercent()));
-
-        //Toplist
-        $toplist = $dom->createElement('toplist');
-        $toplist->setAttribute('activated', $this->booleanToTrueOrFalse($quiz->isToplistActivated()));
-        $toplist->appendChild($dom->createElement('toplistDataAddPermissions', $quiz->getToplistDataAddPermissions()));
-        $toplist->appendChild($dom->createElement('toplistDataSort', $quiz->getToplistDataSort()));
-        $toplist->appendChild($dom->createElement('toplistDataAddMultiple',
-            $this->booleanToTrueOrFalse($quiz->isToplistDataAddMultiple())));
-        $toplist->appendChild($dom->createElement('toplistDataAddBlock', $quiz->getToplistDataAddBlock()));
-        $toplist->appendChild($dom->createElement('toplistDataShowLimit', $quiz->getToplistDataShowLimit()));
-        $toplist->appendChild($dom->createElement('toplistDataShowIn', $quiz->getToplistDataShowIn()));
-        $toplist->appendChild($dom->createElement('toplistDataCaptcha',
-            $this->booleanToTrueOrFalse($quiz->isToplistDataCaptcha())));
-        $toplist->appendChild($dom->createElement('toplistDataAddAutomatic',
-            $this->booleanToTrueOrFalse($quiz->isToplistDataAddAutomatic())));
-
-        $quizElement->appendChild($toplist);
+        $this->booleanToTrueOrFalse($quiz->isShowMaxQuestionPercent()));
 
         $quizElement->appendChild($dom->createElement('showAverageResult',
             $this->booleanToTrueOrFalse($quiz->isShowAverageResult())));

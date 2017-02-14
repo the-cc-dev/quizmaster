@@ -7,18 +7,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
     const QUIZ_RUN_ONCE_TYPE_ONLY_USER = 2;
     const QUIZ_RUN_ONCE_TYPE_ONLY_ANONYM = 3;
 
-    const QUIZ_TOPLIST_TYPE_ALL = 1;
-    const QUIZ_TOPLIST_TYPE_ONLY_USER = 2;
-    const QUIZ_TOPLIST_TYPE_ONLY_ANONYM = 3;
-
-    const QUIZ_TOPLIST_SORT_BEST = 1;
-    const QUIZ_TOPLIST_SORT_NEW = 2;
-    const QUIZ_TOPLIST_SORT_OLD = 3;
-
-    const QUIZ_TOPLIST_SHOW_IN_NONE = 0;
-    const QUIZ_TOPLIST_SHOW_IN_NORMAL = 1;
-    const QUIZ_TOPLIST_SHOW_IN_BUTTON = 2;
-
     const QUIZ_MODUS_NORMAL = 0;
     const QUIZ_MODUS_BACK_BUTTON = 1;
     const QUIZ_MODUS_CHECK = 2;
@@ -55,26 +43,13 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
     protected $_showMaxQuestion = false;
     protected $_showMaxQuestionValue = 1;
     protected $_showMaxQuestionPercent = false;
+    protected $_startOnlyByAccessCode = false;
 
-    //0.19
-    protected $_toplistActivated = false;
-    protected $_toplistDataAddPermissions = 1;
-    protected $_toplistDataSort = 1;
-    protected $_toplistDataAddMultiple = false;
-    protected $_toplistDataAddBlock = 1;
-    protected $_toplistDataShowLimit = 1;
-    protected $_toplistDataShowQuizResult = false;
-    protected $_toplistDataShowIn = 0;
-    protected $_toplistDataCaptcha = false;
-
-    protected $_toplistData = array();
 
     protected $_showAverageResult = false;
-
     protected $_prerequisite = false;
 
     //0.22
-    protected $_toplistDataAddAutomatic = false;
     protected $_quizModus = 0;
     protected $_showReviewQuestion = false;
     protected $_quizSummaryHide = false;
@@ -413,144 +388,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         return $this->_showMaxQuestionPercent;
     }
 
-    public function setToplistActivated($_toplistActivated)
-    {
-        $this->_toplistActivated = (bool)$_toplistActivated;
-
-        return $this;
-    }
-
-    public function isToplistActivated()
-    {
-        return $this->_toplistActivated;
-    }
-
-    public function setToplistDataAddPermissions($_toplistDataAddPermissions)
-    {
-        $this->_toplistDataAddPermissions = (int)$_toplistDataAddPermissions;
-
-        return $this;
-    }
-
-    public function getToplistDataAddPermissions()
-    {
-        return $this->_toplistDataAddPermissions;
-    }
-
-    public function setToplistDataSort($_toplistDataSort)
-    {
-        $this->_toplistDataSort = (int)$_toplistDataSort;
-
-        return $this;
-    }
-
-    public function getToplistDataSort()
-    {
-        return $this->_toplistDataSort;
-    }
-
-    public function setToplistDataAddMultiple($_toplistDataAddMultiple)
-    {
-        $this->_toplistDataAddMultiple = (bool)$_toplistDataAddMultiple;
-
-        return $this;
-    }
-
-    public function isToplistDataAddMultiple()
-    {
-        return $this->_toplistDataAddMultiple;
-    }
-
-    public function setToplistDataAddBlock($_toplistDataAddBlock)
-    {
-        $this->_toplistDataAddBlock = (int)$_toplistDataAddBlock;
-
-        return $this;
-    }
-
-    public function getToplistDataAddBlock()
-    {
-        return $this->_toplistDataAddBlock;
-    }
-
-    public function setToplistDataShowLimit($_toplistDataShowLimit)
-    {
-        $this->_toplistDataShowLimit = (int)$_toplistDataShowLimit;
-
-        return $this;
-    }
-
-    public function getToplistDataShowLimit()
-    {
-        return $this->_toplistDataShowLimit;
-    }
-
-    public function setToplistData($_toplistData)
-    {
-        if (!empty($_toplistData)) {
-            $d = unserialize($_toplistData);
-
-            if ($d !== false) {
-                $this->setModelData($d);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getToplistData()
-    {
-
-        $a = array(
-            'toplistDataAddPermissions' => $this->getToplistDataAddPermissions(),
-            'toplistDataSort' => $this->getToplistDataSort(),
-            'toplistDataAddMultiple' => $this->isToplistDataAddMultiple(),
-            'toplistDataAddBlock' => $this->getToplistDataAddBlock(),
-            'toplistDataShowLimit' => $this->getToplistDataShowLimit(),
-            'toplistDataShowIn' => $this->getToplistDataShowIn(),
-            'toplistDataCaptcha' => $this->isToplistDataCaptcha(),
-            'toplistDataAddAutomatic' => $this->isToplistDataAddAutomatic()
-        );
-
-        return serialize($a);
-    }
-
-    public function setToplistDataShowIn($_toplistDataShowIn)
-    {
-        $this->_toplistDataShowIn = (int)$_toplistDataShowIn;
-
-        return $this;
-    }
-
-    public function getToplistDataShowIn()
-    {
-        return $this->_toplistDataShowIn;
-    }
-
-    public function setToplistDataCaptcha($_toplistDataCaptcha)
-    {
-        $this->_toplistDataCaptcha = (bool)$_toplistDataCaptcha;
-
-        return $this;
-    }
-
-    public function isToplistDataCaptcha()
-    {
-        return $this->_toplistDataCaptcha;
-    }
-
-    public function setShowAverageResult($_showAverageResult)
-    {
-        $this->_showAverageResult = (bool)$_showAverageResult;
-
-        return $this;
-    }
-
-    public function isShowAverageResult()
-    {
-        return $this->_showAverageResult;
-    }
-
     public function setPrerequisite($_prerequisite)
     {
         $this->_prerequisite = (bool)$_prerequisite;
@@ -563,23 +400,9 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         return $this->_prerequisite;
     }
 
-    public function setToplistDataAddAutomatic($_toplistDataAddAutomatic)
-    {
-        $this->_toplistDataAddAutomatic = (bool)$_toplistDataAddAutomatic;
 
-        return $this;
-    }
-
-    public function isToplistDataAddAutomatic()
-    {
-        return $this->_toplistDataAddAutomatic;
-    }
-
-    public function setQuizModus($_quizModus)
-    {
-        $this->_quizModus = (int)$_quizModus;
-
-        return $this;
+    public function setQuizModus($_quizModus) {
+      $this->_quizModus = (int)$_quizModus;
     }
 
     public function getQuizModus()
@@ -767,76 +590,61 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         return $this->_formShowPosition;
     }
 
-    public function setStartOnlyRegisteredUser($_startOnlyRegisteredUser)
-    {
-        $this->_startOnlyRegisteredUser = (bool)$_startOnlyRegisteredUser;
-
-        return $this;
+    public function setStartOnlyRegisteredUser($_startOnlyRegisteredUser) {
+      $this->_startOnlyRegisteredUser = (bool)$_startOnlyRegisteredUser;
     }
 
-    public function isStartOnlyRegisteredUser()
-    {
-        return $this->_startOnlyRegisteredUser;
+    public function isStartOnlyRegisteredUser() {
+      return $this->_startOnlyRegisteredUser;
     }
 
-    public function setQuestionsPerPage($_questionsPerPage)
-    {
-        $this->_questionsPerPage = (int)$_questionsPerPage;
-
-        return $this;
+    public function setStartOnlyByAccessCode( $_startOnlyByAccessCode ) {
+      $this->_startOnlyByAccessCode = (bool)$_startOnlyByAccessCode;
     }
 
-    public function getQuestionsPerPage()
-    {
-        return $this->_questionsPerPage;
+    public function isStartOnlyByAccessCode() {
+      return $this->_startOnlyByAccessCode;
     }
 
-    public function setSortCategories($_sortCategories)
-    {
-        $this->_sortCategories = (bool)$_sortCategories;
-
-        return $this;
+    public function setQuestionsPerPage($_questionsPerPage) {
+      $this->_questionsPerPage = (int)$_questionsPerPage;
     }
 
-    public function isSortCategories()
-    {
-        return $this->_sortCategories;
+    public function getQuestionsPerPage() {
+      return $this->_questionsPerPage;
     }
 
-    public function setShowCategory($_showCategory)
-    {
-        $this->_showCategory = (bool)$_showCategory;
-
-        return $this;
+    public function setSortCategories($_sortCategories) {
+      $this->_sortCategories = (bool)$_sortCategories;
     }
 
-    public function isShowCategory()
-    {
-        return $this->_showCategory;
+    public function isSortCategories() {
+      return $this->_sortCategories;
     }
 
-    public function setCategoryId($_categoryId)
-    {
+    public function setShowCategory($_showCategory) {
+      $this->_showCategory = (bool)$_showCategory;
+    }
+
+    public function isShowCategory() {
+      return $this->_showCategory;
+    }
+
+    public function setCategoryId($_categoryId) {
         $this->_categoryId = (int)$_categoryId;
-
         return $this;
     }
 
-    public function getCategoryId()
-    {
-        return $this->_categoryId;
+    public function getCategoryId() {
+      return $this->_categoryId;
     }
 
-    public function setCategoryName($_categoryName)
-    {
-        $this->_categoryName = (string)$_categoryName;
-
-        return $this;
+    public function setCategoryName($_categoryName) {
+      $this->_categoryName = (string)$_categoryName;
     }
 
-    public function getCategoryName()
-    {
-        return $this->_categoryName;
+    public function getCategoryName() {
+      return $this->_categoryName;
     }
 
     public function setAdminEmail($_adminEmail)
@@ -907,33 +715,4 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         return $this->_userEmail;
     }
 
-    public function setPluginContainer($_pluginContainer)
-    {
-        $this->_pluginContainer = $_pluginContainer;
-
-        return $this;
-    }
-
-    public function getPluginContainer($serialize = false)
-    {
-        if ($this->_pluginContainer === null) {
-            $this->_pluginContainer = new QuizMaster_Model_PluginContainer();
-        }
-
-        if (is_object($this->_pluginContainer) || $this->_pluginContainer instanceof QuizMaster_Model_PluginContainer) {
-            if ($serialize) {
-                return @serialize($this->_pluginContainer);
-            }
-        } else {
-            if (!$serialize) {
-                if (QuizMaster_Helper_Until::saveUnserialize($this->_pluginContainer, $into) === false) {
-                    return null;
-                }
-
-                $this->_pluginContainer = $into;
-            }
-        }
-
-        return $this->_pluginContainer;
-    }
 }

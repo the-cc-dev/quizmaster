@@ -293,19 +293,6 @@ class QuizMaster_Helper_ImportXml
             }
         }
 
-        if (isset($xml->toplist)) {
-            $model->setToplistActivated($xml->toplist->attributes()->activated == 'true');
-
-            $model->setToplistDataAddPermissions($xml->toplist->toplistDataAddPermissions);
-            $model->setToplistDataSort($xml->toplist->toplistDataSort);
-            $model->setToplistDataAddMultiple($xml->toplist->toplistDataAddMultiple == 'true');
-            $model->setToplistDataAddBlock($xml->toplist->toplistDataAddBlock);
-            $model->setToplistDataShowLimit($xml->toplist->toplistDataShowLimit);
-            $model->setToplistDataShowIn($xml->toplist->toplistDataShowIn);
-            $model->setToplistDataCaptcha($xml->toplist->toplistDataCaptcha == 'true');
-            $model->setToplistDataAddAutomatic($xml->toplist->toplistDataAddAutomatic == 'true');
-        }
-
         $model->setShowAverageResult($xml->showAverageResult == 'true');
         $model->setPrerequisite($xml->prerequisite == 'true');
         $model->setQuizModus($xml->quizModus);
