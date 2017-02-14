@@ -83,7 +83,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         }
 
         if ($quiz->isStartOnlyByAccessCode()) {
-          $data['startUserLock'] = 1;
+          $data['startUserLockAccessCode'] = 1;
         }
 
         return $data;

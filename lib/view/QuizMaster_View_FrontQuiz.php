@@ -27,7 +27,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
             'lock_box_msg' => __('You have already completed the quiz before. Hence you can not start it again.', 'quizmaster'),
             'only_registered_user_msg' => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
             'prerequisite_msg' => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
-            'only_access_code_msg' => __('You must enter an access code to take this quiz:', 'quizmaster')
         );
 
         $this->_buttonNames = ((array)apply_filters('quizMaster_filter_frontButtonNames', $names, $this)) + $names;
@@ -412,13 +411,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
     }
 
     public function showStartOnlyAccessCodeBox() {
-        ?>
-        <div style="display: none;" class="quizMaster_startOnlyAccessCode">
-            <p>
-                <?php echo $this->_buttonNames['only_access_code_msg']; ?>
-            </p>
-        </div>
-        <?php
+      quizmaster_get_template('quiz/access-code.php');
     }
 
     public function showPrerequisiteBox()

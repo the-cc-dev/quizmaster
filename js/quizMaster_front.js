@@ -967,30 +967,33 @@ quizMasterReady(function () {
 
             startQuiz: function (loadData) {
                 if (quizStatus.loadLock) {
-                    quizStatus.isQuizStart = 1;
-
-                    return;
+                  quizStatus.isQuizStart = 1;
+                  return;
                 }
 
                 quizStatus.isQuizStart = 0;
 
                 if (quizStatus.isLocked) {
-                    globalElements.quizStartPage.hide();
-                    $e.find('.quizMaster_lock').show();
-
-                    return;
+                  globalElements.quizStartPage.hide();
+                  $e.find('.quizMaster_lock').show();
+                  return;
                 }
 
                 if (quizStatus.isPrerequisite) {
                     globalElements.quizStartPage.hide();
                     $e.find('.quizMaster_prerequisite').show();
-
                     return;
                 }
 
                 if (quizStatus.isUserStartLocked) {
                   globalElements.quizStartPage.hide();
                   $e.find('.quizMaster_startOnlyRegisteredUser').show();
+                  return;
+                }
+
+                if (quizStatus.isUserStartLockedAccessCode) {
+                  globalElements.quizStartPage.hide();
+                  $e.find('.quizMaster_startOnlyAccessCode').show();
                   return;
                 }
 
@@ -1692,7 +1695,13 @@ quizMasterReady(function () {
                     }
 
                     if (json.startUserLock != undefined) {
-                        quizStatus.isUserStartLocked = json.startUserLock;
+                      quizStatus.isUserStartLocked = json.startUserLock;
+
+
+                    }
+
+                    if (json.startUserLockAccessCode != undefined) {
+                      quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
                     }
 
                     quizStatus.loadLock = 0;
