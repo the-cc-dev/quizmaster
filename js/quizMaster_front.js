@@ -1,3 +1,7 @@
+jQuery(document).ready(function() {
+  jQuery('#quizmaster_score_table').DataTable();
+});
+
 //quizMasterReady = jQuery.noop;
 
 /**
@@ -82,6 +86,7 @@ quizMasterReady(function () {
 });
 
 (function ($) {
+
     /**
      * @memberOf $
      */

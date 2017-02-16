@@ -131,6 +131,10 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     return $this->_quizId;
   }
 
+  public function getQuizName() {
+    return get_the_title( $this->getQuizId());
+  }
+
   public function setUserId($_userId) {
     $this->_userId = (int)$_userId;
     return $this;
@@ -198,7 +202,19 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function getScoreResult() {
-    return round(( 100 * $this->getTotalPointsEarned() / $this->getTotalPointsPossible() ), 2) . '%';
+    return round(( 100 * $this->getTotalPointsEarned() / $this->getTotalPointsPossible() ), 2);
+  }
+
+  public function getSolvedPercentage() {
+    return round(( 100 * $this->getTotalSolved() / $this->getTotalQuestionCount() ), 2);
+  }
+
+  public function getQuestionsCorrectPercentage() {
+    return round(( 100 * $this->getTotalQuestionsCorrect() / $this->getTotalQuestionCount() ), 2);
+  }
+
+  public function getQuestionsIncorrectPercentage() {
+    return round(( 100 * $this->getTotalQuestionsIncorrect() / $this->getTotalQuestionCount() ), 2);
   }
 
 }

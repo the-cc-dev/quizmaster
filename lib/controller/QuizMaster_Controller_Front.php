@@ -9,7 +9,7 @@ class QuizMaster_Controller_Front
     private $_settings = null;
 
     public function __construct() {
-      
+
       add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
 
       /* add shortcodes */
@@ -62,6 +62,24 @@ class QuizMaster_Controller_Front
         $data = apply_filters('quizMaster_front_style', $data);
 
         wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
+
+        wp_enqueue_script('jquery-datatables',
+          plugins_url('js/datatables/jquery.dataTables.min.js', QUIZMASTER_FILE),
+          array(),
+          QUIZMASTER_VERSION
+        );
+
+        wp_enqueue_style('jquery-datatables-style',
+          plugins_url('js/datatables/jquery.dataTables.min.css', QUIZMASTER_FILE),
+          array(),
+          QUIZMASTER_VERSION
+        );
+
+        wp_enqueue_script('jquery-easy-pie-chart',
+          plugins_url('js/jquery.easypiechart.min.js', QUIZMASTER_FILE),
+          array(),
+          QUIZMASTER_VERSION
+        );
 
 
         $this->loadJsScripts(false, true);
