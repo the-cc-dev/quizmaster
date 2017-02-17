@@ -112,8 +112,7 @@ get_header(); ?>
 			<table>
 				<tr>
 					<th>Question</th>
-					<th>Possible Points</th>
-					<th>Points Scored</th>
+					<th>Points</th>
 					<th>Correct</th>
 					<th>Incorrect</th>
 					<th>Hints Used</th>
@@ -127,10 +126,8 @@ get_header(); ?>
 				?>
 					<tr>
 						<td><?php print $scoreView->getQuestion(); ?></td>
-						<td><?php print $scoreView->getPossiblePoints(); ?></td>
-						<td><?php print $scoreView->getPoints(); ?></td>
+						<td><?php print $scoreView->getPoints() . '/' . $scoreView->getPointsPossible(); ?></td>
 						<td><?php print $scoreView->getCorrectCount(); ?></td>
-						<td><?php print $scoreView->getIncorrectCount(); ?></td>
 						<td><?php print $scoreView->getHintCount(); ?></td>
 						<td><?php print $scoreView->getSolvedCount(); ?></td>
 						<td><?php print $scoreView->getQuestionTime(); ?></td>
