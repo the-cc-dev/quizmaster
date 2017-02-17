@@ -84,6 +84,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         if ($quiz->isStartOnlyByAccessCode()) {
           $data['startUserLockAccessCode'] = 1;
+          $data['accessCode'] = get_field( 'qmqz_access_code', $quiz->getId() );
         }
 
         return $data;

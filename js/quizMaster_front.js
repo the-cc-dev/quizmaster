@@ -1,46 +1,84 @@
-jQuery(document).ready(function() {
-  jQuery('#quizmaster_score_table').DataTable();
-});
+/* Global Scope (Not On Ready) */
+function quizmasterProcessAccessCode( codeEntered, code ) {
+  if( codeEntered == code ) {
+    console.log("code is correct");
+    quizmasterGrantAccessByCode();
+  } else {
+    quizmasterDenyAccessByCode();
+  }
+}
 
-//quizMasterReady = jQuery.noop;
+function quizmasterGrantAccessByCode() {
+  jQuery('.quizmaster-access-code-error').hide();
+  console.log('starting quiz!');
+
+  // plugin.methode.startQuiz();
+
+  //globalElements.quizStartPage.show();
+  jQuery('.quizMaster_startOnlyAccessCode').hide();
+  jQuery('.quizMaster_text').show();
+}
+
+function quizmasterDenyAccessByCode() {
+  console.log('code is wrong');
+  jQuery('.quizmaster-access-code-error').show();
+}
+
+
+jQuery(document).ready(function( $ ) {
+
+  // datatables
+  $('#quizmaster_score_table').DataTable();
+
+  /*
+  $('#quiz_access_code_form').submit( function( e ) {
+    console.log('code!');
+    var code = $('#access_code').val();
+    console.log(code);
+    console.log( quizStatus.accessCode );
+    e.preventDefault();
+  });
+  */
+
+});
 
 /**
  * Source: https://github.com/jfriend00/docReady
  */
 (function(funcName, baseObj) {
-    // The public function name defaults to window.quizMasterReady
-    // but you can pass in your own object and own function name and those will be used
-    // if you want to put them in a different namespace
-    funcName = funcName || "quizMasterReady";
-    baseObj = baseObj || window;
-    var readyList = [];
-    var readyFired = false;
-    var readyEventHandlersInstalled = false;
+  // The public function name defaults to window.quizMasterReady
+  // but you can pass in your own object and own function name and those will be used
+  // if you want to put them in a different namespace
+  funcName = funcName || "quizMasterReady";
+  baseObj = baseObj || window;
+  var readyList = [];
+  var readyFired = false;
+  var readyEventHandlersInstalled = false;
 
     // call this when the document is ready
     // this function protects itself against being called more than once
     function ready() {
-        if (!readyFired) {
-            // this must be set to true before we start calling callbacks
-            readyFired = true;
-            for (var i = 0; i < readyList.length; i++) {
-                // if a callback here happens to add new ready handlers,
-                // the quizMasterReady() function will see that it already fired
-                // and will schedule the callback to run right after
-                // this event loop finishes so all handlers will still execute
-                // in order and no new ones will be added to the readyList
-                // while we are processing the list
-                readyList[i].fn.call(window, readyList[i].ctx);
-            }
-            // allow any closures held by these functions to free
-            readyList = [];
+      if (!readyFired) {
+        // this must be set to true before we start calling callbacks
+        readyFired = true;
+        for (var i = 0; i < readyList.length; i++) {
+          // if a callback here happens to add new ready handlers,
+          // the quizMasterReady() function will see that it already fired
+          // and will schedule the callback to run right after
+          // this event loop finishes so all handlers will still execute
+          // in order and no new ones will be added to the readyList
+          // while we are processing the list
+          readyList[i].fn.call(window, readyList[i].ctx);
         }
+        // allow any closures held by these functions to free
+        readyList = [];
+      }
     }
 
     function readyStateChange() {
-        if ( document.readyState === "complete" ) {
-            ready();
-        }
+      if ( document.readyState === "complete" ) {
+        ready();
+      }
     }
 
     // This is the one public interface
@@ -61,28 +99,28 @@ jQuery(document).ready(function() {
         if (document.readyState === "complete") {
             setTimeout(ready, 1);
         } else if (!readyEventHandlersInstalled) {
-            // otherwise if we don't have event handlers installed, install them
-            if (document.addEventListener) {
-                // first choice is DOMContentLoaded event
-                document.addEventListener("DOMContentLoaded", ready, false);
-                // backup is window load event
-                window.addEventListener("load", ready, false);
-            } else {
-                // must be IE
-                document.attachEvent("onreadystatechange", readyStateChange);
-                window.attachEvent("onload", ready);
-            }
-            readyEventHandlersInstalled = true;
+          // otherwise if we don't have event handlers installed, install them
+          if (document.addEventListener) {
+            // first choice is DOMContentLoaded event
+            document.addEventListener("DOMContentLoaded", ready, false);
+            // backup is window load event
+            window.addEventListener("load", ready, false);
+          } else {
+            // must be IE
+            document.attachEvent("onreadystatechange", readyStateChange);
+            window.attachEvent("onload", ready);
+          }
+          readyEventHandlersInstalled = true;
         }
     }
 })("quizMasterReady", window);
 
 quizMasterReady(function () {
-    var r = window.quizMasterInitList || [];
+  var r = window.quizMasterInitList || [];
 
-    for(var i = 0; i < r.length; i++) {
-        jQuery(r[i].id).quizMasterFront(r[i].init);
-    }
+  for(var i = 0; i < r.length; i++) {
+    jQuery(r[i].id).quizMasterFront(r[i].init);
+  }
 });
 
 (function ($) {
@@ -115,7 +153,7 @@ quizMasterReady(function () {
             quizSummeryHide: 0,
             skipButton: 0,
             reviewQustion: 0,
-            autoStart: 0,
+            autoautoStart: 0,
             forcingQuestionSolve: 0,
             hideQuestionPositionOverview: 0,
             formActivated: 0,
@@ -755,43 +793,6 @@ quizMasterReady(function () {
 
                 });
 
-//				$('.quizMaster_forms input, .quizMaster_forms textarea').each(function() {
-//					var $this = $(this);
-//					var isRequired = $this.data('required') == 1;
-//					var validate = $this.data('validate') & 0xFF;
-//					var test = false;
-//					var $infos = $this.parents('div:eq(0)').find('.quizMaster_invalidate');
-//
-//					if(isRequired) {
-//						if($this.attr('type') == 'checkbox') {
-//							if($this.is(':checked'))
-//								test = true;
-//
-//						} else {
-//							if(!funcs.isEmpty($this.val()))
-//								test = true;
-//						}
-//
-//						if(!test) {
-//							check = false;
-//							$infos.eq(0).show();
-//						} else {
-//							$infos.eq(0).hide();
-//						}
-//					}
-//
-//					if(!funcs.testValidate($this.val(), validate)) {
-//						check = false;
-//						$infos.eq(1).show();
-//					} else {
-//						$infos.eq(1).hide();
-//					}
-//
-//				});
-
-//				if(!check)
-//					alert(QuizMasterGlobal.fieldsNotFilled);
-//
                 return check;
             };
 
@@ -1077,13 +1078,6 @@ quizMasterReady(function () {
 
                 if (config.mode == 3) {
                     plugin.methode.showSinglePage(0);
-//					if(config.qpp) {
-//						$listItem.slice(0, config.qpp).show();
-//						$e.find(globalNames.singlePageRight).show();
-//						$e.find('input[name="checkSingle"]').hide();
-//					} else {
-//						$listItem.show();
-//					}
                 } else {
                     currentQuestion = $listItem.eq(0).show();
 
@@ -1172,10 +1166,7 @@ quizMasterReady(function () {
 
             showSingleQuestion: function (question) {
                 var page = question ? Math.ceil(question / config.qpp) : 1;
-
                 this.showSinglePage(page);
-
-//				plugin.methode.scrollTo($element, 1);
             },
 
             showSinglePage: function (page) {
@@ -1188,7 +1179,6 @@ quizMasterReady(function () {
                 }
 
                 page = page ? +page : 1;
-
                 var maxPage = Math.ceil($e.find('.quizMaster_list > li').length / config.qpp);
 
                 if (page > maxPage)
@@ -1203,13 +1193,12 @@ quizMasterReady(function () {
                 }
 
                 if (page == maxPage) {
-                    cs.show();
+                  cs.show();
                 } else {
-                    pr.val(pr.data('text').replace(/%d/, page + 1)).show();
+                  pr.val(pr.data('text').replace(/%d/, page + 1)).show();
                 }
 
                 currentPage = page;
-
                 var start = config.qpp * (page - 1);
 
                 $listItem.slice(start, start + config.qpp).show();
@@ -1217,27 +1206,11 @@ quizMasterReady(function () {
             },
 
             nextQuestion: function () {
-//				currentQuestion = currentQuestion.hide().next().show();
-//
-//				plugin.methode.scrollTo(globalElements.quiz);
-//
-//				$e.trigger({type: 'changeQuestion', values: {item: currentQuestion, index: currentQuestion.index()}});
-//
-//				if(!currentQuestion.length) {
-//					plugin.methode.showQuizSummary();
-//				}
-
-                this.showQuestionObject(currentQuestion.next());
+              this.showQuestionObject(currentQuestion.next());
             },
 
             prevQuestion: function () {
-//				currentQuestion = currentQuestion.hide().prev().show();
-//
-//				plugin.methode.scrollTo(globalElements.quiz);
-//
-//				$e.trigger({type: 'changeQuestion', values: {item: currentQuestion, index: currentQuestion.index()}});
-//
-                this.showQuestionObject(currentQuestion.prev());
+              this.showQuestionObject(currentQuestion.prev());
             },
 
             showQuestion: function (index) {
@@ -1245,26 +1218,12 @@ quizMasterReady(function () {
 
                 if (config.mode == 3 || inViewQuestions) {
                     if (config.qpp) {
-                        plugin.methode.showSingleQuestion(index + 1);
-//						questionTimer.startQuiz();
-//						return;
+                      plugin.methode.showSingleQuestion(index + 1);
                     }
-//					plugin.methode.scrollTo($e.find('.quizMaster_list > li').eq(index), 1);
                     plugin.methode.scrollTo($element, 1);
                     questionTimer.startQuiz();
                     return;
                 }
-
-//				currentQuestion.hide();
-//
-//				currentQuestion = $element.show();
-//
-//				plugin.methode.scrollTo(globalElements.quiz);
-//
-//				$e.trigger({type: 'changeQuestion', values: {item: currentQuestion, index: currentQuestion.index()}});
-//
-//				if(!currentQuestion.length)
-//					plugin.methode.showQuizSummary();
 
                 this.showQuestionObject($element);
             },
@@ -1389,10 +1348,6 @@ quizMasterReady(function () {
 
                 results.comp.result = Math.round(results.comp.points / config.globalPoints * 100 * 100) / 100;
                 results.comp.solved = 0;
-
-                //for(var i = 0; i < quizSolved.length; i++)
-                //	results.comp.solved += quizSolved[i] ? 1 : 0;
-
                 var $pointFields = $e.find('.quizMaster_points span');
 
                 $pointFields.eq(0).text(results.comp.points);
@@ -1477,13 +1432,6 @@ quizMasterReady(function () {
 
                 var formData = formClass.getFormData();
 
-                //plugin.methode.ajax({
-                //    action: 'quizmaster_completed_quiz',
-                //    quizId: config.quizId,
-                //    results: results,
-                //    forms: formData
-                //});
-
                 plugin.methode.ajax({
                     action: 'quizmaster_admin_ajax',
                     func: 'completedQuiz',
@@ -1554,19 +1502,15 @@ quizMasterReady(function () {
                 $e.find('.quizMaster_questionInput, .quizMaster_cloze input').removeAttr('disabled').removeAttr('checked')
                     .css('background-color', '');
 
-//				$e.find('.quizMaster_cloze input').val('');
                 $e.find('.quizMaster_questionListItem input[type="text"]').val('');
 
                 $e.find('.quizMaster_answerCorrect, .quizMaster_answerIncorrect').removeClass('quizMaster_answerCorrect quizMaster_answerIncorrect');
 
                 $e.find('.quizMaster_listItem').data('check', false);
-
                 $e.find('.quizMaster_response').hide().children().hide();
 
                 plugin.methode.resetMatrix($e.find('.quizMaster_listItem'));
-
                 $e.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
-
                 $e.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .quizMaster_resultsList > li').hide();
 
                 $e.find('.quizMaster_question_page, input[name="tip"]').show();
@@ -1676,8 +1620,6 @@ quizMasterReady(function () {
                 quizStatus.loadLock = 1;
 
                 plugin.methode.ajax({
-                    //action: 'quizmaster_check_lock',
-                    //quizId: config.quizId
 
                     action: 'quizmaster_admin_ajax',
                     func: 'quizCheckLock',
@@ -1701,12 +1643,19 @@ quizMasterReady(function () {
 
                     if (json.startUserLock != undefined) {
                       quizStatus.isUserStartLocked = json.startUserLock;
-
-
                     }
 
+                    // quiz access code handling
                     if (json.startUserLockAccessCode != undefined) {
                       quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
+                      quizStatus.accessCode = json.accessCode;
+                      $('#quiz_access_code_form').submit( function( e ) {
+                        var codeEntered = $('#access_code').val();
+                        console.log(codeEntered);
+                        console.log( quizStatus.accessCode );
+                        quizmasterProcessAccessCode( codeEntered, quizStatus.accessCode );
+                        e.preventDefault();
+                      });
                     }
 
                     quizStatus.loadLock = 0;
@@ -1734,18 +1683,6 @@ quizMasterReady(function () {
                     }
                 });
 
-                //plugin.methode.ajax({
-                //    action: 'quizmaster_load_quiz_data',
-                //    quizId: config.quizId
-                //}, function (json) {
-                //    if (json.toplist) {
-                //        plugin.methode.handleToplistData(json.toplist);
-                //    }
-                //
-                //    if (json.averageResult != undefined) {
-                //        plugin.methode.setAverageResult(json.averageResult, true);
-                //    }
-                //});
             },
 
             setAverageResult: function (p, g) {
@@ -1811,16 +1748,6 @@ quizMasterReady(function () {
                 var $addBox = $e.find('.quizMaster_addBox').hide();
 
                 plugin.methode.ajax({
-                    //action: 'quizmaster_add_toplist',
-                    //quizId: config.quizId,
-                    //token: toplistData.token,
-                    //name: $addBox.find('input[name="quizMaster_toplistName"]').val(),
-                    //email: $addBox.find('input[name="quizMaster_toplistEmail"]').val(),
-                    //captcha: $addBox.find('input[name="quizMaster_captcha"]').val(),
-                    //prefix: $addBox.find('input[name="quizMaster_captchaPrefix"]').val(),
-                    //points: results.comp.points,
-                    //totalPoints: config.globalPoints
-
                     action: 'quizmaster_admin_ajax',
                     func: 'addInToplist',
                     data: {
@@ -2030,129 +1957,6 @@ quizMasterReady(function () {
             }
         };
 
-//		/**
-//		 * @memberOf plugin
-//		 */
-//		plugin.init = function() {
-//			//
-//			plugin.methode.setClozeStyle();
-//			//
-//			plugin.methode.registerSolved();
-//
-//
-//			reviewBox.init();
-//
-//			if(bitOptions.checkBeforeStart && !bitOptions.preview) {
-//				plugin.methode.checkQuizLock();
-//			}
-//
-//			$e.find('input[name="startQuiz"]').click(function() {
-//				plugin.methode.startQuiz();
-//				return false;
-//			});
-//
-//			//
-//			globalElements.next.click(function() {
-//				if(bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
-//						&& (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
-//
-//					alert(QuizMasterGlobal.questionNotSolved);
-//					return false;
-//				}
-//
-//				plugin.methode.nextQuestion();
-//			});
-//
-//			//
-//			globalElements.back.click(function() {
-//				plugin.methode.prevQuestion();
-//			});
-//
-//			$e.find('input[name="reShowQuestion"]').click(function() {
-//				plugin.methode.showQustionList();
-//			});
-//
-//			$e.find('input[name="restartQuiz"]').click(function() {
-//				plugin.methode.restartQuiz();
-//			});
-//
-//			//
-//			$e.find(globalNames.check).click(function() {
-//				if(bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
-//						&& (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
-//
-//					alert(QuizMasterGlobal.questionNotSolved);
-//					return false;
-//				}
-//
-//				plugin.methode.checkQuestion();
-//			});
-//
-//			//
-//			$e.find('input[name="checkSingle"]').click(function() {
-//				if(bitOptions.forcingQuestionSolve	&& (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
-//					for(var i = 0, c = $e.find('.quizMaster_listItem').length; i < c; i++) {
-//						if(!quizSolved[i]) {
-//							alert(QuizMasterGlobal.questionsNotSolved);
-//							return false;
-//						}
-//					}
-//				}
-//
-//				plugin.methode.showQuizSummary();
-//			});
-//
-//			//
-//			$e.find('input[name="tip"]').click(plugin.methode.showTip);
-//
-//			//
-//			$e.find('input[name="skip"]').click(plugin.methode.skipQuestion);
-//
-//			$e.find('input[name="review"]').click(plugin.methode.reviewQuestion);
-//
-//			$e.find('input[name="quizMaster_toplistAdd"]').click(plugin.methode.addToplist);
-//
-//			$e.find('input[name="quizSummary"]').click(plugin.methode.showQuizSummary);
-//
-//			$e.find('input[name="endQuizSummary"]').click(function() {
-//				if(bitOptions.forcingQuestionSolve) {
-//					for(var i = 0, c = $e.find('.quizMaster_listItem').length; i < c; i++) {
-//						if(!quizSolved[i]) {
-//							alert(QuizMasterGlobal.questionsNotSolved);
-//							return false;
-//						}
-//					}
-//				}
-//
-//				if(bitOptions.formActivated && config.formPos == formPosConst.END && !formClass.checkForm())
-//					return;
-//
-//				plugin.methode.finishQuiz();
-//			});
-//
-//			$e.find('input[name="endInfopage"]').click(function() {
-//				if(formClass.checkForm())
-//					plugin.methode.finishQuiz();
-//			});
-//
-//			$e.find('input[name="showToplist"]').click(function() {
-//				globalElements.quiz.hide();
-//				globalElements.toplistShowInButton.toggle();
-//			});
-//
-//			//
-//			$e.find('input[name="quizMaster_pageLeft"]').click(function() {
-//				plugin.methode.showSinglePage(currentPage-1);
-//			});
-//
-//			//
-//			$e.find('input[name="quizMaster_pageRight"]').click(function() {
-//				plugin.methode.showSinglePage(currentPage+1);
-//			});
-//
-//			$e.bind('questionSolved', plugin.methode.questionSolved);
-//		};
-
         /**
          * @memberOf plugin
          */
@@ -2164,7 +1968,6 @@ quizMasterReady(function () {
                 plugin.methode.startQuiz();
                 return false;
             });
-
             if (bitOptions.checkBeforeStart && !bitOptions.preview) {
                 plugin.methode.checkQuizLock();
             }
