@@ -176,6 +176,52 @@ function quizmaster_locate_template( $template_name, $template_path = '', $defau
 	return apply_filters( 'quizmaster_locate_template', $template, $template_name, $template_path, $default_path );
 }
 
+/* Meta Capability Mapping */
+add_filter( 'map_meta_cap', 'quizMasterMapMetaCap', 10, 4 );
+
+function quizMasterMapMetaCap( $caps, $cap, $user_id, $args ) {
+
+  /* If editing, deleting, or reading a quiz, get the post and post type object. */
+	if ( 'quizmaster_edit_quiz' == $cap || 'quizmaster_delete_quiz' == $cap || 'quizmaster_read_quiz' == $cap ) {
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+		/* Set an empty array for the caps. */
+		$caps = array();
+	}
+
+	/* If editing a quiz, assign the required capability. */
+	if ( 'quizmaster_edit_quiz' == $cap ) {
+		if ( $user_id == $post->post_author )
+			$caps[] = $post_type->cap->edit_posts;
+		else
+			$caps[] = $post_type->cap->edit_others_posts;
+	}
+
+	/* If deleting a quiz, assign the required capability. */
+	elseif ( 'quizmaster_delete_quiz' == $cap ) {
+		if ( $user_id == $post->post_author )
+			$caps[] = $post_type->cap->delete_posts;
+		else
+			$caps[] = $post_type->cap->delete_others_posts;
+	}
+
+	/* If reading a private quiz, assign the required capability. */
+	elseif ( 'quizmaster_read_quiz' == $cap ) {
+
+		if ( 'private' != $post->post_status )
+			$caps[] = 'read';
+		elseif ( $user_id == $post->post_author )
+			$caps[] = 'read';
+		else
+			$caps[] = $post_type->cap->read_private_posts;
+	}
+
+	/* Return the capabilities required by the user. */
+	return $caps;
+
+}
+
 function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_quiz',
     array(
@@ -189,7 +235,19 @@ function quizmasterAddPostTypes() {
       'show_in_menu' => 'quizMaster',
       'supports' => array('title', 'revisions'),
       'capability_type' => array('quiz', 'quizzes'),
-      'map_meta_cap' => false,
+      'capabilities' => array(
+        'publish_posts' => 'quizmaster_publish_quizzes',
+        'edit_posts' => 'quizmaster_edit_quizzes',
+        'edit_post' => 'quizmaster_edit_quiz',
+        'edit_others_posts' => 'quizmaster_edit_others_quizzes',
+        'delete_posts' => 'quizmaster_delete_quizzes',
+        'delete_post' => 'quizmaster_delete_quiz',
+        'delete_others_posts' => 'quizmaster_delete_others_quizzes',
+        'manage_posts' => 'quizmaster_manage_quizzes',
+        'read_private_posts' => 'quizmaster_read_private_quizzes',
+        'read_post' => 'quizmaster_read_quiz',
+      ),
+      'map_meta_cap' => true,
     )
   );
 
@@ -275,31 +333,47 @@ function quizmasterRegisterTaxonomies() {
 }
 
 /* ACF Integration */
-
-add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
-function quizmasterAcfSettingsPath( $path ) {
-  return QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/';
+add_action('init', 'quizMasterInitPre', 1);
+function quizMasterInitPre() {
+  include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
 }
 
-add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
+add_action('init', 'quizMasterInit', 10);
+function quizMasterInit() {
+
+  // inclusion Filters
+  add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
+  add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
+  add_filter('acf/settings/show_admin', '__return_false');
+
+  // add fieldgroups and option pages
+  if( !QUIZMASTER_DEV ) {
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
+  }
+  quizMasterAddOptionsPages();
+
+}
+
 function quizmasterAcfSettingsDir( $dir ) {
   return QUIZMASTER_URL . '/acf/advanced-custom-fields-pro/';
 }
 
-include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
-
-if( !QUIZMASTER_DEV ) {
-  include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
+function quizmasterAcfSettingsPath( $path ) {
+  return QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/';
 }
 
-/* Options Pages */
-$option_page = acf_add_options_page(array(
-		'page_title' 	=> 'QuizMaster Settings',
-		'menu_title' 	=> 'Settings',
-		'menu_slug' 	=> 'quizmaster-settings',
-    'parent_slug' => 'quizMaster',
- 		'capability' 	=> 'edit_posts',
-	));
+function quizMasterAddOptionsPages() {
+  /* Options Pages */
+  $option_page = acf_add_options_page(array(
+  		'page_title' 	=> 'QuizMaster Settings',
+  		'menu_title' 	=> 'Settings',
+  		'menu_slug' 	=> 'quizmaster-settings',
+      'parent_slug' => 'quizMaster',
+   		'capability' 	=> 'edit_posts',
+  	));
+}
+
+
 
 /* Single Quiz Template */
 add_filter('single_template', 'quizmaster_quiz_template');
