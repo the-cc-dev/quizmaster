@@ -11,7 +11,7 @@ Domain Path: /languages
 */
 
 define('QUIZMASTER_VERSION', '0.37');
-define('QUIZMASTER_DEV', true);
+define('QUIZMASTER_DEV', false);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
