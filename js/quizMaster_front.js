@@ -1,42 +1,7 @@
-/* Global Scope (Not On Ready) */
-function quizmasterProcessAccessCode( codeEntered, code ) {
-  if( codeEntered == code ) {
-    console.log("code is correct");
-    quizmasterGrantAccessByCode();
-  } else {
-    quizmasterDenyAccessByCode();
-  }
-}
-
-function quizmasterGrantAccessByCode() {
-  jQuery('.quizmaster-access-code-error').hide();
-  console.log('starting quiz!');
-
-  //globalElements.quizStartPage.show();
-  jQuery('.quizMaster_startOnlyAccessCode').hide();
-  jQuery('.quizMaster_text').show();
-}
-
-function quizmasterDenyAccessByCode() {
-  console.log('code is wrong');
-  jQuery('.quizmaster-access-code-error').show();
-}
-
-
 jQuery(document).ready(function( $ ) {
 
   // datatables
   $('#quizmaster_score_table').DataTable();
-
-  /*
-  $('#quiz_access_code_form').submit( function( e ) {
-    console.log('code!');
-    var code = $('#access_code').val();
-    console.log(code);
-    console.log( quizStatus.accessCode );
-    e.preventDefault();
-  });
-  */
 
 });
 
@@ -970,23 +935,12 @@ quizMasterReady(function () {
             },
 
             startQuiz: function (loadData) {
-
-              console.log('startQuiz() at 974');
-
-              console.log(quizStatus.loadLock);
-
                 if (quizStatus.loadLock) {
-
-                  console.log('stopped at loadlock');
-
                   quizStatus.isQuizStart = 1;
                   return;
                 }
 
                 quizStatus.isQuizStart = 0;
-
-                console.log('isLocked: ' + quizStatus.isLocked);
-
                 if (quizStatus.isLocked) {
                   globalElements.quizStartPage.hide();
                   $e.find('.quizMaster_lock').show();
@@ -1004,8 +958,6 @@ quizMasterReady(function () {
                   $e.find('.quizMaster_startOnlyRegisteredUser').show();
                   return;
                 }
-
-                console.log('accessCodeLock: ' + quizStatus.isUserStartLockedAccessCode);
 
                 if (quizStatus.isUserStartLockedAccessCode) {
                   globalElements.quizStartPage.hide();
@@ -1661,14 +1613,9 @@ quizMasterReady(function () {
                       quizStatus.accessCode = json.accessCode;
                       $('#quiz_access_code_form').submit( function( e ) {
                         var codeEntered = $('#access_code').val();
-                        console.log(codeEntered);
-                        console.log( quizStatus.accessCode );
 
-                        //quizmasterProcessAccessCode( codeEntered, quizStatus.accessCode );
-
-
-                        quizStatus.isUserStartLockedAccessCode = false;
-                        plugin.methode.startQuiz();
+                        // process access code
+                        plugin.methode.processAccessCode( codeEntered );
                         e.preventDefault();
                       });
                     }
@@ -1679,6 +1626,26 @@ quizMasterReady(function () {
                         plugin.methode.startQuiz();
                     }
                 });
+            },
+
+            processAccessCode: function ( codeEntered ) {
+              if( codeEntered == quizStatus.accessCode ) {
+                plugin.methode.grantAccessByCode();
+              } else {
+                plugin.methode.denyAccessByCode();
+              }
+            },
+
+            grantAccessByCode: function () {
+              $('.quizmaster-access-code-error').hide();
+              $('.quizMaster_startOnlyAccessCode').hide();
+
+              quizStatus.isUserStartLockedAccessCode = false;
+              plugin.methode.startQuiz();
+            },
+
+            denyAccessByCode: function () {
+              $('.quizmaster-access-code-error').show();
             },
 
             loadQuizData: function () {
