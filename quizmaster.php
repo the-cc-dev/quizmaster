@@ -11,7 +11,7 @@ Domain Path: /languages
 */
 
 define('QUIZMASTER_VERSION', '0.37');
-define('QUIZMASTER_DEV', false);
+define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
@@ -197,9 +197,86 @@ function quizmaster_locate_template( $template_name, $template_path = '', $defau
 }
 
 /* Meta Capability Mapping */
-add_filter( 'map_meta_cap', 'quizMasterMapMetaCap', 10, 4 );
+add_filter( 'map_meta_cap', 'quizMasterMapMetaCapQuiz', 10, 4 );
+add_filter( 'map_meta_cap', 'quizMasterMapMetaCapQuestion', 10, 4 );
+add_filter( 'map_meta_cap', 'quizMasterMapMetaCapScore', 10, 4 );
+add_filter( 'map_meta_cap', 'quizMasterMapMetaCapEmail', 10, 4 );
 
-function quizMasterMapMetaCap( $caps, $cap, $user_id, $args ) {
+function quizMasterMapMetaCapScore( $caps, $cap, $user_id, $args ) {
+
+  /* If editing, deleting, or reading a quiz, get the post and post type object. */
+	if ( 'quizmaster_edit_score' == $cap || 'quizmaster_delete_score' == $cap || 'quizmaster_read_score' == $cap ) {
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+    /* Set an empty array for the caps. */
+		$caps = array();
+	}
+
+	/* If editing a quiz, assign the required capability. */
+	if ( 'quizmaster_edit_score' == $cap ) {
+    $caps[] = $post_type->cap->edit_posts;
+	}
+
+	/* If deleting a quiz, assign the required capability. */
+	elseif ( 'quizmaster_delete_score' == $cap ) {
+    $caps[] = $post_type->cap->delete_posts;
+	}
+
+	/* If reading a private quiz, assign the required capability. */
+	elseif ( 'quizmaster_read_score' == $cap ) {
+
+		if ( 'private' != $post->post_status )
+			$caps[] = 'read';
+		elseif ( $user_id == $post->post_author )
+			$caps[] = 'read';
+		else
+			$caps[] = $post_type->cap->read_private_posts;
+	}
+
+	/* Return the capabilities required by the user. */
+	return $caps;
+
+}
+
+function quizMasterMapMetaCapEmail( $caps, $cap, $user_id, $args ) {
+
+  /* If editing, deleting, or reading a quiz, get the post and post type object. */
+	if ( 'quizmaster_edit_email' == $cap || 'quizmaster_delete_email' == $cap || 'quizmaster_read_email' == $cap ) {
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+    /* Set an empty array for the caps. */
+		$caps = array();
+	}
+
+	/* If editing a quiz, assign the required capability. */
+	if ( 'quizmaster_edit_email' == $cap ) {
+    $caps[] = $post_type->cap->edit_posts;
+	}
+
+	/* If deleting a quiz, assign the required capability. */
+	elseif ( 'quizmaster_delete_email' == $cap ) {
+    $caps[] = $post_type->cap->delete_posts;
+	}
+
+	/* If reading a private quiz, assign the required capability. */
+	elseif ( 'quizmaster_read_email' == $cap ) {
+
+		if ( 'private' != $post->post_status )
+			$caps[] = 'read';
+		elseif ( $user_id == $post->post_author )
+			$caps[] = 'read';
+		else
+			$caps[] = $post_type->cap->read_private_posts;
+	}
+
+	/* Return the capabilities required by the user. */
+	return $caps;
+
+}
+
+function quizMasterMapMetaCapQuiz( $caps, $cap, $user_id, $args ) {
 
   /* If editing, deleting, or reading a quiz, get the post and post type object. */
 	if ( 'quizmaster_edit_quiz' == $cap || 'quizmaster_delete_quiz' == $cap || 'quizmaster_read_quiz' == $cap ) {
@@ -237,13 +314,48 @@ function quizMasterMapMetaCap( $caps, $cap, $user_id, $args ) {
 			$caps[] = $post_type->cap->read_private_posts;
 	}
 
-  //if($user_id == 6) {
-  if($user_id == 6 && $cap == 'quizmaster_edit_quiz') {
-    $capReturn = get_option( 'capreturn', true );
-    $capReturn = json_decode( $capReturn, true );
-    $capReturn[] = $caps;
-    update_option('capreturn', json_encode($capReturn));
-  }
+	/* Return the capabilities required by the user. */
+	return $caps;
+
+}
+
+function quizMasterMapMetaCapQuestion( $caps, $cap, $user_id, $args ) {
+
+  /* If editing, deleting, or reading a quiz, get the post and post type object. */
+	if ( 'quizmaster_edit_question' == $cap || 'quizmaster_delete_question' == $cap || 'quizmaster_read_question' == $cap ) {
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+    /* Set an empty array for the caps. */
+		$caps = array();
+	}
+
+	/* If editing a quiz, assign the required capability. */
+	if ( 'quizmaster_edit_question' == $cap ) {
+		if ( $user_id == $post->post_author )
+			$caps[] = $post_type->cap->edit_posts;
+		else
+			$caps[] = $post_type->cap->edit_others_posts;
+	}
+
+	/* If deleting a quiz, assign the required capability. */
+	elseif ( 'quizmaster_delete_question' == $cap ) {
+		if ( $user_id == $post->post_author )
+			$caps[] = $post_type->cap->delete_posts;
+		else
+			$caps[] = $post_type->cap->delete_others_posts;
+	}
+
+	/* If reading a private quiz, assign the required capability. */
+	elseif ( 'quizmaster_read_question' == $cap ) {
+
+		if ( 'private' != $post->post_status )
+			$caps[] = 'read';
+		elseif ( $user_id == $post->post_author )
+			$caps[] = 'read';
+		else
+			$caps[] = $post_type->cap->read_private_posts;
+	}
 
 	/* Return the capabilities required by the user. */
 	return $caps;
@@ -291,6 +403,21 @@ function quizmasterAddPostTypes() {
       'rewrite' => array('slug' => 'question'),
       'show_in_menu' => 'quizMaster',
       'supports' => array('title', 'revisions'),
+      'capabilities' => array(
+        'create_posts' => 'quizmaster_manage_questions',
+        'publish_posts' => 'quizmaster_manage_questions',
+        'edit_posts' => 'quizmaster_manage_questions',
+        'edit_post' => 'quizmaster_edit_question',
+        'edit_others_posts' => 'quizmaster_manage_others_questions',
+        'edit_published_posts' => 'quizmaster_manage_questions',
+        'delete_posts' => 'quizmaster_manage_others_questions',
+        'delete_post' => 'quizmaster_delete_question',
+        'delete_others_posts' => 'quizmaster_manage_others_questions',
+        'manage_posts' => 'quizmaster_manage_questions',
+        'read_private_posts' => 'quizmaster_manage_questions',
+        'read_post' => 'quizmaster_read_question',
+      ),
+      'map_meta_cap' => true,
     )
   );
 
@@ -302,7 +429,22 @@ function quizmasterAddPostTypes() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_menu' => 'quizMaster'
+      'show_in_menu' => 'quizMaster',
+      'capabilities' => array(
+        'create_posts' => 'quizmaster_manage_emails',
+        'publish_posts' => 'quizmaster_manage_emails',
+        'edit_posts' => 'quizmaster_manage_emails',
+        'edit_post' => 'quizmaster_edit_email',
+        'edit_others_posts' => 'quizmaster_manage_emails',
+        'edit_published_posts' => 'quizmaster_manage_emails',
+        'delete_posts' => 'quizmaster_manage_emails',
+        'delete_post' => 'quizmaster_delete_email',
+        'delete_others_posts' => 'quizmaster_manage_emails',
+        'manage_posts' => 'quizmaster_manage_emails',
+        'read_private_posts' => 'quizmaster_manage_emails',
+        'read_post' => 'quizmaster_read_email',
+      ),
+      'map_meta_cap' => true,
     )
   );
 
@@ -314,7 +456,22 @@ function quizmasterAddPostTypes() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_menu' => 'quizMaster'
+      'show_in_menu' => 'quizMaster',
+      'capabilities' => array(
+        'create_posts' => 'quizmaster_manage_scores',
+        'publish_posts' => 'quizmaster_manage_scores',
+        'edit_posts' => 'quizmaster_manage_scores',
+        'edit_post' => 'quizmaster_edit_score',
+        'edit_others_posts' => 'quizmaster_manage_scores',
+        'edit_published_posts' => 'quizmaster_manage_scores',
+        'delete_posts' => 'quizmaster_manage_scores',
+        'delete_post' => 'quizmaster_delete_score',
+        'delete_others_posts' => 'quizmaster_manage_scores',
+        'manage_posts' => 'quizmaster_manage_scores',
+        'read_private_posts' => 'quizmaster_manage_scores',
+        'read_post' => 'quizmaster_read_score',
+      ),
+      'map_meta_cap' => true,
     )
   );
 
@@ -373,10 +530,10 @@ function quizMasterInit() {
   // inclusion Filters
   add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
   add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
-  add_filter('acf/settings/show_admin', '__return_false');
 
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
+    add_filter('acf/settings/show_admin', '__return_false');
     include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
   }
   quizMasterAddOptionsPages();
@@ -690,7 +847,16 @@ function quizMasterAddAdminCaps() {
   $admins->add_cap( 'quizmaster_manage_quizzes' );
   $admins->add_cap( 'quizmaster_read_private_quizzes' );
   $admins->add_cap( 'quizmaster_manage_settings' );
-  //
+
+  // question caps
+  $admins->add_cap( 'quizmaster_manage_questions' );
+  $admins->add_cap( 'quizmaster_manage_others_questions' );
+
+  // email caps
+  $admins->add_cap( 'quizmaster_manage_emails' );
+
+  // score caps
+  $admins->add_cap( 'quizmaster_manage_scores' );
 
 }
 
@@ -700,10 +866,6 @@ function addTeacherRole() {
   $capabilities = array(
     'read'                       => true,
     'edit_posts'                 => true,
-    //'create_posts'               => true,
-    //'publish_posts'              => true,
-    //'manage_posts'               => true,
-    //'delete_posts'               => true,
     'quizmaster_create_quizzes'  => true,
     'quizmaster_edit_quizzes'    => true,
     'quizmaster_publish_quizzes' => true,
@@ -711,14 +873,12 @@ function addTeacherRole() {
     'quizmaster_manage_quizzes'  => true,
     'quizmaster_read_quiz'       => true,
     'quizmaster_show'            => true,
-    //'unfiltered_html'            => true,
   );
 
   add_role( 'quizmaster_teacher', 'Teacher', $capabilities );
 
   $teacher = get_role('quizmaster_teacher');
-  //$teacher->add_cap('read');
-  //$teacher->add_cap('edit_published_posts');
+  $teacher->add_cap( 'quizmaster_manage_questions' );
 
 }
 
