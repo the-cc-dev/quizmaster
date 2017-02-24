@@ -11,7 +11,7 @@ Domain Path: /languages
 */
 
 define('QUIZMASTER_VERSION', '0.37');
-define('QUIZMASTER_DEV', true);
+define('QUIZMASTER_DEV', false);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
@@ -28,8 +28,6 @@ spl_autoload_register('quizMaster_autoload');
 delete_option('quizMaster_dbVersion');
 
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
-register_activation_hook( __FILE__, 'createDefaultEmails' );
-register_activation_hook( __FILE__, 'createStudentReportPage' );
 register_activation_hook( __FILE__, 'quizMasterActivation' );
 
 register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
@@ -45,11 +43,14 @@ function quizmasterRemoveRoles() {
 }
 
 function quizMasterActivation() {
+
+  include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
+
   addTeacherRole();
   quizMasterAddAdminCaps();
 
-  update_option('capargs', '');
-  update_option('capreturn', '');
+  quizmasterCreateDefaultEmails();
+  quizmasterCreateStudentReportPage();
 }
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
@@ -785,11 +786,11 @@ function revisionTest( $post_id, $post, $update ) {
 
 }
 
-function createDefaultEmails() {
-  createDefaultEmailStudentCompletion();
+function quizmasterCreateDefaultEmails() {
+  quizmasterCreateDefaultEmailstudentCompletion();
 }
 
-function createDefaultEmailStudentCompletion() {
+function quizmasterCreateDefaultEmailstudentCompletion() {
 
   $emailCtr = new QuizMaster_Controller_Email;
   if( $emailCtr->emailExists('student_completion') ) {
@@ -812,7 +813,7 @@ function createDefaultEmailStudentCompletion() {
   update_field('qm_email_type', 'html', $post_id);
 }
 
-function createStudentReportPage() {
+function quizmasterCreateStudentReportPage() {
   $studentReportPageExists = get_page_by_path('student-report');
   if( $studentReportPageExists ) {
     setStudentReportPageOption( $post_id );
@@ -883,15 +884,6 @@ function addTeacherRole() {
   $teacher->add_cap( 'quizmaster_manage_questions' );
 
 }
-
-/*
-$role = get_role('author');
-print '<pre>';
-var_dump( $role->capabilities );
-print '</pre>';
-die();
-*/
-
 
 function quizmaster_camelize($input, $separator = '_') {
   return str_replace($separator, '', ucwords($input, $separator));
