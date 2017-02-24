@@ -30,7 +30,12 @@ delete_option('quizMaster_dbVersion');
 register_activation_hook(__FILE__, array('QuizMaster_Helper_Upgrade', 'upgrade'));
 register_activation_hook( __FILE__, 'createDefaultEmails' );
 register_activation_hook( __FILE__, 'createStudentReportPage' );
-register_activation_hook( __FILE__, 'addTeacherRole' );
+register_activation_hook( __FILE__, 'quizMasterActivation' );
+
+function quizMasterActivation() {
+  addTeacherRole();
+  quizMasterAddAdminCaps();
+}
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
 add_action('init', 'quizmasterAddPostTypes', 10, 2);
@@ -234,7 +239,6 @@ function quizmasterAddPostTypes() {
       'rewrite' => array('slug' => 'quiz'),
       'show_in_menu' => 'quizMaster',
       'supports' => array('title', 'revisions'),
-      'capability_type' => array('quiz', 'quizzes'),
       'capabilities' => array(
         'publish_posts' => 'quizmaster_publish_quizzes',
         'edit_posts' => 'quizmaster_edit_quizzes',
@@ -642,31 +646,37 @@ function createStudentReportPage() {
 }
 
 function setStudentReportPageOption( $post_id ) {
-  update_field( 'qm_student_report_page', $post_id, 'option' );
+  update_option( 'qm_student_report_page', $post_id );
 }
 
 function getStudentReportPageOption() {
   return get_field('qm_student_report_page', 'option');
 }
 
+function quizMasterAddAdminCaps() {
+
+  // quiz caps
+  $admins = get_role('administrator');
+  $admins->add_cap( 'quizmaster_edit_quizzes' );
+  $admins->add_cap( 'quizmaster_edit_others_quizzes' );
+  $admins->add_cap( 'quizmaster_delete_quizzes' );
+  $admins->add_cap( 'quizmaster_delete_others_quizzes' );
+  $admins->add_cap( 'quizmaster_publish_quizzes' );
+  $admins->add_cap( 'quizmaster_manage_quizzes' );
+  $admins->add_cap( 'quizmaster_read_private_quizzes' );
+
+}
+
 /* Teachers */
 function addTeacherRole() {
-  $admins = get_role('administrator');
-  $admins->add_cap( 'edit_quizzes' );
-  $admins->add_cap( 'edit_other_quizzes' );
-  $admins->add_cap( 'publish_quizzes' );
-  $admins->add_cap( 'create_quizzes' );
-  $admins->add_cap( 'read_private_quizzes' );
 
   $capabilities = array(
     'read'            => true,
     'edit_posts'      => true,
     'publish_posts'   => true,
-    'edit_quizzes'    => true,
-    'publish_quizzes' => true,
-    'create_quizzes'  => true,
-    'delete_quizzes'  => true,
-    'quizMaster_show' => true,
+    'quizmaster_edit_quizzes'    => true,
+    'quizmaster_publish_quizzes' => true,
+    'quizmaster_delete_quizzes'  => true,
   );
 
   add_role( 'teacher', 'Teacher', $capabilities );
