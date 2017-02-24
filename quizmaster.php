@@ -814,9 +814,9 @@ function quizmasterCreateDefaultEmailstudentCompletion() {
 }
 
 function quizmasterCreateStudentReportPage() {
-  $studentReportPageExists = get_page_by_path('student-report');
-  if( $studentReportPageExists ) {
-    setStudentReportPageOption( $post_id );
+  $studentReportPage = get_page_by_path('student-report');
+  if( $studentReportPage ) {
+    setStudentReportPageOption( $studentReportPage->ID );
     return;
   }
   $post = array(
