@@ -678,14 +678,15 @@ function quizmaster_score_filter_quiz() {
     }
 
     // selected quiz
-    $selectedQuiz = isset($_GET['quiz'])? $_GET['quiz']:'';
+    $selectKey = 'qm_quiz';
+    $selected = isset($_GET[ $selectKey ])? $_GET[ $selectKey ]:'';
 
     // filter select
     quizmaster_get_template('/reports/score-filter.php', array(
-      'selectName' => 'qm_quiz',
+      'selectName' => $selectKey,
       'values' => $values,
       'defaultLabel' => 'All quizzes',
-      'selected' => $selectedQuiz,
+      'selected' => $selected,
     ));
 
 
@@ -697,14 +698,15 @@ function quizmaster_score_filter_quiz() {
     }
 
     // selected user
-    $selectedUser = isset($_GET['user'])? $_GET['user']:'';
+    $selectKey = 'qm_user';
+    $selected = isset($_GET[ $selectKey ])? $_GET[ $selectKey ]:'';
 
     // filter select
     quizmaster_get_template('/reports/score-filter.php', array(
-      'selectName' => 'qm_user',
+      'selectName' => $selectKey,
       'values' => $values,
       'defaultLabel' => 'All users',
-      'selected' => $selectedUser,
+      'selected' => $selected,
     ));
 
   }
