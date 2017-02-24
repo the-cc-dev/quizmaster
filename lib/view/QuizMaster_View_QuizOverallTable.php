@@ -84,7 +84,7 @@ class QuizMaster_View_QuizOverallTable extends WP_List_Table
         $actions['quizMaster_preview'] = sprintf('<a href="?page=quizMaster&module=preview&id=%s">' . __('Preview',
                 'quizmaster') . '</a>', $item['ID']);
 
-        if (current_user_can('quizMaster_show_statistics')) {
+        if (current_user_can('quizmaster_show_statistics')) {
             $actions['quizMaster_statistics'] = sprintf('<a href="?page=quizMaster&module=statistics&id=%s">' . __('Statistics',
                     'quizmaster') . '</a>', $item['ID']);
         }

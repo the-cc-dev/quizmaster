@@ -32,9 +32,24 @@ register_activation_hook( __FILE__, 'createDefaultEmails' );
 register_activation_hook( __FILE__, 'createStudentReportPage' );
 register_activation_hook( __FILE__, 'quizMasterActivation' );
 
+register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
+
+/* remove stuff at deactivation */
+function quizMasterDeactivation() {
+  quizmasterRemoveRoles();
+}
+
+function quizmasterRemoveRoles() {
+  remove_role('quizmaster_teacher');
+  remove_role('teacher');
+}
+
 function quizMasterActivation() {
   addTeacherRole();
   quizMasterAddAdminCaps();
+
+  update_option('capargs', '');
+  update_option('capreturn', '');
 }
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
@@ -191,7 +206,7 @@ function quizMasterMapMetaCap( $caps, $cap, $user_id, $args ) {
 		$post = get_post( $args[0] );
 		$post_type = get_post_type_object( $post->post_type );
 
-		/* Set an empty array for the caps. */
+    /* Set an empty array for the caps. */
 		$caps = array();
 	}
 
@@ -222,6 +237,14 @@ function quizMasterMapMetaCap( $caps, $cap, $user_id, $args ) {
 			$caps[] = $post_type->cap->read_private_posts;
 	}
 
+  //if($user_id == 6) {
+  if($user_id == 6 && $cap == 'quizmaster_edit_quiz') {
+    $capReturn = get_option( 'capreturn', true );
+    $capReturn = json_decode( $capReturn, true );
+    $capReturn[] = $caps;
+    update_option('capreturn', json_encode($capReturn));
+  }
+
 	/* Return the capabilities required by the user. */
 	return $caps;
 
@@ -240,10 +263,12 @@ function quizmasterAddPostTypes() {
       'show_in_menu' => 'quizMaster',
       'supports' => array('title', 'revisions'),
       'capabilities' => array(
+        'create_posts' => 'quizmaster_manage_quizzes',
         'publish_posts' => 'quizmaster_publish_quizzes',
         'edit_posts' => 'quizmaster_edit_quizzes',
         'edit_post' => 'quizmaster_edit_quiz',
         'edit_others_posts' => 'quizmaster_edit_others_quizzes',
+        'edit_published_posts' => 'quizmaster_manage_quizzes',
         'delete_posts' => 'quizmaster_delete_quizzes',
         'delete_post' => 'quizmaster_delete_quiz',
         'delete_others_posts' => 'quizmaster_delete_others_quizzes',
@@ -373,7 +398,7 @@ function quizMasterAddOptionsPages() {
   		'menu_title' 	=> 'Settings',
   		'menu_slug' 	=> 'quizmaster-settings',
       'parent_slug' => 'quizMaster',
-   		'capability' 	=> 'edit_posts',
+   		'capability' 	=> 'quizmaster_manage_settings',
   	));
 }
 
@@ -664,6 +689,8 @@ function quizMasterAddAdminCaps() {
   $admins->add_cap( 'quizmaster_publish_quizzes' );
   $admins->add_cap( 'quizmaster_manage_quizzes' );
   $admins->add_cap( 'quizmaster_read_private_quizzes' );
+  $admins->add_cap( 'quizmaster_manage_settings' );
+  //
 
 }
 
@@ -671,25 +698,38 @@ function quizMasterAddAdminCaps() {
 function addTeacherRole() {
 
   $capabilities = array(
-    'read'            => true,
-    'edit_posts'      => true,
-    'publish_posts'   => true,
+    'read'                       => true,
+    'edit_posts'                 => true,
+    //'create_posts'               => true,
+    //'publish_posts'              => true,
+    //'manage_posts'               => true,
+    //'delete_posts'               => true,
+    'quizmaster_create_quizzes'  => true,
     'quizmaster_edit_quizzes'    => true,
     'quizmaster_publish_quizzes' => true,
     'quizmaster_delete_quizzes'  => true,
+    'quizmaster_manage_quizzes'  => true,
+    'quizmaster_read_quiz'       => true,
+    'quizmaster_show'            => true,
+    //'unfiltered_html'            => true,
   );
 
-  add_role( 'teacher', 'Teacher', $capabilities );
+  add_role( 'quizmaster_teacher', 'Teacher', $capabilities );
+
+  $teacher = get_role('quizmaster_teacher');
+  //$teacher->add_cap('read');
+  //$teacher->add_cap('edit_published_posts');
 
 }
 
 /*
-$teacher = get_role('teacher');
+$role = get_role('author');
 print '<pre>';
-var_dump( $teacher->capabilities );
+var_dump( $role->capabilities );
 print '</pre>';
-remove_role('teacher');
+die();
 */
+
 
 function quizmaster_camelize($input, $separator = '_') {
   return str_replace($separator, '', ucwords($input, $separator));
@@ -734,4 +774,21 @@ function remove_row_actions( $actions ) {
   if( get_post_type() === 'quizmaster_email' )
     unset( $actions['view'] );
   return $actions;
+}
+
+
+/* Teacher Dashboard Cleanup */
+add_action( 'admin_init', 'quizmasterTeacherDashboard' );
+function quizmasterTeacherDashboard() {
+
+  $roles = wp_get_current_user()->roles;
+
+  if ( !in_array( 'quizmaster_teacher', (array) $roles ) ) {
+    return;
+  }
+
+  remove_menu_page('edit.php'); // Posts
+  remove_menu_page('tools.php'); // Tools
+  remove_menu_page('edit-comments.php'); // Comments
+
 }

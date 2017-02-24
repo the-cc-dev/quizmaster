@@ -249,7 +249,7 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
 
     public function showAction()
     {
-        if (!current_user_can('quizMaster_show')) {
+        if (!current_user_can('quizmaster_show')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 

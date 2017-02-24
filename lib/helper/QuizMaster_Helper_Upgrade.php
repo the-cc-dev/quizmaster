@@ -31,11 +31,11 @@ class QuizMaster_Helper_Upgrade
     {
         $role = get_role('administrator');
 
-        $role->add_cap('quizMaster_show');
+        $role->add_cap('quizmaster_show');
         $role->add_cap('quizMaster_add_quiz');
         $role->add_cap('quizMaster_edit_quiz');
         $role->add_cap('quizMaster_delete_quiz');
-        $role->add_cap('quizMaster_show_statistics');
+        $role->add_cap('quizmaster_show_statistics');
         $role->add_cap('quizMaster_reset_statistics');
         $role->add_cap('quizMaster_import');
         $role->add_cap('quizMaster_export');

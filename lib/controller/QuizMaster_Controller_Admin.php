@@ -91,7 +91,7 @@ class QuizMaster_Controller_Admin
         $pages[] = add_menu_page(
           'QuizMaster',
           'QuizMaster',
-          'quizMaster_show',
+          'quizmaster_show',
           'quizMaster',
           array($this, 'route'),
           'dashicons-welcome-learn-more'
@@ -137,7 +137,7 @@ class QuizMaster_Controller_Admin
           'quizMaster',
           __('Categories & Tags', 'quizmaster'),
           __('Categories & Tags', 'quizmaster'),
-          'quizMaster_show',
+          'quizmaster_manage_settings',
           'quizmaster-categories-tags',
           array($this, 'route'));
 
@@ -145,7 +145,7 @@ class QuizMaster_Controller_Admin
             'quizMaster',
             __('Help & Support', 'quizmaster'),
             __('Help & Support', 'quizmaster'),
-            'quizMaster_show',
+            'quizmaster_manage_settings',
             'quizmaster-support',
             array($this, 'route'));
 
