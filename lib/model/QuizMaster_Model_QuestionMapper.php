@@ -119,6 +119,10 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
         $quizPost = get_post( $quizId );
         $quizQuestions = get_field( 'quiz_questions', $quizId );
 
+        if( empty($quizQuestions)) {
+          return false;
+        }
+
         foreach( $quizQuestions as $qq ) {
           $quizQuestionID = $qq['quiz_question'];
           $fields = get_fields( $quizQuestionID );
