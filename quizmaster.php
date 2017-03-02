@@ -11,12 +11,13 @@ Domain Path: /languages
 */
 
 define('QUIZMASTER_VERSION', '0.37');
-define('QUIZMASTER_DEV', false);
+define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
 define('QUIZMASTER_PPATH', dirname(plugin_basename(__FILE__)));
 define('QUIZMASTER_PLUGIN_PATH', QUIZMASTER_PATH . '/plugin');
+define('QUIZMASTER_ANSWER_TYPE_FIELD', 'qmqe_answer_type');
 
 $uploadDir = wp_upload_dir();
 

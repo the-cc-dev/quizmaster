@@ -26,7 +26,9 @@
         <div style="clear: both;"></div>
     <?php } ?>
 
-    <?php if ($question->getCategoryId() && $view->quiz->isShowCategory()) { ?>
+    <?php
+
+    if ($question->getCategoryId() && $view->quiz->isShowCategory()) { ?>
         <div style="font-weight: bold; padding-top: 5px;">
             <?php printf(__('Category: %s', 'quizmaster'),
                 esc_html($question->getCategoryName())); ?>

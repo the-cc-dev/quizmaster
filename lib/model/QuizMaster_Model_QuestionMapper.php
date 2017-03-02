@@ -1,7 +1,7 @@
 <?php
 
-class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
-{
+class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
+
     private $_table;
 
     public function __construct()
@@ -83,6 +83,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
     /*
      * Return list of questions associated with quiz
+     * Used by ajaxLoadQuestionsSort, expect return to be array of fields (not question objects)
      */
     public function fetchAllList($quizId, $list, $sort = false) {
 
@@ -92,14 +93,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
       foreach( $quizQuestions as $qq ) {
 
         $quizQuestionID = $qq['quiz_question'];
+        $question = new QuizMaster_Model_Question( $quizQuestionID );
 
-        // $question = new QuizMaster_Model_Question( $quizQuestionID );
-
-        $fields = get_fields( $quizQuestionID );
-        $results[] = array(
-          'id'      => $quizQuestionID,
-          'points'  => $fields['qm_qe_points'],
-        );
       }
       return $results;
 
@@ -114,6 +109,10 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
      */
     public function fetchAll($quizId, $rand = false, $max = 0) {
 
+      print '<pre>';
+      var_dump( 113 );
+      print '</pre>';
+
         $a = array();
 
         $quizPost = get_post( $quizId );
@@ -126,13 +125,14 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
         foreach( $quizQuestions as $qq ) {
           $quizQuestionID = $qq['quiz_question'];
           $fields = get_fields( $quizQuestionID );
-          $fields['id'] = $quizQuestionID;
 
           // set answer data
-          switch( $fields['answerType'] ) {
+          switch( $fields[ QUIZMASTER_ANSWER_TYPE_FIELD ] ) {
             case 'single':
+              $answerData = $this->loadAnswerDataSingleChoice( $fields );
+              break;
             case 'multiple':
-              $answerData = $this->loadAnswerDataClassic( $fields );
+              $answerData = $this->loadAnswerDataMultipleChoice( $fields );
               break;
             case 'free_answer':
               $answerData = $this->loadAnswerDataFreeChoice( $fields );
@@ -151,10 +151,9 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
               break;
           }
 
-          // $fields['answerData'] = $answerData;
-          // $model = new QuizMaster_Model_Question( $fields );
           $model = new QuizMaster_Model_Question( $quizQuestionID );
           $model->setAnswerData( $answerData );
+
           $a[] = $model;
         }
 
@@ -163,169 +162,72 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper
 
     // MOVE TO QUESTION MODEL
     public function loadAnswerDataAssessment( $fields ) {
-      $acfAnswerData['answer'] = $fields['assessment_answer'];
+      $acfAnswerData['answer'] = $fields['qmqe_assessment_answers'];
       $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
       return $answerData;
     }
 
     public function loadAnswerDataCloze( $fields ) {
-      $acfAnswerData['answer'] = $fields['cloze_answer'];
+      $acfAnswerData['answer'] = $fields['qmqe_cloze_answers'];
       $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
       return $answerData;
     }
 
     public function loadAnswerDataFreeChoice( $fields ) {
       $acfAnswerData = array(
-        'answer' => $fields['free_choice_answers']
+        'answer' => $fields['qmqe_free_choice_answers']
       );
       $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
       return $answerData;
     }
 
     public function loadAnswerDataMatrixSortingAnswer( $fields ) {
-      $acfAnswerData = $fields['matrix_sorting_answers'];
+      $acfAnswerData = $fields['qmqe_matrix_sorting_answers'];
       $answerData = array();
       foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer']      = $acfAnswer['criterion'];
+        $acfAnswer['answer'] = $acfAnswer['qmqe_matrix_sorting_criterion'];
         $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
       }
       return $answerData;
     }
 
     public function loadAnswerDataSortingChoice( $fields ) {
-      $acfAnswerData = $fields['sorting_choice_answers'];
+      $acfAnswerData = $fields['qmqe_sorting_choice_answers'];
       $answerData = array();
       foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer'] = $acfAnswer['sorting_choice_answer'];
+        $acfAnswer['answer'] = $acfAnswer['qmqe_sorting_choice_answer'];
         $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
       }
       return $answerData;
     }
 
-    public function loadAnswerDataClassic( $fields ) {
-      $acfAnswerData = $fields['answerData'];
+    public function loadAnswerDataMultipleChoice( $fields ) {
+      $acfAnswerData = $fields['qmqe_multiple_choice_answers'];
       $answerData = array();
       foreach( $acfAnswerData as $acfAnswer ) {
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+        $answer['answer'] = $acfAnswer['qmqe_multiple_choice_answer'];
+        $answer['correct'] = $acfAnswer['qmqe_multiple_choice_correct'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
       }
       return $answerData;
     }
 
-    /**
-     * @param $quizId
-     * @param $orderBy
-     * @param $order
-     * @param $search
-     * @param $limit
-     * @param $offset
-     * @param $filter
-     * @return array
-     */
-    public function fetchTable($quizId, $orderBy, $order, $search, $limit, $offset, $filter)
-    {
-        $r = array();
+    public function loadAnswerDataSingleChoice( $fields ) {
 
-        switch ($orderBy) {
-            case 'category';
-                $_orderBy = 'c.category_name';
-                break;
-            case 'name':
-                $_orderBy = 'q.title';
-                break;
-            default:
-                $_orderBy = 'q.sort';
-                $order = 'asc';
-                break;
-        }
+      var_dump(216);
+      var_dump( $fields['qmqe_single_choice_answers'] );
 
-        $whereFilter = '';
+      $acfAnswerData = $fields['qmqe_single_choice_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $answer['answer'] = $acfAnswer['qmqe_single_choice_answer'];
+        $answer['correct'] = $acfAnswer['qmqe_single_choice_correct'];
 
-        if ($filter) {
-            if (isset($filter['cat']) && $filter['cat']) {
-                $whereFilter = ' AND q.category_id = ' . ((int)$filter['cat']);
-            }
-        }
+        var_dump( $answer );
 
-        $results = $this->_wpdb->get_results($this->_wpdb->prepare("
-				SELECT
-					q.*,
-					c.category_name
-				FROM
-					{$this->_table} AS q
-					LEFT JOIN {$this->_tableCategory} AS c
-						ON c.category_id = q.category_id
-				WHERE
-					quiz_id = %d AND q.online = 1 AND
-					q.title LIKE %s
-					{$whereFilter}
-				ORDER BY
-					{$_orderBy} " . ($order == 'asc' ? 'asc' : 'desc') . "
-				LIMIT %d, %d
-			", array(
-            $quizId,
-            '%' . $search . '%',
-            $offset,
-            $limit
-        )), ARRAY_A);
-
-        foreach ($results as $row) {
-            $r[] = new QuizMaster_Model_Question($row);
-        }
-
-        $count = $this->_wpdb->get_var($this->_wpdb->prepare("
-				SELECT
-					COUNT(*) as count_rows
-				FROM
-					{$this->_table} AS q
-				WHERE
-					quiz_id = %d AND q.online = 1 AND
-					q.title LIKE %s
-					{$whereFilter}
-			", array(
-            $quizId,
-            '%' . $search . '%'
-        )));
-
-        return array(
-            'questions' => $r,
-            'count' => $count ? $count : 0
-        );
-    }
-
-    public function count($quizId)
-    {
-        return $this->_wpdb->get_var($this->_wpdb->prepare("SELECT COUNT(*) FROM {$this->_table} WHERE quiz_id = %d AND online = 1",
-            $quizId));
-    }
-
-    public function exists($id)
-    {
-        return $this->_wpdb->get_var($this->_wpdb->prepare("SELECT COUNT(*) FROM {$this->_table} WHERE id = %d AND online = 1",
-            $id));
-    }
-
-    public function existsAndWritable($id)
-    {
-        return $this->_wpdb->get_var($this->_wpdb->prepare("SELECT COUNT(*) FROM {$this->_table} WHERE id = %d AND online = 1",
-            $id));
-    }
-
-    public function fetchCategoryPoints($quizId)
-    {
-        $results = $this->_wpdb->get_results(
-            $this->_wpdb->prepare(
-                'SELECT SUM( points ) AS sum_points , category_id
-						FROM ' . $this->_tableQuestion . '
-						WHERE quiz_id = %d AND online = 1
-						GROUP BY category_id', $quizId));
-
-        $a = array();
-
-        foreach ($results as $result) {
-            $a[$result['category_id']] = $result['sum_points'];
-        }
-
-        return $a;
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
+      }
+      return $answerData;
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
-class QuizMaster_Model_Question extends QuizMaster_Model_Model
-{
+class QuizMaster_Model_Question extends QuizMaster_Model_Model {
+
     protected $_id = 0;
     protected $_quizId = 0;
     protected $_sort = 0;
@@ -20,10 +20,8 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
     protected $_answerPointsActivated = false;
     protected $_answerData = null;
 
-    //0.23
+    // categories
     protected $_categoryId = 0;
-
-    //0.24
     protected $_categoryName = '';
 
     //0.25
@@ -33,11 +31,8 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
     //0.27
     protected $_matrixSortAnswerCriteriaWidth = 20;
 
-    public function setId($_id)
-    {
-        $this->_id = (int)$_id;
-
-        return $this;
+    public function setId($_id) {
+      $this->_id = (int)$_id;
     }
 
     public function getId()
@@ -222,28 +217,20 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
       return $this->_answerData;
     }
 
-    public function setCategoryId($_categoryId)
-    {
-        $this->_categoryId = (int)$_categoryId;
-
-        return $this;
+    public function setCategoryId($_categoryId) {
+      $this->_categoryId = (int)$_categoryId;
     }
 
-    public function getCategoryId()
-    {
-        return $this->_categoryId;
+    public function getCategoryId() {
+      return $this->_categoryId;
     }
 
-    public function setCategoryName($_categoryName)
-    {
-        $this->_categoryName = (string)$_categoryName;
-
-        return $this;
+    public function setCategoryName($_categoryName) {
+      $this->_categoryName = (string)$_categoryName;
     }
 
-    public function getCategoryName()
-    {
-        return $this->_categoryName;
+    public function getCategoryName() {
+      return $this->_categoryName;
     }
 
     public function setAnswerPointsDiffModusActivated($_answerPointsDiffModusActivated)
@@ -282,12 +269,25 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model
         return $this->_matrixSortAnswerCriteriaWidth;
     }
 
-    public function getFieldPrefix() {
-      return 'qm_qe_';
+    public function processFieldsDuringModelSet( $fields ) {
+
+
+
+      print '<pre>';
+      var_dump( $fields );
+      print '</pre>';
+      //die();
+
+
+      $fields['category_id'] = 7;
+      $fields['category_name'] = "Math";
+
+
+      return $fields;
     }
 
-    public function processFieldsDuringModelSet( $fields ) {
-      return $fields;
+    public function getFieldPrefix() {
+      return 'qmqe_';
     }
 
 }

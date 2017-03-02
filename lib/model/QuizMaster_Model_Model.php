@@ -25,6 +25,7 @@ class QuizMaster_Model_Model {
       $fields['post'] = get_post( $id );
       $fields = $this->processFieldsDuringModelSet( $fields );
       $this->setModelData( $fields );
+      $this->afterSetModel();
     }
 
     public function setPost( $post ) {
@@ -52,6 +53,13 @@ class QuizMaster_Model_Model {
      */
     public function processFieldsDuringModelSet( $fields ) {
       return $fields;
+    }
+
+    /*
+     * Override to alter the model after data set automatically
+     */
+    public function afterSetModel() {
+      return;
     }
 
     public function setModelData($array) {
