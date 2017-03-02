@@ -24,8 +24,6 @@ class QuizMaster_Controller_Front
     /* Student Report Shortcode */
     public function studentReportShortcode() {
 
-      $content = 'student report!';
-
       if( !is_user_logged_in() ) {
         return quizmaster_parse_template( 'reports/student-login.php');
       }
@@ -140,7 +138,6 @@ class QuizMaster_Controller_Front
         $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
-
         $maxQuestion = false;
 
         if ($quiz->isShowMaxQuestion() && $quiz->getShowMaxQuestionValue() > 0) {
@@ -161,9 +158,11 @@ class QuizMaster_Controller_Front
         }
 
         if (empty($quiz) || empty($question)) {
-            echo '';
-            return;
+          echo '';
+          return;
         }
+
+
 
         $view->quiz = $quiz;
         $view->question = $question;

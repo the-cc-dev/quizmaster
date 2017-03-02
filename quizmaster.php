@@ -17,7 +17,10 @@ define('QUIZMASTER_URL', plugins_url('', __FILE__));
 define('QUIZMASTER_FILE', __FILE__);
 define('QUIZMASTER_PPATH', dirname(plugin_basename(__FILE__)));
 define('QUIZMASTER_PLUGIN_PATH', QUIZMASTER_PATH . '/plugin');
+
 define('QUIZMASTER_ANSWER_TYPE_FIELD', 'qmqe_answer_type');
+define('QUIZMASTER_QUESTION_SELECTOR_FIELD', 'qmqu_questions');
+define('QUIZMASTER_QUESTION_REFERENCE_FIELD', 'qmqu_question');
 
 $uploadDir = wp_upload_dir();
 
@@ -908,13 +911,13 @@ function generateAccessCode() {
   return strtoupper( $code );
 }
 
-add_filter('acf/load_field/name=qmqz_access_code', 'setQuizAccessCodeReadonly');
+add_filter('acf/load_field/name=qmqu_access_code', 'setQuizAccessCodeReadonly');
 function setQuizAccessCodeReadonly( $field ) {
   $field['readonly'] = true;
   return $field;
 }
 
-add_filter('acf/load_value/name=qmqz_access_code', 'makeQuizAccessCode', 10, 3);
+add_filter('acf/load_value/name=qmqu_access_code', 'makeQuizAccessCode', 10, 3);
 function makeQuizAccessCode( $value, $post_id, $field ) {
   if( empty( $value )) {
     return generateAccessCode();

@@ -1,7 +1,6 @@
 <?php
 
-class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
-{
+class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
     const QUIZ_RUN_ONCE_TYPE_ALL = 1;
     const QUIZ_RUN_ONCE_TYPE_ONLY_USER = 2;
@@ -235,13 +234,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         $m = new QuizMaster_Model_QuizMapper();
 
         return $m->sumQuestionPoints($this->_id);
-    }
-
-    public function fetchCountQuestions()
-    {
-        $m = new QuizMaster_Model_QuizMapper();
-
-        return $m->countQuestion($this->_id);
     }
 
     public function setBtnRestartQuizHidden($_btnRestartQuizHidden)
@@ -713,6 +705,14 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model
         }
 
         return $this->_userEmail;
+    }
+
+    public function getFieldPrefix() {
+      return 'qmqu_';
+    }
+
+    public function processFieldsDuringModelSet( $fields ) {
+      return $fields;
     }
 
 }

@@ -64,27 +64,20 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
         return $this->_sort;
     }
 
-    public function setTitle($_title)
-    {
-        $this->_title = (string)$_title;
-
-        return $this;
+    public function setTitle($_title) {
+      $this->_title = (string)$_title;
     }
 
-    public function getTitle()
-    {
-        return $this->_title;
+    public function getTitle() {
+      return $this->_title;
     }
 
-    public function setQuestion($_question)
-    {
-        $this->_question = (string)$_question;
-        return $this;
+    public function setQuestion($_question) {
+      $this->_question = (string)$_question;
     }
 
-    public function getQuestion()
-    {
-        return $this->_question;
+    public function getQuestion() {
+      return $this->_question;
     }
 
     public function setCorrectMsg($_correctMsg)
@@ -271,19 +264,11 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function processFieldsDuringModelSet( $fields ) {
 
-
-
-      print '<pre>';
-      var_dump( $fields );
-      print '</pre>';
-      //die();
-
-
       $fields['category_id'] = 7;
       $fields['category_name'] = "Math";
 
-
       return $fields;
+
     }
 
     public function getFieldPrefix() {

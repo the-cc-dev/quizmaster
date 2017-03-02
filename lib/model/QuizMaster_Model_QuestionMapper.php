@@ -109,21 +109,17 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
      */
     public function fetchAll($quizId, $rand = false, $max = 0) {
 
-      print '<pre>';
-      var_dump( 113 );
-      print '</pre>';
-
         $a = array();
 
         $quizPost = get_post( $quizId );
-        $quizQuestions = get_field( 'quiz_questions', $quizId );
+        $quizQuestions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
 
         if( empty($quizQuestions)) {
           return false;
         }
 
         foreach( $quizQuestions as $qq ) {
-          $quizQuestionID = $qq['quiz_question'];
+          $quizQuestionID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
           $fields = get_fields( $quizQuestionID );
 
           // set answer data
@@ -214,17 +210,11 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
     public function loadAnswerDataSingleChoice( $fields ) {
 
-      var_dump(216);
-      var_dump( $fields['qmqe_single_choice_answers'] );
-
       $acfAnswerData = $fields['qmqe_single_choice_answers'];
       $answerData = array();
       foreach( $acfAnswerData as $acfAnswer ) {
         $answer['answer'] = $acfAnswer['qmqe_single_choice_answer'];
         $answer['correct'] = $acfAnswer['qmqe_single_choice_correct'];
-
-        var_dump( $answer );
-
         $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
       }
       return $answerData;
