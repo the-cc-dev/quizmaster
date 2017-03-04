@@ -51,7 +51,8 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return !empty($v) || $v === '0';
     }
 
-    public function show($preview = false) {
+    public function show() {
+
       $this->loadButtonNames();
       $this->question_count = count($this->question);
       $this->result = $this->quiz->getResultText();
@@ -76,7 +77,8 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
       }
 
-      print quizmaster_get_template( 'front-quiz.php', array('view' => $this));
+      return quizmaster_parse_template( 'front-quiz.php', array('view' => $this));
+
     }
 
     public function createOption($preview)

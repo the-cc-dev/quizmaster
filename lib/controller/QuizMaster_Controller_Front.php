@@ -107,28 +107,28 @@ class QuizMaster_Controller_Front
 
     }
 
-    public function shortcode($attr)
-    {
+    public function shortcode( $attr ) {
         $id = $attr[0];
         $content = '';
 
         $this->loadJsScripts();
 
         if (is_numeric($id)) {
-            ob_start();
-
-            $this->handleShortCode($id);
-
-            $content = ob_get_contents();
-
-            ob_end_clean();
+            $content = $this->handleShortCode( $id );
         }
+
+        $content = "8888";
+
+        var_dump(122);
+
 
         return $content;
     }
 
-    public function handleShortCode($id)
-    {
+    public function handleShortCode( $id, $return = true ) {
+
+        $content = '';
+
         $view = new QuizMaster_View_FrontQuiz();
         $view = apply_filters( 'quizmaster_view_load', $view, 'FrontQuiz' );
         $view = apply_filters( 'quizmaster_view_load_front_quiz', $view );
@@ -158,11 +158,12 @@ class QuizMaster_Controller_Front
         }
 
         if (empty($quiz) || empty($question)) {
-          echo '';
-          return;
+          if( $return ) {
+            return $content;
+          } else {
+            print $content;
+          }
         }
-
-
 
         $view->quiz = $quiz;
         $view->question = $question;
@@ -171,10 +172,17 @@ class QuizMaster_Controller_Front
 
         $view = apply_filters( 'quizmaster_view_before_render', $view );
         if ($maxQuestion) {
-            $view->showMaxQuestion();
+          $content = $view->showMaxQuestion();
         } else {
-            $view->show();
+          $content = $view->show();
         }
+
+        if( $return ) {
+          return $content;
+        } else {
+          print $content;
+        }
+
     }
 
     public static function ajaxQuizLoadData($data)
