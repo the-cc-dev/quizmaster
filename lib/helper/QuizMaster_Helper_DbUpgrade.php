@@ -46,7 +46,6 @@ class QuizMaster_Helper_DbUpgrade
 
     public function delete() {
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_lock`');
-        $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_prerequisite`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_statistic`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_statistic_ref`');
         $this->_wpdb->query('DROP TABLE IF EXISTS `' . $this->_wpdb->prefix . 'quizmaster_template`');
@@ -67,12 +66,6 @@ class QuizMaster_Helper_DbUpgrade
       }
 
       dbDelta("
-
-			CREATE TABLE {$this->_wpdb->prefix}quizmaster_prerequisite (
-			  prerequisite_quiz_id int(11) NOT NULL,
-			  quiz_id int(11) NOT NULL,
-			  PRIMARY KEY  (prerequisite_quiz_id,quiz_id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 			CREATE TABLE {$this->_wpdb->prefix}quizmaster_statistic (
 			  statistic_ref_id int(10) unsigned NOT NULL,
@@ -438,20 +431,6 @@ class QuizMaster_Helper_DbUpgrade
         $this->_wpdb->query('
 			ALTER TABLE `' . $this->_wpdb->prefix . 'quizmaster_statistic`
 				ADD `points` int(10) unsigned NOT NULL
-		');
-
-        $this->_wpdb->query('
-			ALTER TABLE  `' . $this->_wpdb->prefix . 'quizmaster_master`
-  				ADD `show_average_result` tinyint(1) NOT NULL,
-  				ADD `prerequisite` tinyint(1) NOT NULL
-		');
-
-        $this->_wpdb->query('
-			CREATE TABLE IF NOT EXISTS `' . $this->_wpdb->prefix . 'quizmaster_prerequisite` (
-			 	`prerequisite_quiz_id` int(11) NOT NULL,
-			 	`quiz_id` int(11) NOT NULL,
-			  	PRIMARY KEY (`prerequisite_quiz_id`,`quiz_id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		');
 
         $results = $this->_wpdb->get_results('SELECT id, answer_type, answer_json, points_per_answer, points_answer  FROM `' . $this->_wpdb->prefix . 'quizmaster_question`',

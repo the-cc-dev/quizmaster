@@ -53,8 +53,6 @@ class QuizMaster_Controller_Email {
         break;
     }
 
-
-
     return $content;
   }
 

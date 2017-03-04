@@ -294,7 +294,6 @@ class QuizMaster_Helper_ImportXml
         }
 
         $model->setShowAverageResult($xml->showAverageResult == 'true');
-        $model->setPrerequisite($xml->prerequisite == 'true');
         $model->setQuizModus($xml->quizModus);
         $model->setShowReviewQuestion($xml->showReviewQuestion == 'true');
         $model->setQuizSummaryHide($xml->quizSummaryHide == 'true');

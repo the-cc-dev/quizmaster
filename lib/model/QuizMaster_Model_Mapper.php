@@ -21,7 +21,6 @@ class QuizMaster_Model_Mapper
     protected $_tableMaster;
     protected $_tableLock;
     protected $_tableStatistic;
-    protected $_tablePrerequisite;
     protected $_tableCategory;
     protected $_tableStatisticRef;
     protected $_tableForm;
@@ -39,7 +38,6 @@ class QuizMaster_Model_Mapper
         $this->_tableMaster = $this->_prefix . 'master';
         $this->_tableLock = $this->_prefix . 'lock';
         $this->_tableStatistic = $this->_prefix . 'statistic';
-        $this->_tablePrerequisite = $this->_prefix . 'prerequisite';
         $this->_tableCategory = $this->_prefix . 'category';
         $this->_tableStatisticRef = $this->_prefix . 'statistic_ref';
         $this->_tableForm = $this->_prefix . 'form';

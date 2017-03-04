@@ -14,7 +14,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         $lockMapper = new QuizMaster_Model_LockMapper();
         $quizMapper = new QuizMaster_Model_QuizMapper();
-        $prerequisiteMapper = new QuizMaster_Model_PrerequisiteMapper();
 
         $quiz = $quizMapper->fetch($this->_post['quizId']);
 
@@ -42,39 +41,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
                 'is' => ($lockIp || $lockCookie),
                 'pre' => true
             );
-        }
-
-        if ($quiz->isPrerequisite()) {
-            $quizIds = array();
-
-            if ($userId > 0) {
-                $quizIds = $prerequisiteMapper->getNoPrerequisite($quizId, $userId);
-            } else {
-                $checkIds = $prerequisiteMapper->fetchQuizIds($quizId);
-
-                if (isset($this->_cookie['quizMaster_result'])) {
-                    $r = json_decode($this->_cookie['quizMaster_result'], true);
-
-                    if ($r !== null && is_array($r)) {
-                        foreach ($checkIds as $id) {
-                            if (!isset($r[$id]) || !$r[$id]) {
-                                $quizIds[] = $id;
-                            }
-                        }
-                    }
-                } else {
-                    $quizIds = $checkIds;
-                }
-            }
-
-            if (!empty($quizIds)) {
-                $names = $quizMapper->fetchCol($quizIds, 'name');
-
-                if (!empty($names)) {
-                    $data['prerequisite'] = implode(', ', $names);
-                }
-            }
-
         }
 
         // lock quiz if user not logged in
@@ -305,10 +271,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         return json_encode(array());
     }
 
-    private function setResultCookie(QuizMaster_Model_Quiz $quiz)
-    {
-        $prerequisite = new QuizMaster_Model_PrerequisiteMapper();
-        if (get_current_user_id() == 0 && $prerequisite->isQuizId($quiz->getId())) {
+    private function setResultCookie(QuizMaster_Model_Quiz $quiz) {
+        if (get_current_user_id() == 0) {
             $cookieData = array();
             if (isset($this->_cookie['quizMaster_result'])) {
                 $d = json_decode($this->_cookie['quizMaster_result'], true);
