@@ -119,105 +119,14 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
         }
 
         foreach( $quizQuestions as $qq ) {
+
           $quizQuestionID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
-          $fields = get_fields( $quizQuestionID );
-
-          // set answer data
-          switch( $fields[ QUIZMASTER_ANSWER_TYPE_FIELD ] ) {
-            case 'single':
-              $answerData = $this->loadAnswerDataSingleChoice( $fields );
-              break;
-            case 'multiple':
-              $answerData = $this->loadAnswerDataMultipleChoice( $fields );
-              break;
-            case 'free_answer':
-              $answerData = $this->loadAnswerDataFreeChoice( $fields );
-              break;
-            case 'sort_answer':
-              $answerData = $this->loadAnswerDataSortingChoice( $fields );
-              break;
-            case 'matrix_sort_answer':
-              $answerData = $this->loadAnswerDataMatrixSortingAnswer( $fields );
-              break;
-            case 'cloze_answer':
-              $answerData = $this->loadAnswerDataCloze( $fields );
-              break;
-            case 'assessment_answer':
-              $answerData = $this->loadAnswerDataAssessment( $fields );
-              break;
-          }
-
-          $model = new QuizMaster_Model_Question( $quizQuestionID );
-          $model->setAnswerData( $answerData );
-
-          $a[] = $model;
+          $q = new QuizMaster_Model_Question( $quizQuestionID );
+          $a[] = $q;
+          
         }
 
         return $a;
-    }
-
-    // MOVE TO QUESTION MODEL
-    public function loadAnswerDataAssessment( $fields ) {
-      $acfAnswerData['answer'] = $fields['qmqe_assessment_answers'];
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
-      return $answerData;
-    }
-
-    public function loadAnswerDataCloze( $fields ) {
-      $acfAnswerData['answer'] = $fields['qmqe_cloze_answers'];
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
-      return $answerData;
-    }
-
-    public function loadAnswerDataFreeChoice( $fields ) {
-      $acfAnswerData = array(
-        'answer' => $fields['qmqe_free_choice_answers']
-      );
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
-      return $answerData;
-    }
-
-    public function loadAnswerDataMatrixSortingAnswer( $fields ) {
-      $acfAnswerData = $fields['qmqe_matrix_sorting_answers'];
-      $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer'] = $acfAnswer['qmqe_matrix_sorting_criterion'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
-      }
-      return $answerData;
-    }
-
-    public function loadAnswerDataSortingChoice( $fields ) {
-      $acfAnswerData = $fields['qmqe_sorting_choice_answers'];
-      $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer'] = $acfAnswer['qmqe_sorting_choice_answer'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
-      }
-      return $answerData;
-    }
-
-    public function loadAnswerDataMultipleChoice( $fields ) {
-      $acfAnswerData = $fields['qmqe_multiple_choice_answers'];
-      $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $answer['answer'] = $acfAnswer['qmqe_multiple_choice_answer'];
-        $answer['correct'] = $acfAnswer['qmqe_multiple_choice_correct'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
-      }
-      return $answerData;
-    }
-
-    public function loadAnswerDataSingleChoice( $fields ) {
-
-      $acfAnswerData = $fields['qmqe_single_choice_answers'];
-      $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $answer['answer'] = $acfAnswer['qmqe_single_choice_answer'];
-        $answer['correct'] = $acfAnswer['qmqe_single_choice_correct'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
-      }
-      return $answerData;
     }
 
 }

@@ -262,12 +262,129 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
         return $this->_matrixSortAnswerCriteriaWidth;
     }
 
+    public function loadAnswerDataAssessment( $fields ) {
+      $acfAnswerData['answer'] = $fields['qmqe_assessment_answers'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataCloze( $fields ) {
+      $acfAnswerData['answer'] = $fields['qmqe_cloze_answers'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataFreeChoice( $fields ) {
+      $acfAnswerData = array(
+        'answer' => $fields['qmqe_free_choice_answers']
+      );
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      return $answerData;
+    }
+
+    public function loadAnswerDataMatrixSortingAnswer( $fields ) {
+      $acfAnswerData = $fields['qmqe_matrix_sorting_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $acfAnswer['answer'] = $acfAnswer['qmqe_matrix_sorting_criterion'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      }
+      return $answerData;
+    }
+
+    public function loadAnswerDataSortingChoice( $fields ) {
+      $acfAnswerData = $fields['qmqe_sorting_choice_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $acfAnswer['answer'] = $acfAnswer['qmqe_sorting_choice_answer'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      }
+      return $answerData;
+    }
+
+    public function loadAnswerDataMultipleChoice( $fields ) {
+      $acfAnswerData = $fields['qmqe_multiple_choice_answers'];
+      $answerData = array();
+      foreach( $acfAnswerData as $acfAnswer ) {
+        $answer['answer'] = $acfAnswer['qmqe_multiple_choice_answer'];
+        $answer['correct'] = $acfAnswer['qmqe_multiple_choice_correct'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
+      }
+      return $answerData;
+    }
+
+    public function loadAnswerDataSingleChoice( $fields ) {
+
+      $acfAnswerData = $fields['qmqe_single_choice_answers'];
+      $answerData = array();
+      $acfAnswer = $acfAnswerData[0];
+
+      // correct answer
+      $rep = 'qmqe_single_correct_answer_repeater';
+      $field = 'qmqe_single_correct_answer';
+      $answer['answer'] = $acfAnswer[ $rep ][0][ $field ];
+      $answer['correct'] = true;
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
+
+      // incorrect answers
+      $rep = 'qmqe_single_incorrect_answer_repeater';
+      $field = 'qmqe_single_incorrect_answer';
+
+      foreach( $acfAnswer[ $rep ] as $ia ) {
+
+        $answer['answer'] = $ia[ $field ];
+        $answer['correct'] = false;
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
+
+      }
+
+      return $answerData;
+    }
+
     public function processFieldsDuringModelSet( $fields ) {
+
+      // load the answer data based on answer type
+      $this->loadAnswerData();
 
       $fields['category_id'] = 7;
       $fields['category_name'] = "Math";
 
       return $fields;
+
+    }
+
+    private function loadAnswerData() {
+
+      $fields = get_fields( $this->getId() );
+      $answer_type = $fields[ QUIZMASTER_ANSWER_TYPE_FIELD ];
+
+      // set answer data
+      switch( $answer_type ) {
+
+        case 'single':
+          $answerData = $this->loadAnswerDataSingleChoice( $fields );
+          break;
+        case 'multiple':
+          $answerData = $this->loadAnswerDataMultipleChoice( $fields );
+          break;
+        case 'free_answer':
+          $answerData = $this->loadAnswerDataFreeChoice( $fields );
+          break;
+        case 'sort_answer':
+          $answerData = $this->loadAnswerDataSortingChoice( $fields );
+          break;
+        case 'matrix_sort_answer':
+          $answerData = $this->loadAnswerDataMatrixSortingAnswer( $fields );
+          break;
+        case 'cloze_answer':
+          $answerData = $this->loadAnswerDataCloze( $fields );
+          break;
+        case 'assessment_answer':
+          $answerData = $this->loadAnswerDataAssessment( $fields );
+          break;
+      }
+
+      $this->setAnswerData( $answerData );
 
     }
 

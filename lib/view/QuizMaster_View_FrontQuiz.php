@@ -675,6 +675,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
       $json = array();
       foreach ($questions as $question) {
         $answerArray = $question->getAnswerData();
+
         $json[$question->getId()]['type'] = $question->getAnswerType();
         $json[$question->getId()]['id'] = (int)$question->getId();
         $json[$question->getId()]['catId'] = (int)$question->getCategoryId();

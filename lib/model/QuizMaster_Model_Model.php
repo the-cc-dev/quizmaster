@@ -21,6 +21,7 @@ class QuizMaster_Model_Model {
       if( !empty( $fields )) {
         $fields = $this->stripFieldPrefixes( $fields );
       }
+      $this->setId( $id );
       $fields['id'] = $id;
       $fields['post'] = get_post( $id );
       $fields = $this->processFieldsDuringModelSet( $fields );
