@@ -127,6 +127,13 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     return $this;
   }
 
+  /*
+   * @return quiz model object
+   */
+  public function getQuiz() {
+    return new QuizMaster_Model_Quiz( $this->getQuizId() );
+  }
+
   public function getQuizId() {
     return $this->_quizId;
   }
@@ -142,6 +149,10 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
   public function getUserId() {
     return $this->_userId;
+  }
+
+  public function getUserName() {
+    return get_userdata( $this->getUserId() )->user_login;
   }
 
   public function getCreateDate() {

@@ -1,12 +1,12 @@
 <?php
+
 /**
- * The template for displaying quiz scores
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ * Template for displaying quiz scores
  *
  * @package QuizMaster
  * @since 1.0
  * @version 1.0
+ *
  */
 
 $scoreCtr = QuizMaster_Controller_Score::loadById( $post->ID );
@@ -21,18 +21,37 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 
 			<h1>Quiz Score</h1>
-			<h2>Quiz: <?php print $scoreModel->getQuizName(); ?></h2>
-			<h3>User: <?php print $scoreModel->getUserId(); ?></h3>
 
-			<div class="mini-charts-item bgm-bluegray">
-	      <div class="clearfix">
-          <div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
-          <div class="count">
-            <small>Questions Corrent/Incorrect</small>
-            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
-          </div>
-	      </div>
-      </div>
+			<div class="quizmaster-score-summary">
+				<h2>Quiz: <?php print $scoreModel->getQuizName(); ?></h2>
+				<h2>User: <?php print $scoreModel->getUserName(); ?></h2>
+			</div>
+
+
+			<div class="quizmaster-score-stats mini-charts">
+
+				<div class="quizmaster-score-key-stat">
+
+					<div class="mini-charts-item bgm-bluegray">
+			      <div class="clearfix">
+
+		          <div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+		          <div class="count">
+		            <h3>Questions Corrent/Incorrect</h3>
+		            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
+		          </div>
+
+							<div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+							<div class="count">
+								<h3>Questions Corrent/Incorrect</h3>
+								<h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
+							</div>
+
+			      </div>
+		      </div>
+				</div>
+
+			</div>
 
 <div class="dash-widgets">
 

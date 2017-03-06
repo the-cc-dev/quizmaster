@@ -646,65 +646,8 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this;
     }
 
-    /**
-     * @param bool|false $serialize
-     * @return null|string|QuizMaster_Model_Email
-     */
-    public function getAdminEmail($serialize = false)
-    {
-        if ($this->_adminEmail === null) {
-            return null;
-        }
-
-        if (is_object($this->_adminEmail) || $this->_adminEmail instanceof QuizMaster_Model_Email) {
-            if ($serialize) {
-                return @serialize($this->_adminEmail);
-            }
-        } else {
-            if (!$serialize) {
-                if (QuizMaster_Helper_Until::saveUnserialize($this->_adminEmail, $into) === false) {
-                    return null;
-                }
-
-                $this->_adminEmail = $into;
-            }
-        }
-
-        return $this->_adminEmail;
-    }
-
-    public function setUserEmail($_userEmail)
-    {
-        $this->_userEmail = $_userEmail;
-
-        return $this;
-    }
-
-    /**
-     * @param bool|false $serialize
-     * @return null|string|QuizMaster_Model_Email
-     */
-    public function getUserEmail($serialize = false)
-    {
-        if ($this->_userEmail === null) {
-            return null;
-        }
-
-        if (is_object($this->_userEmail) || $this->_userEmail instanceof QuizMaster_Model_Email) {
-            if ($serialize) {
-                return @serialize($this->_userEmail);
-            }
-        } else {
-            if (!$serialize) {
-                if (QuizMaster_Helper_Until::saveUnserialize($this->_userEmail, $into) === false) {
-                    return null;
-                }
-
-                $this->_userEmail = $into;
-            }
-        }
-
-        return $this->_userEmail;
+    public function getLink() {
+      return '<a class="quizmaster-quiz-link" href="' . get_permalink( $this->getId() ) . '">' . $this->getName() . '</a>';
     }
 
     public function getFieldPrefix() {
@@ -712,6 +655,9 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     }
 
     public function processFieldsDuringModelSet( $fields ) {
+
+      $fields['name'] = get_post( $this->getId() )->post_title;
+
       return $fields;
     }
 
