@@ -14,8 +14,6 @@ $scoreView = new QuizMaster_View_Score;
 $scoreModel = $scoreCtr->getScore();
 $scoreView->setScoreQuestions( $scoreModel->getScores() );
 
-$totals = $scoreModel->getTotals();
-
 get_header(); ?>
 
 <div class="wrap quizmaster">
@@ -41,19 +39,18 @@ get_header(); ?>
 <div id="pie-charts" class="dw-item bgm-cyan c-white">
 
 			<div class="dw-item">
-			                                        <div class="dwi-header">
-			                                            <div class="dwih-title">Quiz Statistics</div>
-			                                        </div>
+        <div class="dwi-header">
+            <div class="dwih-title">Quiz Statistics</div>
+        </div>
 
-			                                        <div class="clearfix"></div>
+        <div class="clearfix"></div>
 
-			                                        <div class="text-center p-20 m-t-25">
-			                                            <div class="easy-pie main-pie" data-percent="<?php print $scoreModel->getScoreResult(); ?>">
-			                                                <div class="percent"><?php print $scoreModel->getScoreResult(); ?></div>
-			                                                <div class="pie-title">Overall Score</div>
-			                                            <canvas height="148" width="148"></canvas></div>
-			                                        </div>
-
+        <div class="text-center p-20 m-t-25">
+            <div class="easy-pie main-pie" data-percent="<?php print $scoreModel->getScoreResult(); ?>">
+                <div class="percent"><?php print $scoreModel->getScoreResult(); ?></div>
+                <div class="pie-title">Overall Score</div>
+            <canvas height="148" width="148"></canvas></div>
+        </div>
 
 	<div class="p-t-25 p-b-20 text-center">
 		<div class="easy-pie sub-pie-1" data-percent="<?php print $scoreModel->getSolvedPercentage(); ?>">
@@ -108,46 +105,11 @@ get_header(); ?>
 
 			</div>
 
-			<!-- Score Details Table -->
-			<table>
-				<tr>
-					<th>Question</th>
-					<th>Points</th>
-					<th>Correct</th>
-					<th>Incorrect</th>
-					<th>Hints Used</th>
-					<th>Solved</th>
-					<th>Time</th>
-				</tr>
-
-				<?php foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) :
-					$scoreView->setActiveScoreQuestion( $scoreQuestion );
-
-				?>
-					<tr>
-						<td><?php print $scoreView->getQuestion(); ?></td>
-						<td><?php print $scoreView->getPoints() . '/' . $scoreView->getPointsPossible(); ?></td>
-						<td><?php print $scoreView->getCorrectCount(); ?></td>
-						<td><?php print $scoreView->getHintCount(); ?></td>
-						<td><?php print $scoreView->getSolvedCount(); ?></td>
-						<td><?php print $scoreView->getQuestionTime(); ?></td>
-					</tr>
-				<?php endforeach; ?>
-
-				<!-- Totals Row -->
-				<tfoot>
-					<tr>
-						<th><?php _e('Total', 'quizmaster'); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'possiblePoints' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'correctCount' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'incorrectCount' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'hintCount' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'solvedCount' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'questionTime' ); ?></th>
-						<th><?php print $scoreView->getScoreTotal( 'points' ); ?></th>
-					</tr>
-				</tfoot>
-			</table>
+			<?php
+				quizmaster_get_template( 'reports/score-question-table.php',
+					array('scoreView' => $scoreView)
+				);
+			?>
 
 			<!-- Return Link -->
 			<?php
@@ -273,13 +235,3 @@ jQuery(".sub-pie-2").easyPieChart({
   border-bottom: 1px solid #000;
 }
 </style>
-
-999999999999 777777777777 333333333333
-<?php
-print '<br />';
-print $scoreModel->getTotalQuestionCount();
-print '<br />';
-print $scoreModel->getSolvedCount();
-print '<br />';
-print $scoreModel->getSolvedPercentage();
-?>

@@ -108,6 +108,7 @@ class QuizMaster_Controller_Front
     }
 
     public function shortcode( $attr ) {
+      
         $id = $attr[0];
         $content = '';
 
@@ -116,11 +117,6 @@ class QuizMaster_Controller_Front
         if (is_numeric($id)) {
             $content = $this->handleShortCode( $id );
         }
-
-        $content = "8888";
-
-        var_dump(122);
-
 
         return $content;
     }

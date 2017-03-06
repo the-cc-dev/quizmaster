@@ -3,7 +3,8 @@
 class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
   protected $_scoreID = 0;
-  protected $_questionId = 0;
+  protected $_questionId = 0; // question current revision
+  protected $_questionIdUnrevised = 0; // question parent id (not the current revision)
   protected $_correctCount = 0;
   protected $_incorrectCount = 0;
   protected $_hintCount = 0;
@@ -14,15 +15,16 @@ class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
   public function outputArray() {
     return array(
-      'scoreId'         => $this->_scoreId,
-      'questionId'      => $this->_questionId,
-      'correctCount'    => $this->_correctCount,
-      'incorrectCount'  => $this->_incorrectCount,
-      'hintCount'       => $this->_hintCount,
-      'points'          => $this->_points,
-      'questionTime'    => $this->_questionTime,
-      'answerData'      => $this->_answerData,
-      'solvedCount'     => $this->_solvedCount,
+      'scoreId'             => $this->_scoreId,
+      'questionId'          => $this->_questionId,
+      'questionIdUnrevised' => $this->_questionIdUnrevised,
+      'correctCount'        => $this->_correctCount,
+      'incorrectCount'      => $this->_incorrectCount,
+      'hintCount'           => $this->_hintCount,
+      'points'              => $this->_points,
+      'questionTime'        => $this->_questionTime,
+      'answerData'          => $this->_answerData,
+      'solvedCount'         => $this->_solvedCount,
     );
   }
 
@@ -32,6 +34,14 @@ class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
   public function getQuestionId() {
     return $this->_questionId;
+  }
+
+  public function setQuestionIdUnrevised($_questionId) {
+    $this->_questionIdUnrevised = (int)$_questionIdUnrevised;
+  }
+
+  public function getQuestionIdUnrevised() {
+    return $this->_questionIdUnrevised;
   }
 
   public function setCorrectCount($_correctCount) {

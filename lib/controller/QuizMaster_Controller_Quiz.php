@@ -181,7 +181,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
     {
         // workaround ...
         $_POST = $_POST['data'];
-
         $ctr = new QuizMaster_Controller_Quiz();
 
         $lockMapper = new QuizMaster_Model_LockMapper();

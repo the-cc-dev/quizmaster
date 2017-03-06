@@ -15,7 +15,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
   public function save($quiz = null) {
 
     $quizId = $this->_post['quizId'];
-    $array = $this->_post['results'];
+    $results = $this->_post['results'];
 
     // load revision
     $quizRevisions = wp_get_post_revisions( $quizId );
@@ -24,6 +24,8 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $lockIp = $this->getIp();
     $userId = get_current_user_id();
+
+    var_dump(28);
 
     if ($lockIp === false) {
       return false;
@@ -34,11 +36,15 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $quiz = $quizMapper->fetch($quizId);
     }
 
+    var_dump(37);
+
     if (!$quiz->isStatisticsOn()) {
       return false;
     }
 
-    $scores = $this->makeScoreList($quizId, $array, $quiz->getQuizModus());
+    $scores = $this->makeScoreList($quizId, $results, $quiz->getQuizModus());
+
+    var_dump($scores);
 
     if ($scores === false) {
       return false;
@@ -107,23 +113,21 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
   }
 
-  private function makeScoreList($quizId, $array, $modus) {
+  private function makeScoreList($quizId, $results, $modus) {
 
     $questionMapper = new QuizMaster_Model_QuestionMapper();
-
-    $questions = $questionMapper->fetchAllList($quizId, array('id', 'points'));
-
+    $questions = $questionMapper->fetchAll( $quizId );
     $ids = array();
 
     foreach ($questions as $q) {
-      if (!isset($array[$q['id']])) {
+      if (!isset( $results[ $q->getId() ]) ) {
         continue;
       }
 
-      $ids[] = $q['id'];
-      $v = $array[$q['id']];
+      $ids[] = $q->getId();
+      $v = $results[ $q->getId() ];
 
-      if (!isset($v) || $v['points'] > $q['points'] || $v['points'] < 0) {
+      if (!isset($v) || $v['points'] > $q->getPoints() || $v['points'] < 0) {
         return false;
       }
     }
@@ -131,12 +135,12 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $avgTime = null;
 
     if ($modus == QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) {
-      $avgTime = ceil($array['comp']['quizTime'] / count($questions));
+      $avgTime = ceil($results['comp']['quizTime'] / count($questions));
     }
 
-    unset($array['comp']);
+    unset($results['comp']);
 
-    $ak = array_keys($array);
+    $ak = array_keys($results);
 
     if (array_diff($ids, $ak) !== array_diff($ak, $ids)) {
       return false;
@@ -144,15 +148,16 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     $values = array();
 
-    foreach ($array as $k => $v) {
+    foreach ($results as $id => $v) {
 
       // load revision
-      $qRevisions = wp_get_post_revisions( $k );
+      $qRevisions = wp_get_post_revisions( $id );
       $qScoringRevision = reset( $qRevisions );
-      $qId = $qScoringRevision->ID;
+      $qRevisionId = $qScoringRevision->ID;
 
       $s = new QuizMaster_Model_ScoreQuestion();
-      $s->setQuestionId($qId);
+      $s->setQuestionId( $qRevisionId );
+      $s->setQuestionIdUnrevised( $id );
       $s->setHintCount(isset($v['tip']) ? 1 : 0);
       $s->setSolvedCount(isset($v['solved']) && $v['solved'] ? 1 : 0);
       $s->setCorrectCount($v['correct'] ? 1 : 0);

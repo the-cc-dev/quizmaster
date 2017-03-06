@@ -341,18 +341,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $answerData;
     }
 
-    public function processFieldsDuringModelSet( $fields ) {
-
-      // load the answer data based on answer type
-      $this->loadAnswerData();
-
-      $fields['category_id'] = 7;
-      $fields['category_name'] = "Math";
-
-      return $fields;
-
-    }
-
     private function loadAnswerData() {
 
       $fields = get_fields( $this->getId() );
@@ -390,6 +378,21 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function getFieldPrefix() {
       return 'qmqe_';
+    }
+
+    public function processFieldsDuringModelSet( $fields ) {
+
+      // load the answer data based on answer type
+      $this->loadAnswerData();
+
+      $scoreCategoryID = $fields[ 'score_category' ];
+      $scoreCategory = get_term( $scoreCategoryID );
+
+      $fields['category_id'] = $scoreCategoryID;
+      $fields['category_name'] = $scoreCategory->name;
+
+      return $fields;
+
     }
 
 }

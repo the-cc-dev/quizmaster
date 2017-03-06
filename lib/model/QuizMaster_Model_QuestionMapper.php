@@ -81,25 +81,6 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
       return is_array($id) ? $a : (isset($a[0]) ? $a[0] : null);
     }
 
-    /*
-     * Return list of questions associated with quiz
-     * Used by ajaxLoadQuestionsSort, expect return to be array of fields (not question objects)
-     */
-    public function fetchAllList($quizId, $list, $sort = false) {
-
-      $results = array();
-      $quizPost = get_post( $quizId );
-      $quizQuestions = get_field( 'quiz_questions', $quizId );
-      foreach( $quizQuestions as $qq ) {
-
-        $quizQuestionID = $qq['quiz_question'];
-        $question = new QuizMaster_Model_Question( $quizQuestionID );
-
-      }
-      return $results;
-
-    }
-
     /**
      * @param $quizId
      * @param bool $rand
@@ -107,7 +88,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
      *
      * @return QuizMaster_Model_Question[]
      */
-    public function fetchAll($quizId, $rand = false, $max = 0) {
+    public function fetchAll( $quizId ) {
 
         $a = array();
 
@@ -123,7 +104,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
           $quizQuestionID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
           $q = new QuizMaster_Model_Question( $quizQuestionID );
           $a[] = $q;
-          
+
         }
 
         return $a;
