@@ -5,6 +5,7 @@ class QuizMaster_Controller_Email {
   private $email = false;
   private $quiz  = false;
   private $score  = false;
+  private $contenttype = array('Content-Type: text/html; charset=UTF-8');//Mahesh #32 - Default content type
 
   const QUIZMASTER_EMAIL_TRIGGER_FIELD = 'qm_email_trigger';
   const QUIZMASTER_EMAIL_ENABLED_FIELD = 'qm_email_enabled';
@@ -89,7 +90,7 @@ class QuizMaster_Controller_Email {
       $this->email->getRecipients(),
       $this->email->getSubject(),
       $this->email->getMessage(),
-      $this->email->getHeaders()
+      $this->email->getHeaders($this->contenttype)
     );
     print "Email Sent";
   }
@@ -101,7 +102,15 @@ class QuizMaster_Controller_Email {
 
   public function parseTemplate() {
     $templateName = str_replace( '_', '-', $this->email->getKey() );
-    $template = 'emails/' . $templateName;
+    //Mahesh #32 - checked email type and assigned template path
+    $emailType = get_field('qm_email_type', $this->email->getKey());
+    if($emailType == 'plain'){
+         $template = 'emails/plain/' . $templateName;
+         $this->contenttype = array('Content-Type: text; charset=UTF-8');
+    }else{
+        $template = 'emails/' . $templateName;
+        $this->contenttype = array('Content-Type: html; charset=UTF-8');
+    }
     $content = quizmaster_parse_template( $template . '.php' );
     return do_shortcode( $content );
   }
