@@ -34,9 +34,56 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
     return false;
   }
 
+  public function usedHint() {
+    if( $this->getHintCount() == 1 ) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isSolved() {
+    if( $this->getSolvedCount() == 1 ) {
+      return true;
+    }
+    return false;
+  }
+
+  public function renderSolved() {
+    if( $this->isSolved() ) {
+      $this->renderYes();
+    } else {
+      $this->renderNo();
+    }
+  }
+
+  public function renderHint() {
+    if( $this->usedHint() ) {
+      $this->renderYes();
+    } else {
+      $this->renderNo();
+    }
+  }
+
+  public function renderCorrect() {
+    if( $this->isCorrect() ) {
+      $this->renderYes();
+    } else {
+      $this->renderNo();
+    }
+  }
+
+  public function renderYes() {
+    print 'YES';
+  }
+
+  public function renderNo() {
+    print 'NO';
+  }
+
   public function getCorrectCount() {
     $val = $this->_activeScoreQuestion->getCorrectCount();
     $this->addScoreTotal('correctCount', $val);
+    $this->addScoreTotal('totalQuestionCount', 1);
     return $val;
   }
 

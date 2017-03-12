@@ -29,9 +29,9 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
 <table>
   <tr>
     <th>Question</th>
-    <th>Points Earned</th>
-    <th>Correct Questions</th>
-    <th>Hints Used</th>
+    <th>Points</th>
+    <th>Correct</th>
+    <th>Hint</th>
     <th>Solved</th>
     <th>Time</th>
   </tr>
@@ -51,9 +51,9 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
     <tr>
       <td><?php print $scoreView->getQuestion(); ?></td>
       <td><?php print $scoreView->getPoints() . '/' . $scoreView->getPossiblePoints(); ?></td>
-			<td><?php print $scoreView->isCorrect(); ?></td>
-      <td><?php print $scoreView->getHintCount(); ?></td>
-      <td><?php print $scoreView->getSolvedCount(); ?></td>
+			<td><?php $scoreView->renderCorrect(); ?></td>
+      <td><?php $scoreView->renderHint(); ?></td>
+      <td><?php $scoreView->renderSolved(); ?></td>
       <td><?php print $scoreView->getQuestionTime(); ?></td>
     </tr>
 
@@ -63,7 +63,7 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
   <tr>
     <th><?php _e('Subtotal', 'quizmaster'); ?></th>
     <th><?php print $scoreView->getPoints() . '/' . $scoreView->getPossiblePoints(); ?></th>
-    <th><?php print $scoreView->getScoreTotal( 'correctCount' ) . '/' . $scoreView->getScoreTotal( 'incorrectCount' ); ?></th>
+    <th><?php print $scoreView->getScoreTotal( 'correctCount' ) . '/' . $scoreView->getScoreTotal( 'totalQuestionCount' ); ?></th>
     <th><?php print $scoreView->getScoreTotal( 'hintCount' ); ?></th>
     <th><?php print $scoreView->getScoreTotal( 'solvedCount' ); ?></th>
     <th><?php print $scoreView->getScoreTotal( 'questionTime' ); ?></th>
