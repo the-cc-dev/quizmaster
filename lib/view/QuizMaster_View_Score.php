@@ -166,4 +166,13 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
     return '<a href="' . get_permalink( $score->getId() ) . '">' . $text . '</a>';
   }
 
+  public function renderQuestionTime() {
+    print gmdate( "H:i:s", $this->getQuestionTime() );
+  }
+
+  public function renderTotalQuestionTime() {
+    $seconds = $this->getScoreTotal( 'questionTime' );
+    print gmdate( "H:i:s", $seconds );
+  }
+
 }

@@ -54,7 +54,7 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
 			<td><?php $scoreView->renderCorrect(); ?></td>
       <td><?php $scoreView->renderHint(); ?></td>
       <td><?php $scoreView->renderSolved(); ?></td>
-      <td><?php print $scoreView->getQuestionTime(); ?></td>
+      <td><?php $scoreView->renderQuestionTime(); ?></td>
     </tr>
 
   <?php endforeach; ?>
@@ -66,7 +66,7 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
     <th><?php print $scoreView->getScoreTotal( 'correctCount' ) . '/' . $scoreView->getScoreTotal( 'totalQuestionCount' ); ?></th>
     <th><?php print $scoreView->getScoreTotal( 'hintCount' ); ?></th>
     <th><?php print $scoreView->getScoreTotal( 'solvedCount' ); ?></th>
-    <th><?php print $scoreView->getScoreTotal( 'questionTime' ); ?></th>
+    <th><?php $scoreView->renderTotalQuestionTime(); ?></th>
   </tr>
 
   <?php endforeach; ?>
@@ -80,7 +80,7 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
       <th><?php print $scoreModel->getCorrectRatio(); ?></th>
       <th><?php print $scoreModel->getTotalHints(); ?></th>
       <th><?php print $scoreModel->getTotalSolved(); ?></th>
-      <th><?php print $scoreModel->getTotalTime(); ?></th>
+      <th><?php print gmdate( "H:i:s", $scoreModel->getTotalTime() ); ?></th>
     </tr>
 
   </tfoot>
