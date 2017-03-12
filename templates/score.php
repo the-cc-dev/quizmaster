@@ -137,7 +137,10 @@ get_header(); ?>
 
 			<?php
 				quizmaster_get_template( 'reports/score-question-table.php',
-					array('scoreView' => $scoreView)
+					array(
+						'scoreView' => $scoreView,
+						'scoreModel' => $scoreModel
+					)
 				);
 			?>
 

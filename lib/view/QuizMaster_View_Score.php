@@ -26,6 +26,14 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
     return $val;
   }
 
+  public function isCorrect() {
+    $correct = $this->getCorrectCount();
+    if( $correct ) {
+      return 'YES';
+    }
+    return false;
+  }
+
   public function getCorrectCount() {
     $val = $this->_activeScoreQuestion->getCorrectCount();
     $this->addScoreTotal('correctCount', $val);

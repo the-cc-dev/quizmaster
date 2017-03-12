@@ -155,6 +155,9 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $qScoringRevision = reset( $qRevisions );
       $qRevisionId = $qScoringRevision->ID;
 
+      var_dump(158);
+      var_dump( $v['time'] );
+
       $s = new QuizMaster_Model_ScoreQuestion();
       $s->setQuestionId( $qRevisionId );
       $s->setQuestionIdUnrevised( $id );
@@ -163,7 +166,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $s->setCorrectCount($v['correct'] ? 1 : 0);
       $s->setIncorrectCount($v['correct'] ? 0 : 1);
       $s->setPoints($v['points']);
-      $s->setQuestionTime($avgTime === null ? $v['time'] : $avgTime);
+      $s->setQuestionTime( $v['time'] );
       $s->setAnswerData(isset($v['data']) ? $v['data'] : null);
 
       $values[] = $s;
