@@ -775,7 +775,7 @@ span.quizMaster_catPercent {
   clear:both;
 }
 
-[class*='.quizmaster-col-'] {
+[class*='quizmaster-col-'] {
   float: left;
   min-height: 1px;
   width: 8.33%;
@@ -819,4 +819,9 @@ span.quizMaster_catPercent {
   width: 100%;
 }
 
+}
+
+
+.bgm-bluegray {
+    background-color: #607D8B!important
 }

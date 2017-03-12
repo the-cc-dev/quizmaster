@@ -27,31 +27,42 @@ get_header(); ?>
 				<h2>User: <?php print $scoreModel->getUserName(); ?></h2>
 			</div>
 
+			<div class="quizmaster-container">
+				<div class="quizmaster-row">
 
-			<div class="quizmaster-score-stats mini-charts">
+					<div class="quizmaster-col-6">
 
-				<div class="quizmaster-score-key-stat">
-
-					<div class="mini-charts-item bgm-bluegray">
-			      <div class="clearfix">
-
-		          <div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
-		          <div class="count">
-		            <h3>Questions Corrent/Incorrect</h3>
-		            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
-		          </div>
-
-							<div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
-							<div class="count">
-								<h3>Questions Corrent/Incorrect</h3>
-								<h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
-							</div>
-
+						<div class="mini-charts-item bgm-bluegray">
+				      <div class="clearfix">
+								<div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+			          <div class="count">
+			            <h3>Corrent Questions</h3>
+			            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
+			          </div>
+				      </div>
 			      </div>
-		      </div>
-				</div>
 
+					</div>
+
+					<div class="quizmaster-col-6">
+
+						<div class="mini-charts-item bgm-bluegray">
+				      <div class="clearfix">
+			          <div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+			          <div class="count">
+			            <h3>Questions Corrent/Incorrect</h3>
+			            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
+			          </div>
+				      </div>
+			      </div>
+
+					</div>
+				</div>
 			</div>
+
+
+
+
 
 <div class="dash-widgets">
 
