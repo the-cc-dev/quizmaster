@@ -11,7 +11,7 @@ class QuizMaster_Controller_Admin {
       $this->_ajax->init();
 
       // register the admin menu
-      add_action('admin_menu', array($this, 'register_page'));
+      add_action('admin_menu', array($this, 'addMenuItems'));
 
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
@@ -71,8 +71,7 @@ class QuizMaster_Controller_Admin {
         $this->localizeScript();
     }
 
-    public function register_page()
-    {
+    public function addMenuItems() {
         $pages = array();
 
         $pages[] = add_menu_page(
@@ -84,6 +83,7 @@ class QuizMaster_Controller_Admin {
           'dashicons-welcome-learn-more'
         );
 
+        do_action( 'quizmaster_add_menu_item', array('quizmaster-categories-tags') );
         $pages[] = add_submenu_page(
           'quizMaster',
           __('Categories & Tags', 'quizmaster'),
@@ -92,13 +92,14 @@ class QuizMaster_Controller_Admin {
           'quizmaster-categories-tags',
           array($this, 'route'));
 
-          $pages[] = add_submenu_page(
-            'quizMaster',
-            __('Help & Support', 'quizmaster'),
-            __('Help & Support', 'quizmaster'),
-            'quizmaster_manage_settings',
-            'quizmaster-support',
-            array($this, 'route'));
+        do_action( 'quizmaster_add_menu_item', array('quizmaster-support') );
+        $pages[] = add_submenu_page(
+          'quizMaster',
+          __('Help & Support', 'quizmaster'),
+          __('Help & Support', 'quizmaster'),
+          'quizmaster_manage_settings',
+          'quizmaster-support',
+          array($this, 'route'));
 
         foreach ($pages as $p) {
           add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));
@@ -164,6 +165,6 @@ class QuizMaster_Controller_Admin {
           $c->route();
         }
       }
-      
+
     }
 }
