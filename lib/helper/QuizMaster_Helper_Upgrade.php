@@ -1,34 +1,33 @@
 <?php
 
-class QuizMaster_Helper_Upgrade
-{
+class QuizMaster_Helper_Upgrade {
 
-    public static function upgrade()
-    {
+    public static function upgrade() {
 
-        QuizMaster_Helper_Upgrade::updateDb();
+      QuizMaster_Helper_Upgrade::updateDb();
 
-        $oldVersion = get_option('quizMaster_version');
+      $oldVersion = get_option('quizMaster_version');
 
-        if ($oldVersion == '0.20') {
-            QuizMaster_Helper_Upgrade::updateV21();
-        }
+      if ($oldVersion == '0.20') {
+          QuizMaster_Helper_Upgrade::updateV21();
+      }
 
-        switch ($oldVersion) {
-          case '0.36':
-            break;
-          default:
-            QuizMaster_Helper_Upgrade::install();
-            break;
-        }
+      switch ($oldVersion) {
+        case '0.36':
+          break;
+        default:
+          QuizMaster_Helper_Upgrade::install();
+          break;
+      }
 
-        if (add_option('quizMaster_version', QUIZMASTER_VERSION) === false) {
-            update_option('quizMaster_version', QUIZMASTER_VERSION);
-        }
+      if (add_option('quizMaster_version', QUIZMASTER_VERSION) === false) {
+          update_option('quizMaster_version', QUIZMASTER_VERSION);
+      }
+
     }
 
-    private static function install()
-    {
+    private static function install() {
+
         $role = get_role('administrator');
 
         $role->add_cap('quizmaster_show');
@@ -40,6 +39,7 @@ class QuizMaster_Helper_Upgrade
         $role->add_cap('quizMaster_import');
         $role->add_cap('quizMaster_export');
         $role->add_cap('quizMaster_change_settings');
+
     }
 
     private static function updateDb() {
@@ -51,8 +51,7 @@ class QuizMaster_Helper_Upgrade
       }
     }
 
-    private static function updateV20()
-    {
+    private static function updateV20() {
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -129,8 +128,8 @@ class QuizMaster_Helper_Upgrade
         }
     }
 
-    public static function deinstall()
-    {
+    public static function deinstall() {
 
     }
+
 }
