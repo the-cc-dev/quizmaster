@@ -12,20 +12,9 @@ class QuizMaster_Controller_Admin
 
       add_action('admin_menu', array($this, 'register_page'));
 
-      add_filter('set-screen-option', array($this, 'setScreenOption'), 10, 3);
-
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
 
-    }
-
-    public function setScreenOption($status, $option, $value)
-    {
-        if (in_array($option, array('quizmaster_quiz_overview_per_page', 'quizmaster_question_overview_per_page'))) {
-            return $value;
-        }
-
-        return $status;
     }
 
     private function localizeScript()
