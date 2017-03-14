@@ -97,42 +97,6 @@ class QuizMaster_Controller_Admin
           'dashicons-welcome-learn-more'
         );
 
-        /*
-
-        add_submenu_page(
-          'quizMaster',
-          'Question Categories',
-          'Question Categories',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_question_category'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Question Tags',
-          'Question Tags',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_question_tag'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Quiz Categories',
-          'Quiz Categories',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_quiz_category'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Quiz Tags',
-          'Quiz Tags',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_quiz_tag'
-        );
-
-        */
-
         $pages[] = add_submenu_page(
           'quizMaster',
           __('Categories & Tags', 'quizmaster'),
