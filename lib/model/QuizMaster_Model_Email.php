@@ -33,13 +33,13 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model
       return $this->_id;
     }
 
-    public function getHeaders() {
+    public function getHeaders($contentType) {
       $headers = array(
         'From: "' . get_bloginfo('name') . '" <'. $this->getFrom() .'>' ,
         'Reply-To: "' . get_bloginfo('name') . '" <' . $this->getFrom() . '>' ,
         'X-Mailer: PHP/' . phpversion() ,
         'MIME-Version: 1.0' ,
-        'Content-type: text/html; charset=iso-8859-1' ,
+        'Content-type: '.$contentType.'; charset=iso-8859-1' ,
       );
       $headers = implode( "\r\n" , $headers );
       return $headers;
