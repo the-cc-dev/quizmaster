@@ -130,58 +130,40 @@ class QuizMaster_Controller_Admin {
         $this->_route(true);
     }
 
-    public function route()
-    {
-        $this->_route();
+    public function route(){
+      $this->_route();
     }
 
-    private function _route($routeAction = false)
-    {
-        $module = isset($_GET['module']) ? $_GET['module'] : 'overallView';
+    private function _route( $routeAction = false ) {
 
-        if (isset($_GET['page'])) {
-            if (preg_match('#quizmaster-(.+)#', trim($_GET['page']), $matches)) {
-                $module = $matches[1];
-            }
+      $module = isset($_GET['module']) ? $_GET['module'] : 'overallView';
+
+      if (isset($_GET['page'])) {
+        if (preg_match('#quizmaster-(.+)#', trim($_GET['page']), $matches)) {
+          $module = $matches[1];
         }
+      }
 
-        $c = null;
+      $c = null;
 
-        switch ($module) {
-            case 'categories-tags':
-                $c = new QuizMaster_Controller_Taxonomies();
-                break;
-            case 'overallView':
-                $c = new QuizMaster_Controller_Quiz();
-                break;
-            case 'question':
-                $c = new QuizMaster_Controller_Question();
-                break;
-            case 'preview':
-                $c = new QuizMaster_Controller_Preview();
-                break;
-            case 'importExport':
-                $c = new QuizMaster_Controller_ImportExport();
-                break;
-            case 'styleManager':
-                $c = new QuizMaster_Controller_StyleManager();
-                break;
-            case 'support':
-                $c = new QuizMaster_Controller_Support();
-                break;
-            case 'info_adaptation':
-                $c = new QuizMaster_Controller_InfoAdaptation();
-                break;
+      switch ($module) {
+        case 'question':
+          $c = new QuizMaster_Controller_Question();
+          break;
+        case 'support':
+          $c = new QuizMaster_Controller_Support();
+          break;
+      }
+
+      if ($c !== null) {
+        if ($routeAction) {
+          if (method_exists($c, 'routeAction')) {
+            $c->routeAction();
+          }
+        } else {
+          $c->route();
         }
-
-        if ($c !== null) {
-            if ($routeAction) {
-                if (method_exists($c, 'routeAction')) {
-                    $c->routeAction();
-                }
-            } else {
-                $c->route();
-            }
-        }
+      }
+      
     }
 }
