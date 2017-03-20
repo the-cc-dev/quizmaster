@@ -83,7 +83,7 @@ class QuizMaster_Controller_Admin {
           'dashicons-welcome-learn-more'
         );
 
-        do_action( 'quizmaster_add_menu_item', array('quizmaster-categories-tags') );
+        do_action( 'quizmaster_add_menu_item', 'quizmaster-categories-tags' );
         $pages[] = add_submenu_page(
           'quizMaster',
           __('Categories & Tags', 'quizmaster'),
@@ -92,7 +92,7 @@ class QuizMaster_Controller_Admin {
           'quizmaster-categories-tags',
           array($this, 'route'));
 
-        do_action( 'quizmaster_add_menu_item', array('quizmaster-support') );
+        do_action( 'quizmaster_add_menu_item', 'quizmaster-support' );
         $pages[] = add_submenu_page(
           'quizMaster',
           __('Help & Support', 'quizmaster'),
@@ -148,11 +148,11 @@ class QuizMaster_Controller_Admin {
       $c = null;
 
       switch ($module) {
-        case 'question':
-          $c = new QuizMaster_Controller_Question();
-          break;
         case 'support':
           $c = new QuizMaster_Controller_Support();
+          break;
+        case 'categories-tags':
+          $c = new QuizMaster_Controller_Taxonomies();
           break;
       }
 

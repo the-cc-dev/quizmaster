@@ -661,4 +661,16 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       return $fields;
     }
 
+    /**
+     * Save the current quiz object. Must be fully-formed, with certain required properties set
+     * @return QuizMaster_Model_Quiz saved quiz object
+     */
+    public function save() {
+
+    }
+
+    public function fields() {
+      
+    }
+
 }
