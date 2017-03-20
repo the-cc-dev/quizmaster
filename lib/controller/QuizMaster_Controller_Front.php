@@ -129,7 +129,6 @@ class QuizMaster_Controller_Front {
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
-        $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
         $maxQuestion = false;
@@ -187,7 +186,6 @@ class QuizMaster_Controller_Front {
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
         $categoryMapper = new QuizMaster_Model_CategoryMapper();
-        $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
 
@@ -214,7 +212,6 @@ class QuizMaster_Controller_Front {
         $view->quiz = $quiz;
         $view->question = $question;
         $view->category = $categoryMapper->fetchByQuiz( $quiz->getId() );
-        $view->forms = $formMapper->fetch($quiz->getId());
 
         return json_encode($view->getQuizData());
     }
