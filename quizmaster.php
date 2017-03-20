@@ -950,3 +950,34 @@ function quizmasterTeacherDashboard() {
   remove_menu_page('edit-comments.php'); // Comments
 
 }
+
+/* Make QuizMaster admin menu item active for different taxonomies under Category & Tags */
+add_filter( 'parent_file', 'qm_parent_file' ); 
+function qm_parent_file( $parent_file ){ 
+    /* Get current screen */
+    global $current_screen, $self;
+
+    if ( 'edit-tags'==$current_screen->base && in_array( $current_screen->taxonomy, array( 'quizmaster_quiz_category', 'quizmaster_quiz_tag','quizmaster_question_category','quizmaster_question_tag' ) ) ) {
+        $parent_file = 'quizMaster';
+    }
+ 
+    return $parent_file;
+}
+
+
+/**
+ * Fix Sub Menu Item Highlights for different taxonomies under Category & Tags
+ */
+add_filter( 'submenu_file', 'qm_submenu_file' );
+function qm_submenu_file( $submenu_file ){
+ 
+    /* Get current screen */
+    global $current_screen, $self;
+    //$screen = get_current_screen();
+ 
+    if ( 'edit-tags'==$current_screen->base && in_array( $current_screen->taxonomy, array( 'quizmaster_quiz_category', 'quizmaster_quiz_tag','quizmaster_question_category','quizmaster_question_tag' ) )) {
+        $submenu_file = 'quizmaster-categories-tags';
+    }
+ 
+    return $submenu_file;
+}
