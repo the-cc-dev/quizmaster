@@ -4,10 +4,8 @@
  * @property QuizMaster_Model_Quiz quiz
  * @property QuizMaster_Model_Question[] question
  * @property QuizMaster_Model_Category[] category
- * @property QuizMaster_Model_Form[] forms
  */
-class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
-{
+class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     public $_clozeTemp = array();
     public $_assessmetTemp = array();
     public $_buttonNames = array();
@@ -56,7 +54,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
       $this->loadButtonNames();
       $this->question_count = count($this->question);
       $this->result = $this->quiz->getResultText();
-      $this->preview = $preview;
 
       if (!$this->quiz->isResultGradeEnabled()) {
         $this->result = array(
@@ -66,17 +63,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
       }
 
       $this->resultsProzent = json_encode($this->result['prozent']);
-
-      $resultReplace = array();
-      foreach ($this->forms as $form) {
-        /* @var $form QuizMaster_Model_Form */
-        $resultReplace['$form{' . $form->getSort() . '}'] = '<span class="quizMaster_resultForm" data-form_id="' . $form->getFormId() . '"></span>';
-      }
-
-      foreach ($this->result['text'] as &$text) {
-        $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
-      }
-
       return quizmaster_parse_template( 'front-quiz.php', array('view' => $this));
 
     }
@@ -274,123 +260,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         return $a === null ? '' : $a;
     }
 
-    public function showFormBox()
-    {
-        $info = '<div class="quizMaster_invalidate">' . __('You must fill out this field.', 'quizmaster') . '</div>';
-
-        $validateText = array(
-            QuizMaster_Model_Form::FORM_TYPE_NUMBER => __('You must specify a number.', 'quizmaster'),
-            QuizMaster_Model_Form::FORM_TYPE_TEXT => __('You must specify a text.', 'quizmaster'),
-            QuizMaster_Model_Form::FORM_TYPE_EMAIL => __('You must specify an email address.', 'quizmaster'),
-            QuizMaster_Model_Form::FORM_TYPE_DATE => __('You must specify a date.', 'quizmaster')
-        );
-        ?>
-        <div class="quizMaster_forms">
-            <table>
-                <tbody>
-
-                <?php
-                $index = 0;
-                foreach ($this->forms as $form) {
-                    /* @var $form QuizMaster_Model_Form */
-
-                    $id = 'forms_' . $this->quiz->getId() . '_' . $index++;
-                    $name = 'quizMaster_field_' . $form->getFormId();
-                    ?>
-                    <tr>
-                        <td>
-                            <?php
-                            echo '<label for="' . $id . '">';
-                            echo esc_html($form->getFieldname());
-                            echo $form->isRequired() ? '<span class="quizMaster_required">*</span>' : '';
-                            echo '</label>';
-                            ?>
-                        </td>
-                        <td>
-
-                            <?php
-                            switch ($form->getType()) {
-                                case QuizMaster_Model_Form::FORM_TYPE_TEXT:
-                                case QuizMaster_Model_Form::FORM_TYPE_EMAIL:
-                                case QuizMaster_Model_Form::FORM_TYPE_NUMBER:
-                                    echo '<input name="' . $name . '" id="' . $id . '" type="text" ',
-                                        'data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" data-form_id="' . $form->getFormId() . '">';
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_TEXTAREA:
-                                    echo '<textarea rows="5" cols="20" name="' . $name . '" id="' . $id . '" ',
-                                        'data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" data-form_id="' . $form->getFormId() . '"></textarea>';
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_CHECKBOX:
-                                    echo '<input name="' . $name . '" id="' . $id . '" type="checkbox" value="1"',
-                                        'data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" data-form_id="' . $form->getFormId() . '">';
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_DATE:
-                                    echo '<div data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" class="quizMaster_formFields" data-form_id="' . $form->getFormId() . '">';
-                                    echo QuizMaster_Helper_Until::getDatePicker(get_option('date_format', 'j. F Y'),
-                                        $name);
-                                    echo '</div>';
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_RADIO:
-                                    echo '<div data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" class="quizMaster_formFields" data-form_id="' . $form->getFormId() . '">';
-
-                                    if ($form->getData() !== null) {
-                                        foreach ($form->getData() as $data) {
-                                            echo '<label>';
-                                            echo '<input name="' . $name . '" type="radio" value="' . esc_attr($data) . '"> ',
-                                            esc_html($data);
-                                            echo '</label> ';
-                                        }
-                                    }
-
-                                    echo '</div>';
-
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_SELECT:
-                                    if ($form->getData() !== null) {
-                                        echo '<select name="' . $name . '" id="' . $id . '" ',
-                                            'data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" data-form_id="' . $form->getFormId() . '">';
-                                        echo '<option value=""></option>';
-
-                                        foreach ($form->getData() as $data) {
-                                            echo '<option value="' . esc_attr($data) . '">', esc_html($data), '</option>';
-                                        }
-
-                                        echo '</select>';
-                                    }
-                                    break;
-                                case QuizMaster_Model_Form::FORM_TYPE_YES_NO:
-                                    echo '<div data-required="' . (int)$form->isRequired() . '" data-type="' . $form->getType() . '" class="quizMaster_formFields" data-form_id="' . $form->getFormId() . '">';
-                                    echo '<label>';
-                                    echo '<input name="' . $name . '" type="radio" value="1"> ',
-                                    __('Yes', 'quizmaster');
-                                    echo '</label> ';
-
-                                    echo '<label>';
-                                    echo '<input name="' . $name . '" type="radio" value="0"> ',
-                                    __('No', 'quizmaster');
-                                    echo '</label> ';
-                                    echo '</div>';
-                                    break;
-                            }
-
-                            if (isset($validateText[$form->getType()])) {
-                                echo '<div class="quizMaster_invalidate">' . $validateText[$form->getType()] . '</div>';
-                            } else {
-                                echo '<div class="quizMaster_invalidate">' . __('You must fill out this field.',
-                                        'quizmaster') . '</div>';
-                            }
-                            ?>
-                        </td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
-
-        </div>
-
-        <?php
-    }
-
     public function showLockBox()
     {
         ?>
@@ -457,7 +326,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
                 ?>
                 <h4 class="quizMaster_header"><?php _e('Information', 'quizmaster'); ?></h4>
                 <?php
-                $this->showFormBox();
             }
 
             ?>
@@ -613,16 +481,18 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
 
                 <div style="margin-top: 10px;">
                     <ol>
-                        <?php foreach ($this->category as $cat) {
-                            if (!$cat->getCategoryId()) {
-                                $cat->setCategoryName(__('Not categorized', 'quizmaster'));
-                            }
-                            ?>
-                            <li data-category_id="<?php echo $cat->getCategoryId(); ?>">
-                                <span class="quizMaster_catName"><?php echo $cat->getCategoryName(); ?></span>
-                                <span class="quizMaster_catPercent">0%</span>
-                            </li>
-                        <?php } ?>
+
+                      <li data-category_id="0">
+                        <span class="quizMaster_catName"><?php print __('Uncategorized', 'quizmaster') ?></span>
+                        <span class="quizMaster_catPercent">0%</span>
+                      </li>
+
+                      <?php foreach ( $this->category as $catId ) { ?>
+                          <li data-category_id="<?php echo $catId; ?>">
+                            <span class="quizMaster_catName"><?php echo get_term( $catId )->name; ?></span>
+                            <span class="quizMaster_catPercent">0%</span>
+                          </li>
+                      <?php } ?>
                     </ol>
                 </div>
             </div>
@@ -652,7 +522,8 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
         <?php
     }
 
-    public function showQuizBox($questionCount) {
+    public function showQuizBox( $questionCount ) {
+
       quizmaster_get_template('quiz-question-item.php',
         array(
           'view'          => $this,
@@ -662,10 +533,15 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
 
       $globalPoints = $this->setGlobalPoints( $this->question );
       $json = $this->setQuizJson( $this->question );
-      return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
+
+      $catPoints = $this->quiz->fetchQuestionCategoryPoints();
+
+      return array( 'globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => $catPoints );
+
     }
 
     public function setGlobalPoints( $questions ) {
+      $globalPoints = 0;
       foreach ($questions as $question) {
         $answerArray = $question->getAnswerData();
         $globalPoints += $question->getPoints();

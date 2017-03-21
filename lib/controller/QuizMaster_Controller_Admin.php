@@ -1,69 +1,56 @@
 <?php
 
-class QuizMaster_Controller_Admin
-{
+class QuizMaster_Controller_Admin {
 
     protected $_ajax;
 
     public function __construct() {
 
+      // init ajax handlers
       $this->_ajax = new QuizMaster_Controller_Ajax();
       $this->_ajax->init();
 
-      add_action('admin_menu', array($this, 'register_page'));
-
-      add_filter('set-screen-option', array($this, 'setScreenOption'), 10, 3);
+      // register the admin menu
+      add_action('admin_menu', array($this, 'addMenuItems'));
 
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
 
     }
 
-    public function setScreenOption($status, $option, $value)
-    {
-        if (in_array($option, array('quizmaster_quiz_overview_per_page', 'quizmaster_question_overview_per_page'))) {
-            return $value;
-        }
-
-        return $status;
-    }
-
-    private function localizeScript()
-    {
+    private function localizeScript() {
         global $wp_locale;
 
         $isRtl = isset($wp_locale->is_rtl) ? $wp_locale->is_rtl : false;
 
         $translation_array = array(
-            'delete_msg' => __('Do you really want to delete the quiz/question?', 'quizmaster'),
-            'no_title_msg' => __('Title is not filled!', 'quizmaster'),
-            'no_question_msg' => __('No question deposited!', 'quizmaster'),
-            'no_correct_msg' => __('Correct answer was not selected!', 'quizmaster'),
-            'no_answer_msg' => __('No answer deposited!', 'quizmaster'),
-            'no_quiz_start_msg' => __('No quiz description filled!', 'quizmaster'),
-            'fail_grade_result' => __('The percent values in result text are incorrect.', 'quizmaster'),
-            'no_nummber_points' => __('No number in the field "Points" or less than 1', 'quizmaster'),
-            'no_nummber_points_new' => __('No number in the field "Points" or less than 0', 'quizmaster'),
-            'no_selected_quiz' => __('No quiz selected', 'quizmaster'),
-            'no_data_available' => __('No data available', 'quizmaster'),
-            'no_sort_element_criterion' => __('No sort element in the criterion', 'quizmaster'),
-            'dif_points' => __('"Different points for every answer" is not possible at "Free" choice', 'quizmaster'),
-            'category_no_name' => __('You must specify a name.', 'quizmaster'),
-            'confirm_delete_entry' => __('This entry should really be deleted?', 'quizmaster'),
-            'not_all_fields_completed' => __('Not all fields completed.', 'quizmaster'),
-            'temploate_no_name' => __('You must specify a template name.', 'quizmaster'),
-            'closeText' => __('Close', 'quizmaster'),
-            'currentText' => __('Today', 'quizmaster'),
-            'monthNames' => array_values($wp_locale->month),
-            'monthNamesShort' => array_values($wp_locale->month_abbrev),
-            'dayNames' => array_values($wp_locale->weekday),
-            'dayNamesShort' => array_values($wp_locale->weekday_abbrev),
-            'dayNamesMin' => array_values($wp_locale->weekday_initial),
-//			'dateFormat'        => QuizMaster_Helper_Until::convertPHPDateFormatToJS(get_option('date_format', 'm/d/Y')),
-            //e.g. "9 de setembro de 2014" -> change to "hard" dateformat
-            'dateFormat' => 'mm/dd/yy',
-            'firstDay' => get_option('start_of_week'),
-            'isRTL' => $isRtl
+          'delete_msg' => __('Do you really want to delete the quiz/question?', 'quizmaster'),
+          'no_title_msg' => __('Title is not filled!', 'quizmaster'),
+          'no_question_msg' => __('No question deposited!', 'quizmaster'),
+          'no_correct_msg' => __('Correct answer was not selected!', 'quizmaster'),
+          'no_answer_msg' => __('No answer deposited!', 'quizmaster'),
+          'no_quiz_start_msg' => __('No quiz description filled!', 'quizmaster'),
+          'fail_grade_result' => __('The percent values in result text are incorrect.', 'quizmaster'),
+          'no_nummber_points' => __('No number in the field "Points" or less than 1', 'quizmaster'),
+          'no_nummber_points_new' => __('No number in the field "Points" or less than 0', 'quizmaster'),
+          'no_selected_quiz' => __('No quiz selected', 'quizmaster'),
+          'no_data_available' => __('No data available', 'quizmaster'),
+          'no_sort_element_criterion' => __('No sort element in the criterion', 'quizmaster'),
+          'dif_points' => __('"Different points for every answer" is not possible at "Free" choice', 'quizmaster'),
+          'category_no_name' => __('You must specify a name.', 'quizmaster'),
+          'confirm_delete_entry' => __('This entry should really be deleted?', 'quizmaster'),
+          'not_all_fields_completed' => __('Not all fields completed.', 'quizmaster'),
+          'temploate_no_name' => __('You must specify a template name.', 'quizmaster'),
+          'closeText' => __('Close', 'quizmaster'),
+          'currentText' => __('Today', 'quizmaster'),
+          'monthNames' => array_values($wp_locale->month),
+          'monthNamesShort' => array_values($wp_locale->month_abbrev),
+          'dayNames' => array_values($wp_locale->weekday),
+          'dayNamesShort' => array_values($wp_locale->weekday_abbrev),
+          'dayNamesMin' => array_values($wp_locale->weekday_initial),
+          'dateFormat' => 'mm/dd/yy',
+          'firstDay' => get_option('start_of_week'),
+          'isRTL' => $isRtl
         );
 
         wp_localize_script('quizMaster_admin_javascript', 'quizMasterLocalize', $translation_array);
@@ -84,8 +71,7 @@ class QuizMaster_Controller_Admin
         $this->localizeScript();
     }
 
-    public function register_page()
-    {
+    public function addMenuItems() {
         $pages = array();
 
         $pages[] = add_menu_page(
@@ -97,42 +83,7 @@ class QuizMaster_Controller_Admin
           'dashicons-welcome-learn-more'
         );
 
-        /*
-
-        add_submenu_page(
-          'quizMaster',
-          'Question Categories',
-          'Question Categories',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_question_category'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Question Tags',
-          'Question Tags',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_question_tag'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Quiz Categories',
-          'Quiz Categories',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_quiz_category'
-        );
-
-        add_submenu_page(
-          'quizMaster',
-          'Quiz Tags',
-          'Quiz Tags',
-          'manage_options',
-          'edit-tags.php?taxonomy=quizmaster_quiz_tag'
-        );
-
-        */
-
+        do_action( 'quizmaster_add_menu_item', 'quizmaster-categories-tags' );
         $pages[] = add_submenu_page(
           'quizMaster',
           __('Categories & Tags', 'quizmaster'),
@@ -141,13 +92,14 @@ class QuizMaster_Controller_Admin
           'quizmaster-categories-tags',
           array($this, 'route'));
 
-          $pages[] = add_submenu_page(
-            'quizMaster',
-            __('Help & Support', 'quizmaster'),
-            __('Help & Support', 'quizmaster'),
-            'quizmaster_manage_settings',
-            'quizmaster-support',
-            array($this, 'route'));
+        do_action( 'quizmaster_add_menu_item', 'quizmaster-support' );
+        $pages[] = add_submenu_page(
+          'quizMaster',
+          __('Help & Support', 'quizmaster'),
+          __('Help & Support', 'quizmaster'),
+          'quizmaster_manage_settings',
+          'quizmaster-support',
+          array($this, 'route'));
 
         foreach ($pages as $p) {
           add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));
@@ -155,21 +107,20 @@ class QuizMaster_Controller_Admin
         }
     }
 
-    public function routeLoadAction()
-    {
+    public function routeLoadAction() {
+
+        // screen handling
         $screen = get_current_screen();
-
         if (!empty($screen)) {
-            // Workaround for wp_ajax_hidden_columns() with sanitize_key()
-            $name = strtolower($screen->id);
+          // Workaround for wp_ajax_hidden_columns() with sanitize_key()
+          $name = strtolower($screen->id);
 
-            if (!empty($_GET['module'])) {
-                $name .= '_' . strtolower($_GET['module']);
-            }
+          if (!empty($_GET['module'])) {
+              $name .= '_' . strtolower($_GET['module']);
+          }
 
-            set_current_screen($name);
-
-            $screen = get_current_screen();
+          set_current_screen($name);
+          $screen = get_current_screen();
         }
 
         $helperView = new QuizMaster_View_GlobalHelperTabs();
@@ -180,58 +131,40 @@ class QuizMaster_Controller_Admin
         $this->_route(true);
     }
 
-    public function route()
-    {
-        $this->_route();
+    public function route(){
+      $this->_route();
     }
 
-    private function _route($routeAction = false)
-    {
-        $module = isset($_GET['module']) ? $_GET['module'] : 'overallView';
+    private function _route( $routeAction = false ) {
 
-        if (isset($_GET['page'])) {
-            if (preg_match('#quizmaster-(.+)#', trim($_GET['page']), $matches)) {
-                $module = $matches[1];
-            }
+      $module = isset($_GET['module']) ? $_GET['module'] : 'overallView';
+
+      if (isset($_GET['page'])) {
+        if (preg_match('#quizmaster-(.+)#', trim($_GET['page']), $matches)) {
+          $module = $matches[1];
         }
+      }
 
-        $c = null;
+      $c = null;
 
-        switch ($module) {
-            case 'categories-tags':
-                $c = new QuizMaster_Controller_Taxonomies();
-                break;
-            case 'overallView':
-                $c = new QuizMaster_Controller_Quiz();
-                break;
-            case 'question':
-                $c = new QuizMaster_Controller_Question();
-                break;
-            case 'preview':
-                $c = new QuizMaster_Controller_Preview();
-                break;
-            case 'importExport':
-                $c = new QuizMaster_Controller_ImportExport();
-                break;
-            case 'styleManager':
-                $c = new QuizMaster_Controller_StyleManager();
-                break;
-            case 'support':
-                $c = new QuizMaster_Controller_Support();
-                break;
-            case 'info_adaptation':
-                $c = new QuizMaster_Controller_InfoAdaptation();
-                break;
+      switch ($module) {
+        case 'support':
+          $c = new QuizMaster_Controller_Support();
+          break;
+        case 'categories-tags':
+          $c = new QuizMaster_Controller_Taxonomies();
+          break;
+      }
+
+      if ($c !== null) {
+        if ($routeAction) {
+          if (method_exists($c, 'routeAction')) {
+            $c->routeAction();
+          }
+        } else {
+          $c->route();
         }
+      }
 
-        if ($c !== null) {
-            if ($routeAction) {
-                if (method_exists($c, 'routeAction')) {
-                    $c->routeAction();
-                }
-            } else {
-                $c->route();
-            }
-        }
     }
 }

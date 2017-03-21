@@ -185,7 +185,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
         $lockMapper = new QuizMaster_Model_LockMapper();
         $quizMapper = new QuizMaster_Model_QuizMapper();
-        $formMapper = new QuizMaster_Model_FormMapper();
 
         $is100P = $data['results']['comp']['result'] == 100;
 
@@ -194,8 +193,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         if ($quiz === null || $quiz->getId() <= 0) {
           return json_encode(array());
         }
-
-        $forms = $formMapper->fetch($quiz->getId());
 
         $ctr->setResultCookie($quiz);
 

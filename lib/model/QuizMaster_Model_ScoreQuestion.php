@@ -2,7 +2,6 @@
 
 class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
-  protected $_scoreID = 0;
   protected $_questionId = 0; // question current revision
   protected $_questionIdUnrevised = 0; // question parent id (not the current revision)
   protected $_correctCount = 0;
@@ -15,7 +14,6 @@ class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
   public function outputArray() {
     return array(
-      'scoreId'             => $this->_scoreId,
       'questionId'          => $this->_questionId,
       'questionIdUnrevised' => $this->_questionIdUnrevised,
       'correctCount'        => $this->_correctCount,
@@ -36,8 +34,8 @@ class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
     return $this->_questionId;
   }
 
-  public function setQuestionIdUnrevised($_questionId) {
-    $this->_questionIdUnrevised = (int)$_questionIdUnrevised;
+  public function setQuestionIdUnrevised( $_questionIdUnrevised ) {
+    $this->_questionIdUnrevised = (int) $_questionIdUnrevised;
   }
 
   public function getQuestionIdUnrevised() {

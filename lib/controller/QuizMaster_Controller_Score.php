@@ -25,8 +25,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $lockIp = $this->getIp();
     $userId = get_current_user_id();
 
-    var_dump(28);
-
     if ($lockIp === false) {
       return false;
     }
@@ -36,15 +34,11 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $quiz = $quizMapper->fetch($quizId);
     }
 
-    var_dump(37);
-
     if (!$quiz->isStatisticsOn()) {
       return false;
     }
 
     $scores = $this->makeScoreList($quizId, $results, $quiz->getQuizModus());
-
-    var_dump($scores);
 
     if ($scores === false) {
       return false;
@@ -163,7 +157,7 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $s->setCorrectCount($v['correct'] ? 1 : 0);
       $s->setIncorrectCount($v['correct'] ? 0 : 1);
       $s->setPoints($v['points']);
-      $s->setQuestionTime($avgTime === null ? $v['time'] : $avgTime);
+      $s->setQuestionTime( $v['time'] );
       $s->setAnswerData(isset($v['data']) ? $v['data'] : null);
 
       $values[] = $s;

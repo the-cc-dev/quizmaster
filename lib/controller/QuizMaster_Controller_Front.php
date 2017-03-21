@@ -1,7 +1,6 @@
 <?php
 
-class QuizMaster_Controller_Front
-{
+class QuizMaster_Controller_Front {
 
     /**
      * @var QuizMaster_Model_GlobalSettings
@@ -13,7 +12,7 @@ class QuizMaster_Controller_Front
       add_action('wp_enqueue_scripts', array($this, 'loadDefaultScripts'));
 
       /* add shortcodes */
-      add_shortcode('QuizMaster', array($this, 'shortcode'));
+      add_shortcode('quizmaster', array($this, 'shortcode'));
       add_shortcode('quizmaster_student_report', array($this, 'studentReportShortcode'));
 
       // init controller email
@@ -47,68 +46,67 @@ class QuizMaster_Controller_Front
 
     }
 
-    public function loadDefaultScripts()
-    {
-        wp_enqueue_script('jquery');
+    public function loadDefaultScripts() {
+      wp_enqueue_script('jquery');
 
-        $data = array(
-            'src' => plugins_url('css/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
-            'deps' => array(),
-            'ver' => QUIZMASTER_VERSION,
-        );
+      $data = array(
+          'src' => plugins_url('css/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
+          'deps' => array(),
+          'ver' => QUIZMASTER_VERSION,
+      );
 
-        $data = apply_filters('quizMaster_front_style', $data);
+      $data = apply_filters('quizMaster_front_style', $data);
 
-        wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
+      wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
 
-        wp_enqueue_script('jquery-datatables',
-          plugins_url('js/datatables/jquery.dataTables.min.js', QUIZMASTER_FILE),
-          array(),
-          QUIZMASTER_VERSION
-        );
+      wp_enqueue_script('jquery-datatables',
+        plugins_url('js/datatables/jquery.dataTables.min.js', QUIZMASTER_FILE),
+        array(),
+        QUIZMASTER_VERSION
+      );
 
-        wp_enqueue_style('jquery-datatables-style',
-          plugins_url('js/datatables/jquery.dataTables.min.css', QUIZMASTER_FILE),
-          array(),
-          QUIZMASTER_VERSION
-        );
+      wp_enqueue_style('jquery-datatables-style',
+        plugins_url('js/datatables/jquery.dataTables.min.css', QUIZMASTER_FILE),
+        array(),
+        QUIZMASTER_VERSION
+      );
 
-        wp_enqueue_script('jquery-easy-pie-chart',
-          plugins_url('js/jquery.easypiechart.min.js', QUIZMASTER_FILE),
-          array(),
-          QUIZMASTER_VERSION
-        );
+      wp_enqueue_script('jquery-easy-pie-chart',
+        plugins_url('js/jquery.easypiechart.min.js', QUIZMASTER_FILE),
+        array(),
+        QUIZMASTER_VERSION
+      );
 
-
-        $this->loadJsScripts(false, true);
+      $this->loadJsScripts(false, true);
 
     }
 
-    private function loadJsScripts($footer = true, $quiz = true)
-    {
-        if ($quiz) {
-            wp_enqueue_script(
-                'quizMaster_front_javascript',
-                plugins_url('js/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
-                array('jquery-ui-sortable'),
-                QUIZMASTER_VERSION,
-                $footer
-            );
+    private function loadJsScripts($footer = true, $quiz = true) {
 
-            wp_localize_script('quizMaster_front_javascript', 'QuizMasterGlobal', array(
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'loadData' => __('Loading', 'quizmaster'),
-                'questionNotSolved' => __('You must answer this question.', 'quizmaster'),
-                'questionsNotSolved' => __('You must answer all questions before you can completed the quiz.',
-                    'quizmaster'),
-                'fieldsNotFilled' => __('All fields have to be filled.', 'quizmaster')
-            ));
-        }
+      if ($quiz) {
+
+        wp_enqueue_script(
+            'quizMaster_front_javascript',
+            plugins_url('js/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
+            array('jquery-ui-sortable'),
+            QUIZMASTER_VERSION,
+            $footer
+        );
+
+        wp_localize_script('quizMaster_front_javascript', 'QuizMasterGlobal', array(
+          'ajaxurl' => admin_url('admin-ajax.php'),
+          'loadData' => __('Loading', 'quizmaster'),
+          'questionNotSolved' => __('You must answer this question.', 'quizmaster'),
+          'questionsNotSolved' => __('You must answer all questions before you can completed the quiz.', 'quizmaster'),
+          'fieldsNotFilled' => __('All fields have to be filled.', 'quizmaster')
+        ));
+
+      }
 
     }
 
     public function shortcode( $attr ) {
-      
+
         $id = $attr[0];
         $content = '';
 
@@ -131,7 +129,6 @@ class QuizMaster_Controller_Front
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
-        $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
         $maxQuestion = false;
@@ -163,8 +160,7 @@ class QuizMaster_Controller_Front
 
         $view->quiz = $quiz;
         $view->question = $question;
-        $view->category = array();
-        $view->forms = $formMapper->fetch($quiz->getId());
+        $view->category = $quiz->fetchQuestionCategoriesByQuiz();
 
         $view = apply_filters( 'quizmaster_view_before_render', $view );
         if ($maxQuestion) {
@@ -181,16 +177,13 @@ class QuizMaster_Controller_Front
 
     }
 
-    public static function ajaxQuizLoadData($data)
-    {
+    public static function ajaxQuizLoadData($data) {
         $id = $data['quizId'];
 
         $view = new QuizMaster_View_FrontQuiz();
 
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
-        $categoryMapper = new QuizMaster_Model_CategoryMapper();
-        $formMapper = new QuizMaster_Model_FormMapper();
 
         $quiz = $quizMapper->fetch($id);
 
@@ -216,8 +209,7 @@ class QuizMaster_Controller_Front
 
         $view->quiz = $quiz;
         $view->question = $question;
-        $view->category = $categoryMapper->fetchByQuiz($quiz->getId());
-        $view->forms = $formMapper->fetch($quiz->getId());
+        $view->category = $quiz->fetchQuestionCategoriesByQuiz();
 
         return json_encode($view->getQuizData());
     }

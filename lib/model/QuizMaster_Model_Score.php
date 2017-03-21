@@ -109,8 +109,8 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
         break;
       case "json":
         $scores = array();
-        foreach( $this->_scores as $score ) {
-          $scores[] = $score->outputArray();
+        foreach( $this->_scores as $scoreQuestion ) {
+          $scores[] = $scoreQuestion->outputArray();
         }
         return json_encode( $scores );
         break;
@@ -189,6 +189,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
    * Override to alter the fields before setting model data
    */
   public function processFieldsDuringModelSet( $fields ) {
+
     $fields['quiz_id'] = $fields['quiz'];
     $fields['user_id'] = $fields['user'];
     $fields['scores'] = $this->loadScoreQuestionsFromJson( $fields['scores'] );

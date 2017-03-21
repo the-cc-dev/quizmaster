@@ -1343,10 +1343,6 @@ quizMasterReady(function () {
 
                 plugin.methode.sendCompletedQuiz();
 
-                if (bitOptions.isAddAutomatic && toplistData.isUser) {
-                    plugin.methode.addToplist();
-                }
-
                 reviewBox.hide();
 
                 $e.find('.quizMaster_checkPage, .quizMaster_infopage').hide();
@@ -1590,41 +1586,42 @@ quizMasterReady(function () {
                     }
                 }, function (json) {
 
-                    if (json.lock != undefined) {
-                        quizStatus.isLocked = json.lock.is;
+                  if (json.lock != undefined) {
+                    quizStatus.isLocked = json.lock.is;
 
-                        if (json.lock.pre) {
-                            $e.find('input[name="restartQuiz"]').hide();
-                        }
+                    if (json.lock.pre) {
+                      $e.find('input[name="restartQuiz"]').hide();
                     }
+                  }
 
-                    if (json.prerequisite != undefined) {
-                        quizStatus.isPrerequisite = 1;
-                        $e.find('.quizMaster_prerequisite span').text(json.prerequisite);
-                    }
+                  if (json.prerequisite != undefined) {
+                    quizStatus.isPrerequisite = 1;
+                    $e.find('.quizMaster_prerequisite span').text(json.prerequisite);
+                  }
 
-                    if (json.startUserLock != undefined) {
-                      quizStatus.isUserStartLocked = json.startUserLock;
-                    }
+                  if (json.startUserLock != undefined) {
+                    quizStatus.isUserStartLocked = json.startUserLock;
+                  }
 
-                    // quiz access code handling
-                    if (json.startUserLockAccessCode != undefined) {
-                      quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
-                      quizStatus.accessCode = json.accessCode;
-                      $('#quiz_access_code_form').submit( function( e ) {
-                        var codeEntered = $('#access_code').val();
+                  // quiz access code handling
+                  if (json.startUserLockAccessCode != undefined) {
+                    quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
+                    quizStatus.accessCode = json.accessCode;
+                    $('#quiz_access_code_form').submit( function( e ) {
+                      var codeEntered = $('#access_code').val();
 
-                        // process access code
-                        plugin.methode.processAccessCode( codeEntered );
-                        e.preventDefault();
-                      });
-                    }
+                      // process access code
+                      plugin.methode.processAccessCode( codeEntered );
+                      e.preventDefault();
+                    });
+                  }
 
-                    quizStatus.loadLock = 0;
+                  quizStatus.loadLock = 0;
 
-                    if (quizStatus.isQuizStart) {
-                        plugin.methode.startQuiz();
-                    }
+                  if (quizStatus.isQuizStart) {
+                      plugin.methode.startQuiz();
+                  }
+                  
                 });
             },
 
@@ -1656,13 +1653,11 @@ quizMasterReady(function () {
                         quizId: config.quizId
                     }
                 }, function (json) {
-                    if (json.toplist) {
-                        plugin.methode.handleToplistData(json.toplist);
-                    }
 
                     if (json.averageResult != undefined) {
                         plugin.methode.setAverageResult(json.averageResult, true);
                     }
+
                 });
 
             },
@@ -1674,95 +1669,11 @@ quizMasterReady(function () {
                 v.eq(0).css('width', (240 * p / 100) + 'px');
             },
 
-            handleToplistData: function (json) {
-                var $tp = $e.find('.quizMaster_addToplist');
-                var $addBox = $tp.find('.quizMaster_addBox').show().children('div');
-
-                if (json.canAdd) {
-                    $tp.show();
-                    $tp.find('.quizMaster_addToplistMessage').hide();
-                    $tp.find('.quizMaster_toplistButton').show();
-
-                    toplistData.token = json.token;
-                    toplistData.isUser = 0;
-
-                    if (json.userId) {
-                        $addBox.hide();
-                        toplistData.isUser = 1;
-
-                        if (bitOptions.isAddAutomatic) {
-                            $tp.hide();
-                        }
-                    } else {
-                        $addBox.show();
-
-                        var $captcha = $addBox.children().eq(1);
-
-                        if (json.captcha) {
-
-                            $captcha.find('input[name="quizMaster_captchaPrefix"]').val(json.captcha.code);
-                            $captcha.find('.quizMaster_captchaImg').attr('src', json.captcha.img);
-                            $captcha.find('input[name="quizMaster_captcha"]').val('');
-
-                            $captcha.show();
-                        } else {
-                            $captcha.hide();
-                        }
-                    }
-                } else {
-                    $tp.hide();
-                }
-            },
-
             scrollTo: function (e, h) {
                 var x = e.offset().top - 100;
 
                 if (h || (window.pageYOffset || document.body.scrollTop) > x) {
                     $('html,body').animate({scrollTop: x}, 300);
-                }
-            },
-
-            addToplist: function () {
-                if (bitOptions.preview)
-                    return;
-
-                var $addToplistMessage = $e.find('.quizMaster_addToplistMessage').text(QuizMasterGlobal.loadData).show();
-                var $addBox = $e.find('.quizMaster_addBox').hide();
-
-                plugin.methode.ajax({
-                    action: 'quizmaster_admin_ajax',
-                    func: 'addInToplist',
-                    data: {
-                        quizId: config.quizId,
-                        token: toplistData.token,
-                        name: $addBox.find('input[name="quizMaster_toplistName"]').val(),
-                        email: $addBox.find('input[name="quizMaster_toplistEmail"]').val(),
-                        captcha: $addBox.find('input[name="quizMaster_captcha"]').val(),
-                        prefix: $addBox.find('input[name="quizMaster_captchaPrefix"]').val(),
-                        points: results.comp.points,
-                        totalPoints: config.globalPoints
-                    }
-                }, function (json) {
-                    $addToplistMessage.text(json.text);
-
-                    if (json.clear) {
-                        $addBox.hide();
-                        plugin.methode.updateToplist();
-                    } else {
-                        $addBox.show();
-                    }
-
-                    if (json.captcha) {
-                        $addBox.find('.quizMaster_captchaImg').attr('src', json.captcha.img);
-                        $addBox.find('input[name="quizMaster_captchaPrefix"]').val(json.captcha.code);
-                        $addBox.find('input[name="quizMaster_captcha"]').val('');
-                    }
-                });
-            },
-
-            updateToplist: function () {
-                if (typeof(quizMaster_fetchToplist) == "function") {
-                    quizMaster_fetchToplist();
                 }
             },
 
@@ -1878,6 +1789,7 @@ quizMasterReady(function () {
                     plugin.methode.initQuiz();
 
                     if (quizStart)
+                        console.log('quizStart, 1886');
                         plugin.methode.startQuiz(true);
 
                 });
@@ -1963,8 +1875,6 @@ quizMasterReady(function () {
             });
 
             $e.find('input[name="review"]').click(plugin.methode.reviewQuestion);
-
-            $e.find('input[name="quizMaster_toplistAdd"]').click(plugin.methode.addToplist);
 
             $e.find('input[name="quizSummary"]').click(plugin.methode.showQuizSummary);
 

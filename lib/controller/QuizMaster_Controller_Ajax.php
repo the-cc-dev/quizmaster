@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @since 0.23
- */
 class QuizMaster_Controller_Ajax {
 
   private $_adminCallbacks = array();
@@ -50,8 +47,6 @@ class QuizMaster_Controller_Ajax {
       'statisticLoadUser' => array('QuizMaster_Controller_Statistics', 'ajaxLoadStatisticUser'),
       'statisticResetNew' => array('QuizMaster_Controller_Statistics', 'ajaxRestStatistic'),
       'statisticLoadOverviewNew' => array('QuizMaster_Controller_Statistics', 'ajaxLoadStatsticOverviewNew'),
-      'templateEdit' => array('QuizMaster_Controller_Template', 'ajaxEditTemplate'),
-      'templateDelete' => array('QuizMaster_Controller_Template', 'ajaxDeleteTemplate'),
       'quizLoadData' => array('QuizMaster_Controller_Front', 'ajaxQuizLoadData'),
       'loadQuestionsSort' => array('QuizMaster_Controller_Question', 'ajaxLoadQuestionsSort'),
       'questionSaveSort' => array('QuizMaster_Controller_Question', 'ajaxSaveSort'),
