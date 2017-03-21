@@ -675,12 +675,18 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
     public function fetchQuestionCategoriesByQuiz() {
 
+      $categories = array();
+
       // get all questions
       $questionMapper = new QuizMaster_Model_QuestionMapper();
       $questions = $questionMapper->fetchAll( $this->getId() );
 
+      // return early if no questions
+      if( empty( $questions )) {
+        return $categories;
+      }
+
       // get all the terms for each question
-      $categories = array();
       foreach( $questions as $q ) {
         $categories[] = $q->getCategoryId();
       }
