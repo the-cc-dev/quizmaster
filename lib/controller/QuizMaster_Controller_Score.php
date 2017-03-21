@@ -25,8 +25,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $lockIp = $this->getIp();
     $userId = get_current_user_id();
 
-    var_dump(28);
-
     if ($lockIp === false) {
       return false;
     }
@@ -36,15 +34,11 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $quiz = $quizMapper->fetch($quizId);
     }
 
-    var_dump(37);
-
     if (!$quiz->isStatisticsOn()) {
       return false;
     }
 
     $scores = $this->makeScoreList($quizId, $results, $quiz->getQuizModus());
-
-    var_dump($scores);
 
     if ($scores === false) {
       return false;
@@ -154,9 +148,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       $qRevisions = wp_get_post_revisions( $id );
       $qScoringRevision = reset( $qRevisions );
       $qRevisionId = $qScoringRevision->ID;
-
-      var_dump(158);
-      var_dump( $v['time'] );
 
       $s = new QuizMaster_Model_ScoreQuestion();
       $s->setQuestionId( $qRevisionId );

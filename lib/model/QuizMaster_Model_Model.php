@@ -7,10 +7,11 @@ class QuizMaster_Model_Model {
      */
     protected $_mapper = null;
 
-    public function __construct($data = null) {
+    public function __construct( $data = false ) {
+      
       if( is_array( $data )) {
         $this->setModelData( $data );
-      } else {
+      } elseif( $data ) {
         $this->setModelByID( $data );
       }
 

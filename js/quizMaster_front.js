@@ -1655,15 +1655,10 @@ quizMasterReady(function () {
                     }
                 }, function (json) {
 
-                  console.log(1662);
-
-                    if (json.toplist) {
-                        plugin.methode.handleToplistData(json.toplist);
-                    }
-
                     if (json.averageResult != undefined) {
                         plugin.methode.setAverageResult(json.averageResult, true);
                     }
+
                 });
 
             },
@@ -1771,13 +1766,8 @@ quizMasterReady(function () {
                     }
                 }, function (json) {
 
-                    console.log(1857);
-
                     config.globalPoints = json.globalPoints;
                     config.catPoints = json.catPoints;
-
-                    console.log( json.catPoints );
-
                     config.json = json.json;
 
                     globalElements.quiz.remove();
