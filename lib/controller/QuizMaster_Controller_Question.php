@@ -247,46 +247,6 @@ class QuizMaster_Controller_Question extends QuizMaster_Controller_Controller
         return max(1, $pagenum);
     }
 
-    public function showAction()
-    {
-        if (!current_user_can('quizmaster_show')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
-        }
-
-        $m = new QuizMaster_Model_QuizMapper();
-        $mm = new QuizMaster_Model_QuestionMapper();
-        $categoryMapper = new QuizMaster_Model_CategoryMapper();
-
-        $view = new QuizMaster_View_QuestionOverall();
-        $view->quiz = $m->fetch($this->_quizId);
-
-        $per_page = (int)get_user_option('quizmaster_question_overview_per_page');
-        if (empty($per_page) || $per_page < 1) {
-            $per_page = 20;
-        }
-
-        $current_page = $this->getCurrentPage();
-        $search = isset($_GET['s']) ? trim($_GET['s']) : '';
-        $orderBy = isset($_GET['orderby']) ? trim($_GET['orderby']) : '';
-        $order = isset($_GET['order']) ? trim($_GET['order']) : '';
-        $offset = ($current_page - 1) * $per_page;
-        $limit = $per_page;
-        $filter = array();
-
-        if (isset($_GET['cat'])) {
-            $filter['cat'] = $_GET['cat'];
-        }
-
-        $result = $mm->fetchTable($this->_quizId, $orderBy, $order, $search, $limit, $offset, $filter);
-
-        $view->questionItems = $result['questions'];
-        $view->questionCount = $result['count'];
-        $view->categoryItems = $categoryMapper->fetchAll(QuizMaster_Model_Category::CATEGORY_TYPE_QUESTION);
-        $view->perPage = $per_page;
-
-        $view->show();
-    }
-
     public static function ajaxSetQuestionMultipleCategories($data)
     {
         if (!current_user_can('quizMaster_edit_quiz')) {

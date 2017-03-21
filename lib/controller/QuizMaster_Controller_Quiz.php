@@ -194,8 +194,6 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
           return json_encode(array());
         }
 
-        $forms = $formMapper->fetch($quiz->getId());
-
         $ctr->setResultCookie($quiz);
 
         if (!$ctr->isPreLockQuiz($quiz)) {

@@ -5,8 +5,7 @@
  * @property QuizMaster_Model_Question[] question
  * @property QuizMaster_Model_Category[] category
  */
-class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
-{
+class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     public $_clozeTemp = array();
     public $_assessmetTemp = array();
     public $_buttonNames = array();
@@ -55,7 +54,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
       $this->loadButtonNames();
       $this->question_count = count($this->question);
       $this->result = $this->quiz->getResultText();
-      $this->preview = $preview;
 
       if (!$this->quiz->isResultGradeEnabled()) {
         $this->result = array(
@@ -65,12 +63,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
       }
 
       $this->resultsProzent = json_encode($this->result['prozent']);
-
-      $resultReplace = array();
-      foreach ($this->result['text'] as &$text) {
-        $text = str_replace(array_keys($resultReplace), $resultReplace, $text);
-      }
-
       return quizmaster_parse_template( 'front-quiz.php', array('view' => $this));
 
     }
@@ -489,16 +481,18 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
 
                 <div style="margin-top: 10px;">
                     <ol>
-                        <?php foreach ($this->category as $cat) {
-                            if (!$cat->getCategoryId()) {
-                                $cat->setCategoryName(__('Not categorized', 'quizmaster'));
-                            }
-                            ?>
-                            <li data-category_id="<?php echo $cat->getCategoryId(); ?>">
-                                <span class="quizMaster_catName"><?php echo $cat->getCategoryName(); ?></span>
-                                <span class="quizMaster_catPercent">0%</span>
-                            </li>
-                        <?php } ?>
+
+                      <li data-category_id="0">
+                        <span class="quizMaster_catName"><?php print __('Uncategorized', 'quizmaster') ?></span>
+                        <span class="quizMaster_catPercent">0%</span>
+                      </li>
+
+                      <?php foreach ( $this->category as $catId ) { ?>
+                          <li data-category_id="<?php echo $catId; ?>">
+                            <span class="quizMaster_catName"><?php echo get_term( $catId )->name; ?></span>
+                            <span class="quizMaster_catPercent">0%</span>
+                          </li>
+                      <?php } ?>
                     </ol>
                 </div>
             </div>
@@ -542,6 +536,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View
     }
 
     public function setGlobalPoints( $questions ) {
+      $globalPoints = 0;
       foreach ($questions as $question) {
         $answerArray = $question->getAnswerData();
         $globalPoints += $question->getPoints();

@@ -670,7 +670,26 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     }
 
     public function fields() {
-      
+
+    }
+
+    public function fetchQuestionCategoriesByQuiz() {
+
+      // get all questions
+      $questionMapper = new QuizMaster_Model_QuestionMapper();
+      $questions = $questionMapper->fetchAll( $this->getId() );
+
+      // get all the terms for each question
+      $categories = array();
+      foreach( $questions as $q ) {
+        $categories[] = $q->getCategoryId();
+      }
+
+      // remove duplicates and reindex array
+      $categories = array_unique( $categories );
+      $categories = array_values( $categories );
+
+      return $categories;
     }
 
 }

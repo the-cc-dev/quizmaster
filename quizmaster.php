@@ -127,7 +127,7 @@ function quizMaster_pluginLoaded() {
  * @param string 	$string $template_path	Path to templates.
  * @param string	$default_path			Default path to template files.
  */
-function quizmaster_parse_template( $template_name, $args = array(), $tempate_path = '', $default_path = '' ) {
+function quizmaster_parse_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
   ob_start();
   quizmaster_get_template( $template_name, $args, $template_path, $default_path );
   $contents = ob_get_contents();
