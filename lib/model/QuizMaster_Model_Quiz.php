@@ -5,16 +5,13 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     const QUIZ_RUN_ONCE_TYPE_ALL = 1;
     const QUIZ_RUN_ONCE_TYPE_ONLY_USER = 2;
     const QUIZ_RUN_ONCE_TYPE_ONLY_ANONYM = 3;
-
     const QUIZ_MODUS_NORMAL = 0;
     const QUIZ_MODUS_BACK_BUTTON = 1;
     const QUIZ_MODUS_CHECK = 2;
     const QUIZ_MODUS_SINGLE = 3;
-
     const QUIZ_EMAIL_NOTE_NONE = 0;
     const QUIZ_EMAIL_NOTE_REG_USER = 1;
     const QUIZ_EMAIL_NOTE_ALL = 2;
-
     const QUIZ_FORM_POSITION_START = 0;
     const QUIZ_FORM_POSITION_END = 1;
 
@@ -696,6 +693,33 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       $categories = array_values( $categories );
 
       return $categories;
+    }
+
+    public function fetchQuestionCategoryPoints() {
+
+      $categoryPoints = array();
+
+      // get all questions
+      $questionMapper = new QuizMaster_Model_QuestionMapper();
+      $questions = $questionMapper->fetchAll( $this->getId() );
+
+      // return early if no questions
+      if( empty( $questions )) {
+        return $categoryPoints;
+      }
+
+      // get all the terms for each question
+      foreach( $questions as $q ) {
+        $catId = $q->getCategoryId();
+        if( array_key_exists( $catId, $categoryPoints )) {
+          $categoryPoints[ $catId ] += $q->getPoints();
+        } else {
+          $categoryPoints[ $catId ] = $q->getPoints();
+        }
+
+      }
+
+      return $categoryPoints;
     }
 
 }

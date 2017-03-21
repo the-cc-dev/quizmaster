@@ -522,7 +522,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         <?php
     }
 
-    public function showQuizBox($questionCount) {
+    public function showQuizBox( $questionCount ) {
 
       quizmaster_get_template('quiz-question-item.php',
         array(
@@ -533,7 +533,10 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
       $globalPoints = $this->setGlobalPoints( $this->question );
       $json = $this->setQuizJson( $this->question );
-      return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
+
+      $catPoints = $this->quiz->fetchQuestionCategoryPoints();
+
+      return array( 'globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => $catPoints );
 
     }
 
