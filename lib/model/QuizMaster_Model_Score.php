@@ -190,8 +190,6 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
    */
   public function processFieldsDuringModelSet( $fields ) {
 
-    var_dump( $fields );
-
     $fields['quiz_id'] = $fields['quiz'];
     $fields['user_id'] = $fields['user'];
     $fields['scores'] = $this->loadScoreQuestionsFromJson( $fields['scores'] );

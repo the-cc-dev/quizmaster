@@ -1586,43 +1586,42 @@ quizMasterReady(function () {
                     }
                 }, function (json) {
 
-                  console.log(1593);
+                  if (json.lock != undefined) {
+                    quizStatus.isLocked = json.lock.is;
 
-                    if (json.lock != undefined) {
-                        quizStatus.isLocked = json.lock.is;
-
-                        if (json.lock.pre) {
-                            $e.find('input[name="restartQuiz"]').hide();
-                        }
+                    if (json.lock.pre) {
+                      $e.find('input[name="restartQuiz"]').hide();
                     }
+                  }
 
-                    if (json.prerequisite != undefined) {
-                        quizStatus.isPrerequisite = 1;
-                        $e.find('.quizMaster_prerequisite span').text(json.prerequisite);
-                    }
+                  if (json.prerequisite != undefined) {
+                    quizStatus.isPrerequisite = 1;
+                    $e.find('.quizMaster_prerequisite span').text(json.prerequisite);
+                  }
 
-                    if (json.startUserLock != undefined) {
-                      quizStatus.isUserStartLocked = json.startUserLock;
-                    }
+                  if (json.startUserLock != undefined) {
+                    quizStatus.isUserStartLocked = json.startUserLock;
+                  }
 
-                    // quiz access code handling
-                    if (json.startUserLockAccessCode != undefined) {
-                      quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
-                      quizStatus.accessCode = json.accessCode;
-                      $('#quiz_access_code_form').submit( function( e ) {
-                        var codeEntered = $('#access_code').val();
+                  // quiz access code handling
+                  if (json.startUserLockAccessCode != undefined) {
+                    quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
+                    quizStatus.accessCode = json.accessCode;
+                    $('#quiz_access_code_form').submit( function( e ) {
+                      var codeEntered = $('#access_code').val();
 
-                        // process access code
-                        plugin.methode.processAccessCode( codeEntered );
-                        e.preventDefault();
-                      });
-                    }
+                      // process access code
+                      plugin.methode.processAccessCode( codeEntered );
+                      e.preventDefault();
+                    });
+                  }
 
-                    quizStatus.loadLock = 0;
+                  quizStatus.loadLock = 0;
 
-                    if (quizStatus.isQuizStart) {
-                        plugin.methode.startQuiz();
-                    }
+                  if (quizStatus.isQuizStart) {
+                      plugin.methode.startQuiz();
+                  }
+                  
                 });
             },
 

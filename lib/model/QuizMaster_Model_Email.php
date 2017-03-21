@@ -1,14 +1,12 @@
 <?php
 
-class QuizMaster_Model_Email extends QuizMaster_Model_Model
-{
-    protected $_id = 0;
+class QuizMaster_Model_Email extends QuizMaster_Model_Model {
 
+    protected $_id = 0;
     protected $_from = '';
     protected $_html = false;
     protected $_message = '';
     protected $_headers = '';
-
     protected $_key = '';
     protected $_enabled = '';
     protected $_trigger = '';
@@ -129,7 +127,6 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model
      * Override to alter the fields before setting model data
      */
     public function processFieldsDuringModelSet( $fields ) {
-      $fields['email_key'] = $fields['qm_email_key'];
       return $fields;
     }
 

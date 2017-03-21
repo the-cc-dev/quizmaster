@@ -117,29 +117,9 @@ class QuizMaster_Controller_Email {
   public function sendEmailCompletedQuiz( $quiz, $score ) {
 
     $trigger = 'quizmaster_completed_quiz';
+    $emailPosts = $this->getEmailsByTrigger( $trigger );
 
-    define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
-    define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
-
-    $posts = get_posts(array(
-    	'numberposts'	=> -1,
-    	'post_type'		=> 'quizmaster_email',
-    	'meta_query'	=> array(
-    		'relation'		=> 'AND',
-    		array(
-    			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
-    			'value'	  	=> $trigger,
-    			'compare' 	=> '=',
-    		),
-    		array(
-    			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
-    			'value'	  	=> '1',
-    			'compare' 	=> '=',
-    		),
-    	),
-    ));
-
-    foreach( $posts as $emailPost ) {
+    foreach( $emailPosts as $emailPost ) {
       $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
       $this->quiz   = $quiz;
       $this->score  = $score;
@@ -152,29 +132,9 @@ class QuizMaster_Controller_Email {
   public function sendEmailCompletedQuiz100Percent( $quiz, $score ) {
 
     $trigger = 'quizmaster_completed_quiz_100_percent';
+    $emailPosts = $this->getEmailsByTrigger( $trigger );
 
-    define( QUIZMASTER_EMAIL_TRIGGER_FIELD, 'qm_email_trigger');
-    define( QUIZMASTER_EMAIL_ENABLED_FIELD, 'qm_email_enabled');
-
-    $posts = get_posts(array(
-    	'numberposts'	=> -1,
-    	'post_type'		=> 'quizmaster_email',
-    	'meta_query'	=> array(
-    		'relation'		=> 'AND',
-    		array(
-    			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
-    			'value'	  	=> $trigger,
-    			'compare' 	=> '=',
-    		),
-    		array(
-    			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
-    			'value'	  	=> '1',
-    			'compare' 	=> '=',
-    		),
-    	),
-    ));
-
-    foreach( $posts as $emailPost ) {
+    foreach( $emailPosts as $emailPost ) {
       $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
       $this->quiz   = $quiz;
       $this->score  = $score;
@@ -191,12 +151,12 @@ class QuizMaster_Controller_Email {
     	'meta_query'	=> array(
     		'relation'		=> 'AND',
     		array(
-    			'key'	 	    => QUIZMASTER_EMAIL_TRIGGER_FIELD,
+    			'key'	 	    => self::QUIZMASTER_EMAIL_TRIGGER_FIELD,
     			'value'	  	=> $trigger,
     			'compare' 	=> '=',
     		),
     		array(
-    			'key'	  	  => QUIZMASTER_EMAIL_ENABLED_FIELD,
+    			'key'	  	  => self::QUIZMASTER_EMAIL_ENABLED_FIELD,
     			'value'	  	=> '1',
     			'compare' 	=> '=',
     		),
