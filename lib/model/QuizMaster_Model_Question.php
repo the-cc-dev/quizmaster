@@ -388,8 +388,12 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       $scoreCategoryID = $fields[ 'score_category' ];
       $scoreCategory = get_term( $scoreCategoryID );
 
-      $fields['category_id'] = $scoreCategoryID;
-      $fields['category_name'] = $scoreCategory->name;
+      if( !is_wp_error($scoreCategory )) {
+
+        $fields['category_id'] = $scoreCategoryID;
+        $fields['category_name'] = $scoreCategory->name;
+
+      }
 
       return $fields;
 
