@@ -306,32 +306,13 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $answerData;
     }
 
-    public function loadAnswerDataSingleChoice( $fields ) {
+    public function loadAnswerDataSingleChoice( $data ) {
 
-      $acfAnswerData = $fields['qmqe_single_choice_answers'];
-      $answerData = array();
-      $acfAnswer = $acfAnswerData[0];
+      // load answer model
+      $aModelName = $this->answerModelName();
+      $aModel = new $aModelName();
+      return $aModel->load( $data );
 
-      // correct answer
-      $rep = 'qmqe_single_correct_answer_repeater';
-      $field = 'qmqe_single_correct_answer';
-      $answer['answer'] = $acfAnswer[ $rep ][0][ $field ];
-      $answer['correct'] = true;
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
-
-      // incorrect answers
-      $rep = 'qmqe_single_incorrect_answer_repeater';
-      $field = 'qmqe_single_incorrect_answer';
-
-      foreach( $acfAnswer[ $rep ] as $ia ) {
-
-        $answer['answer'] = $ia[ $field ];
-        $answer['correct'] = false;
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $answer );
-
-      }
-
-      return $answerData;
     }
 
     private function loadAnswerData() {

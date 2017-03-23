@@ -65,25 +65,15 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
       $qType = $this->questionTypeById( $qID );
       $qModel = $this->questionModelByType( $qType );
 
-
-
       if( $qModel ) {
         $q = new $qModel( $qID );
       } else {
         $q = new QuizMaster_Model_Question( $qID );
       }
 
-      print '<pre>';
-      var_dump( $qType );
-      var_dump( $qModel );
-      var_dump( $q );
-      print '</pre>';
-
       $a[] = $q;
 
     }
-
-    die();
 
     return $a;
   }
