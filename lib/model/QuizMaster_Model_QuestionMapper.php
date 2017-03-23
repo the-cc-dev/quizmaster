@@ -2,46 +2,90 @@
 
 class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
-    public function __construct() {
-      parent::__construct();
+  const QUESTION_TYPE_FIELD = "qmqe_answer_type";
+
+  public function __construct() {
+    parent::__construct();
+  }
+
+  public function save(QuizMaster_Model_Question $question) {
+
+  }
+
+  public function fetch( $id ) {
+    $model = new QuizMaster_Model_Question( $id );
+    return $model;
+  }
+
+  public function questionTypeById( $id ) {
+    $qType = get_field( self::QUESTION_TYPE_FIELD, $id );
+    if( !$qType || !isset( $qType ) ) {
+      return false;
+    }
+    return $qType;
+  }
+
+  public function questionModelByType( $qType ) {
+    $qTypes = array(
+      'single' => 'QuizMaster_Question_SingleChoice',
+    );
+
+    $qTypes = apply_filters('quizmaster_question_type_registry', $qTypes );
+
+    // check if this question type exists in the register
+    if( !array_key_exists( $qType, $qTypes ) ) {
+      return false;
     }
 
-    public function save(QuizMaster_Model_Question $question) {
+    return $qTypes[ $qType ];
+  }
 
+  /**
+   * @param $quizId
+   * @param bool $rand
+   * @param int $max
+   *
+   * @return QuizMaster_Model_Question[]
+   */
+  public function fetchAll( $quizId ) {
+
+    $a = array();
+
+    $quizPost = get_post( $quizId );
+    $quizQuestions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
+
+    if( empty($quizQuestions)) {
+      return false;
     }
 
-    public function fetch( $id ) {
-      $model = new QuizMaster_Model_Question( $id );
-      return $model;
-    }
+    foreach( $quizQuestions as $qq ) {
 
-    /**
-     * @param $quizId
-     * @param bool $rand
-     * @param int $max
-     *
-     * @return QuizMaster_Model_Question[]
-     */
-    public function fetchAll( $quizId ) {
+      $qID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
 
-      $a = array();
+      $qType = $this->questionTypeById( $qID );
+      $qModel = $this->questionModelByType( $qType );
 
-      $quizPost = get_post( $quizId );
-      $quizQuestions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
 
-      if( empty($quizQuestions)) {
-        return false;
+
+      if( $qModel ) {
+        $q = new $qModel( $qID );
+      } else {
+        $q = new QuizMaster_Model_Question( $qID );
       }
 
-      foreach( $quizQuestions as $qq ) {
+      print '<pre>';
+      var_dump( $qType );
+      var_dump( $qModel );
+      var_dump( $q );
+      print '</pre>';
 
-        $quizQuestionID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
-        $q = new QuizMaster_Model_Question( $quizQuestionID );
-        $a[] = $q;
+      $a[] = $q;
 
-      }
-
-      return $a;
     }
+
+    die();
+
+    return $a;
+  }
 
 }

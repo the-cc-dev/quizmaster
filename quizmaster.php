@@ -75,30 +75,36 @@ function quizMaster_autoload($class)
     }
 
     switch ($c[1]) {
-        case 'View':
-            $dir = 'view';
-            break;
-        case 'Model':
-            $dir = 'model';
-            break;
-        case 'Helper':
-            $dir = 'helper';
-            break;
-        case 'Controller':
-            $dir = 'controller';
-            break;
-        case 'Plugin':
-            $dir = 'plugin';
-            break;
-        default:
-            return;
+      case 'View':
+        $dir = 'view';
+        break;
+      case 'Model':
+        $dir = 'model';
+        break;
+      case 'Question':
+        $dir = 'model/question_types';
+        break;
+      case 'Answer':
+        $dir = 'model/answer_types';
+        break;
+      case 'Helper':
+        $dir = 'helper';
+        break;
+      case 'Controller':
+        $dir = 'controller';
+        break;
+      case 'Plugin':
+        $dir = 'plugin';
+        break;
+      default:
+        return;
     }
 
     $classPath = QUIZMASTER_PATH . '/lib/' . $dir . '/' . $class . '.php';
 
     if (file_exists($classPath)) {
-        /** @noinspection PhpIncludeInspection */
-        include_once $classPath;
+      /** @noinspection PhpIncludeInspection */
+      include_once $classPath;
     }
 }
 
@@ -952,15 +958,15 @@ function quizmasterTeacherDashboard() {
 }
 
 /* Make QuizMaster admin menu item active for different taxonomies under Category & Tags */
-add_filter( 'parent_file', 'qm_parent_file' ); 
-function qm_parent_file( $parent_file ){ 
+add_filter( 'parent_file', 'qm_parent_file' );
+function qm_parent_file( $parent_file ){
     /* Get current screen */
     global $current_screen, $self;
 
     if ( 'edit-tags'==$current_screen->base && in_array( $current_screen->taxonomy, array( 'quizmaster_quiz_category', 'quizmaster_quiz_tag','quizmaster_question_category','quizmaster_question_tag' ) ) ) {
         $parent_file = 'quizMaster';
     }
- 
+
     return $parent_file;
 }
 
@@ -970,14 +976,14 @@ function qm_parent_file( $parent_file ){
  */
 add_filter( 'submenu_file', 'qm_submenu_file' );
 function qm_submenu_file( $submenu_file ){
- 
+
     /* Get current screen */
     global $current_screen, $self;
     //$screen = get_current_screen();
- 
+
     if ( 'edit-tags'==$current_screen->base && in_array( $current_screen->taxonomy, array( 'quizmaster_quiz_category', 'quizmaster_quiz_tag','quizmaster_question_category','quizmaster_question_tag' ) )) {
         $submenu_file = 'quizmaster-categories-tags';
     }
- 
+
     return $submenu_file;
 }
