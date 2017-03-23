@@ -48,7 +48,6 @@ class QuizMaster_Controller_Ajax {
       'statisticResetNew' => array('QuizMaster_Controller_Statistics', 'ajaxRestStatistic'),
       'statisticLoadOverviewNew' => array('QuizMaster_Controller_Statistics', 'ajaxLoadStatsticOverviewNew'),
       'quizLoadData' => array('QuizMaster_Controller_Front', 'ajaxQuizLoadData'),
-      'loadQuestionsSort' => array('QuizMaster_Controller_Question', 'ajaxLoadQuestionsSort'),
       'questionSaveSort' => array('QuizMaster_Controller_Question', 'ajaxSaveSort'),
       'questionaLoadCopyQuestion' => array('QuizMaster_Controller_Question', 'ajaxLoadCopyQuestion'),
       'loadQuizData' => array('QuizMaster_Controller_Quiz', 'ajaxLoadQuizData'),

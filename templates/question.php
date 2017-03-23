@@ -20,9 +20,9 @@ get_header(); ?>
 				/* Start the Loop */
 				while ( have_posts() ) : the_post();
 
-          $quizControllerFront = new QuizMaster_Controller_Front();
-          $quizControllerFront->handleShortCode( $post->ID );
-					// ->showQuizBox($questionCount);
+					$qCtr = new QuizMaster_Controller_Question();
+					$qCtr->load( $post->ID );
+					$qCtr->render();
 
 					get_template_part( 'template-parts/post/content', get_post_format() );
 
