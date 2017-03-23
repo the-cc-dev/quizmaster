@@ -15,20 +15,12 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
     protected $_tipMsg = '';
     protected $_points = 1;
     protected $_showPointsInBox = false;
-
-    //0.19
     protected $_answerPointsActivated = false;
     protected $_answerData = null;
-
-    // categories
     protected $_categoryId = 0;
     protected $_categoryName = '';
-
-    //0.25
     protected $_answerPointsDiffModusActivated = false;
     protected $_disableCorrect = false;
-
-    //0.27
     protected $_matrixSortAnswerCriteriaWidth = 20;
 
     public function setId($_id) {
@@ -287,6 +279,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       $answerData = array();
       foreach( $acfAnswerData as $acfAnswer ) {
         $acfAnswer['answer'] = $acfAnswer['qmqe_matrix_sorting_criterion'];
+        $acfAnswer['sort_string'] = $acfAnswer['qmqe_matrix_sorting_sort_string'];
         $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
       }
       return $answerData;
