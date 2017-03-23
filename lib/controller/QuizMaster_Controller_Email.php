@@ -91,7 +91,7 @@ class QuizMaster_Controller_Email {
 
   public function send() {
 
-    wp_mail(
+    $send = wp_mail(
       $this->email->getRecipients(),
       $this->email->getSubject(),
       $this->email->getMessage(),

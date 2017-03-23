@@ -31,7 +31,7 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model {
       return $this->_id;
     }
 
-    public function getHeaders($contentType) {
+    public function getHeaders( $contentType ) {
       $headers = array(
         'From: "' . get_bloginfo('name') . '" <'. $this->getFrom() .'>' ,
         'Reply-To: "' . get_bloginfo('name') . '" <' . $this->getFrom() . '>' ,
