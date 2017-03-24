@@ -12,9 +12,19 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
   }
 
-  public function fetch( $id ) {
-    $model = new QuizMaster_Model_Question( $id );
-    return $model;
+  public function fetch( $qId ) {
+    $qType = $this->questionTypeById( $qId );
+    $qModel = $this->questionModelByType( $qType );
+
+    if( $qModel ) {
+      $q = new $qModel( $qId );
+    } else {
+      $q = new QuizMaster_Model_Question( $qId );
+    }
+
+    $q->loadAnswerData();
+
+    return $q;
   }
 
   public function questionTypeById( $id ) {
@@ -59,20 +69,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
     }
 
     foreach( $quizQuestions as $qq ) {
-
-      $qID = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
-
-      $qType = $this->questionTypeById( $qID );
-      $qModel = $this->questionModelByType( $qType );
-
-      if( $qModel ) {
-        $q = new $qModel( $qID );
-      } else {
-        $q = new QuizMaster_Model_Question( $qID );
-      }
-
-      $a[] = $q;
-
+      $qId = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
+      $a[] = $this->fetch( $qId );
     }
 
     return $a;

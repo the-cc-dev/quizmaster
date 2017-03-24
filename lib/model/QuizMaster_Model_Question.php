@@ -322,7 +322,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
       // set answer data
       switch( $answer_type ) {
-
         case 'single':
           $answerData = $this->loadAnswerDataSingleChoice( $fields );
           break;
