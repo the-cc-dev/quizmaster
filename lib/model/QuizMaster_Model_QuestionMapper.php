@@ -38,6 +38,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
   public function questionModelByType( $qType ) {
     $qTypes = array(
       'single' => 'QuizMaster_Question_SingleChoice',
+      'multiple' => 'QuizMaster_Question_MultipleChoice',
     );
 
     $qTypes = apply_filters('quizmaster_question_type_registry', $qTypes );
