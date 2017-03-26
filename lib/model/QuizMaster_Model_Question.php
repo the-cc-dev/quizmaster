@@ -266,14 +266,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $answerData;
     }
 
-    public function loadAnswerDataFreeChoice( $fields ) {
-      $acfAnswerData = array(
-        'answer' => $fields['qmqe_free_choice_answers']
-      );
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
-      return $answerData;
-    }
-
     public function loadAnswerDataMatrixSortingAnswer( $fields ) {
       $acfAnswerData = $fields['qmqe_matrix_sorting_answers'];
       $answerData = array();
@@ -305,6 +297,15 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
     }
 
     public function loadAnswerDataSingleChoice( $data ) {
+
+      // load answer model
+      $aModelName = $this->answerModelName();
+      $aModel = new $aModelName();
+      return $aModel->load( $data );
+
+    }
+
+    public function loadAnswerDataFreeChoice( $data ) {
 
       // load answer model
       $aModelName = $this->answerModelName();
