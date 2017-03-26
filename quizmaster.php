@@ -3,14 +3,14 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.1.2
+Version: 0.2.0
 Author: Joel Milne, GoldHat Group
 Author URI: https://goldhat.ca
 Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.37');
+define('QUIZMASTER_VERSION', '0.2.0');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
@@ -378,7 +378,9 @@ function quizmasterAddPostTypes() {
     array(
       'labels' => array(
         'name' => __( 'Quizzes' ),
-        'singular_name' => __( 'Quiz' )
+        'singular_name' => __( 'Quiz' ),
+        'add_new' => __( 'Add New Quiz' ),
+        'add_new_item' => __( 'Add New Quiz' ),
       ),
       'public' => true,
       'has_archive' => true,
@@ -406,8 +408,10 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_question',
     array(
       'labels' => array(
-        'name' => __( 'Questions' ),
-        'singular_name' => __( 'Question' )
+        'name' => __( 'Question' ),
+        'singular_name' => __( 'Question' ),
+        'add_new' => __( 'Add New Question' ),
+        'add_new_item' => __( 'Add New Question' ),
       ),
       'public' => true,
       'has_archive' => true,
