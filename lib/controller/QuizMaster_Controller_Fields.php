@@ -17,9 +17,9 @@ class QuizMaster_Controller_Fields {
 
   public function loadFieldGroup( $fieldGroupKey ) {
 
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/' . $fieldGroupKey . '.php' );
-    // $fieldGroup loaded from file include
+    include( QUIZMASTER_PATH . '/acf/fieldgroups/' . $fieldGroupKey . '.php' );
 
+    // $fieldGroup loaded from file include
     $allFields = array();
     $baseFields = $fieldGroup['fields'];
     $fieldGroup['fields'] = array(); // reset array of fields
@@ -29,7 +29,6 @@ class QuizMaster_Controller_Fields {
     }
 
     $fieldGroup = apply_filters('quizmaster_add_fieldgroup', $fieldGroup );
-
     return $fieldGroup;
 
   }

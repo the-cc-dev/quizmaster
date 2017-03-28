@@ -58,9 +58,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_categoryId = 0;
     protected $_categoryName = '';
 
-    //0.33
-    protected $_pluginContainer = null;
-
     public function setId($_id)
     {
         $this->_id = (int)$_id;
@@ -591,14 +588,41 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       // if new quiz, save quiz post
       if( !$this->getId() ) {
          $createPostResult = $this->createPost();
-         if( is_wp_error( $createPostResult || $createPostResult == 0 ) {
+         if( is_wp_error( $createPostResult || $createPostResult == 0 )) {
            return; // failed post create
          }
          $this->setId( $createPostResult );
       }
 
-      // update meta
+      // save meta
+      $this->saveMeta();
 
+    }
+
+    /*
+     * Update quiz meta
+     */
+    public function saveMeta() {
+      $fieldGroup = $this->getFieldGroup();
+      foreach( $fieldGroup['fields'] as $field ) {
+        $this->saveField( $field );
+      }
+    }
+
+    public function saveField( $field ) {
+
+      // skip tabs
+      if( $field['type'] == 'tab' ) {
+        return;
+      }
+
+      // get method name
+      $methodName = $this->fieldMethodNameGet( $field['name'] );
+
+      if( $methodName ) {
+        update_field( $field['name'], $this->$methodName(), $this->getId() );
+      }
+    
     }
 
     /*
@@ -670,6 +694,10 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       }
 
       return $categoryPoints;
+    }
+
+    public function fieldGroupKey() {
+      return 'quiz';
     }
 
 }

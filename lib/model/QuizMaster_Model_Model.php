@@ -8,7 +8,7 @@ class QuizMaster_Model_Model {
     protected $_mapper = null;
 
     public function __construct( $data = false ) {
-      
+
       if( is_array( $data )) {
         $this->setModelData( $data );
       } elseif( $data ) {
@@ -101,15 +101,50 @@ class QuizMaster_Model_Model {
     }
 
     public function stripFieldPrefixes( $fields ) {
-
-      $fieldPrefix = $this->getFieldPrefix();
-
       foreach( $fields as $key => $val ) {
-        $newKey = str_replace( $fieldPrefix, '', $key );
+        $newKey = $this->stripFieldPrefix( $key );
         $fields[$newKey] = $val;
         unset( $fields[$key] );
       }
       return $fields;
+    }
+
+    public function stripFieldPrefix( $fieldKey ) {
+      return str_replace( $this->getFieldPrefix(), '', $fieldKey );
+    }
+
+    public function getFieldGroup() {
+
+      if( $this->fieldGroupKey() == false ) {
+        return;
+      }
+
+      $fieldCtr = new QuizMaster_Controller_Fields();
+      return $fieldCtr->loadFieldGroup( $this->fieldGroupKey() );
+
+    }
+
+    public function fieldGroupKey() {
+      return false;
+    }
+
+    public function fieldMethodNameGet( $fieldKey ) {
+
+      $fieldKey = $this->stripFieldPrefix( $fieldKey );
+      $fieldKey = str_replace( '_', ' ', $fieldKey );
+      $fieldKey = ucwords( $fieldKey );
+      $fieldKey = str_replace( ' ', '', $fieldKey );
+
+      if( method_exists ( 'QuizMaster_Model_Quiz', 'get' . $fieldKey )) {
+        return 'get' . $fieldKey;
+      }
+
+      if( method_exists ( 'QuizMaster_Model_Quiz', 'is' . $fieldKey )) {
+        return 'is' . $fieldKey;
+      }
+
+      return false;
+
     }
 
 }
