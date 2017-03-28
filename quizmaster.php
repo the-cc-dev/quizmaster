@@ -547,10 +547,16 @@ function quizMasterInit() {
   add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
 
   // add fieldgroups and option pages
+  /*
   if( !QUIZMASTER_DEV ) {
     add_filter('acf/settings/show_admin', '__return_false');
     include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
   }
+  */
+
+ $fieldCtr = new QuizMaster_Controller_Fields();
+ $fieldCtr->loadFieldGroups();
+
   quizMasterAddOptionsPages();
 
 }
