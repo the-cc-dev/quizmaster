@@ -9,9 +9,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     const QUIZ_MODUS_BACK_BUTTON = 1;
     const QUIZ_MODUS_CHECK = 2;
     const QUIZ_MODUS_SINGLE = 3;
-    const QUIZ_EMAIL_NOTE_NONE = 0;
-    const QUIZ_EMAIL_NOTE_REG_USER = 1;
-    const QUIZ_EMAIL_NOTE_ALL = 2;
     const QUIZ_FORM_POSITION_START = 0;
     const QUIZ_FORM_POSITION_END = 1;
 
@@ -40,34 +37,22 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_showMaxQuestionValue = 1;
     protected $_showMaxQuestionPercent = false;
     protected $_startOnlyByAccessCode = false;
-
-
     protected $_showAverageResult = false;
     protected $_prerequisite = false;
-
-    //0.22
     protected $_quizModus = 0;
     protected $_showReviewQuestion = false;
     protected $_quizSummaryHide = false;
     protected $_skipQuestionDisabled = false;
     protected $_emailNotification = 0;
-
-    //0.24
     protected $_userEmailNotification = false;
     protected $_showCategoryScore = false;
     protected $_hideResultCorrectQuestion = false;
     protected $_hideResultQuizTime = false;
     protected $_hideResultPoints = false;
-
-    //0.25
     protected $_autostart = false;
     protected $_forcingQuestionSolve = false;
     protected $_hideQuestionPositionOverview = false;
     protected $_hideQuestionNumbering = false;
-
-    //0.27
-    protected $_formActivated = false;
-    protected $_formShowPosition = 0;
     protected $_startOnlyRegisteredUser = false;
     protected $_questionsPerPage = 0;
     protected $_sortCategories = false;
@@ -553,30 +538,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     public function isHideQuestionNumbering()
     {
         return $this->_hideQuestionNumbering;
-    }
-
-    public function setFormActivated($_formActivated)
-    {
-        $this->_formActivated = (bool)$_formActivated;
-
-        return $this;
-    }
-
-    public function isFormActivated()
-    {
-        return $this->_formActivated;
-    }
-
-    public function setFormShowPosition($_formShowPosition)
-    {
-        $this->_formShowPosition = (int)$_formShowPosition;
-
-        return $this;
-    }
-
-    public function getFormShowPosition()
-    {
-        return $this->_formShowPosition;
     }
 
     public function setStartOnlyRegisteredUser($_startOnlyRegisteredUser) {
