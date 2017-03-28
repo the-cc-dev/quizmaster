@@ -43,8 +43,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_showReviewQuestion = false;
     protected $_quizSummaryHide = false;
     protected $_skipQuestionDisabled = false;
-    protected $_emailNotification = 0;
-    protected $_userEmailNotification = false;
     protected $_showCategoryScore = false;
     protected $_hideResultCorrectQuestion = false;
     protected $_hideResultQuizTime = false;
@@ -57,12 +55,8 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_questionsPerPage = 0;
     protected $_sortCategories = false;
     protected $_showCategory = false;
-
-    //0.29
     protected $_categoryId = 0;
     protected $_categoryName = '';
-    protected $_adminEmail = null;
-    protected $_userEmail = null;
 
     //0.33
     protected $_pluginContainer = null;
@@ -420,30 +414,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this->_skipQuestionDisabled;
     }
 
-    public function setEmailNotification($_emailNotification)
-    {
-        $this->_emailNotification = (int)$_emailNotification;
-
-        return $this;
-    }
-
-    public function getEmailNotification()
-    {
-        return $this->_emailNotification;
-    }
-
-    public function setUserEmailNotification($_userEmailNotification)
-    {
-        $this->_userEmailNotification = (bool)$_userEmailNotification;
-
-        return $this;
-    }
-
-    public function isUserEmailNotification()
-    {
-        return $this->_userEmailNotification;
-    }
-
     public function setShowCategoryScore($_showCategoryScore)
     {
         $this->_showCategoryScore = (bool)$_showCategoryScore;
@@ -597,13 +567,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       return $this->_categoryName;
     }
 
-    public function setAdminEmail($_adminEmail)
-    {
-        $this->_adminEmail = $_adminEmail;
-
-        return $this;
-    }
-
     public function getLink() {
       return '<a class="quizmaster-quiz-link" href="' . get_permalink( $this->getId() ) . '">' . $this->getName() . '</a>';
     }
@@ -625,6 +588,32 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
      */
     public function save() {
 
+      // if new quiz, save quiz post
+      if( !$this->getId() ) {
+         $createPostResult = $this->createPost();
+         if( is_wp_error( $createPostResult || $createPostResult == 0 ) {
+           return; // failed post create
+         }
+         $this->setId( $createPostResult );
+      }
+
+      // update meta
+
+    }
+
+    /*
+     * Create quiz post
+     */
+    public function createPost() {
+      $quizId = wp_insert_post(
+        array(
+          'post_type'     => 'quizmaster_quiz',
+          'post_title'    => $this->getName(),
+          'post_status'   => 'publish',
+          'post_author'   => 1,
+        )
+      );
+      return $quizId;
     }
 
     public function fields() {
