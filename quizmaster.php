@@ -59,6 +59,7 @@ function quizMasterActivation() {
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
 add_action('init', 'quizmasterAddPostTypes', 10, 2);
+add_action('init', 'quizmasterMenuItems', 20, 2);
 
 if (is_admin()) {
   new QuizMaster_Controller_Admin();
@@ -373,7 +374,15 @@ function quizMasterMapMetaCapQuestion( $caps, $cap, $user_id, $args ) {
 
 }
 
+function quizmasterMenuItems() {
+  QuizMaster_Helper_Submenu::position('edit.php?post_type=quizmaster_quiz', 10);
+  QuizMaster_Helper_Submenu::position('edit.php?post_type=quizmaster_question', 20);
+  QuizMaster_Helper_Submenu::position('edit.php?post_type=quizmaster_score', 30);
+  QuizMaster_Helper_Submenu::position('edit.php?post_type=quizmaster_email', 40);
+}
+
 function quizmasterAddPostTypes() {
+
   register_post_type( 'quizmaster_quiz',
     array(
       'labels' => array(
@@ -385,7 +394,7 @@ function quizmasterAddPostTypes() {
       'public' => true,
       'has_archive' => true,
       'rewrite' => array('slug' => 'quiz'),
-      'show_in_menu' => 'quizMaster',
+      'show_in_menu' => 'quizmaster',
       'supports' => array('title', 'revisions'),
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_quizzes',
@@ -408,7 +417,7 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_question',
     array(
       'labels' => array(
-        'name' => __( 'Question' ),
+        'name' => __( 'Questions' ),
         'singular_name' => __( 'Question' ),
         'add_new' => __( 'Add New Question' ),
         'add_new_item' => __( 'Add New Question' ),
@@ -416,7 +425,7 @@ function quizmasterAddPostTypes() {
       'public' => true,
       'has_archive' => true,
       'rewrite' => array('slug' => 'question'),
-      'show_in_menu' => 'quizMaster',
+      'show_in_menu' => 'quizmaster',
       'supports' => array('title', 'revisions'),
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_questions',
@@ -444,7 +453,7 @@ function quizmasterAddPostTypes() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_menu' => 'quizMaster',
+      'show_in_menu' => 'quizmaster',
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_emails',
         'publish_posts' => 'quizmaster_manage_emails',
@@ -471,7 +480,7 @@ function quizmasterAddPostTypes() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_menu' => 'quizMaster',
+      'show_in_menu' => 'quizmaster',
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_scores',
         'publish_posts' => 'quizmaster_manage_scores',
@@ -572,12 +581,13 @@ function quizmasterAcfSettingsPath( $path ) {
 function quizMasterAddOptionsPages() {
   /* Options Pages */
   $option_page = acf_add_options_page(array(
-  		'page_title' 	=> 'QuizMaster Settings',
-  		'menu_title' 	=> 'Settings',
-  		'menu_slug' 	=> 'quizmaster-settings',
-      'parent_slug' => 'quizMaster',
-   		'capability' 	=> 'quizmaster_manage_settings',
-  	));
+		'page_title' 	=> 'QuizMaster Settings',
+		'menu_title' 	=> 'Settings',
+		'menu_slug' 	=> 'quizmaster-settings',
+    'parent_slug' => 'quizmaster',
+ 		'capability' 	=> 'quizmaster_manage_settings',
+	));
+  QuizMaster_Helper_Submenu::position( 'quizmaster-settings', 70 );
 }
 
 

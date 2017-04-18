@@ -10,8 +10,9 @@ class QuizMaster_Controller_Admin {
       $this->_ajax = new QuizMaster_Controller_Ajax();
       $this->_ajax->init();
 
-      // register the admin menu
-      add_action('admin_menu', array($this, 'addMenuItems'));
+      // add admin menu items
+      add_action( 'admin_menu', array($this, 'addMenuItems'), 50 );
+      add_action( 'admin_menu', array($this, 'menuItemSort'), 110 );
 
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
@@ -71,6 +72,34 @@ class QuizMaster_Controller_Admin {
         $this->localizeScript();
     }
 
+    public function menuItemSort() {
+      global $submenu;
+
+      $qm_submenu = $submenu['quizmaster'];
+      foreach( $qm_submenu as $i => $item ) {
+        $pos = array_search( $item[2], $GLOBALS['quizmaster_menu'] );
+        if( !$pos ) {
+          $pos = 100; // default position
+        }
+        $item['pos'] = $pos;
+        $qm_submenu[ $i ] = $item;
+      }
+
+      usort($qm_submenu, function($a, $b) {
+        return $a['pos'] - $b['pos'];
+      });
+
+      /*
+
+      print '<pre>';
+      var_dump($submenu['quizmaster']);
+      var_dump($qm_submenu );
+      print '</pre>'; */
+
+      $submenu['quizmaster'] = $qm_submenu;
+
+    }
+
     public function addMenuItems() {
         $pages = array();
 
@@ -78,28 +107,32 @@ class QuizMaster_Controller_Admin {
           'QuizMaster',
           'QuizMaster',
           'quizmaster_show',
-          'quizMaster',
+          'quizmaster',
           array($this, 'route'),
           'dashicons-welcome-learn-more'
         );
 
         do_action( 'quizmaster_add_menu_item', 'quizmaster-categories-tags' );
-        $pages[] = add_submenu_page(
-          'quizMaster',
+        $pages[] = QuizMaster_Helper_Submenu::add(
+          'quizmaster',
           __('Categories & Tags', 'quizmaster'),
           __('Categories & Tags', 'quizmaster'),
           'quizmaster_manage_settings',
           'quizmaster-categories-tags',
-          array($this, 'route'));
+          array($this, 'route'),
+          50
+        );
 
         do_action( 'quizmaster_add_menu_item', 'quizmaster-support' );
-        $pages[] = add_submenu_page(
-          'quizMaster',
+        $pages[] = QuizMaster_Helper_Submenu::add(
+          'quizmaster',
           __('Help & Support', 'quizmaster'),
           __('Help & Support', 'quizmaster'),
           'quizmaster_manage_settings',
           'quizmaster-support',
-          array($this, 'route'));
+          array($this, 'route'),
+          60
+        );
 
         foreach ($pages as $p) {
           add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));

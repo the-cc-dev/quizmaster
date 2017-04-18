@@ -371,5 +371,9 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     }
 
+    public function save() {
+
+    }
+
 
 }
