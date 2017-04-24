@@ -29,6 +29,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     if( !is_array( $totals )) {
       $totals = json_decode( $totals, true );
     }
+
     $this->_totalQCount = $totals['qCount'];
     $this->_totalQCorrect = $totals['qCorrect'];
     $this->_totalQIncorrect = $totals['qIncorrect'];

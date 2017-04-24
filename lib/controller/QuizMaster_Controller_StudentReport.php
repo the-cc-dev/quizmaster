@@ -8,7 +8,7 @@ class QuizMaster_Controller_StudentReport {
     $studentId = $currentUser->ID;
 
     $scoreMapper = new QuizMaster_Model_ScoreMapper;
-    $scores = $scoreMapper->fetchByUser( $userId );
+    $scores = $scoreMapper->fetchByUser( $studentId );
 
     $viewScore = new QuizMaster_View_Score;
     return $viewScore->listTable( $scores );
