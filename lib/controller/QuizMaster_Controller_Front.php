@@ -20,6 +20,20 @@ class QuizMaster_Controller_Front {
 
     }
 
+    public function getSetQuizId() {
+      if( !empty(  $_GET['quiz'] )) {
+        return $_GET['quiz'];
+      }
+      return false;
+    }
+
+    public function getSetRefId() {
+      if( !empty(  $_GET['ref'] )) {
+        return $_GET['ref'];
+      }
+      return false;
+    }
+
     /* Student Report Shortcode */
     public function studentReportShortcode() {
 
@@ -29,8 +43,8 @@ class QuizMaster_Controller_Front {
       $user = wp_get_current_user();
 
       // get params
-      $quiz_id = $_GET['quiz'];
-      $ref_id  = $_GET['ref'];
+      $quiz_id = $this->getSetQuizId();
+      $ref_id  = $this->getSetRefId();
 
       // show completed quiz table
       if( !$quiz_id ) {
