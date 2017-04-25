@@ -187,7 +187,7 @@ function quizmaster_get_template( $template_name, $args = array(), $tempate_path
  * @return 	string 							Path to the template file.
  */
 function quizmaster_locate_template( $template_name, $template_path = '', $default_path = '' ) {
-	// Set variable to search in woocommerce-plugin-templates folder of theme.
+	// Set variable to search in /quizmaster folder of theme.
 	if ( ! $template_path ) :
 		$template_path = 'quizmaster/';
 	endif;

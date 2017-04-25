@@ -27,6 +27,8 @@ class QuizMaster_Controller_Email {
 
   public function quizDataShortcode( $atts ) {
 
+    $content = '';
+
     // normalize attribute keys, lowercase
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
 
@@ -47,9 +49,11 @@ class QuizMaster_Controller_Email {
         $content .= '</a>';
         break;
       case "scorelink":
-        $content = '<a href="' . $this->score->getPermalink() . '">';
-        $content .= 'Your Quiz Score';
-        $content .= '</a>';
+        if( is_object( $this->score )) {
+          $content = '<a href="' . $this->score->getPermalink() . '">';
+          $content .= 'Your Quiz Score';
+          $content .= '</a>';
+        }
         break;
     }
 
@@ -91,6 +95,8 @@ class QuizMaster_Controller_Email {
 
   public function send() {
 
+    quizmaster_log($this->email);
+
     $send = wp_mail(
       $this->email->getRecipients(),
       $this->email->getSubject(),
@@ -109,6 +115,11 @@ class QuizMaster_Controller_Email {
 
   public function parseTemplate() {
     $templateName = str_replace( '_', '-', $this->email->getKey() );
+
+    if( $this->email->getType() == 'plain' ) {
+      $templateName = 'plain/' . $templateName;
+    }
+
     $template = 'emails/' . $templateName;
     $content = quizmaster_parse_template( $template . '.php' );
     return do_shortcode( $content );
@@ -119,6 +130,7 @@ class QuizMaster_Controller_Email {
     $trigger = 'quizmaster_completed_quiz';
     $emailPosts = $this->getEmailsByTrigger( $trigger );
 
+    // log send details
     quizmaster_log( array(
       'class'   => 'QuizMaster_Controller_Email',
       'method'  => 'sendEmailCompletedQuiz',

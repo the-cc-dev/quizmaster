@@ -31,16 +31,30 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model {
       return $this->_id;
     }
 
-    public function getHeaders( $contentType ) {
+    public function getHeaders() {
+      return $this->_headers;
+    }
+
+    public function setHeaders() {
+
+      // set content-type
+      if( $this->getType() == 'plain' ) {
+        $contentType = 'Content-Type: text; charset=UTF-8';
+      } else {
+        $contentType = 'Content-Type: text/html; charset="UTF-8"';
+      }
+
       $headers = array(
         'From: "' . get_bloginfo('name') . '" <'. $this->getFrom() .'>' ,
         'Reply-To: "' . get_bloginfo('name') . '" <' . $this->getFrom() . '>' ,
         'X-Mailer: PHP/' . phpversion() ,
         'MIME-Version: 1.0' ,
-        'Content-type: '.$contentType.'; charset=iso-8859-1' ,
+        $contentType ,
       );
+
       $headers = implode( "\r\n" , $headers );
-      return $headers;
+      $this->_headers = $headers;
+
     }
 
     public function setFrom($_from) {
@@ -116,7 +130,10 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model {
 
     public function setType( $_type ) {
       $this->_type = (string)$_type;
-      return $this;
+    }
+
+    public function getType() {
+      return $this->_type;
     }
 
     public function getMessage() {
@@ -124,10 +141,10 @@ class QuizMaster_Model_Email extends QuizMaster_Model_Model {
     }
 
     /*
-     * Override to alter the fields before setting model data
+     * After model loaded
      */
-    public function processFieldsDuringModelSet( $fields ) {
-      return $fields;
+    public function afterSetModel() {
+      $this->setHeaders();
     }
 
 }

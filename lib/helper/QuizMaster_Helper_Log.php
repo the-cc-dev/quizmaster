@@ -12,11 +12,13 @@ class QuizMaster_Helper_Log {
 
   public function log( $message ) {
 
+    $msg = '';
+
     if( !$this->isActive() ) {
       return; // logging deactivated
     }
 
-    if( is_array( $message )) {
+    if( is_array( $message ) || is_object( $message )) {
       ob_start();
       var_dump( $message );
       $msg .= "\r" . ob_get_clean();
