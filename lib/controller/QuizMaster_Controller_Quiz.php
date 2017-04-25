@@ -203,7 +203,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
           do_action( 'quizmaster_completed_quiz', $quiz, $score->getScore() );
 
           if ($is100P) {
-            do_action('quizmaster_completed_quiz_100_percent');
+            do_action('quizmaster_completed_quiz_100_percent', $quiz, $score->getScore() );
           }
 
           return json_encode(array());
@@ -236,7 +236,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
           do_action('quizmaster_completed_quiz', $quiz, $score->getScore() );
 
           if ($is100P) {
-              do_action('quizmaster_completed_quiz_100_percent');
+              do_action('quizmaster_completed_quiz_100_percent', $quiz, $score->getScore() );
           }
 
           if (get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {

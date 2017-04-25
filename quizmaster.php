@@ -1007,3 +1007,9 @@ function qm_submenu_file( $submenu_file ){
 
     return $submenu_file;
 }
+
+// Logging Function
+function quizmaster_log( $message ) {
+  $log = new QuizMaster_Helper_Log();
+  $log->log( $message );
+}

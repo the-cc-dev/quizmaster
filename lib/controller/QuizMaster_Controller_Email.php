@@ -119,6 +119,13 @@ class QuizMaster_Controller_Email {
     $trigger = 'quizmaster_completed_quiz';
     $emailPosts = $this->getEmailsByTrigger( $trigger );
 
+    quizmaster_log( array(
+      'class'   => 'QuizMaster_Controller_Email',
+      'method'  => 'sendEmailCompletedQuiz',
+      'line'    => 124,
+      'score'   => $score
+    ));
+
     foreach( $emailPosts as $emailPost ) {
       $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
       $this->quiz   = $quiz;
