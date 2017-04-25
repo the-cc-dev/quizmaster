@@ -1300,21 +1300,33 @@ quizMasterReady(function () {
 
                 $e.find('.quizMaster_quiz_time span').text(plugin.methode.parseTime(time));
 
+                console.log(1303)
+
                 if (timeover) {
                     globalElements.results.find('.quizMaster_time_limit_expired').show();
                 }
 
+                console.log(1309)
+
                 plugin.methode.checkQuestion(globalElements.questionList.children(), true);
 
+                console.log(1313)
+
                 $e.find('.quizMaster_correct_answer').text(results.comp.correctQuestions);
+
+                console.log(1315)
 
                 results.comp.result = Math.round(results.comp.points / config.globalPoints * 100 * 100) / 100;
                 results.comp.solved = 0;
                 var $pointFields = $e.find('.quizMaster_points span');
 
+                console.log(1321)
+
                 $pointFields.eq(0).text(results.comp.points);
                 $pointFields.eq(1).text(config.globalPoints);
                 $pointFields.eq(2).text(results.comp.result + '%');
+
+                console.log(1327)
 
                 //Result-Text START
                 var $resultText = $e.find('.quizMaster_resultsList > li').eq(plugin.methode.findResultIndex(results.comp.result));
@@ -1333,6 +1345,8 @@ quizMasterReady(function () {
                     $this.text(data).show();
                 });
 
+                console.log(1346)
+
                 $resultText.show();
 
                 //Result-Text END
@@ -1341,6 +1355,8 @@ quizMasterReady(function () {
 
                 this.setCategoryOverview();
 
+                console.log(1356)
+
                 plugin.methode.sendCompletedQuiz();
 
                 reviewBox.hide();
@@ -1348,6 +1364,8 @@ quizMasterReady(function () {
                 $e.find('.quizMaster_checkPage, .quizMaster_infopage').hide();
                 globalElements.quiz.hide();
                 globalElements.results.show();
+
+                console.log(1366)
 
                 plugin.methode.scrollTo(globalElements.results);
             },
@@ -1621,7 +1639,7 @@ quizMasterReady(function () {
                   if (quizStatus.isQuizStart) {
                       plugin.methode.startQuiz();
                   }
-                  
+
                 });
             },
 

@@ -17,17 +17,12 @@
             <span><?php echo $index; ?></span>. <?php _e('Question', 'quizmaster'); ?>
         </h5>
 
-        <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
-          data-type="<?php echo $question->getAnswerType(); ?>">
-
-            <?php
-              // render question
-              // @TODO support: $view->quiz->isShowCategory()) , $view->quiz->isShowPoints()
-              // $view->quiz->isHideAnswerMessageBox()
-              $question->render();
-            ?>
-
-        </ul>
+        <?php
+          // render question
+          // @TODO support: $view->quiz->isShowCategory()) , $view->quiz->isShowPoints()
+          // $view->quiz->isHideAnswerMessageBox()
+          $question->render();
+        ?>
 
         <?php
           // question buttons

@@ -2,9 +2,14 @@
           $question->getPoints()); ?></span>
   <div style="clear: both;"></div>
 
-  <!-- Quiz Category -->
+  <!-- Question Category -->
   <?php
     print quizmaster_get_template( 'quiz/category.php', array( 'question' => $question ));
+  ?>
+
+  <!-- Question Points -->
+  <?php
+    print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question ));
   ?>
 
 <div class="quizMaster_question">
@@ -34,10 +39,10 @@
           </label>
         </li>
 
-    <?php endforeach; ?>
+    <?php $answer_index++; endforeach; ?>
 
   </ul>
 
-  <?php print quizmaster_get_template('quiz/question-response', array('question' => $question)); ?>
+  <?php print quizmaster_get_template('quiz/question-response.php', array('question' => $question)); ?>
 
 </div>
