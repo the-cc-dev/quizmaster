@@ -17,17 +17,17 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         }
 
         $names = array(
-            'start_quiz' => __('Start quiz', 'quizmaster'),
-            'restart_quiz' => __('Restart quiz', 'quizmaster'),
-            'quiz_summary' => __('Quiz-summary', 'quizmaster'),
-            'finish_quiz' => __('Finish quiz', 'quizmaster'),
+            'start_quiz'      => __('Start quiz', 'quizmaster'),
+            'restart_quiz'    => __('Restart quiz', 'quizmaster'),
+            'quiz_summary'    => __('Quiz Summary', 'quizmaster'),
+            'finish_quiz'     => __('Finish quiz', 'quizmaster'),
             'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
-            'lock_box_msg' => __('You have already completed the quiz before. Hence you can not start it again.', 'quizmaster'),
-            'only_registered_user_msg' => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
-            'prerequisite_msg' => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
+            'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
+            'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
+            'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
         );
 
-        $this->_buttonNames = ((array)apply_filters('quizMaster_filter_frontButtonNames', $names, $this)) + $names;
+        $this->_buttonNames = apply_filters('quizmaster_button_names', $names, $this);
     }
 
     /**
@@ -90,22 +90,21 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         return $bo;
     }
 
-    public function showMaxQuestion()
-    {
+    public function showMaxQuestion() {
         $this->loadButtonNames();
 
         $question_count = count($this->question);
 
         $result = $this->quiz->getResultText();
 
-        if (!$this->quiz->isResultGradeEnabled()) {
-            $result = array(
-                'text' => array($result),
-                'prozent' => array(0)
-            );
+        // graduations?
+        $resultsProzent = json_encode( array(0) );
+        if ( !$this->quiz->isResultGradeEnabled() ) {
+          $result = array(
+            'text' => array($result),
+            'prozent' => array(0)
+          );
         }
-
-        $resultsProzent = json_encode($result['prozent']);
 
         ?>
         <div class="quizMaster_content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
@@ -487,12 +486,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
                         <span class="quizMaster_catPercent">0%</span>
                       </li>
 
-                      <?php foreach ( $this->category as $catId ) { ?>
-                          <li data-category_id="<?php echo $catId; ?>">
-                            <span class="quizMaster_catName"><?php echo get_term( $catId )->name; ?></span>
-                            <span class="quizMaster_catPercent">0%</span>
-                          </li>
-                      <?php } ?>
+                      <?php
+                        if( !empty( $this->category )) :
+                          foreach ( $this->category as $catId ) { ?>
+                            <li data-category_id="<?php echo $catId; ?>">
+                              <span class="quizMaster_catName"><?php echo get_term( $catId )->name; ?></span>
+                              <span class="quizMaster_catPercent">0%</span>
+                            </li>
+                      <?php } endif; ?>
                     </ol>
                 </div>
             </div>

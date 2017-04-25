@@ -277,14 +277,13 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $answerData;
     }
 
-    public function loadAnswerDataSortingChoice( $fields ) {
-      $acfAnswerData = $fields['qmqe_sorting_choice_answers'];
-      $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer'] = $acfAnswer['qmqe_sorting_choice_answer'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
-      }
-      return $answerData;
+    public function loadAnswerDataSortingChoice( $data ) {
+
+      // load answer model
+      $aModelName = $this->answerModelName();
+      $aModel = new $aModelName();
+      return $aModel->load( $data );
+
     }
 
     public function loadAnswerDataMultipleChoice( $data ) {
@@ -333,14 +332,8 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
         case 'sort_answer':
           $answerData = $this->loadAnswerDataSortingChoice( $fields );
           break;
-        case 'matrix_sort_answer':
-          $answerData = $this->loadAnswerDataMatrixSortingAnswer( $fields );
-          break;
         case 'cloze_answer':
           $answerData = $this->loadAnswerDataCloze( $fields );
-          break;
-        case 'assessment_answer':
-          $answerData = $this->loadAnswerDataAssessment( $fields );
           break;
       }
 

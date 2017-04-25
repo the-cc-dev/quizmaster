@@ -1,7 +1,7 @@
 <div class="quizMaster_question">
 
   <div class="quizMaster_question_text">
-    <?php print $question->getQuestion(); ?>
+    <?php echo do_shortcode(apply_filters('comment_text', $question->getQuestion())); ?>
   </div>
 
   <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
@@ -9,22 +9,18 @@
 
     <?php
       $answer_index = 0;
-      foreach ($question->getAnswerData() as $v) {
+      foreach ($question->getAnswerData() as $v) :
         $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
-
-        if ($answer_text == '') {
-          continue;
-        }
-      }
     ?>
 
-    <li class="quizMaster_questionListItem" data-pos="<?php echo $answer_index; ?>">
-      <label>
-        <input class="quizMaster_questionInput" type="text"
-          name="question_<?php echo $question->getId(); ?>"
-          style="width: 300px;">
-      </label>
-    </li>
+      <li class="quizMaster_questionListItem" data-pos="<?php echo $answer_index; ?>">
+        <div class="quizMaster_sortable">
+          <?php echo $answer_text; ?>
+        </div>
+      </li>
+
+      <?php $answer_index++; endforeach;?>
+
   </ul>
 
   <?php print quizmaster_get_template('quiz/question-response', array('question' => $question)); ?>

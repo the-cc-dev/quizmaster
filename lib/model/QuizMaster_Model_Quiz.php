@@ -101,9 +101,8 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this;
     }
 
-    public function getResultText()
-    {
-        return $this->_resultText;
+    public function getResultText() {
+      return $this->_resultText;
     }
 
     public function setTitleHidden($_titleHidden)
@@ -622,7 +621,7 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       if( $methodName ) {
         update_field( $field['name'], $this->$methodName(), $this->getId() );
       }
-    
+
     }
 
     /*
