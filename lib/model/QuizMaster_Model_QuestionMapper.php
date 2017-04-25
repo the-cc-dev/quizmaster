@@ -12,9 +12,11 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
   }
 
-  public function fetch( $qId ) {
-    $qType = $this->questionTypeById( $qId );
-    $qModel = $this->questionModelByType( $qType );
+  public static function fetch( $qId ) {
+
+    $q = new QuizMaster_Model_Question;
+    $qType = self::questionTypeById( $qId );
+    $qModel = self::questionModelByType( $qType );
 
     if( $qModel ) {
       $q = new $qModel( $qId );
@@ -27,7 +29,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
     return $q;
   }
 
-  public function questionTypeById( $id ) {
+  public static function questionTypeById( $id ) {
     $qType = get_field( self::QUESTION_TYPE_FIELD, $id );
     if( !$qType || !isset( $qType ) ) {
       return false;
@@ -35,7 +37,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
     return $qType;
   }
 
-  public function questionModelByType( $qType ) {
+  public static function questionModelByType( $qType ) {
 
     $qTypes = array(
       'single' => 'QuizMaster_Question_SingleChoice',

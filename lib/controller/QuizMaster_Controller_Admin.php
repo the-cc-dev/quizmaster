@@ -89,13 +89,6 @@ class QuizMaster_Controller_Admin {
         return $a['pos'] - $b['pos'];
       });
 
-      /*
-
-      print '<pre>';
-      var_dump($submenu['quizmaster']);
-      var_dump($qm_submenu );
-      print '</pre>'; */
-
       $submenu['quizmaster'] = $qm_submenu;
 
     }

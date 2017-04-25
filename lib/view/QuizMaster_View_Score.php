@@ -142,7 +142,7 @@ class QuizMaster_View_Score extends QuizMaster_View_View {
   }
 
   public function loadQuestionById( $questionId ) {
-    $this->_activeQuestion = new QuizMaster_Model_Question( $questionId );
+    $this->_activeQuestion = QuizMaster_Model_QuestionMapper::fetch( $questionId );
   }
 
   public function listTable( $scores ) {

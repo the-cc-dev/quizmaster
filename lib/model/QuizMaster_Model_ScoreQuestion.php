@@ -100,7 +100,7 @@ class QuizMaster_Model_ScoreQuestion extends QuizMaster_Model_Model {
 
   // returns the possible points for the question
   public function getPossiblePoints() {
-    $question = new QuizMaster_Model_Question( $this->getQuestionId() );
+    $question = QuizMaster_Model_QuestionMapper::fetch( $this->getQuestionId() );
     $points = $question->getPoints();
     $correctCount = $this->getCorrectCount();
     $incorrectCount = $this->getIncorrectCount();
