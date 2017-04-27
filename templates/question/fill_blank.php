@@ -17,7 +17,7 @@
   <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
-    <li class="quizMaster_questionListItem" data-pos="<?php echo $answer_index; ?>">
+    <li class="quizMaster_questionListItem" data-pos="0">
 
       <?php
         $answer_index = 0;

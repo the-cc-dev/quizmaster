@@ -206,9 +206,8 @@ class QuizMaster_Controller_Front {
             $value = $quiz->getShowMaxQuestionValue();
 
             if ($quiz->isShowMaxQuestionPercent()) {
-                $count = $questionMapper->count($id);
-
-                $value = ceil($count * $value / 100);
+              $count = $questionMapper->count($id);
+              $value = ceil($count * $value / 100);
             }
 
             $question = $questionMapper->fetchAll($id, true, $value);

@@ -450,13 +450,13 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             </div>
             <div>
                 <ul class="quizMaster_resultsList">
-                    <?php foreach ($result['text'] as $resultText) { ?>
-                        <li style="display: none;">
-                            <div>
-                                <?php echo do_shortcode(apply_filters('comment_text', $resultText)); ?>
-                            </div>
-                        </li>
-                    <?php } ?>
+                  <?php if(!empty( $result['text'] )): foreach ($result['text'] as $resultText) { ?>
+                      <li style="display: none;">
+                          <div>
+                              <?php echo do_shortcode(apply_filters('comment_text', $resultText)); ?>
+                          </div>
+                      </li>
+                  <?php } endif; ?>
                 </ul>
             </div>
 
@@ -545,7 +545,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
           // cloze
           if ($question->getAnswerType() === 'cloze_answer') {
-            $clozeData = $this->fetchCloze($v->getAnswer());
+            $clozeData = $question->fetchCloze($v->getAnswer());
             $json[$question->getId()]['correct'] = $clozeData['correct'];
             if ($question->isAnswerPointsActivated()) {
               $json[$question->getId()]['points'] = $clozeData['points'];
