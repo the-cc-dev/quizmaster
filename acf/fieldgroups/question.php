@@ -2,7 +2,7 @@
 
 $fieldGroup = array (
 	'key' => 'group_5885e433e5b83',
-	'title' => 'Question',
+	'title' => 'QuizMaster Questions',
 	'fields' => array (
 		array (
 			'placement' => 'left',
@@ -334,15 +334,15 @@ $fieldGroup = array (
 			),
 		),
 		array (
-			'tabs' => 'all',
-			'toolbar' => 'full',
-			'media_upload' => 1,
 			'default_value' => '',
-			'delay' => 0,
+			'new_lines' => '',
+			'maxlength' => '',
+			'placeholder' => '',
+			'rows' => '',
 			'key' => 'field_588a8e01fbde9',
 			'label' => 'Fill in the Blank Answer',
 			'name' => 'qmqe_cloze_answers',
-			'type' => 'wysiwyg',
+			'type' => 'textarea',
 			'instructions' => 'Enclose the searched words with { } e.g. "I {play} soccer". Capital and small letters will be ignored.
 You can specify multiple options for a search word. Enclose the word with [ ] e.g. "I {[play][love][hate]} soccer" . In this case answers play, love OR hate are correct.
 If mode "Different points for every answer" is activated, you can assign points with |POINTS. Otherwise 1 point will be awarded for every answer.

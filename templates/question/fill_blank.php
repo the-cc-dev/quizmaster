@@ -17,27 +17,31 @@
   <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
-    <?php
-      $answer_index = 0;
-      foreach ($question->getAnswerData() as $v) {
-        $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
+    <li class="quizMaster_questionListItem" data-pos="<?php echo $answer_index; ?>">
 
-        if ($answer_text == '') {
-          continue;
+      <?php
+        $answer_index = 0;
+        foreach ($question->getAnswerData() as $v) {
+          $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
+
+          if ($answer_text == '') {
+            continue;
+          }
+
+          $clozeData = $question->fetchCloze( $answer_text );
+
+          $question->_clozeTemp = $clozeData['data'];
+          $cloze = do_shortcode(apply_filters('comment_text',
+              $clozeData['replace']));
+          $cloze = $clozeData['replace'];
+
+          echo preg_replace_callback('#@@quizMasterCloze@@#im', array($question, 'clozeCallback'), $cloze);
+
         }
 
-        $clozeData = $question->fetchCloze( $answer_text );
+      ?>
 
-        $question->_clozeTemp = $clozeData['data'];
-        $cloze = do_shortcode(apply_filters('comment_text',
-            $clozeData['replace']));
-        $cloze = $clozeData['replace'];
-
-        echo preg_replace_callback('#@@quizMasterCloze@@#im', array($question, 'clozeCallback'), $cloze);
-
-      }
-
-    ?>
+    </li>
 
   </ul>
 
