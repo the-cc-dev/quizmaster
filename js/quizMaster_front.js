@@ -1315,8 +1315,7 @@ quizMasterReady(function () {
                 $pointFields.eq(1).text(config.globalPoints);
                 $pointFields.eq(2).text(results.comp.result + '%');
 
-                //Result-Text START
-                var $resultText = $e.find('.quizMaster_resultsList > li').eq(plugin.methode.findResultIndex(results.comp.result));
+                var $resultText = $e.find('.quizMaster_resultsList > li').eq(0);
 
                 var formData = formClass.getFormData();
 
@@ -1397,23 +1396,6 @@ quizMasterReady(function () {
                         forms: formData
                     }
                 });
-            },
-
-            findResultIndex: function (p) {
-                var r = config.resultsGrade;
-                var index = -1;
-                var diff = 999999;
-
-                for (var i = 0; i < r.length; i++) {
-                    var v = r[i];
-
-                    if ((p >= v) && ((p - v) < diff)) {
-                        diff = p - v;
-                        index = i;
-                    }
-                }
-
-                return index;
             },
 
             showQustionList: function () {

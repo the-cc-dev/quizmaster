@@ -41,7 +41,6 @@ $bo = $view->createOption($view->preview);
       mode: <?php echo (int)$view->quiz->getQuizModus(); ?>,
       globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
       timelimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
-      resultsGrade: <?php echo $view->resultsProzent; ?>,
       bo: <?php echo $bo ?>,
       qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
       catPoints: <?php echo json_encode($quizData['catPoints']); ?>,

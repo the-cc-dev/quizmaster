@@ -95,20 +95,10 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     }
 
     public function showMaxQuestion() {
+
         $this->loadButtonNames();
-
         $question_count = count($this->question);
-
         $result = $this->quiz->getResultText();
-
-        // graduations?
-        $resultsProzent = json_encode( array(0) );
-        if ( !$this->quiz->isResultGradeEnabled() ) {
-          $result = array(
-            'text' => array($result),
-            'prozent' => array(0)
-          );
-        }
 
         ?>
         <div class="quizMaster_content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
@@ -142,7 +132,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
                     quizId: <?php echo (int)$this->quiz->getId(); ?>,
                     mode: <?php echo (int)$this->quiz->getQuizModus(); ?>,
                     timelimit: <?php echo (int)$this->quiz->getTimeLimit(); ?>,
-                    resultsGrade: <?php echo $resultsProzent; ?>,
                     bo: <?php echo $bo ?>,
                     qpp: <?php echo $this->quiz->getQuestionsPerPage(); ?>,
                     formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,

@@ -177,16 +177,12 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this->_statisticsIpLock;
     }
 
-    public function setResultGradeEnabled($_resultGradeEnabled)
-    {
-        $this->_resultGradeEnabled = (bool)$_resultGradeEnabled;
-
-        return $this;
+    public function setResultGradeEnabled( $_resultGradeEnabled ) {
+      $this->_resultGradeEnabled = (bool)$_resultGradeEnabled;
     }
 
-    public function isResultGradeEnabled()
-    {
-        return $this->_resultGradeEnabled;
+    public function isResultGradeEnabled() {
+      return $this->_resultGradeEnabled;
     }
 
     public function setShowPoints($_showPoints)
