@@ -55,14 +55,18 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
       $this->question_count = count($this->question);
       $this->result = $this->quiz->getResultText();
 
-      if (!$this->quiz->isResultGradeEnabled()) {
+      // handle graduations
+      if ( $this->quiz->isResultGradeEnabled() ) {
         $this->result = array(
           'text' => array($this->result),
           'prozent' => array(0)
         );
+
+        $this->resultsProzent = json_encode( $this->result['prozent'] );
+      } else {
+        $this->resultsProzent = array(0);
       }
 
-      $this->resultsProzent = json_encode($this->result['prozent']);
       return quizmaster_parse_template( 'front-quiz.php', array('view' => $this));
 
     }
