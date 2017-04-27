@@ -148,9 +148,6 @@ get_header(); ?>
 			<?php
 				$user = wp_get_current_user();
 				$adminLink = false;
-				if ( in_array( 'teacher', (array) $user->roles ) ) {
-					$adminLink = true;
-				}
 				if ( in_array( 'administrator', (array) $user->roles ) ) {
 					$adminLink = true;
 				}

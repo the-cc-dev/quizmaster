@@ -42,17 +42,14 @@ function quizMasterDeactivation() {
 }
 
 function quizmasterRemoveRoles() {
-  remove_role('quizmaster_teacher');
-  remove_role('teacher');
+
 }
 
 function quizMasterActivation() {
 
   include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
 
-  addTeacherRole();
   quizMasterAddAdminCaps();
-
   quizmasterCreateDefaultEmails();
   quizmasterCreateStudentReportPage();
 }
@@ -893,28 +890,6 @@ function quizMasterAddAdminCaps() {
 
 }
 
-/* Teachers */
-function addTeacherRole() {
-
-  $capabilities = array(
-    'read'                       => true,
-    'edit_posts'                 => true,
-    'quizmaster_create_quizzes'  => true,
-    'quizmaster_edit_quizzes'    => true,
-    'quizmaster_publish_quizzes' => true,
-    'quizmaster_delete_quizzes'  => true,
-    'quizmaster_manage_quizzes'  => true,
-    'quizmaster_read_quiz'       => true,
-    'quizmaster_show'            => true,
-  );
-
-  add_role( 'quizmaster_teacher', 'Teacher', $capabilities );
-
-  $teacher = get_role('quizmaster_teacher');
-  $teacher->add_cap( 'quizmaster_manage_questions' );
-
-}
-
 function quizmaster_camelize($input, $separator = '_') {
   return str_replace($separator, '', ucwords($input, $separator));
 }
@@ -958,23 +933,6 @@ function remove_row_actions( $actions ) {
   if( get_post_type() === 'quizmaster_email' )
     unset( $actions['view'] );
   return $actions;
-}
-
-
-/* Teacher Dashboard Cleanup */
-add_action( 'admin_init', 'quizmasterTeacherDashboard' );
-function quizmasterTeacherDashboard() {
-
-  $roles = wp_get_current_user()->roles;
-
-  if ( !in_array( 'quizmaster_teacher', (array) $roles ) ) {
-    return;
-  }
-
-  remove_menu_page('edit.php'); // Posts
-  remove_menu_page('tools.php'); // Tools
-  remove_menu_page('edit-comments.php'); // Comments
-
 }
 
 /* Make QuizMaster admin menu item active for different taxonomies under Category & Tags */

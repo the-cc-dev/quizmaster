@@ -13,7 +13,6 @@
     $view->showLockBox();
     $view->showLoadQuizBox();
     $view->showStartOnlyRegisteredUserBox();
-    $view->showStartOnlyAccessCodeBox();
     $view->showPrerequisiteBox();
     $view->showResultBox($view->result, $view->question_count);
     $view->showReviewBox($view->question_count);

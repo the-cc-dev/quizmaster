@@ -224,10 +224,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         <?php
     }
 
-    public function showStartOnlyAccessCodeBox() {
-      quizmaster_get_template('quiz/access-code.php');
-    }
-
     public function showPrerequisiteBox()
     {
         ?>
