@@ -1,12 +1,46 @@
+<!-- Question Category -->
 <?php
-
-$clozeData = $view->fetchCloze($answers->getAnswer());
-
-$view->_clozeTemp = $clozeData['data'];
-$cloze = do_shortcode(apply_filters('comment_text',
-    $clozeData['replace']));
-$cloze = $clozeData['replace'];
-
-echo preg_replace_callback('#@@quizMasterCloze@@#im', array($view, 'clozeCallback'), $cloze);
-
+  print quizmaster_get_template( 'quiz/category.php', array( 'question' => $question ));
 ?>
+
+<!-- Question Points -->
+<?php
+  print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question ));
+?>
+
+<div class="quizMaster_question">
+
+  <div class="quizMaster_question_text">
+    <?php print $question->getQuestion(); ?>
+  </div>
+
+  <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
+    data-type="<?php echo $question->getAnswerType(); ?>">
+
+    <?php
+      $answer_index = 0;
+      foreach ($question->getAnswerData() as $v) {
+        $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
+
+        if ($answer_text == '') {
+          continue;
+        }
+
+        $clozeData = $question->fetchCloze( $answer_text );
+
+        $question->_clozeTemp = $clozeData['data'];
+        $cloze = do_shortcode(apply_filters('comment_text',
+            $clozeData['replace']));
+        $cloze = $clozeData['replace'];
+
+        echo preg_replace_callback('#@@quizMasterCloze@@#im', array($question, 'clozeCallback'), $cloze);
+
+      }
+
+    ?>
+
+  </ul>
+
+  <?php print quizmaster_get_template('quiz/question-response.php', array('question' => $question)); ?>
+
+</div>

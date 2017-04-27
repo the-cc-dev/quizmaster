@@ -1,6 +1,3 @@
-
-
-
 <!-- Question Category -->
 <?php
   print quizmaster_get_template( 'quiz/category.php', array( 'question' => $question ));
