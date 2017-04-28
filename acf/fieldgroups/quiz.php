@@ -695,7 +695,7 @@ $fieldGroup = array (
 					),
 				),
 			),
-			'min' => 0,
+			'min' => 1,
 			'max' => 0,
 			'layout' => 'table',
 			'button_label' => '',
@@ -705,7 +705,7 @@ $fieldGroup = array (
 			'name' => 'qmqu_questions',
 			'type' => 'repeater',
 			'instructions' => '',
-			'required' => 0,
+			'required' => 1,
 			'conditional_logic' => 0,
 			'wrapper' => array (
 				'width' => '',
