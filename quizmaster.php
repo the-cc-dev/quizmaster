@@ -3,14 +3,14 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.2.0
+Version: 0.3.0
 Author: Joel Milne, GoldHat Group
 Author URI: https://goldhat.ca
 Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.2.0');
+define('QUIZMASTER_VERSION', '0.3.0');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
@@ -449,7 +449,7 @@ function quizmasterAddPostTypes() {
         'singular_name' => __( 'Email' )
       ),
       'public' => true,
-      'has_archive' => true,
+      'has_archive' => false,
       'show_in_menu' => 'quizmaster',
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_emails',
@@ -476,7 +476,7 @@ function quizmasterAddPostTypes() {
         'singular_name' => __( 'Quiz Score' )
       ),
       'public' => true,
-      'has_archive' => true,
+      'has_archive' => false,
       'show_in_menu' => 'quizmaster',
       'capabilities' => array(
         'create_posts' => 'quizmaster_manage_scores',
@@ -553,12 +553,14 @@ function quizMasterInit() {
   add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
 
   // add fieldgroups and option pages
-  /*
   if( !QUIZMASTER_DEV ) {
     add_filter('acf/settings/show_admin', '__return_false');
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quizmaster_fieldgroups.php' );
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/email.php' );
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/question.php' );
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quiz.php' );
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/score.php' );
+    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/settings.php' );
   }
-  */
 
  $fieldCtr = new QuizMaster_Controller_Fields();
  $fieldCtr->loadFieldGroups();
