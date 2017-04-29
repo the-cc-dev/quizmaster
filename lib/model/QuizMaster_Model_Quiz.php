@@ -82,16 +82,20 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this->_name;
     }
 
-    public function setText($_text)
-    {
-        $this->_text = (string)$_text;
-
-        return $this;
+    public function setQuizDescription( $_description ) {
+      $this->_text = (string)$_description;
     }
 
-    public function getText()
-    {
-        return $this->_text;
+    public function getQuizDescription() {
+      return $this->_text;
+    }
+
+    public function setText($_text) {
+      $this->_text = (string)$_text;
+    }
+
+    public function getText() {
+      return $this->_text;
     }
 
     public function setResultText($_resultText)
