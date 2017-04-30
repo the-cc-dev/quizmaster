@@ -64,7 +64,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $this->_title;
     }
 
-    public function setQuestion($_question) {
+    public function setQuestion( $_question ) {
       $this->_question = (string)$_question;
     }
 
@@ -146,7 +146,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function setPoints($_points) {
       $this->_points = (int)$_points;
-      return $this;
     }
 
     public function getPoints() {
@@ -164,7 +163,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function setAnswerPointsActivated($_answerPointsActivated) {
       $this->_answerPointsActivated = (bool)$_answerPointsActivated;
-      return $this;
     }
 
     public function isAnswerPointsActivated() {
@@ -173,7 +171,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function setAnswerData($_answerData) {
       $this->_answerData = $_answerData;
-      return $this;
     }
 
     /**
@@ -366,7 +363,47 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function save() {
 
+      // if new q, save q post
+      if( !$this->getId() ) {
+         $createPostResult = $this->createPost();
+         if( is_wp_error( $createPostResult || $createPostResult == 0 )) {
+           return; // failed post create
+         }
+         $this->setId( $createPostResult );
+      }
+
+      // save meta
+      $this->saveMeta();
+
     }
 
+    /*
+     * Create quiz post
+     */
+    public function createPost() {
+      $questionId = wp_insert_post(
+        array(
+          'post_type'     => 'quizmaster_question',
+          'post_title'    => $this->getTitle(),
+          'post_status'   => 'publish',
+          'post_author'   => 1,
+        )
+      );
+      return $questionId;
+    }
+
+    /*
+     * Update question meta
+     */
+    public function saveMeta() {
+      $fieldGroup = $this->getFieldGroup();
+      foreach( $fieldGroup['fields'] as $field ) {
+        $this->saveField( $field );
+      }
+    }
+
+    public function fieldGroupKey() {
+      return 'question';
+    }
 
 }

@@ -135,15 +135,34 @@ class QuizMaster_Model_Model {
       $fieldKey = ucwords( $fieldKey );
       $fieldKey = str_replace( ' ', '', $fieldKey );
 
-      if( method_exists ( 'QuizMaster_Model_Quiz', 'get' . $fieldKey )) {
+      if( method_exists ( get_class($this), 'get' . $fieldKey )) {
         return 'get' . $fieldKey;
       }
 
-      if( method_exists ( 'QuizMaster_Model_Quiz', 'is' . $fieldKey )) {
+      if( method_exists ( get_class($this), 'is' . $fieldKey )) {
         return 'is' . $fieldKey;
       }
 
       return false;
+
+    }
+
+    /*
+     * Generic field save handler
+     */
+    public function saveField( $field ) {
+
+      // skip tabs
+      if( $field['type'] == 'tab' ) {
+        return;
+      }
+
+      // get method name
+      $methodName = $this->fieldMethodNameGet( $field['name'] );
+
+      if( $methodName ) {
+        update_field( $field['name'], $this->$methodName(), $this->getId() );
+      }
 
     }
 

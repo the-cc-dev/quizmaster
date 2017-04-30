@@ -639,10 +639,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       return $quizId;
     }
 
-    public function fields() {
-
-    }
-
     public function fetchQuestionCategoriesByQuiz() {
 
       $categories = array();
