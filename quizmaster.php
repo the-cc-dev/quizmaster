@@ -3,14 +3,14 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.3.0
+Version: 0.4.0
 Author: Joel Milne, GoldHat Group
 Author URI: https://goldhat.ca
 Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.3.0');
+define('QUIZMASTER_VERSION', '0.4.0');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
@@ -46,12 +46,21 @@ function quizmasterRemoveRoles() {
 }
 
 function quizMasterActivation() {
-
-  include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
-
+  quizmasterTestForACF();
   quizMasterAddAdminCaps();
   quizmasterCreateDefaultEmails();
   quizmasterCreateStudentReportPage();
+}
+
+function quizmasterTestForACF() {
+  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+  $isAcfActive = is_plugin_active('advanced-custom-fields-pro/acf.php');
+  if( !$isAcfActive ) {
+    deactivate_plugins( plugin_basename( __FILE__ ) );
+    wp_die( __( 'QuizMaster requires ACF Pro! Visit <a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a> to purchase or
+      return to <a href="' . get_admin_url( null, 'plugins.php' ) . '">Manage Plugins</a>.
+      ', 'quizmaster-migrate' ) );
+  }
 }
 
 add_action('plugins_loaded', 'quizMaster_pluginLoaded');
