@@ -548,12 +548,6 @@ function quizmasterRegisterTaxonomies() {
 	);
 }
 
-/* ACF Integration */
-add_action('init', 'quizMasterInitPre', 1);
-function quizMasterInitPre() {
-  include_once( QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/acf.php' );
-}
-
 add_action('init', 'quizMasterInit', 10);
 function quizMasterInit() {
 
