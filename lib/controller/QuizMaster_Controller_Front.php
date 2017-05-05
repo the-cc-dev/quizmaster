@@ -64,14 +64,14 @@ class QuizMaster_Controller_Front {
       wp_enqueue_script('jquery');
 
       $data = array(
-          'src' => plugins_url('css/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
+          'src' => plugins_url('css/quizmaster' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
           'deps' => array(),
           'ver' => QUIZMASTER_VERSION,
       );
 
-      $data = apply_filters('quizMaster_front_style', $data);
+      $data = apply_filters('quizmaster_style', $data);
 
-      wp_enqueue_style('quizMaster_front_style', $data['src'], $data['deps'], $data['ver']);
+      wp_enqueue_style('quizmaster_style', $data['src'], $data['deps'], $data['ver']);
 
       wp_enqueue_script('jquery-datatables',
         plugins_url('js/datatables/jquery.dataTables.min.js', QUIZMASTER_FILE),
@@ -100,14 +100,14 @@ class QuizMaster_Controller_Front {
       if ($quiz) {
 
         wp_enqueue_script(
-            'quizMaster_front_javascript',
-            plugins_url('js/quizMaster_front' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
+            'quizmaster_javascript',
+            plugins_url('js/quizmaster' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
             array('jquery-ui-sortable'),
             QUIZMASTER_VERSION,
             $footer
         );
 
-        wp_localize_script('quizMaster_front_javascript', 'QuizMasterGlobal', array(
+        wp_localize_script('quizmaster_javascript', 'QuizMasterGlobal', array(
           'ajaxurl' => admin_url('admin-ajax.php'),
           'loadData' => __('Loading', 'quizmaster'),
           'questionNotSolved' => __('You must answer this question.', 'quizmaster'),

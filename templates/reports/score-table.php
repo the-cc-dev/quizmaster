@@ -1,6 +1,6 @@
 <h2>Quiz Scores</h2>
 
-<table id="quizmaster_score_table">
+<table id="quizmaster_score_table" class="display">
   <thead>
     <tr>
       <th>Quiz</th>
@@ -22,9 +22,3 @@
     <?php endforeach; ?>
   </tbody>
 </table>
-
-<script>
-  jQuery(document).ready(function() {
-      //jQuery('#quizmaster_score_table').DataTable();
-  });
-</script>
