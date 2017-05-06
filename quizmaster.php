@@ -488,18 +488,18 @@ function quizmasterAddPostTypes() {
       'has_archive' => false,
       'show_in_menu' => 'quizmaster',
       'capabilities' => array(
-        'create_posts' => 'quizmaster_manage_scores',
-        'publish_posts' => 'quizmaster_manage_scores',
-        'edit_posts' => 'quizmaster_manage_scores',
-        'edit_post' => 'quizmaster_edit_score',
-        'edit_others_posts' => 'quizmaster_manage_scores',
-        'edit_published_posts' => 'quizmaster_manage_scores',
-        'delete_posts' => 'quizmaster_manage_scores',
-        'delete_post' => 'quizmaster_delete_score',
-        'delete_others_posts' => 'quizmaster_manage_scores',
-        'manage_posts' => 'quizmaster_manage_scores',
-        'read_private_posts' => 'quizmaster_manage_scores',
-        'read_post' => 'quizmaster_read_score',
+        'create_posts' 					=> 'do_not_allow',
+        'publish_posts' 				=> 'quizmaster_manage_scores',
+        'edit_posts' 						=> 'quizmaster_manage_scores',
+        'edit_post' 						=> 'quizmaster_edit_score',
+        'edit_others_posts' 		=> 'quizmaster_manage_scores',
+        'edit_published_posts' 	=> 'quizmaster_manage_scores',
+        'delete_posts' 					=> 'quizmaster_manage_scores',
+        'delete_post'						=> 'quizmaster_delete_score',
+        'delete_others_posts' 	=> 'quizmaster_manage_scores',
+        'manage_posts' 					=> 'quizmaster_manage_scores',
+        'read_private_posts' 		=> 'quizmaster_manage_scores',
+        'read_post' 						=> 'quizmaster_read_score',
       ),
       'map_meta_cap' => true,
     )
@@ -551,10 +551,6 @@ function quizmasterRegisterTaxonomies() {
 add_action('init', 'quizMasterInit', 10);
 function quizMasterInit() {
 
-  // inclusion Filters
-  add_filter('acf/settings/path', 'quizmasterAcfSettingsPath');
-  add_filter('acf/settings/dir', 'quizmasterAcfSettingsDir');
-
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
     add_filter('acf/settings/show_admin', '__return_false');
@@ -565,22 +561,15 @@ function quizMasterInit() {
     include_once( QUIZMASTER_PATH . '/acf/fieldgroups/settings.php' );
   }
 
- $fieldCtr = new QuizMaster_Controller_Fields();
- $fieldCtr->loadFieldGroups();
+	quizMasterAddOptionsPages();
 
-  quizMasterAddOptionsPages();
+	$fieldCtr = new QuizMaster_Controller_Fields();
+	$fieldCtr->loadFieldGroups();
 
-}
-
-function quizmasterAcfSettingsDir( $dir ) {
-  return QUIZMASTER_URL . '/acf/advanced-custom-fields-pro/';
-}
-
-function quizmasterAcfSettingsPath( $path ) {
-  return QUIZMASTER_PATH . '/acf/advanced-custom-fields-pro/';
 }
 
 function quizMasterAddOptionsPages() {
+
   /* Options Pages */
   $option_page = acf_add_options_page(array(
 		'page_title' 	=> 'QuizMaster Settings',
@@ -619,15 +608,32 @@ function quizmaster_question_template($single) {
   return $single;
 }
 
-/* Statistics Link in Quiz Table */
-add_filter('post_row_actions','statisticsRow', 10, 2);
-function statisticsRow($actions, $post){
-    //check for your post type
-    if ($post->post_type =="quizmaster_quiz"){
-      $statsUrl = admin_url('admin.php?page=quizMaster&module=statistics&id=' . $post->ID);
-      $actions['statistics'] = '<a href="'. $statsUrl .'">Statistics</a>';
-    }
-    return $actions;
+/* Scores Link in Quiz Table */
+add_filter('post_row_actions','quizmasterCustomPostRows', 10, 2);
+function quizmasterCustomPostRows( $actions, $quizPost ) {
+
+  if ( $quizPost->post_type == "quizmaster_quiz") {
+
+		// Add scores link
+	  $scoresUrl = admin_url( '/edit.php?post_type=quizmaster_score&qm_quiz=' . $quizPost->ID );
+	  $actions['scores'] = '<a href="'. $scoresUrl .'">Scores</a>';
+
+	}
+
+	if ( $quizPost->post_type == "quizmaster_score") {
+
+	  // Remove the Quick Edit link
+	  if ( isset( $actions['inline hide-if-no-js'] ) ) {
+	    unset( $actions['inline hide-if-no-js'] );
+	  }
+
+		// remove edit, trash
+		unset( $actions['edit'] );
+		unset( $actions['trash'] );
+
+	}
+
+  return $actions;
 }
 
 /* Activate Revisions for Quizzes & Questions */
@@ -651,6 +657,15 @@ function quizmaster_score_columns( $columns ) {
       'correct' => 'Correct'
     )
   );
+}
+
+add_action( 'admin_footer-edit.php', 'quizmasterRemovePostEditTitle' );
+function quizmasterRemovePostEditTitle() {
+  ?>
+  <script type="text/javascript">
+    jQuery('body.post-type-quizmaster_score table.wp-list-table a.row-title').contents().unwrap();
+  </script>
+  <?php
 }
 
 add_filter('manage_quizmaster_score_posts_custom_column', 'quizmaster_score_column_content', 10, 2);
