@@ -633,3 +633,41 @@ span.quizMaster_catPercent {
   line-height: 1.1;
   color: #333;
 }
+
+/* TABLES */
+.quizmaster-table {
+	font-size: 0.8rem;
+}
+.quizmaster-table th {
+	cursor: pointer;
+}
+.quizmaster-table label {
+	font-size: 0.8rem;
+}
+.quizmaster-table td a,
+.quizmaster-table td a:hover {
+	text-decoration: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+.quizmaster-table td a:hover {
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	font-weight: bold;
+}
+
+.quizmaster-wrap .dataTables_wrapper select {
+	height: auto;
+}
+
+.quizmaster-wrap .dataTables_wrapper select {
+	padding: 3px;
+	margin: 10px 4px;
+}
+.quizmaster-wrap .dataTables_wrapper .dataTables_length {
+	font-size: 0.7rem;
+	float: right;
+}
+.quizmaster-wrap .dataTables_wrapper .dataTables_length label {
+	font-weight: normal;
+}

@@ -1,7 +1,9 @@
 jQuery(document).ready(function( $ ) {
 
   // datatables
-  $('#quizmaster_score_table').DataTable();
+  $('#quizmaster_score_table').DataTable({
+		searching: false
+	});
 
 });
 
