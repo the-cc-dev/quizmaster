@@ -12,40 +12,33 @@ The best quiz system plugin for WordPress.
 
 == Description ==
 
-The best quiz system plugin for WordPress. Highly extendable and developer-friendly. Requires ACF Pro.
+The best quiz system plugin for WordPress. Highly extendable and developer-friendly. Requires ACF Pro. Forked in 2016 from WP Pro Quiz, a free quiz plugin developed by Julius Fischer (http://www.it-gecko.de/).
 
 = Features =
-* Single Choice
-* Multiple Choice
-* "Sorting" Choice
-* "Free" Choice
-* Fill in the Blank Questions
-* Time limit
+* Single Choice Question Type
+* Multiple Choice Question Type
+* Sorting Choice Question Type
+* Free Choice Question Type
+* Fill in the Blank Question Type
+* Time Limit
 * Randomize Answers
 * Randomize Questions
-* HTML in questions and answers is allowed
-* Multimedia in questions
-* Back button (optional) support
-* Correct / incorrect response message for all questions
+* Correct or incorrect response message for all questions
 * Different points for each answer
 * Result text with gradations
 * Preview-function
 * Statistics
 * Quiz requirements
 * Hints
-* Custom fields
-* Import / Export function
 * E-mail notification
 * Category support
 * Quiz summary
-* Many configuration options
-* Fully compatible with cache plugins (e.g. WP-Super-Cache or W3 Total Cache)
 
-= QuizMaster - Wiki =
-https://github.com/goldhat/QuizMaster/wiki
+= QuizMaster Wiki =
+https://github.com/goldhat/quizmaster/wiki
 
 = Support =
-* Visit https://goldhat.ca/plugins/quizmaster
+Visit https://goldhat.ca/plugins/quizmaster
 
 == Installation ==
 
@@ -53,6 +46,9 @@ https://github.com/goldhat/QuizMaster/wiki
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.4.2 =
+Fixes to quiz score permissions, score link from quiz table. Attributions, copyright updates.
 
 = 0.4.0 =
 Removed ACF Pro in accordance with WordPress.org hosting requirements. Added dependency check on activation to ensure ACF Pro is active.
