@@ -7,8 +7,8 @@
 	    <tr>
 	      <th>Quiz</th>
 	      <th>Taken At</th>
-	      <th>Points</th>
-	      <th>Correct</th>
+	      <th class="dt-center">Points</th>
+	      <th class="dt-center">Correct</th>
 	      <th>&nbsp;</th>
 	    </tr>
 	  </thead>
@@ -17,9 +17,9 @@
 	      <tr>
 	        <td><?php print $view->getQuizTitle( $score ); ?></td>
 	        <td><?php print $score->getDate(); ?></td>
-	        <td><?php print $score->getPointsEarned(); ?></td>
-	        <td><?php print $score->getCorrectRatio() ?></td>
-	        <td><?php print $view->getLink( $score, "View Details"); ?></td>
+	        <td class="dt-center"><?php print $score->getPointsEarned(); ?></td>
+	        <td class="dt-center"><?php print $score->getCorrectRatio() ?></td>
+	        <td class="dt-right"><?php print $view->getLink( $score, "View Details"); ?></td>
 	      </tr>
 	    <?php endforeach; ?>
 	  </tbody>

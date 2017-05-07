@@ -7,6 +7,11 @@
  * @since 1.0
  * @version 1.0
  *
+ *
+ * Thanks to Easy Pie Chart, https://github.com/rendro/easy-pie-chart
+ * https://rendro.github.io/easy-pie-chart/
+ *
+ *
  */
 
 $scoreCtr = QuizMaster_Controller_Score::loadById( $post->ID );
@@ -16,47 +21,48 @@ $scoreView->setScoreQuestions( $scoreModel->getScores() );
 
 get_header(); ?>
 
-<div class="wrap quizmaster">
+<div class="wrap quizmaster-wrap">
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
 			<h1>Quiz Score</h1>
 
 			<div class="quizmaster-score-summary">
-				<h2>Quiz: <?php print $scoreModel->getQuizName(); ?></h2>
-				<h2>User: <?php print $scoreModel->getUserName(); ?></h2>
+
+				<table class="quizmaster-table quizmaster-info-table display info">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Quiz</td>
+							<td><?php print $scoreModel->getQuizName(); ?></td>
+						</tr>
+						<tr>
+							<td>User</td>
+							<td><?php print $scoreModel->getUserName(); ?></td>
+						</tr>
+						<tr>
+							<td>Correct Questions</td>
+							<td><?php print $scoreModel->getCorrectRatio(); ?></td>
+						</tr>
+						<tr>
+							<td>Hints Used</td>
+							<td><?php print $scoreModel->getTotalHints(); ?></td>
+						</tr>
+
+
+					</tbody>
+				</table>
+
 			</div>
 
 			<div class="quizmaster-container">
 				<div class="quizmaster-row">
 
-					<div class="quizmaster-col-6">
-
-						<div class="mini-charts-item bgm-bluegray">
-				      <div class="clearfix">
-								<div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
-			          <div class="count">
-			            <h3>Corrent Questions</h3>
-			            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
-			          </div>
-				      </div>
-			      </div>
-
-					</div>
-
-					<div class="quizmaster-col-6">
-
-						<div class="mini-charts-item bgm-bluegray">
-				      <div class="clearfix">
-			          <div class="chart stats-line-2"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
-			          <div class="count">
-			            <h3>Questions Corrent/Incorrect</h3>
-			            <h2><?php print $scoreModel->getCorrectRatio(); ?></h2>
-			          </div>
-				      </div>
-			      </div>
-
-					</div>
 				</div>
 			</div>
 
@@ -77,8 +83,8 @@ get_header(); ?>
 
         <div class="text-center p-20 m-t-25">
             <div class="easy-pie main-pie" data-percent="<?php print $scoreModel->getScoreResult(); ?>">
-                <div class="percent"><?php print $scoreModel->getScoreResult(); ?></div>
-                <div class="pie-title">Overall Score</div>
+              <div class="percent"><?php print $scoreModel->getScoreResult(); ?></div>
+              <div class="pie-title">Overall Score</div>
             <canvas height="148" width="148"></canvas></div>
         </div>
 
@@ -116,11 +122,6 @@ get_header(); ?>
 				<div class="quizmaster-score-summary-item">
 					<h3>Questions Corrent/Incorrect</h3>
 					<?php print $scoreModel->getCorrectRatio(); ?>
-				</div>
-
-				<div class="quizmaster-score-summary-item">
-					<h3>Hints Used</h3>
-					<?php print $scoreModel->getTotalHints(); ?>
 				</div>
 
 				<div class="quizmaster-score-summary-item">
@@ -165,18 +166,19 @@ get_header(); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
+	<?php get_sidebar(); ?>
 </div><!-- .wrap -->
 
 <?php get_footer(); ?>
 
 <script>
 jQuery(".main-pie").easyPieChart({
-		trackColor: "rgba(255,255,255,0.2)",
-		scaleColor: "rgba(255,255,255,0)",
-		barColor: "rgba(255,255,255,0.7)",
+		trackColor: "#000",
+		scaleColor: "#999",
+		barColor: "#999",
 		lineWidth: 2,
 		lineCap: "butt",
-		size: 148
+		size: 150
 });
 jQuery(".sub-pie-1").easyPieChart({
 		trackColor: "rgba(255,255,255,0.2)",
@@ -198,70 +200,22 @@ jQuery(".sub-pie-2").easyPieChart({
 </script>
 
 <style>
-.quizMaster_questionList {
-  margin-bottom: 10px !important;
-  background: #F8FAF5 !important;
-  border: 1px solid #C3D1A3 !important;
-  padding: 5px !important;
-  list-style: none !important;
+
+.quizmaster-wrap .quizmaster-score-summary h2 {
+	margin: 6px 0;
+	padding: 0;
 }
 
-.quizMaster_questionList > li {
-  padding: 3px !important;
-  margin-bottom: 5px !important;
-  background-image: none !important;
-  margin-left: 0 !important;
-  list-style: none !important;
+.easyPieChart {
+    position: relative;
+    text-align: center;
 }
 
-.quizMaster_answerCorrect {
-  background: #6DB46D !important;
-  font-weight: bold !important;
+.easyPieChart canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
-.quizMaster_answerIncorrect {
-  background: #FF9191 !important;
-  font-weight: bold !important;
-}
 
-.quizMaster_sortable {
-  padding: 5px !important;
-  border: 1px solid lightGrey !important;
-  background-color: #F8FAF5 !important;
-}
-
-.quizMaster_questionList table {
-  border-collapse: collapse !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100%;
-}
-
-.quizMaster_questionList table {
-  border-collapse: collapse !important;
-}
-
-.quizMaster_mextrixTr > td {
-  border: 1px solid #D1D1D1 !important;
-  padding: 5px !important;
-  vertical-align: middle !important;
-}
-
-.quizMaster_maxtrixSortCriterion {
-  padding: 5px !important;
-}
-
-.quizMaster_sortStringItem {
-  margin: 0 !important;
-  background-image: none !important;
-  list-style: none !important;
-  padding: 5px !important;
-  border: 1px solid lightGrey !important;
-  background-color: #F8FAF5 !important;
-}
-
-.quizMaster_cloze {
-  padding: 0 4px 2px 4px;
-  border-bottom: 1px solid #000;
-}
 </style>

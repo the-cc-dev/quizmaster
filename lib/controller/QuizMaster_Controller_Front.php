@@ -61,16 +61,16 @@ class QuizMaster_Controller_Front {
     }
 
     public function loadDefaultScripts() {
-      wp_enqueue_script('jquery');
+
+			wp_enqueue_script('jquery');
 
       $data = array(
-          'src' => plugins_url('css/quizmaster' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
-          'deps' => array(),
-          'ver' => QUIZMASTER_VERSION,
+        'src' => plugins_url('css/quizmaster' . (QUIZMASTER_DEV ? '' : '.min') . '.css', QUIZMASTER_FILE),
+        'deps' => array(),
+        'ver' => QUIZMASTER_VERSION,
       );
 
       $data = apply_filters('quizmaster_style', $data);
-
       wp_enqueue_style('quizmaster_style', $data['src'], $data['deps'], $data['ver']);
 
       wp_enqueue_script('jquery-datatables',

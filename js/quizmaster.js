@@ -1,6 +1,11 @@
 jQuery(document).ready(function( $ ) {
 
   // datatables
+  $('.quizmaster-info-table').DataTable({
+		searching: false,
+		paging: false,
+		"bInfo": false,
+	});
   $('#quizmaster_score_table').DataTable({
 		searching: false
 	});
