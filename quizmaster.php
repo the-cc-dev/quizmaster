@@ -482,8 +482,8 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_score',
     array(
       'labels' => array(
-        'name' => __( 'Quiz Scores' ),
-        'singular_name' => __( 'Quiz Score' )
+        'name' => __( 'Scores' ),
+        'singular_name' => __( 'Score' )
       ),
       'public' => true,
       'has_archive' => false,

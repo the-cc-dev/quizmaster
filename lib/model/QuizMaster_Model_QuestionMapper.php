@@ -14,14 +14,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
   public static function fetch( $qId ) {
 
-		die(9999);
-
     $qType = self::questionTypeById( $qId );
-
-		var_dump(19);
-		var_dump($qType);
-		die();
-
     $qModel = self::questionModelByType( $qType );
 
     if( $qModel ) {
