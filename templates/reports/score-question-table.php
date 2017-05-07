@@ -4,7 +4,7 @@
 $cats = array();
 foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
 
-	$question = new QuizMaster_Model_Question( $scoreQuestion->getQuestionId() );
+	$question = QuizMaster_Model_QuestionMapper::fetch( $scoreQuestion->getQuestionId() );
 	$catId = $question->getCategoryId();
 	if( !$catId ) {
 		$catId = 0;
@@ -13,13 +13,6 @@ foreach( $scoreView->getScoreQuestions() as $scoreQuestion ) {
 		'question' => $question,
 		'score' => $scoreQuestion,
 	);
-
-	print '<pre>';
-	// var_dump( $scoreQuestion );
-	//var_dump( $question );
-	//var_dump( $question->getCategoryId() );
-	//var_dump( $question->getCategoryName() );
-	print '</pre>';
 
 }
 

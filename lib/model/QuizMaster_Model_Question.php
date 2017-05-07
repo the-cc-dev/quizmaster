@@ -27,37 +27,28 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       $this->_id = (int)$_id;
     }
 
-    public function getId()
-    {
-        return $this->_id;
+    public function getId() {
+      return $this->_id;
     }
 
-    public function setQuizId($_quizId)
-    {
-        $this->_quizId = (int)$_quizId;
-
-        return $this;
+    public function setQuizId($_quizId) {
+      $this->_quizId = (int)$_quizId;
     }
 
-    public function getQuizId()
-    {
-        return $this->_quizId;
+    public function getQuizId() {
+      return $this->_quizId;
     }
 
-    public function setSort($_sort)
-    {
-        $this->_sort = (int)$_sort;
-
-        return $this;
+    public function setSort($_sort) {
+      $this->_sort = (int) $_sort;
     }
 
-    public function getSort()
-    {
-        return $this->_sort;
+    public function getSort() {
+      return $this->_sort;
     }
 
-    public function setTitle($_title) {
-      $this->_title = (string)$_title;
+    public function setTitle( $_title ) {
+      $this->_title = (string) $_title;
     }
 
     public function getTitle() {
@@ -65,23 +56,19 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
     }
 
     public function setQuestion( $_question ) {
-      $this->_question = (string)$_question;
+      $this->_question = (string) $_question;
     }
 
     public function getQuestion() {
       return $this->_question;
     }
 
-    public function setCorrectMsg($_correctMsg)
-    {
-        $this->_correctMsg = (string)$_correctMsg;
-
-        return $this;
+    public function setCorrectMsg($_correctMsg) {
+      $this->_correctMsg = (string) $_correctMsg;
     }
 
-    public function getCorrectMsg()
-    {
-        return $this->_correctMsg;
+    public function getCorrectMsg() {
+      return $this->_correctMsg;
     }
 
     public function setIncorrectMsg($_incorrectMsg)
@@ -296,6 +283,13 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
       // load answer model
       $aModelName = $this->answerModelName();
+
+			/*
+			var_dump($this);
+			var_dump($aModelName);
+			die();
+			*/
+
       $aModel = new $aModelName();
       return $aModel->load( $data );
 
@@ -350,7 +344,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       $scoreCategoryID = $fields[ 'score_category' ];
       $scoreCategory = get_term( $scoreCategoryID );
 
-      if( !is_wp_error($scoreCategory )) {
+      if( !is_wp_error( $scoreCategory )) {
 
         $fields['category_id'] = $scoreCategoryID;
         $fields['category_name'] = $scoreCategory->name;

@@ -14,15 +14,21 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
   public static function fetch( $qId ) {
 
-    $q = new QuizMaster_Model_Question;
+		die(9999);
+
     $qType = self::questionTypeById( $qId );
+
+		var_dump(19);
+		var_dump($qType);
+		die();
+
     $qModel = self::questionModelByType( $qType );
 
     if( $qModel ) {
       $q = new $qModel( $qId );
     } else {
-      $q = new QuizMaster_Model_Question( $qId );
-    }
+			return wp_error( 'Question Model could not be loaded for ' . $qId );
+		}
 
     $q->loadAnswerData();
 
@@ -30,7 +36,16 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
   }
 
   public static function questionTypeById( $id ) {
+
+		if( wp_is_post_revision( $id )) {
+
+		}
+
     $qType = get_field( self::QUESTION_TYPE_FIELD, $id );
+
+		var_dump(40);
+		var_dump($qType);
+
     if( !$qType || !isset( $qType ) ) {
       return false;
     }

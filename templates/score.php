@@ -14,10 +14,6 @@ $scoreView = new QuizMaster_View_Score;
 $scoreModel = $scoreCtr->getScore();
 $scoreView->setScoreQuestions( $scoreModel->getScores() );
 
-print '<pre>';
-var_dump($scoreModel);
-print '</pre>';
-
 get_header(); ?>
 
 <div class="wrap quizmaster">
