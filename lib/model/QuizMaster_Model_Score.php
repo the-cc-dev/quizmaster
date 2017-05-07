@@ -4,6 +4,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
   protected $_id                  = 0;
   protected $_quizId              = 0;
+	protected $_quizRevisionId      = 0;
   protected $_userId              = 0;
   protected $_scores              = array();
   protected $_totalQCount         = 0;
@@ -139,6 +140,14 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
     return $this->_quizId;
   }
 
+	public function setQuizRevisionId($_quizRevisionId) {
+    $this->_quizRevisionId = (int)$_quizRevisionId;
+  }
+
+	public function getQuizRevisionId() {
+		return $this->_quizRevisionId;
+  }
+
   public function getQuizName() {
     return get_the_title( $this->getQuizId());
   }
@@ -180,10 +189,11 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function updateFields() {
-    update_field('qm_score_user', $this->getUserId(), $this->getID());
-    update_field('qm_score_quiz', $this->getQuizId(), $this->getID());
-    update_field('qm_score_scores', $this->getScores('json'), $this->getID());
-    update_field('qm_score_totals', $this->getTotalsJson(), $this->getID());
+    update_field( $this->getFieldPrefix() . 'user', $this->getUserId(), $this->getID());
+    update_field( $this->getFieldPrefix() . 'quiz', $this->getQuizId(), $this->getID());
+		update_field( $this->getFieldPrefix() . 'quiz_revision', $this->getQuizId(), $this->getID());
+    update_field( $this->getFieldPrefix() . 'scores', $this->getScores('json'), $this->getID());
+    update_field( $this->getFieldPrefix() . 'totals', $this->getTotalsJson(), $this->getID());
   }
 
   /*
@@ -192,10 +202,12 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   public function processFieldsDuringModelSet( $fields ) {
 
     $fields['quiz_id'] = $fields['quiz'];
+		$fields['quiz_revision_id'] = $fields['quiz_revision'];
     $fields['user_id'] = $fields['user'];
     $fields['scores'] = $this->loadScoreQuestionsFromJson( $fields['scores'] );
     $fields['totalsJson'] = $fields['totals'];
     return $fields;
+
   }
 
   public function loadScoreQuestionsFromJson( $scoreJson ) {
@@ -211,7 +223,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function getFieldPrefix() {
-    return 'qm_score_';
+    return 'qmsc_';
   }
 
   public function getScoreResult() {

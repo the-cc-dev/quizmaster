@@ -12,15 +12,15 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
     $this->_score = $score;
   }
 
-  public function save($quiz = null) {
+  public function save() {
 
     $quizId = $this->_post['quizId'];
     $results = $this->_post['results'];
 
     // load revision
-    $quizRevisions = wp_get_post_revisions( $quizId );
-    $quizScoringRevision = reset( $quizRevisions );
-    $quizId = $quizScoringRevision->ID;
+    $quizRevisionPosts 	= wp_get_post_revisions( $quizId );
+    $quizRevisionPost 	= reset( $quizRevisionPosts );
+    $quizRevisionId 		= $quizRevisionPost->ID;
 
     $lockIp = $this->getIp();
     $userId = get_current_user_id();
@@ -29,22 +29,23 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
       return false;
     }
 
-    if ($quiz === null) {
-      $quizMapper = new QuizMaster_Model_QuizMapper();
-      $quiz = $quizMapper->fetch($quizId);
-    }
+		// load quiz revision
+    $quizMapper = new QuizMaster_Model_QuizMapper();
+    $quizRevision = $quizMapper->fetch( $quizRevisionId );
 
-    if (!$quiz->isStatisticsOn()) {
+		// is statistics off, we don't continue quiz score
+    if ( !$quizRevision->isStatisticsOn() ) {
       return false;
     }
 
-    $scores = $this->makeScoreList($quizId, $results, $quiz->getQuizModus());
+    $scores = $this->makeScoreList( $quizRevisionId, $results, $quizRevision->getQuizModus() );
 
     if ($scores === false) {
       return false;
     }
 
-    if ($quiz->getStatisticsIpLock() > 0) {
+		// locks are applied to the quiz, not the revision
+    if ( $quizRevision->getStatisticsIpLock() > 0 ) {
 
       $lockMapper = new QuizMaster_Model_LockMapper();
       $lockTime = $quiz->getStatisticsIpLock() * 60;
@@ -67,9 +68,10 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
 
     // load score model
     $score = new QuizMaster_Model_Score();
-    $score->setUserId($userId);
-    $score->setQuizId($quizId);
-    $score->setScores($scores);
+    $score->setUserId( $userId );
+    $score->setQuizId( $quizId );
+		$score->setQuizRevisionId( $quizRevisionId );
+    $score->setScores( $scores );
 
     $totals = $this->calcTotals( $scores );
     $score->setTotals( $totals );
