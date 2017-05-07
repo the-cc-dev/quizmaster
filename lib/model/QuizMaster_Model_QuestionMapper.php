@@ -29,20 +29,14 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
   }
 
   public static function questionTypeById( $id ) {
-
-		if( wp_is_post_revision( $id )) {
-
-		}
-
     $qType = get_field( self::QUESTION_TYPE_FIELD, $id );
-
-		var_dump(40);
-		var_dump($qType);
 
     if( !$qType || !isset( $qType ) ) {
       return false;
     }
+
     return $qType;
+		
   }
 
   public static function questionModelByType( $qType ) {

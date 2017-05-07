@@ -283,13 +283,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
       // load answer model
       $aModelName = $this->answerModelName();
-
-			/*
-			var_dump($this);
-			var_dump($aModelName);
-			die();
-			*/
-
       $aModel = new $aModelName();
       return $aModel->load( $data );
 

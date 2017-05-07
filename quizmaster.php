@@ -629,7 +629,7 @@ function quizmasterCustomPostRows( $actions, $quizPost ) {
 	  }
 
 		// remove edit, trash
-		unset( $actions['edit'] );
+		//unset( $actions['edit'] );
 		unset( $actions['trash'] );
 
 	}
@@ -676,11 +676,11 @@ function quizmaster_score_column_content( $column, $post_id ) {
 
   switch ( $column ) {
     case 'quiz' :
-      $quizId = get_field( 'qm_score_quiz', $post_id );
-      print get_the_title( $quizId );
+      $quizRevisionId = get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
+      print get_the_title( $quizRevisionId );
       break;
     case 'user' :
-      $user = get_field( 'qm_score_user', $post_id );
+      $user = get_field( $score->getFieldPrefix() . 'user', $post_id );
       print $user['display_name'];
       break;
     case 'points' :
@@ -779,9 +779,11 @@ function quizmaster_posts_filter( $query ){
 
   $metaQuery = $query->get('meta_query');
 
+	$scoreModel = new QuizMaster_Model_Score;
+
   if ( 'quizmaster_score' == $type && isset($_GET['qm_quiz']) && $_GET['qm_quiz'] != 0) {
     $metaQuery[] = array(
-      'key'       => 'qm_score_quiz',
+      'key'       => $scoreModel->getFieldPrefix() . 'quiz',
       'value'     => $_GET['qm_quiz'],
       'compare'   => '='
     );
@@ -789,7 +791,7 @@ function quizmaster_posts_filter( $query ){
 
   if ( 'quizmaster_score' == $type && isset($_GET['qm_user']) && $_GET['qm_user'] != 0) {
     $metaQuery[] = array(
-      'key'       => 'qm_score_user',
+      'key'       => $scoreModel->getFieldPrefix() . 'user',
       'value'     => $_GET['qm_user'],
       'compare'   => '='
     );
