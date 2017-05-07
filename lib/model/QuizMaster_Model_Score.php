@@ -126,7 +126,6 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 
   public function setQuizId($_quizId) {
     $this->_quizId = (int)$_quizId;
-    return $this;
   }
 
   /*

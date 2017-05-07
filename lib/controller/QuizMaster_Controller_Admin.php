@@ -108,8 +108,8 @@ class QuizMaster_Controller_Admin {
         do_action( 'quizmaster_add_menu_item', 'quizmaster-categories-tags' );
         $pages[] = QuizMaster_Helper_Submenu::add(
           'quizmaster',
-          __('Categories & Tags', 'quizmaster'),
-          __('Categories & Tags', 'quizmaster'),
+          __('Categories', 'quizmaster'),
+          __('Categories', 'quizmaster'),
           'quizmaster_manage_settings',
           'quizmaster-categories-tags',
           array($this, 'route'),
@@ -119,8 +119,8 @@ class QuizMaster_Controller_Admin {
         do_action( 'quizmaster_add_menu_item', 'quizmaster-support' );
         $pages[] = QuizMaster_Helper_Submenu::add(
           'quizmaster',
-          __('Help & Support', 'quizmaster'),
-          __('Help & Support', 'quizmaster'),
+          __('Help', 'quizmaster'),
+          __('Help', 'quizmaster'),
           'quizmaster_manage_settings',
           'quizmaster-support',
           array($this, 'route'),
