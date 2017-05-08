@@ -689,3 +689,10 @@ span.quizMaster_catPercent {
 .quizmaster-info-table thead {
   display:none;
 }
+
+.quizmaster-score-return-button {
+	margin-top: 20px;
+}
+.quizmaster-score-return-button button a {
+	color: #888;
+}

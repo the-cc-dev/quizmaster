@@ -40,4 +40,8 @@ class QuizMaster_Answer_SingleChoice extends QuizMaster_Model_Answer {
 
   }
 
+	public function save( $answers ) {
+		
+	}
+
 }

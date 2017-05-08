@@ -362,6 +362,9 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       // save meta
       $this->saveMeta();
 
+			// save answer data
+			$this->saveAnswers();
+
     }
 
     /*
@@ -383,11 +386,44 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
      * Update question meta
      */
     public function saveMeta() {
+
       $fieldGroup = $this->getFieldGroup();
       foreach( $fieldGroup['fields'] as $field ) {
         $this->saveField( $field );
       }
+
     }
+
+		public function getAnswerModel() {
+
+			switch( $this->getAnswerType() ) {
+	      case 'single':
+	        return new QuizMaster_Answer_SingleChoice;
+	        break;
+	      case 'multiple':
+	        return new QuizMaster_Answer_MultipleChoice;
+	        break;
+	      case 'free_answer':
+	        return  new QuizMaster_Answer_Free;
+	      case 'sort_answer':
+	        return new QuizMaster_Answer_Sorting;
+	      case 'cloze_answer':
+	      	return  new QuizMaster_Answer_Fill_Blank;
+	    }
+
+			return false;
+
+		}
+
+		/*
+     * Update question meta
+     */
+    public function saveAnswers() {
+
+			$answerModel = $this->getAnswerModel();
+			$answerModel->save( $this->getAnswerData() );
+
+		}
 
     public function fieldGroupKey() {
       return 'question';

@@ -30,12 +30,14 @@ get_header(); ?>
 			<div class="quizmaster-score-summary">
 
 				<table class="quizmaster-table quizmaster-info-table display info">
+
 					<thead>
 						<tr>
 							<th></th>
 							<th></th>
 						</tr>
 					</thead>
+
 					<tbody>
 						<tr>
 							<td>Quiz</td>
@@ -46,104 +48,40 @@ get_header(); ?>
 							<td><?php print $scoreModel->getUserName(); ?></td>
 						</tr>
 						<tr>
+							<td>Overall Score</td>
+							<td><?php print $scoreModel->getScoreResult(); ?>%</td>
+						</tr>
+						<tr>
 							<td>Correct Questions</td>
 							<td><?php print $scoreModel->getCorrectRatio(); ?></td>
+						</tr>
+						<tr>
+							<td>Questions Solved</td>
+							<td><?php print $scoreModel->getSolvedPercentage(); ?>%</td>
+						</tr>
+						<tr>
+							<td>Questions Correct</td>
+							<td><?php print $scoreModel->getQuestionsCorrectPercentage(); ?>%</td>
+						</tr>
+						<tr>
+							<td>Questions Incorrect</td>
+							<td><?php print $scoreModel->getQuestionsIncorrectPercentage(); ?>%</td>
+						</tr>
+						<tr>
+							<td>Completion Time</td>
+							<td><?php print $scoreModel->getTotalTime(); ?>%</td>
+						</tr>
+						<tr>
+							<td>Total Solved</td>
+							<td><?php print $scoreModel->getTotalSolved(); ?></td>
 						</tr>
 						<tr>
 							<td>Hints Used</td>
 							<td><?php print $scoreModel->getTotalHints(); ?></td>
 						</tr>
 
-
 					</tbody>
 				</table>
-
-			</div>
-
-			<div class="quizmaster-container">
-				<div class="quizmaster-row">
-
-				</div>
-			</div>
-
-
-
-
-
-<div class="dash-widgets">
-
-<div id="pie-charts" class="dw-item bgm-cyan c-white">
-
-			<div class="dw-item">
-        <div class="dwi-header">
-            <div class="dwih-title">Quiz Statistics</div>
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="text-center p-20 m-t-25">
-            <div class="easy-pie main-pie" data-percent="<?php print $scoreModel->getScoreResult(); ?>">
-              <div class="percent"><?php print $scoreModel->getScoreResult(); ?></div>
-              <div class="pie-title">Overall Score</div>
-            <canvas height="148" width="148"></canvas></div>
-        </div>
-
-	<div class="p-t-25 p-b-20 text-center">
-		<div class="easy-pie sub-pie-1" data-percent="<?php print $scoreModel->getSolvedPercentage(); ?>">
-			<div class="percent"><?php print $scoreModel->getSolvedPercentage(); ?></div>
-			<div class="pie-title">Questions Solved</div>
-			<canvas height="90" width="90"></canvas>
-		</div>
-
-	<div class="easy-pie sub-pie-2" data-percent="<?php print $scoreModel->getQuestionsCorrectPercentage(); ?>">
-	<div class="percent"><?php print $scoreModel->getQuestionsCorrectPercentage(); ?></div>
-	<div class="pie-title">Questions Correct</div>
-	<canvas height="90" width="90"></canvas>
-	</div>
-
-	<div class="easy-pie sub-pie-2" data-percent="<?php print $scoreModel->getQuestionsIncorrectPercentage(); ?>">
-	<div class="percent"><?php print $scoreModel->getQuestionsIncorrectPercentage(); ?></div>
-	<div class="pie-title">Total Incorrect</div>
-	<canvas height="90" width="90"></canvas></div>
-	</div>
-	</div>
-		</div>
-
-
-		</div>
-
-
-
-
-			<!-- Score Summary -->
-			<div class="score-summary">
-				<h2><?php print __('Score Summary', 'quizmaster'); ?></h2>
-
-				<div class="quizmaster-score-summary-item">
-					<h3>Questions Corrent/Incorrect</h3>
-					<?php print $scoreModel->getCorrectRatio(); ?>
-				</div>
-
-				<div class="quizmaster-score-summary-item">
-					<h3>Completion Time</h3>
-					<?php print $scoreModel->getTotalTime(); ?>
-				</div>
-
-				<div class="quizmaster-score-summary-item">
-					<h3>Total Questions Solved</h3>
-					<?php print $scoreModel->getTotalSolved(); ?>
-				</div>
-
-			</div>
-
-			<?php
-				quizmaster_get_template( 'reports/score-question-table.php',
-					array(
-						'scoreView' => $scoreView,
-						'scoreModel' => $scoreModel
-					)
-				);
-			?>
 
 			<!-- Return Link -->
 			<?php
@@ -160,7 +98,9 @@ get_header(); ?>
 				}
 			?>
 			<div class="quizmaster-score-return-button">
-				<a class="quizmaster-score-return-link button" href="<?php print $returnUrl; ?>">Return to Scores List</a>
+				<button class="quizmaster-score-return-button">
+					<a class="quizmaster-score-return-link" href="<?php print $returnUrl; ?>">Return to Scores List</a>
+				</button>
 			</div>
 
 

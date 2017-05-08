@@ -4,7 +4,8 @@ jQuery(document).ready(function( $ ) {
   $('.quizmaster-info-table').DataTable({
 		searching: false,
 		paging: false,
-		"bInfo": false,
+		bInfo: false,
+		ordering: false,
 	});
   $('#quizmaster_score_table').DataTable({
 		searching: false

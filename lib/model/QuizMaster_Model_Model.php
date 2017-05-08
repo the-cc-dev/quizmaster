@@ -153,7 +153,7 @@ class QuizMaster_Model_Model {
     public function saveField( $field ) {
 
       // skip tabs
-      if( $field['type'] == 'tab' ) {
+      if( $field['type'] == 'tab' || $field['type'] == 'repeater' ) {
         return;
       }
 

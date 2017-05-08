@@ -1,14 +1,14 @@
 <?php
 
 
-class QuizMaster_Answer_Sorting extends QuizMaster_Model_Answer {
+class QuizMaster_Answer_Fill_Blank extends QuizMaster_Model_Answer {
 
   public function getKey() {
-    return 'sorting';
+    return 'fill_blank';
   }
 
   public function getName() {
-    return 'Sorting';
+    return 'Fill in the Blank';
   }
 
   public function load( $data ) {
