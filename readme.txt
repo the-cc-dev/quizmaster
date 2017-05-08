@@ -52,3 +52,8 @@ Fixes to quiz score permissions, score link from quiz table. Attributions, copyr
 
 = 0.4.0 =
 Removed ACF Pro in accordance with WordPress.org hosting requirements. Added dependency check on activation to ensure ACF Pro is active.
+
+== Upgrade Notice ==
+
+
+== Screenshots ==
