@@ -8,10 +8,6 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
     parent::__construct();
   }
 
-  public function save(QuizMaster_Model_Question $question) {
-
-  }
-
   public static function fetch( $qId ) {
 
     $qType = self::questionTypeById( $qId );
@@ -36,7 +32,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
     }
 
     return $qType;
-		
+
   }
 
   public static function questionModelByType( $qType ) {

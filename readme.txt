@@ -55,5 +55,12 @@ Removed ACF Pro in accordance with WordPress.org hosting requirements. Added dep
 
 == Upgrade Notice ==
 
+N/A
 
 == Screenshots ==
+
+1. Test
+
+== Credits ==
+
+This plugin would not be possible with the work of Julius Fischer, the developer of WP Pro Quiz.
