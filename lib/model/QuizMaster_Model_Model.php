@@ -128,22 +128,36 @@ class QuizMaster_Model_Model {
       return false;
     }
 
+		public function propertyNameByFieldKey( $fieldKey ) {
+
+			$propertyName = $this->stripFieldPrefix( $fieldKey );
+      $propertyName = str_replace( '_', ' ', $propertyName );
+      $propertyName = ucwords( $propertyName );
+      $propertyName = str_replace( ' ', '', $propertyName );
+			return $propertyName;
+
+		}
+
+		public function fieldKeyByPropertyName( $propertyName ) {
+			$fieldKey = preg_replace('/(?!^)[A-Z]{2,}(?=[A-Z][a-z])|[A-Z][a-z]/', ' $0', $propertyName);
+			$fieldKey = strtolower ( $fieldKey );
+			$fieldKey = str_replace( ' ', '_', $fieldKey );
+			return $fieldKey;
+		}
+
     public function fieldMethodNameGet( $fieldKey ) {
 
-      $fieldKey = $this->stripFieldPrefix( $fieldKey );
-      $fieldKey = str_replace( '_', ' ', $fieldKey );
-      $fieldKey = ucwords( $fieldKey );
-      $fieldKey = str_replace( ' ', '', $fieldKey );
+      $propertyName = $this->propertyNameByFieldKey( $fieldKey );
 
-      if( method_exists ( get_class($this), 'get' . $fieldKey )) {
-        return 'get' . $fieldKey;
+      if( method_exists ( get_class($this), 'get' . $propertyName )) {
+        return 'get' . $propertyName;
       }
 
-      if( method_exists ( get_class($this), 'is' . $fieldKey )) {
-        return 'is' . $fieldKey;
+      if( method_exists ( get_class($this), 'is' . $propertyName )) {
+        return 'is' . $propertyName;
       }
 
-      return false;
+      return NULL;
 
     }
 
@@ -165,5 +179,12 @@ class QuizMaster_Model_Model {
       }
 
     }
+
+		public function __get( $name ) {
+
+			$fieldKey = $this->fieldKeyByPropertyName( $name );
+			return get_field( $this->getFieldPrefix() . $fieldKey, $this->getId() );
+			
+		}
 
 }

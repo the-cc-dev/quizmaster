@@ -18,6 +18,9 @@
     $view->showReviewBox($view->question_count);
     $view->showQuizAnker();
 
+		// enables quizmaster extension to load quiz boxes via action hook
+		$view->renderExtensionQuizBoxes();
+
     $quizData = $view->showQuizBox($view->question_count);
 
   ?>
@@ -31,9 +34,9 @@ $bo = $view->createOption($view->preview);
 
 <script type="text/javascript">
 
-  window.quizMasterInitList = window.quizMasterInitList || [];
+  window.quizmasterQuizRegistry = window.quizmasterQuizRegistry || [];
 
-  window.quizMasterInitList.push({
+  window.quizmasterQuizRegistry.push({
     id: '#quizMaster_<?php echo $view->quiz->getId(); ?>',
     init: {
       quizId: <?php echo (int)$view->quiz->getId(); ?>,

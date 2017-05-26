@@ -7,6 +7,7 @@ jQuery(document).ready(function( $ ) {
 		bInfo: false,
 		ordering: false,
 	});
+
   $('#quizmaster_score_table').DataTable({
 		searching: false
 	});
@@ -86,12 +87,16 @@ jQuery(document).ready(function( $ ) {
     }
 })("quizMasterReady", window);
 
-quizMasterReady(function () {
-  var r = window.quizMasterInitList || [];
+quizmasterQuizRegistry = quizMasterReady(function () {
+
+  var r = window.quizmasterQuizRegistry || [];
 
   for(var i = 0; i < r.length; i++) {
     jQuery(r[i].id).quizMasterFront(r[i].init);
   }
+
+	return window.quizmasterQuizRegistry;
+
 });
 
 (function ($) {
@@ -103,6 +108,7 @@ quizMasterReady(function () {
 
         var $e = $(element);
         var config = options;
+				var callbacks = [];
         var plugin = this;
         var results = new Object();
         var catResults = new Object();
@@ -112,6 +118,19 @@ quizMasterReady(function () {
         var lastButtonValue = "";
         var inViewQuestions = false;
         var currentPage = 1;
+
+				var registerCallbacks = (function () {
+
+					plugin.methode.ajax({
+							action: 'quizmaster_admin_ajax',
+							func: 'registerExtensionScriptCallbacks',
+							data: {}
+						}, function (json) {
+							window.quizmasterCallbackRegistry = json;
+						}
+					);
+
+				});
 
         var bitOptions = {
             randomAnswer: 0,
@@ -441,7 +460,7 @@ quizMasterReady(function () {
 
             this.startQuiz = function () {
                 if (isQuizStart)
-                    this.stopQuiz();
+                  this.stopQuiz();
 
                 quizStartTimer = +new Date();
                 isQuizStart = true;
@@ -674,20 +693,6 @@ quizMasterReady(function () {
                     str = $.trim(str);
                     return (!str || 0 === str.length);
                 }
-
-//					testValidate: function(str, type) {
-//						switch (type) {
-//						case 0: //None
-//							return true;
-//						case 1: //Text
-//							return !funcs.isEmpty(str);
-//						case 2: //Number
-//							return !isNaN(str);
-//						case 3: //E-Mail
-//							return new RegExp(/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/)
-//                                          .test($.trim(str));
-//						}
-//					}
             };
 
             var typeConst = {
@@ -819,14 +824,8 @@ quizMasterReady(function () {
                     data[0] = $this.find('.quizMaster_questionInput').val();
                 } else if (type == 'sort_answer') {
                     return true;
-//					$this.find('.quizMaster_questionListItem').each(function() {
-//						data[$(this).index()] = $(this).data('pos');
-//					});
                 } else if (type == 'matrix_sort_answer') {
                     return true;
-//					$this.find('.quizMaster_questionListItem').each(function() {
-//						data[$(this).data('pos')] = $(this).find('.quizMaster_answerCorrect').length;
-//					});
                 } else if (type == 'cloze_answer') {
                     var i = 0;
                     $this.find('.quizMaster_cloze input').each(function () {
@@ -845,12 +844,64 @@ quizMasterReady(function () {
             });
         };
 
+				plugin.startQuiz = function () {
+					plugin.methode.startQuiz();
+				};
+
+				plugin.blockQuiz = function () {
+					return quizStatus.isBlocked = true;
+				};
+
+				plugin.unblockQuiz = function () {
+					return quizStatus.isBlocked = false;
+				};
+
+				plugin.lockQuiz = function () {
+					return quizStatus.isLocked = true;
+				};
+
+				plugin.setQuizStatus = function ( prop, val ) {
+					quizStatus[ prop ] = val
+					return quizStatus;
+				};
+
+				plugin.getQuizStatus = function () {
+					return quizStatus;
+				};
+
+				plugin.hideQuizStart = function () {
+
+					globalElements.quizStartPage.hide();
+					plugin.methode.startQuiz();
+
+				};
+
         plugin.methode = {
+
+						// public method used for extensions to hook into events
+						registerAction: function ( action, object, func ) {
+
+							var a = {
+								object: object,
+								func: func,
+							}
+
+							if( callbacks.hasOwnProperty( action ) == false ){
+								callbacks[action] = []
+							}
+
+							callbacks[action].push( a )
+
+						},
+
+
+
             /**
              * @memberOf plugin.methode
              */
 
             parseBitOptions: function () {
+
                 if (config.bo) {
                     bitOptions.randomAnswer = config.bo & (1 << 0);
                     bitOptions.randomQuestion = config.bo & (1 << 1);
@@ -943,58 +994,59 @@ quizMasterReady(function () {
             },
 
             startQuiz: function (loadData) {
-                if (quizStatus.loadLock) {
-                  quizStatus.isQuizStart = 1;
-                  return;
-                }
 
-                quizStatus.isQuizStart = 0;
-                if (quizStatus.isLocked) {
-                  globalElements.quizStartPage.hide();
-                  $e.find('.quizMaster_lock').show();
-                  return;
-                }
+              if ( quizStatus.loadLock ) {
+                quizStatus.isQuizStart = 1;
+                return;
+              }
 
-                if (quizStatus.isPrerequisite) {
-                    globalElements.quizStartPage.hide();
-                    $e.find('.quizMaster_prerequisite').show();
-                    return;
-                }
+              quizStatus.isQuizStart = 0;
 
-                if (quizStatus.isUserStartLocked) {
+							if ( quizStatus.isBlocked ) {
+                globalElements.quizStartPage.hide();
+                return;
+              }
+
+              if ( quizStatus.isLocked ) {
+                globalElements.quizStartPage.hide();
+                $e.find('.quizMaster_lock').show();
+                return;
+              }
+
+              if ( quizStatus.isPrerequisite ) {
+                globalElements.quizStartPage.hide();
+                $e.find('.quizMaster_prerequisite').show();
+                return;
+              }
+
+                if ( quizStatus.isUserStartLocked ) {
                   globalElements.quizStartPage.hide();
                   $e.find('.quizMaster_startOnlyRegisteredUser').show();
                   return;
                 }
 
-                if (quizStatus.isUserStartLockedAccessCode) {
-                  globalElements.quizStartPage.hide();
-                  $e.find('.quizMaster_startOnlyAccessCode').show();
-                  return;
-                }
-
                 if (bitOptions.maxShowQuestion && !loadData) {
-                    globalElements.quizStartPage.hide();
+
+										globalElements.quizStartPage.hide();
                     $e.find('.quizMaster_loadQuiz').show();
-
                     plugin.methode.loadQuizDataAjax(true);
-
                     return;
+
                 }
 
                 if (bitOptions.formActivated && config.formPos == formPosConst.START) {
-                    if (!formClass.checkForm())
-                        return;
+	                if (!formClass.checkForm())
+	                  return;
                 }
 
                 plugin.methode.loadQuizData();
 
                 if (bitOptions.randomQuestion) {
-                    plugin.methode.random(globalElements.questionList);
+                  plugin.methode.random(globalElements.questionList);
                 }
 
                 if (bitOptions.randomAnswer) {
-                    plugin.methode.random($e.find(globalNames.questionList));
+                  plugin.methode.random($e.find(globalNames.questionList));
                 }
 
                 if (bitOptions.sortCategories) {
@@ -1566,18 +1618,32 @@ quizMasterReady(function () {
                 quizStatus.loadLock = 1;
 
                 plugin.methode.ajax({
-
                     action: 'quizmaster_admin_ajax',
                     func: 'quizCheckLock',
                     data: {
-                        quizId: config.quizId
+                      quizId: config.quizId
                     }
                 }, function (json) {
+
+									// run callback hooks
+									var quizLockCallbacks = callbacks['checkQuizLock'];
+									$.each( quizLockCallbacks, function( index, value ) {
+
+										// find object
+										var fn = window[value.object][value.func];
+
+										// is object a function?
+										if (typeof fn === "function") {
+											var quizMasterFront = this;
+											fn( json, quizStatus, globalElements );
+										}
+
+									});
 
                   if (json.lock != undefined) {
                     quizStatus.isLocked = json.lock.is;
 
-                    if (json.lock.pre) {
+                    if ( json.lock.pre ) {
                       $e.find('input[name="restartQuiz"]').hide();
                     }
                   }
@@ -1591,46 +1657,13 @@ quizMasterReady(function () {
                     quizStatus.isUserStartLocked = json.startUserLock;
                   }
 
-                  // quiz access code handling
-                  if (json.startUserLockAccessCode != undefined) {
-                    quizStatus.isUserStartLockedAccessCode = json.startUserLockAccessCode;
-                    quizStatus.accessCode = json.accessCode;
-                    $('#quiz_access_code_form').submit( function( e ) {
-                      var codeEntered = $('#access_code').val();
-
-                      // process access code
-                      plugin.methode.processAccessCode( codeEntered );
-                      e.preventDefault();
-                    });
-                  }
-
                   quizStatus.loadLock = 0;
 
-                  if (quizStatus.isQuizStart) {
-                      plugin.methode.startQuiz();
+                  if ( quizStatus.isQuizStart ) {
+                    plugin.methode.startQuiz();
                   }
 
                 });
-            },
-
-            processAccessCode: function ( codeEntered ) {
-              if( codeEntered == quizStatus.accessCode ) {
-                plugin.methode.grantAccessByCode();
-              } else {
-                plugin.methode.denyAccessByCode();
-              }
-            },
-
-            grantAccessByCode: function () {
-              $('.quizmaster-access-code-error').hide();
-              $('.quizMaster_startOnlyAccessCode').hide();
-
-              quizStatus.isUserStartLockedAccessCode = false;
-              plugin.methode.startQuiz();
-            },
-
-            denyAccessByCode: function () {
-              $('.quizmaster-access-code-error').show();
             },
 
             loadQuizData: function () {
@@ -1842,6 +1875,7 @@ quizMasterReady(function () {
          * @memberOf plugin
          */
         plugin.preInit = function () {
+
             plugin.methode.parseBitOptions();
             reviewBox.init();
 
@@ -1849,9 +1883,9 @@ quizMasterReady(function () {
                 plugin.methode.startQuiz();
                 return false;
             });
-            if (bitOptions.checkBeforeStart && !bitOptions.preview) {
-                plugin.methode.checkQuizLock();
-            }
+
+						// check quiz lock
+            plugin.methode.checkQuizLock();
 
             $e.find('input[name="reShowQuestion"]').click(function () {
                 plugin.methode.showQustionList();

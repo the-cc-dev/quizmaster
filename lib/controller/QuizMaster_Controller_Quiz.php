@@ -48,12 +48,11 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             $data['startUserLock'] = (int)!is_user_logged_in();
         }
 
-        if ($quiz->isStartOnlyByAccessCode()) {
-          $data['startUserLockAccessCode'] = 1;
-          $data['accessCode'] = get_field( 'qmqz_access_code', $quiz->getId() );
-        }
+				// enable extensions to filter quiz lock result
+				$data = apply_filters( 'quizmaster_check_quiz_lock', $data, $quiz );
 
         return $data;
+
     }
 
     public function isPreLockQuiz(QuizMaster_Model_Quiz $quiz)

@@ -6,9 +6,14 @@
  * @property QuizMaster_Model_Category[] category
  */
 class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
+
     public $_clozeTemp = array();
     public $_assessmetTemp = array();
     public $_buttonNames = array();
+
+		public function renderExtensionQuizBoxes() {
+			do_action( 'quizmaster_render_quiz_box', $this );
+		}
 
     public function loadButtonNames()
     {
@@ -78,7 +83,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         $bo |= ((int)$this->quiz->isAnswerRandom()) << 0;
         $bo |= ((int)$this->quiz->isQuestionRandom()) << 1;
         $bo |= ((int)$this->quiz->isDisabledAnswerMark()) << 2;
-        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isPrerequisite() || $this->quiz->isStartOnlyRegisteredUser() || $this->quiz->isStartOnlyByAccessCode())) << 3;
+        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isPrerequisite() || $this->quiz->isStartOnlyRegisteredUser() )) << 3;
         $bo |= ((int)$preview) << 4;
         $bo |= ((int)get_option('quizMaster_corsActivated')) << 5;
         $bo |= ((int)$this->quiz->isShowReviewQuestion()) << 7;

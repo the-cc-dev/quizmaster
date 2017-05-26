@@ -54,6 +54,9 @@ class QuizMaster_Controller_Ajax {
       'resetLock' => array('QuizMaster_Controller_Quiz', 'ajaxResetLock'),
       'completedQuiz' => array('QuizMaster_Controller_Quiz', 'ajaxCompletedQuiz'),
       'quizCheckLock' => array('QuizMaster_Controller_Quiz', 'ajaxQuizCheckLock'),
+			'quizCheckLock' => array('QuizMaster_Controller_Quiz', 'ajaxQuizCheckLock'),
+			'registerExtensionScriptCallbacks' => array('QuizMaster_Helper_Extension', 'ajaxRegisterExtensionScriptCallbacks'),
+
     );
 
     //nopriv
@@ -62,6 +65,7 @@ class QuizMaster_Controller_Ajax {
       'loadQuizData' => array('QuizMaster_Controller_Quiz', 'ajaxLoadQuizData'),
       'completedQuiz' => array('QuizMaster_Controller_Quiz', 'ajaxCompletedQuiz'),
       'quizCheckLock' => array('QuizMaster_Controller_Quiz', 'ajaxQuizCheckLock'),
+			'registerExtensionScriptCallbacks' => array('QuizMaster_Helper_Extension', 'ajaxRegisterExtensionScriptCallbacks'),
     );
   }
 

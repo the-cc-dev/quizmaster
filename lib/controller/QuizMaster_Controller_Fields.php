@@ -26,15 +26,25 @@ class QuizMaster_Controller_Fields {
 
     foreach( $baseFields as $baseField ) {
       $fieldGroup['fields'][] = $this->loadField( $baseField );
+
+			// enable extensions to add fields
+			$addFields = apply_filters('quizmaster_add_fields_after_' . $baseField['name'], array() );
+			if( !empty( $addFields )) {
+				foreach( $addFields as $field ) {
+					$fieldGroup['fields'][] = $field;
+				}
+			}
+
     }
 
-    $fieldGroup = apply_filters('quizmaster_add_fieldgroup', $fieldGroup );
+    $fieldGroup = apply_filters( 'quizmaster_add_fieldgroup', $fieldGroup );
+
     return $fieldGroup;
 
   }
 
   public function loadField( $baseField ) {
-    return apply_filters('quizmaster_add_field', $baseField );
+    return apply_filters('quizmaster_add_field', $baseField, $baseField['name'] );
   }
 
   public function fieldGroups() {

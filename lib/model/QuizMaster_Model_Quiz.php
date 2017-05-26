@@ -36,7 +36,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_showMaxQuestion = false;
     protected $_showMaxQuestionValue = 1;
     protected $_showMaxQuestionPercent = false;
-    protected $_startOnlyByAccessCode = false;
     protected $_showAverageResult = false;
     protected $_prerequisite = false;
     protected $_quizModus = 0;
@@ -512,14 +511,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
     public function isStartOnlyRegisteredUser() {
       return $this->_startOnlyRegisteredUser;
-    }
-
-    public function setStartOnlyByAccessCode( $_startOnlyByAccessCode ) {
-      $this->_startOnlyByAccessCode = (bool)$_startOnlyByAccessCode;
-    }
-
-    public function isStartOnlyByAccessCode() {
-      return $this->_startOnlyByAccessCode;
     }
 
     public function setQuestionsPerPage($_questionsPerPage) {
