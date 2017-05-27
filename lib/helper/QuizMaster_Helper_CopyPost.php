@@ -14,19 +14,19 @@ class QuizMaster_Helper_CopyPost {
 	}
 
 	public function init() {
-		add_filter( 'post_row_actions', array( $this, 'duplicatePostLink' ), 10, 2 );
+		add_filter( 'post_row_actions', array( $this, 'copyPostLink' ), 10, 2 );
 		add_action( 'admin_action_copy_post', array( $this, 'copyPost' ));
 	}
 
 	/*
- * Function creates post duplicate as a draft and redirects then to the edit post screen
+ * Function creates post copy as a draft and redirects then to the edit post screen
  */
 	public function copyPost() {
 
 		global $wpdb;
 
 		if (! ( isset( $_GET['post']) || isset( $_POST['post'])  || ( isset($_REQUEST['action']) && 'copyPost' == $_REQUEST['action'] ) ) ) {
-			wp_die('No post to duplicate has been supplied!');
+			wp_die('No post to copy has been supplied!');
 		}
 
 		/*
@@ -46,7 +46,7 @@ class QuizMaster_Helper_CopyPost {
 		$new_post_author = $current_user->ID;
 
 		/*
-		 * if post data exists, create the post duplicate
+		 * if post data exists, create the post copy
 		 */
 		if (isset( $post ) && $post != null) {
 
@@ -84,7 +84,7 @@ class QuizMaster_Helper_CopyPost {
 			}
 
 			/*
-			 * duplicate all post meta just in two SQL queries
+			 * copy all post meta just in two SQL queries
 			 */
 			$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
 			if (count($post_meta_infos)!=0) {
@@ -114,12 +114,12 @@ class QuizMaster_Helper_CopyPost {
 
 
 	/*
-	 * Add the duplicate link to action list for post_row_actions
+	 * Add the copy link to action list for post_row_actions
 	 */
-	function duplicatePostLink( $actions, $post ) {
+	function copyPostLink( $actions, $post ) {
 
 		if (current_user_can('edit_posts') && $this->postTypes == false || in_array( $post->post_type, $this->postTypes )) {
-			$actions['duplicate'] = '<a href="admin.php?action=copy_post&amp;post=' . $post->ID . '" title="Copy" rel="permalink">Duplicate</a>';
+			$actions['copy'] = '<a href="admin.php?action=copy_post&amp;post=' . $post->ID . '" title="Copy" rel="permalink">Copy</a>';
 		}
 
 		return $actions;
