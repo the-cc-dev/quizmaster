@@ -22,6 +22,8 @@
       foreach ($question->getAnswerData() as $v) {
         $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
 
+				print "6666666";
+
         if ($answer_text == '') {
           continue;
         }

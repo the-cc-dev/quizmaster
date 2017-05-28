@@ -696,3 +696,62 @@ span.quizMaster_catPercent {
 .quizmaster-score-return-button button a {
 	color: #888;
 }
+
+/* Basic grid system based on http://j4n.co/blog/Creating-your-own-css-grid-system */
+.quizmaster-container {
+  width : 100%;
+  max-width : 1200px;
+  box-sizing: border-box;
+}
+.quizmaster-row {
+  width : 100%;
+  max-width : 1200px;
+}
+.quizmaster-row:before,
+.quizmaster-row:after {
+  content:"";
+  display: table ;
+  clear:both;
+}
+[class*='.quizmaster-col-'] {
+  float: left;
+  min-height: 1px;
+  width: 8.33%;
+  padding: 12px;
+}
+.quizmaster-col-1 {
+  width: 8.33%;
+}
+.quizmaster-col-2 {
+  width: 16.66%;
+}
+.quizmaster-col-3 {
+  width: 50%;
+}
+.quizmaster-col-4 {
+  width: 33.33%;
+}
+.quizmaster-col-5 {
+  width: 41.66%;
+}
+.quizmaster-col-6 {
+  width: 50%;
+}
+.quizmaster-col-7 {
+  width: 58.33%;
+}
+.quizmaster-col-8 {
+  width: 66.66%;
+}
+.quizmaster-col-9 {
+  width: 75%;
+}
+.quizmaster-col-10 {
+  width: 83.33%;
+}
+.quizmaster-col-11 {
+  width: 91.66%;
+}
+.quizmaster-col-12 {
+  width: 100%;
+}
