@@ -5,7 +5,7 @@
 
 <!-- Question Points -->
 <?php
-  print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question ));
+  print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question, 'quiz' => $quiz ));
 ?>
 
 <div class="quizMaster_question">
@@ -21,9 +21,6 @@
       $answer_index = 0;
       foreach ($question->getAnswerData() as $v) {
         $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
-
-				print "6666666";
-
         if ($answer_text == '') {
           continue;
         }

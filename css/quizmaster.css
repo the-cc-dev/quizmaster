@@ -702,10 +702,15 @@ span.quizMaster_catPercent {
   width : 100%;
   max-width : 1200px;
   box-sizing: border-box;
+	padding: 0 15px;
+}
+.quizmaster-container.fullwidth {
+  max-width : 100%;
 }
 .quizmaster-row {
   width : 100%;
   max-width : 1200px;
+	margin: 0 -15px;
 }
 .quizmaster-row:before,
 .quizmaster-row:after {
@@ -713,11 +718,11 @@ span.quizMaster_catPercent {
   display: table ;
   clear:both;
 }
-[class*='.quizmaster-col-'] {
+[class*='quizmaster-col-'] {
   float: left;
   min-height: 1px;
   width: 8.33%;
-  padding: 12px;
+  padding: 0 15px;
 }
 .quizmaster-col-1 {
   width: 8.33%;

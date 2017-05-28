@@ -19,9 +19,8 @@
 
         <?php
           // render question
-          // @TODO support: $view->quiz->isShowCategory()) , $view->quiz->isShowPoints()
-          // $view->quiz->isHideAnswerMessageBox()
-          $question->render();
+          // @TODO support: $view->quiz->isHideAnswerMessageBox()
+          $question->render( $view->quiz );
         ?>
 
         <?php

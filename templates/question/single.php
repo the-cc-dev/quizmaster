@@ -7,10 +7,10 @@
     print quizmaster_get_template( 'quiz/category.php', array( 'question' => $question ));
   ?>
 
-  <!-- Question Points -->
-  <?php
-    print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question ));
-  ?>
+	<!-- Question Points -->
+	<?php
+	  print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question, 'quiz' => $quiz ));
+	?>
 
 <div class="quizMaster_question">
 

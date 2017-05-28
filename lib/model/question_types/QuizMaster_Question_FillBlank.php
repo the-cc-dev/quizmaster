@@ -6,11 +6,11 @@ class QuizMaster_Question_FillBlank extends QuizMaster_Model_Question {
     return "QuizMaster_Answer_FillBlank";
   }
 
-  public function render() {
+  public function render( $quiz = false ) {
     quizmaster_get_template('question/fill_blank.php',
       array(
         'question' => $this,
-        'view'
+        'quiz' => $quiz,
       )
     );
   }

@@ -6,10 +6,11 @@ class QuizMaster_Question_Free extends QuizMaster_Model_Question {
     return "QuizMaster_Answer_Free";
   }
 
-  public function render() {
+  public function render( $quiz = false ) {
     quizmaster_get_template('question/free.php',
       array(
         'question' => $this,
+				'quiz' => $quiz,
       )
     );
   }
