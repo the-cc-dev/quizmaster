@@ -56,6 +56,7 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_showCategory = false;
     protected $_categoryId = 0;
     protected $_categoryName = '';
+		protected $_staticHeaderMessage;
 
     public function setId($_id)
     {
@@ -681,6 +682,14 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
       return $categoryPoints;
     }
+
+		public function setStaticHeaderMessage( $_staticHeaderMessage ) {
+			$this->_staticHeaderMessage = $_staticHeaderMessage;
+		}
+
+		public function getStaticHeaderMessage() {
+			return $this->_staticHeaderMessage;
+		}
 
     public function fieldGroupKey() {
       return 'quiz';

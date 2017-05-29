@@ -555,4 +555,15 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     public function showLoadQuizBox() {
       quizmaster_get_template('quiz-load-box.php', array( 'view' => $this ));
     }
+
+		public function showStaticHeaderMessage() {
+
+			if( $this->quiz->getStaticHeaderMessage() !== '' ) {
+				return true;
+			}
+
+			return false;
+
+		}
+
 }
