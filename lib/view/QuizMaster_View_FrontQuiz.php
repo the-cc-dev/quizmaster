@@ -470,7 +470,21 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     public function showQuizBox( $questionCount ) {
 
+			quizmaster_get_template('quiz/header.php',
+        array(
+          'view'          => $this,
+          'questionCount' => $questionCount,
+        )
+      );
+
       quizmaster_get_template('quiz-question-item.php',
+        array(
+          'view'          => $this,
+          'questionCount' => $questionCount,
+        )
+      );
+
+			quizmaster_get_template('quiz/footer.php',
         array(
           'view'          => $this,
           'questionCount' => $questionCount,

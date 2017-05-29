@@ -1,11 +1,10 @@
 <?php if ($question->isTipEnabled()) { ?>
-    <div class="quizMaster_tipp" style="display: none; position: relative;">
-        <div>
-            <h5 style="margin: 0 0 10px;" class="quizMaster_header"><?php _e('Hint',
-                    'quizmaster'); ?></h5>
-            <?php echo do_shortcode(apply_filters('comment_text', $question->getTipMsg())); ?>
-        </div>
+  <div class="quizMaster_tipp" style="display: none;">
+    <div>
+      <h5 class="quizMaster_header"><?php __('Hint', 'quizmaster'); ?></h5>
+      <?php echo do_shortcode(apply_filters('comment_text', $question->getTipMsg())); ?>
     </div>
+  </div>
 <?php } ?>
 
 <?php

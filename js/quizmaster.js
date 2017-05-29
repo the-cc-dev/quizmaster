@@ -1579,24 +1579,41 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 });
             },
 
-            showTip: function () {
-                var $this = $(this);
-                var id = $this.siblings('.quizMaster_question').find(globalNames.questionList).data('question_id');
+            showTip: function ( event ) {
 
-                $this.siblings('.quizMaster_tipp').toggle('fast');
+              var $this = $(this);
+              var id = currentQuestion.find(globalNames.questionList).data('question_id');
 
+							// get tip div
+							var $tip = currentQuestion.find('.quizMaster_tipp').html();
+							$tipModal = $('.qm-hint-modal');
+
+							// check if element is Visible
+							var isVisible = $tipModal.is(':visible');
+
+							// show or hide the tip
+							if (isVisible === true) {
+
+							   $tipModal.hide();
+
+							} else {
+
+								// populate modal with current question tip
+								$tipModal.html( $tip )
+
+								// adjust modal position
+								$tipModal.css({
+									position: "absolute",
+									left: $this.position().left + "px",
+									top: ($this.position().top + $this.outerHeight()) + "px",
+									display: "block",
+								});
+
+								// record use of tip
                 results[id].tip = 1;
 
-                $(document).bind('mouseup.tipEvent', function (e) {
+							}
 
-                    var $tip = $e.find('.quizMaster_tipp');
-                    var $btn = $e.find('input[name="tip"]');
-
-                    if (!$tip.is(e.target) && $tip.has(e.target).length == 0 && !$btn.is(e.target)) {
-                        $tip.hide('fast');
-                        $(document).unbind('.tipEvent');
-                    }
-                });
             },
 
             ajax: function (data, success, dataType) {

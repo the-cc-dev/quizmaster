@@ -1,3 +1,9 @@
+<!--
+
+Editing this template is not recommended as it contains vital aspects of loading quizzes. Override with care.
+
+-->
+
 <div class="quizMaster_content" id="quizMaster_<?php echo $view->quiz->getId(); ?>">
 
   <?php

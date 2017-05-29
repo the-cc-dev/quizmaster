@@ -1,11 +1,11 @@
 <?php
 /**
- * The template for displaying quiz scores
+ * The template for displaying quizzes
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
  * @package QuizMaster
- * @since 1.0
+ * @since 0.0.1
  * @version 1.0
  */
 
@@ -23,7 +23,7 @@ get_header(); ?>
 
           $quizControllerFront = new QuizMaster_Controller_Front();
           $quizControllerFront->handleShortCode( $post->ID, false );
-					
+
 					// If comments are open or we have at least one comment, load up the comment template.
 					if ( comments_open() || get_comments_number() ) :
 						comments_template();
