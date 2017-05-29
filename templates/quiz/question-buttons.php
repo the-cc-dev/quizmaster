@@ -13,11 +13,11 @@ if ($quiz->getQuizModus() == QuizMaster_Model_Quiz::QUIZ_MODUS_CHECK && !$quiz->
     print quizmaster_get_template( 'quiz-button-skip.php' );
 }
 
-  print quizmaster_get_template( 'quiz-button-back.php' );
+print quizmaster_get_template( 'quiz-button-back.php' );
 
   if ($question->isTipEnabled()) {
-    print quizmaster_get_template( 'quiz-button-hint.php' );
+		// @TODO make this question setting work outside question
+    print quizmaster_get_template( 'quiz/quiz-button-hint.php' );
   }
-?>
 
-<?php print quizmaster_get_template( 'quiz-button-check-next.php' ); ?>
+?>

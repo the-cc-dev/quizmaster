@@ -160,8 +160,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
         };
 
         var globalNames = {
-            check: 'input[name="check"]',
-            next: 'input[name="next"]',
+            check: '.qm-button-check',
+            next: '.qm-button-next',
             questionList: '.quizMaster_questionList',
             skip: 'input[name="skip"]',
             singlePageLeft: 'input[name="quizMaster_pageLeft"]',
@@ -1089,11 +1089,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 if (bitOptions.hideQuestionPositionOverview || config.mode == 3)
                     $e.find('.quizMaster_question_page').hide();
 
-                //Change last name
-                var $lastButton = globalElements.next.last();
-                lastButtonValue = $lastButton.val();
-                $lastButton.val(config.lbn);
-
                 var $listItem = globalElements.questionList.children();
 
                 globalElements.listItems = $e.find('.quizMaster_list > li');
@@ -1250,6 +1245,13 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 this.showQuestionObject($element);
             },
 
+						questionCount: function () {
+
+							console.log( $e )
+
+							return $e.find('.quizMaster_listItem').length;
+						},
+
             showQuestionObject: function (obj) {
                 if (!obj.length && bitOptions.forcingQuestionSolve && bitOptions.quizSummeryHide && bitOptions.reviewQustion) {
                     for (var i = 0, c = $e.find('.quizMaster_listItem').length; i < c; i++) {
@@ -1261,8 +1263,14 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 }
 
                 currentQuestion.hide();
-
                 currentQuestion = obj.show();
+
+								//Change last name
+								if( plugin.methode.questionCount() == currentQuestion.index() +1 ) {
+									var $lastButton = globalElements.next.last();
+									lastButtonValue = $lastButton.val();
+									$lastButton.val(config.lbn);
+								}
 
                 plugin.methode.scrollTo(globalElements.quiz);
 
@@ -1515,8 +1523,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 $e.find('.quizMaster_resultForm').text('').hide();
 
                 globalElements.results.find('.quizMaster_time_limit_expired').hide();
-
-                globalElements.next.last().val(lastButtonValue);
 
                 inViewQuestions = false;
             },
@@ -1875,7 +1881,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     plugin.methode.showQuizSummary();
                 });
 
-                $e.find('input[name="tip"]').click(plugin.methode.showTip);
+                $e.find('.qm-hint-trigger').click(plugin.methode.showTip);
                 $e.find('input[name="skip"]').click(plugin.methode.skipQuestion);
 
                 $e.find('input[name="quizMaster_pageLeft"]').click(function () {

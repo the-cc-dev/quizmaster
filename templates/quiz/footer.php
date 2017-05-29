@@ -1,13 +1,12 @@
-<div class="quizmaster-container">
+<div class="quizmaster-container qm-quiz-footer">
 	<div class="quizmaster-row">
-		<div class="quizmaster-col-3">
+		<div class="quizmaster-col-6">
 			COL1
 		</div>
-		<div class="quizmaster-col-6">
-			COL2
-		</div>
-		<div class="quizmaster-col-3">
-			COL3
+		<div class="quizmaster-col-6 right">
+
+			<?php print quizmaster_get_template( 'quiz-button-check-next.php' ); ?>
+
 		</div>
 	</div>
 </div>

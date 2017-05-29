@@ -696,12 +696,23 @@ span.quizMaster_catPercent {
 	color: #888;
 }
 
+/* Hints */
 .qm-hint-modal {
 	display: none;
 	border: solid 1px #d3d3d3;
 	padding: 25px;
 	background: #f2f2f2;
 }
+.qm-hint-trigger {
+	cursor: pointer;
+}
+
+/* Quiz Footer */
+.qm-quiz-footer {
+	background: #dbdbdb;
+	color: #212121;
+}
+
 
 /* Basic grid system based on http://j4n.co/blog/Creating-your-own-css-grid-system */
 .quizmaster-container {
@@ -732,6 +743,9 @@ span.quizMaster_catPercent {
 }
 [class*='quizmaster-col-'].center {
   text-align: center;
+}
+[class*='quizmaster-col-'].right {
+  text-align: right;
 }
 .quizmaster-col-1 {
   width: 8.33%;

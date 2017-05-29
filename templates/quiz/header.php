@@ -1,10 +1,10 @@
-<div class="quizmaster-container">
+<div class="quizmaster-container qm-quiz-header">
 
 	<div class="quizmaster-row">
 		<div class="quizmaster-col-3">
 
 			<?php
-		    print quizmaster_get_template( 'quiz-button-hint.php' );
+		    print quizmaster_get_template( 'quiz/quiz-button-hint.php' );
 		  ?>
 
 		</div>
@@ -20,8 +20,11 @@
 
 		</div>
 
-		<div class="quizmaster-col-3">
-			COL3
+		<div class="quizmaster-col-3 right">
+
+			<!-- quit button -->
+			<a href="<?php print get_home_url(); ?>" class="button qm-quit-button">Quit</a>
+
 		</div>
 
 	</div>

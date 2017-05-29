@@ -39,18 +39,4 @@
     <?php endforeach; ?>
   </ol>
 
-  <!-- quiz completion buttons -->
-  <?php if ($view->quiz->getQuizModus() == QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) : ?>
-    <div class="quizmaster-quiz-completion-buttons">
-      <?php
-        print quizmaster_get_template( 'quiz-button-left-right.php' );
-        if ($view->quiz->isShowReviewQuestion() && !$view->quiz->isQuizSummaryHide()) {
-          print quizmaster_get_template( 'quiz-button-summary.php', array('view' => $view));
-        } else {
-          print quizmaster_get_template( 'quiz-button-finish.php', array('view' => $view));
-        }
-      ?>
-    </div>
-  <?php endif; ?>
-
 </div>
