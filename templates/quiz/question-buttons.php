@@ -9,10 +9,6 @@
 
 <?php
 
-if ($quiz->getQuizModus() == QuizMaster_Model_Quiz::QUIZ_MODUS_CHECK && !$quiz->isSkipQuestionDisabled() && $quiz->isShowReviewQuestion()) {
-    print quizmaster_get_template( 'quiz-button-skip.php' );
-}
-
 print quizmaster_get_template( 'quiz-button-back.php' );
 
   if ($question->isTipEnabled()) {

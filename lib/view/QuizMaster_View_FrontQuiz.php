@@ -487,6 +487,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 			quizmaster_get_template('quiz/footer.php',
         array(
           'view'          => $this,
+					'quiz'					=> $this->quiz,
           'questionCount' => $questionCount,
         )
       );
