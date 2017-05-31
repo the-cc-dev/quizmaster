@@ -58,7 +58,7 @@ new quizmaster();
 
 /* remove stuff at deactivation */
 function quizMasterDeactivation() {
-  quizmasterRemoveRoles();
+  QuizMaster_Extension::doDeactivation();
 }
 
 function quizmasterRemoveRoles() {
@@ -70,6 +70,8 @@ function quizMasterActivation() {
   quizMasterAddAdminCaps();
   quizmasterCreateDefaultEmails();
   quizmasterCreateStudentReportPage();
+
+	QuizMaster_Extension::doActivation();
 }
 
 function quizmasterTestForACF() {
@@ -129,10 +131,14 @@ function quizMaster_autoload($class)
 
     $classPath = QUIZMASTER_PATH . '/lib/' . $dir . '/' . $class . '.php';
 
-    if (file_exists($classPath)) {
-      /** @noinspection PhpIncludeInspection */
-      include_once $classPath;
-    }
+		if (file_exists($classPath)) {
+	    /** @noinspection PhpIncludeInspection */
+	    include_once $classPath;
+	  } else {
+			// load extension classes
+			QuizMaster_Extension::autoload( $class, $dir );
+		}
+		
 }
 
 function quizMaster_pluginLoaded() {
@@ -1012,4 +1018,13 @@ function qm_submenu_file( $submenu_file ){
 function quizmaster_log( $message ) {
   $log = new QuizMaster_Helper_Log();
   $log->log( $message );
+}
+
+/* Define QuizMaster_Extension for convenience */
+class QuizMaster_Extension extends QuizMaster_Helper_Extension {}
+
+/* Load all extensions */
+add_action('init', 'quizmasterLoadExtensions', 15);
+function quizmasterLoadExtensions() {
+	QuizMaster_Extension::loadAll();
 }
