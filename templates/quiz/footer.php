@@ -5,7 +5,7 @@
 			<?php
 
 				if ( $quiz->isShowSkipButton() ) {
-				  print quizmaster_get_template( 'quiz-button-skip.php' );
+				  print quizmaster_get_template( 'quiz/button-skip.php' );
 				}
 
 				?>
@@ -13,7 +13,8 @@
 		</div>
 		<div class="quizmaster-col-6 right">
 
-			<?php print quizmaster_get_template( 'quiz-button-check-next.php' ); ?>
+			<?php print quizmaster_get_template( 'quiz/button-check.php' ); ?>
+			<?php print quizmaster_get_template( 'quiz/button-next.php' ); ?>
 
 		</div>
 	</div>

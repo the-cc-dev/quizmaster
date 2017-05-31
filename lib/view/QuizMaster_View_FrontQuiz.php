@@ -275,7 +275,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             ?>
 
             <input type="button" name="endQuizSummary" value="<?php echo $this->_buttonNames['finish_quiz']; ?>"
-                   class="quizMaster_button">
+                   class="qm-button">
         </div>
         <?php
     }
@@ -296,7 +296,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             ?>
 
             <input type="button" name="endInfopage" value="<?php echo $this->_buttonNames['finish_quiz']; ?>"
-                   class="quizMaster_button">
+                   class="qm-button">
         </div>
         <?php
     }
@@ -316,7 +316,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             ?>
 
             <div>
-                <input class="quizMaster_button" type="button" value="<?php echo $this->_buttonNames['start_quiz']; ?>"
+                <input class="qm-button" type="button" value="<?php echo $this->_buttonNames['start_quiz']; ?>"
                        name="startQuiz">
             </div>
         </div>
@@ -361,10 +361,10 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             <div>
                 <?php if ($this->quiz->getQuizModus() != QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) { ?>
                     <input type="button" name="review" value="<?php _e('Review question', 'quizmaster'); ?>"
-                           class="quizMaster_button2" style="float: left; display: block;">
+                           class="qm_button">
                     <?php if (!$this->quiz->isQuizSummaryHide()) { ?>
                         <input type="button" name="quizSummary"
-                               value="<?php echo $this->_buttonNames['quiz_summary']; ?>" class="quizMaster_button2"
+                               value="<?php echo $this->_buttonNames['quiz_summary']; ?>" class="qm-button"
                                style="float: right;">
                     <?php } ?>
                     <div style="clear: both;"></div>
@@ -456,11 +456,11 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
             <div style="margin: 10px 0px;">
                 <?php if (!$this->quiz->isBtnRestartQuizHidden()) { ?>
-                    <input class="quizMaster_button" type="button" name="restartQuiz"
+                    <input class="qm-button" type="button" name="restartQuiz"
                            value="<?php echo $this->_buttonNames['restart_quiz']; ?>">
                 <?php }
                 if (!$this->quiz->isBtnViewQuestionHidden()) { ?>
-                    <input class="quizMaster_button" type="button" name="reShowQuestion"
+                    <input class="qm-button" type="button" name="reShowQuestion"
                            value="<?php _e('View questions', 'quizmaster'); ?>">
                 <?php } ?>
             </div>
@@ -477,7 +477,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         )
       );
 
-      quizmaster_get_template('quiz-question-item.php',
+      quizmaster_get_template('quiz/question-item.php',
         array(
           'view'          => $this,
           'questionCount' => $questionCount,
@@ -568,7 +568,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     }
 
     public function showLoadQuizBox() {
-      quizmaster_get_template('quiz-load-box.php', array( 'view' => $this ));
+      quizmaster_get_template('quiz/load-box.php', array( 'view' => $this ));
     }
 
 		public function showStaticHeaderMessage() {
