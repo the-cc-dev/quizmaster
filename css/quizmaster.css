@@ -21,11 +21,11 @@
     margin-bottom: 10px;
 }
 
-* + html .quizMaster_button, * + html .quizMaster_button:hover {
+* + html .qm-button, * + html .qm-button:hover {
     padding: 3px 0;
 }
 
-.quizMaster_button, .quizMaster_button:hover {
+.qm-button, .qm-button:hover {
     margin: 0;
     padding: 5px 10px;
     background: #13455B;
@@ -491,7 +491,7 @@
     margin-right: 2px;
 }
 
-.quizMaster_button2 {
+.qm-button2 {
     border: 1px solid #DADADA;
     background: whiteSmoke;
     color: #303030;
@@ -504,7 +504,7 @@
     font-weight: normal;
 }
 
-.quizMaster_button2:hover {
+.qm-button2:hover {
     background: #EBEBEB;
 }
 
@@ -735,6 +735,27 @@ span.quizMaster_catPercent {
 .qm-quiz-footer {
 	background: #dbdbdb;
 	color: #212121;
+}
+.qm-quiz-footer .quizmaster-row {
+	padding: 20px 0;
+}
+.qm-quiz-footer .qm-button {
+	background: #E4E4E4;
+	color: #999;
+	min-width: 140px;
+	padding: 10px 25px;
+	font-size: 16px;
+	font-weight: normal;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #CCC;
+	border-radius: 100px;
+	box-shadow: none;
+}
+.qm-quiz-footer .qm-button:hover {
+	color: #222;
+	background: #D0D0D0;
+	box-shadow: none;
 }
 
 /* Progress Bar */
