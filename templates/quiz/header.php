@@ -11,6 +11,9 @@
 
 		<div class="quizmaster-col-6 center">
 
+			<!-- Progress Bar -->
+			<div class="qm-progress-bar">PROGRESS BAR</div>
+
 			<!-- Static Header Message -->
 			<?php if( $view->showStaticHeaderMessage() ) : ?>
 				<div class="qm-quiz-static-message">

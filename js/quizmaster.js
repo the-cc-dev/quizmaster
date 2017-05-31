@@ -281,8 +281,25 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                     $items.eq(e.values.index).addClass('quizMaster_reviewQuestionTarget');
 
+										// show and hide buttons
+										switch (config.mode) {
+
+											case 2:
+
+												globalElements.next.hide();
+												$(globalNames.check).show();
+												$(globalNames.skip).show();
+
+											 break;
+
+										}
+
                     scroll(e.values.index);
                 });
+
+								// show skip button if set
+								if (bitOptions.skipButton)
+									$(globalNames.skip).show();
 
                 $e.bind('reviewQuestion', function (e) {
                     itemsStatus[e.values.index].review = !itemsStatus[e.values.index].review;
@@ -1073,7 +1090,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                         $e.find('input[name="checkSingle"]').show();
                         break;
                     case 2:
-                        $e.find(globalNames.check).show();
+
+                        $(globalNames.check).show();
 
                         if (!bitOptions.skipButton && bitOptions.reviewQustion)
                             $e.find(globalNames.skip).show();
@@ -1246,9 +1264,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
 						questionCount: function () {
-
-							console.log( $e )
-
 							return $e.find('.quizMaster_listItem').length;
 						},
 
@@ -1549,9 +1564,11 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     var result = checker(name, data, $this, $questionList);
 
                     $this.find('.quizMaster_response').show();
-                    $this.find(globalNames.check).hide();
-                    $this.find(globalNames.skip).hide();
-                    $this.find(globalNames.next).show();
+
+										// show and hide buttons
+                    $(globalNames.check).hide();
+                    $(globalNames.skip).hide();
+                    $(globalNames.next).show();
 
                     results[data.id].points = result.p;
                     results[data.id].correct = Number(result.c);

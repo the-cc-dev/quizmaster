@@ -57,6 +57,7 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_categoryId = 0;
     protected $_categoryName = '';
 		protected $_staticHeaderMessage;
+		protected $_showSkipButton;
 
     public function setId($_id)
     {
@@ -398,18 +399,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
         return $this->_quizSummaryHide;
     }
 
-    public function setSkipQuestionDisabled($_skipQuestion)
-    {
-        $this->_skipQuestionDisabled = (bool)$_skipQuestion;
-
-        return $this;
-    }
-
-    public function isSkipQuestionDisabled()
-    {
-        return $this->_skipQuestionDisabled;
-    }
-
     public function setShowCategoryScore($_showCategoryScore)
     {
         $this->_showCategoryScore = (bool)$_showCategoryScore;
@@ -689,6 +678,14 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
 		public function getStaticHeaderMessage() {
 			return $this->_staticHeaderMessage;
+		}
+
+		public function setShowSkipButton( $_showSkipButton ) {
+			$this->_showSkipButton = $_showSkipButton;
+		}
+
+		public function isShowSkipButton() {
+			return $this->_showSkipButton;
 		}
 
     public function fieldGroupKey() {

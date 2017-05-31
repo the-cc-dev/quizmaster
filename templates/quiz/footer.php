@@ -4,7 +4,7 @@
 
 			<?php
 
-				if ($quiz->getQuizModus() == QuizMaster_Model_Quiz::QUIZ_MODUS_CHECK && !$quiz->isSkipQuestionDisabled() && $quiz->isShowReviewQuestion()) {
+				if ( $quiz->isShowSkipButton() ) {
 				  print quizmaster_get_template( 'quiz-button-skip.php' );
 				}
 

@@ -88,7 +88,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         $bo |= ((int)get_option('quizMaster_corsActivated')) << 5;
         $bo |= ((int)$this->quiz->isShowReviewQuestion()) << 7;
         $bo |= ((int)$this->quiz->isQuizSummaryHide()) << 8;
-        $bo |= ((int)(!$this->quiz->isSkipQuestionDisabled() && $this->quiz->isShowReviewQuestion())) << 9;
+        $bo |= ((int)$this->quiz->isShowSkipButton()) << 9;
         $bo |= ((int)$this->quiz->isAutostart()) << 10;
         $bo |= ((int)$this->quiz->isForcingQuestionSolve()) << 11;
         $bo |= ((int)$this->quiz->isHideQuestionPositionOverview()) << 12;
