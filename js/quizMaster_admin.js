@@ -2174,7 +2174,7 @@ jQuery(document).ready(function ($) {
 
                         var closest = $(this).closest('li');
                         var htmlCheck = closest.find('input[name="answerData[][html]"]:eq(0)');
-                        var field = closest.find('.quizMaster_text:eq(0)');
+                        var field = closest.find('.qm-start-box:eq(0)');
 
                         window.org_send_to_editor = window.send_to_editor;
                         var org_tb_remove = tb_remove;
@@ -2406,7 +2406,7 @@ jQuery(document).ready(function ($) {
                         var clone = ul.find('li:eq(0)').clone();
 
                         clone.find('.quizMaster_checkbox').removeAttr('checked');
-                        clone.find('.quizMaster_text').val('');
+                        clone.find('.qm-start-box').val('');
                         clone.find('.quizMaster_points').val(1);
                         clone.find('.deleteAnswer').click(methode.answerRemove);
                         clone.find('.addMedia').click(methode.addMediaClick);

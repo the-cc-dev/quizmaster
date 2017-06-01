@@ -10,7 +10,7 @@
 
 <div class="quizMaster_question">
 
-  <div class="quizMaster_question_text">
+  <div class="qm-question-text">
       <?php echo do_shortcode(apply_filters('comment_text', $question->getQuestion())); ?>
   </div>
 

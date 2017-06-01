@@ -174,8 +174,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             quiz: $e.find('.quizMaster_quiz'),
             questionList: $e.find('.quizMaster_list'),
             results: $e.find('.quizMaster_results'),
-            quizStartPage: $e.find('.quizMaster_text'),
-            timelimit: $e.find('.quizMaster_time_limit'),
+            quizStartPage: $e.find('.qm-start-box'),
+            timelimit: $e.find('.qm-time-limit'),
             toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
             listItems: $()
         };
@@ -212,7 +212,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 var x = _counter * 1000;
 
                 var $timeText = globalElements.timelimit.find('span').text(plugin.methode.parseTime(_counter));
-                var $timeDiv = globalElements.timelimit.find('.quizMaster_progress');
+                var $timeDiv = globalElements.timelimit.find('.qm-progress-box');
 
                 globalElements.timelimit.show();
 
@@ -1038,7 +1038,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                 if ( quizStatus.isUserStartLocked ) {
                   globalElements.quizStartPage.hide();
-                  $e.find('.quizMaster_startOnlyRegisteredUser').show();
+                  $e.find('.qm-lock-box').show();
                   return;
                 }
 
@@ -1384,7 +1384,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 $e.find('.quizMaster_quiz_time span').text(plugin.methode.parseTime(time));
 
                 if (timeover) {
-                    globalElements.results.find('.quizMaster_time_limit_expired').show();
+                    globalElements.results.find('.qm-time-limit_expired').show();
                 }
 
                 plugin.methode.checkQuestion(globalElements.questionList.children(), true);
@@ -1537,7 +1537,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 $e.find('.quizMaster_question_page, input[name="tip"]').show();
                 $e.find('.quizMaster_resultForm').text('').hide();
 
-                globalElements.results.find('.quizMaster_time_limit_expired').hide();
+                globalElements.results.find('.qm-time-limit_expired').hide();
 
                 inViewQuestions = false;
             },
@@ -1841,8 +1841,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                         quiz: $e.find('.quizMaster_quiz'),
                         questionList: $e.find('.quizMaster_list'),
                         results: $e.find('.quizMaster_results'),
-                        quizStartPage: $e.find('.quizMaster_text'),
-                        timelimit: $e.find('.quizMaster_time_limit'),
+                        quizStartPage: $e.find('.qm-start-box'),
+                        timelimit: $e.find('.qm-time-limit'),
                         toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
                         listItems: $()
                     };

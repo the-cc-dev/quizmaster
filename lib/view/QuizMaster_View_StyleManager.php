@@ -44,7 +44,7 @@ class QuizMaster_View_StyleManager extends QuizMaster_View_View
                                                     <h3><span>4</span>. Frage</h3>
 
                                                     <div class="quizMaster_question" style="margin: 10px 0px 0px 0px;">
-                                                        <div class="quizMaster_question_text">
+                                                        <div class="qm-question-text">
                                                             <p>Frage3</p>
                                                         </div>
                                                         <ul class="quizMaster_questionList">

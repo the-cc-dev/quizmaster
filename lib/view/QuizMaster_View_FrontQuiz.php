@@ -15,24 +15,25 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 			do_action( 'quizmaster_render_quiz_box', $this );
 		}
 
-    public function loadButtonNames()
-    {
-        if (!empty($this->_buttonNames)) {
-            return;
-        }
+    public function loadButtonNames() {
 
-        $names = array(
-            'start_quiz'      => __('Start quiz', 'quizmaster'),
-            'restart_quiz'    => __('Restart quiz', 'quizmaster'),
-            'quiz_summary'    => __('Quiz Summary', 'quizmaster'),
-            'finish_quiz'     => __('Finish quiz', 'quizmaster'),
-            'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
-            'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
-            'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
-            'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
-        );
+      if (!empty($this->_buttonNames)) {
+        return;
+      }
 
-        $this->_buttonNames = apply_filters('quizmaster_button_names', $names, $this);
+      $names = array(
+          'start_quiz'      => __('Start quiz', 'quizmaster'),
+          'restart_quiz'    => __('Restart quiz', 'quizmaster'),
+          'quiz_summary'    => __('Quiz Summary', 'quizmaster'),
+          'finish_quiz'     => __('Finish quiz', 'quizmaster'),
+          'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
+          'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
+          'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
+          'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
+      );
+
+      $this->_buttonNames = apply_filters('quizmaster_button_names', $names, $this);
+
     }
 
     /**
@@ -40,18 +41,18 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
      *
      * @return array
      */
-    public function getFreeCorrect($data)
-    {
+    public function getFreeCorrect( $data ) {
+
         $t = str_replace("\r\n", "\n", strtolower($data->getAnswer()));
         $t = str_replace("\r", "\n", $t);
         $t = explode("\n", $t);
 
         return array_values(array_filter(array_map('trim', $t), array($this, 'removeEmptyElements')));
+
     }
 
-    public function removeEmptyElements($v)
-    {
-        return !empty($v) || $v === '0';
+    public function removeEmptyElements( $v ) {
+      return !empty($v) || $v === '0';
     }
 
     public function show() {
@@ -220,13 +221,11 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     }
 
     public function showStartOnlyRegisteredUserBox() {
-        ?>
-        <div style="display: none;" class="quizMaster_startOnlyRegisteredUser">
-            <p>
-                <?php echo $this->_buttonNames['only_registered_user_msg']; ?>
-            </p>
-        </div>
-        <?php
+			quizmaster_get_template('quiz/locked.php',
+        array(
+          'view' => $this,
+        )
+      );
     }
 
     public function showPrerequisiteBox()
@@ -286,51 +285,26 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         <div class="quizMaster_infopage" style="display: none;">
             <h4><?php _e('Information', 'quizmaster'); ?></h4>
 
-            <?php
-            if ($this->quiz->isFormActivated() && $this->quiz->getFormShowPosition() == QuizMaster_Model_Quiz::QUIZ_FORM_POSITION_END
-                && (!$this->quiz->isShowReviewQuestion() || $this->quiz->isQuizSummaryHide())
-            ) {
-                $this->showFormBox();
-            }
-
-            ?>
-
             <input type="button" name="endInfopage" value="<?php echo $this->_buttonNames['finish_quiz']; ?>"
                    class="qm-button">
         </div>
         <?php
     }
 
-    public function showStartQuizBox()
-    {
-        ?>
-        <div class="quizMaster_text">
-            <p>
-                <?php echo do_shortcode(apply_filters('comment_text', $this->quiz->getText())); ?>
-            </p>
-
-            <?php
-            if ($this->quiz->isFormActivated() && $this->quiz->getFormShowPosition() == QuizMaster_Model_Quiz::QUIZ_FORM_POSITION_START) {
-                $this->showFormBox();
-            }
-            ?>
-
-            <div>
-                <input class="qm-button" type="button" value="<?php echo $this->_buttonNames['start_quiz']; ?>"
-                       name="startQuiz">
-            </div>
-        </div>
-        <?php
+    public function showStartQuizBox() {
+			quizmaster_get_template('quiz/start.php',
+        array(
+          'view' => $this,
+        )
+      );
     }
 
-    public function showTimeLimitBox()
-    {
-        ?>
-        <div style="display: none;" class="quizMaster_time_limit">
-            <div class="time"><?php _e('Time limit', 'quizmaster'); ?>: <span>0</span></div>
-            <div class="quizMaster_progress"></div>
-        </div>
-        <?php
+    public function showTimeLimitBox() {
+			quizmaster_get_template('quiz/time.php',
+        array(
+          'view' => $this,
+        )
+      );
     }
 
     public function showReviewBox($questionCount)
@@ -389,7 +363,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
                     <?php _e('Your time: <span></span>', 'quizmaster'); ?>
                 </p>
             <?php } ?>
-            <p class="quizMaster_time_limit_expired" style="display: none;">
+            <p class="qm-time-limit_expired" style="display: none;">
                 <?php _e('Time has elapsed', 'quizmaster'); ?>
             </p>
             <?php if (!$this->quiz->isHideResultPoints()) { ?>

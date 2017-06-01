@@ -10,7 +10,7 @@
 
 <div class="quizMaster_question">
 
-  <div class="quizMaster_question_text">
+  <div class="qm-question-text">
 		<?php do_action('quizmaster_question_text_before'); ?>
     <?php print $question->getQuestion(); ?>
 		<?php do_action('quizmaster_question_text_after'); ?>

@@ -1,3 +1,8 @@
+/* Start Quiz Box */
+.qm-quiz-start-box {
+	display: none;
+}
+
 .quizMaster_answerCorrect {
     background: #6DB46D;
     font-weight: bold;
@@ -135,25 +140,29 @@
     cursor: move;
 }
 
-.quizMaster_time_limit .time {
+/* Time Limit Box */
+.qm-time-limit  {
+	display: none;
+}
+.qm-time-limit .time {
     font-weight: bold;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
-.quizMaster_time_limit .quizMaster_progress {
+.qm-time-limit .qm-progress-box {
     height: 10px;
     background-color: blue;
     margin-bottom: 5px;
 }
 
-.quizMaster_time_limit_expired {
+.qm-time-limit_expired {
     font-weight: bold;
     font-size: 15px;
     text-align: center;
 }
 
-.quizMaster_question_text {
+.qm-question-text {
     margin-bottom: 10px;
 }
 
@@ -272,12 +281,16 @@
     border: 0;
 }
 
-.quizMaster_lock, .quizMaster_prerequisite, .quizMaster_startOnlyRegisteredUser, .quizMaster_loadQuiz {
+/* Lock Box, Prerequisite Box */
+.qm-lock-box {
+	display: none;
+}
+.quizMaster_lock, .quizMaster_prerequisite, .qm-lock-box, .quizMaster_loadQuiz {
     border: 1px dotted #FFC3C3;
     background-color: #FFF7F7;
 }
 
-.quizMaster_lock p, .quizMaster_prerequisite p, .quizMaster_startOnlyRegisteredUser p, .quizMaster_loadQuiz p {
+.quizMaster_lock p, .quizMaster_prerequisite p, .qm-lock-box p, .quizMaster_loadQuiz p {
     margin: 20px;
     font-weight: bold;
 }
