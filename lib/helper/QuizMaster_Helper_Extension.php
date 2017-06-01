@@ -37,7 +37,12 @@ class QuizMaster_Helper_Extension {
 	// include main extension files
 	public static function loadAll() {
 
+		// get extension registry
 		$extObj = new QuizMaster_Helper_Extension;
+		if( empty( $registeredExtensions )) {
+			return; // no registered extensions
+		}
+
 		$registeredExtensions = $extObj->register();
 		foreach( $registeredExtensions as $ext => $extSettings ) {
 			if( $extSettings['type'] == 'pro' ) {
@@ -81,17 +86,6 @@ class QuizMaster_Helper_Extension {
 	// provide onActivation hook
 
 	public function register() {
-
-		$registeredExtensions = array(
-			'teachers' => array(
-				'type' => 'pro',
-				'name' => 'Teachers',
-			),
-			'quiz-access-by-code' => array(
-				'type' => 'pro',
-				'name' => 'Quiz Access by code',
-			),
-		);
 
 		return apply_filters( 'quizmaster_extension_registry', $registeredExtensions );
 

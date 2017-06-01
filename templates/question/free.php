@@ -11,7 +11,9 @@
 <div class="quizMaster_question">
 
   <div class="quizMaster_question_text">
+		<?php do_action('quizmaster_question_text_before'); ?>
     <?php print $question->getQuestion(); ?>
+		<?php do_action('quizmaster_question_text_after'); ?>
   </div>
 
   <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
