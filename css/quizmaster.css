@@ -513,7 +513,7 @@
 }
 
 .quizMaster_header {
-    margin: 0;
+  margin: 0;
 }
 
 .quizMaster_catOverview {
@@ -633,6 +633,11 @@ span.quizMaster_catPercent {
   color: #333;
 }
 
+/* Quiz Header */
+.qm-quiz-header .quizmaster-row {
+	padding: 15px 0;
+}
+
 /* TABLES */
 .quizmaster-wrap .quizmaster-table {
 	font-size: 0.8rem;
@@ -699,7 +704,7 @@ span.quizMaster_catPercent {
 /* Question Answers */
 .quizMaster_questionInput {
 	max-width: 400px;
-	min-width: 220px;
+	min-width: 140px;
 }
 
 /* Quiz Header */
@@ -804,12 +809,19 @@ span.quizMaster_catPercent {
   min-height: 1px;
   width: 8.33%;
   padding: 0 7px;
+	box-sizing: border-box;
 }
 [class*='quizmaster-col-'].center {
   text-align: center;
 }
 [class*='quizmaster-col-'].right {
   text-align: right;
+}
+[class*='quizmaster-col-']:first-child{
+  padding-left: 14px;
+}
+[class*='quizmaster-col-']:last-child {
+  padding-right: 14px;
 }
 .quizmaster-col-1 {
   width: 8.33%;
