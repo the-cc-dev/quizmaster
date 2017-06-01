@@ -1,5 +1,5 @@
-<div class="qm-lock-box">
+<div class="qm-locked">
 	<p>
-		<?php echo $view->_buttonNames['only_registered_user_msg']; ?>
+		<?php echo $view->_buttonNames['lock_box_msg']; ?>
 	</p>
 </div>

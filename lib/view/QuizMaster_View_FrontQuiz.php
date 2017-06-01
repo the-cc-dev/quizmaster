@@ -148,19 +148,16 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         <?php
     }
 
-    public function getQuizData()
-    {
-        ob_start();
+    public function getQuizData() {
 
-        $this->loadButtonNames();
+      ob_start();
+      $this->loadButtonNames();
+      $quizData = $this->showQuizBox(count($this->question));
+      $quizData['content'] = ob_get_contents();
+      ob_end_clean();
 
-        $quizData = $this->showQuizBox(count($this->question));
+      return $quizData;
 
-        $quizData['content'] = ob_get_contents();
-
-        ob_end_clean();
-
-        return $quizData;
     }
 
     public function showQuizAnker()
@@ -209,18 +206,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         return $a === null ? '' : $a;
     }
 
-    public function showLockBox()
-    {
-        ?>
-        <div style="display: none;" class="quizMaster_lock">
-            <p>
-                <?php echo $this->_buttonNames['lock_box_msg']; ?>
-            </p>
-        </div>
-        <?php
-    }
-
-    public function showStartOnlyRegisteredUserBox() {
+    public function showLockBox() {
 			quizmaster_get_template('quiz/locked.php',
         array(
           'view' => $this,
@@ -228,16 +214,22 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
       );
     }
 
-    public function showPrerequisiteBox()
-    {
-        ?>
-        <div style="display: none;" class="quizMaster_prerequisite">
-            <p>
-                <?php echo $this->_buttonNames['prerequisite_msg']; ?>
-                <span></span>
-            </p>
-        </div>
-        <?php
+    public function showStartOnlyRegisteredUserBox() {
+			quizmaster_get_template('quiz/registered.php',
+        array(
+          'view' => $this,
+        )
+      );
+    }
+
+    public function showPrerequisiteBox() {
+
+			quizmaster_get_template('quiz/prerequisites.php',
+        array(
+          'view' => $this,
+        )
+      );
+
     }
 
     public function showCheckPageBox($questionCount)
@@ -444,35 +436,10 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     public function showQuizBox( $questionCount ) {
 
-			quizmaster_get_template('quiz/header.php',
-        array(
-          'view'          => $this,
-          'questionCount' => $questionCount,
-        )
-      );
-
-      quizmaster_get_template('quiz/question-item.php',
-        array(
-          'view'          => $this,
-          'questionCount' => $questionCount,
-        )
-      );
-
-			quizmaster_get_template('quiz/footer.php',
-        array(
-          'view'          => $this,
-					'quiz'					=> $this->quiz,
-          'questionCount' => $questionCount,
-        )
-      );
-
-      $globalPoints = $this->setGlobalPoints( $this->question );
+			$globalPoints = $this->setGlobalPoints( $this->question );
       $json = $this->setQuizJson( $this->question );
-
-      $catPoints = $this->quiz->fetchQuestionCategoryPoints();
-
-      return array( 'globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => $catPoints );
-
+      return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
+			
     }
 
     public function setGlobalPoints( $questions ) {
@@ -501,6 +468,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         if ($question->isAnswerPointsActivated() && $question->isAnswerPointsDiffModusActivated()) {
           $json[$question->getId()]['diffMode'] = 1;
         }
+
+				if ($question->isShowPointsInBox() && $question->isAnswerPointsActivated()) {
+					$json[$question->getId()]['showPoint'] = 1;
+				}
+
+				// pass messages
+				$json[$question->getId()]['correctMessage'] = $question->getCorrectMsg();
+				$json[$question->getId()]['incorrectMessage'] = $question->getIncorrectMsg();
 
         $answer_index = 0;
         foreach ($answerArray as $v) {

@@ -3,6 +3,14 @@
 	display: none;
 }
 
+/* Question Check */
+.qm-question-check {
+	display: none;
+}
+.qm-check-answer-box {
+	display: none;
+}
+
 .quizMaster_answerCorrect {
     background: #6DB46D;
     font-weight: bold;
@@ -18,7 +26,7 @@
 }
 
 .quizMaster_content {
-    margin-top: 10px;
+    margin-top: 25px;
     margin-bottom: 10px;
 }
 
@@ -285,12 +293,15 @@
 .qm-lock-box {
 	display: none;
 }
-.quizMaster_lock, .quizMaster_prerequisite, .qm-lock-box, .quizMaster_loadQuiz {
+.qm-locked {
+	display: none;
+}
+.qm-locked, .quizMaster_prerequisite, .qm-lock-box, .quizMaster_loadQuiz {
     border: 1px dotted #FFC3C3;
     background-color: #FFF7F7;
 }
 
-.quizMaster_lock p, .quizMaster_prerequisite p, .qm-lock-box p, .quizMaster_loadQuiz p {
+.qm-locked p, .quizMaster_prerequisite p, .qm-lock-box p, .quizMaster_loadQuiz p {
     margin: 20px;
     font-weight: bold;
 }

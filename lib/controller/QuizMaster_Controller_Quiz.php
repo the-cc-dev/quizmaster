@@ -27,8 +27,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
             $lockCookie = false;
             $cookieTime = $quiz->getQuizRunOnceTime();
 
-            if (isset($this->_cookie['quizMaster_lock']) && $userId == 0 && $quiz->isQuizRunOnceCookie()) {
-                $cookieJson = json_decode($this->_cookie['quizMaster_lock'], true);
+            if (isset($this->_cookie['qm-locked']) && $userId == 0 && $quiz->isQuizRunOnceCookie()) {
+                $cookieJson = json_decode($this->_cookie['qm-locked'], true);
 
                 if ($cookieJson !== false) {
                     if (isset($cookieJson[$this->_post['quizId']]) && $cookieJson[$this->_post['quizId']] == $cookieTime) {
@@ -217,8 +217,8 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         $cookieTime = $quiz->getQuizRunOnceTime();
         $cookieJson = null;
 
-        if (isset($ctr->_cookie['quizMaster_lock']) && get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {
-          $cookieJson = json_decode($ctr->_cookie['quizMaster_lock'], true);
+        if (isset($ctr->_cookie['qm-locked']) && get_current_user_id() == 0 && $quiz->isQuizRunOnceCookie()) {
+          $cookieJson = json_decode($ctr->_cookie['qm-locked'], true);
 
           if ($cookieJson !== false) {
             if (isset($cookieJson[$data['quizId']]) && $cookieJson[$data['quizId']] == $cookieTime) {
@@ -248,7 +248,7 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
               $cookieData[$data['quizId']] = $quiz->getQuizRunOnceTime();
               $url = parse_url(get_bloginfo('url'));
 
-              setcookie('quizMaster_lock', json_encode($cookieData), time() + 60 * 60 * 24 * 60,
+              setcookie('qm-locked', json_encode($cookieData), time() + 60 * 60 * 24 * 60,
                   empty($url['path']) ? '/' : $url['path']);
           }
 

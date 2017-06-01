@@ -171,9 +171,12 @@ quizmasterQuizRegistry = quizMasterReady(function () {
         var globalElements = {
             back: $e.find('input[name="back"]'),
             next: $e.find(globalNames.next),
+						skip: $e.find(globalNames.skip),
+						check: $e.find(globalNames.check),
             quiz: $e.find('.quizMaster_quiz'),
             questionList: $e.find('.quizMaster_list'),
             results: $e.find('.quizMaster_results'),
+						questionCheck: $e.find('.qm-check-answer-box'),
             quizStartPage: $e.find('.qm-start-box'),
             timelimit: $e.find('.qm-time-limit'),
             toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
@@ -286,9 +289,10 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
 											case 2:
 
-												globalElements.next.hide();
-												$(globalNames.check).show();
-												$(globalNames.skip).show();
+												globalElements.questionCheck.hide()
+												globalElements.next.hide()
+												$(globalNames.check).show()
+												$(globalNames.skip).show()
 
 											 break;
 
@@ -1026,7 +1030,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
               if ( quizStatus.isLocked ) {
                 globalElements.quizStartPage.hide();
-                $e.find('.quizMaster_lock').show();
+                $e.find('.qm-locked').show();
                 return;
               }
 
@@ -1093,10 +1097,11 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                         $(globalNames.check).show();
 
-                        if (!bitOptions.skipButton && bitOptions.reviewQustion)
-                            $e.find(globalNames.skip).show();
+                        if ( bitOptions.skipButton || bitOptions.reviewQustion)
+                          $e.find(globalNames.skip).show();
 
                         break;
+
                     case 1:
                         $e.find('input[name="back"]').slice(1).show();
                     case 0:
@@ -1189,13 +1194,13 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 reviewBox.show();
 
                 if (config.mode != 3) {
-                    $e.trigger({
-                        type: 'changeQuestion',
-                        values: {
-                            item: currentQuestion,
-                            index: currentQuestion.index()
-                        }
-                    });
+                  $e.trigger({
+                    type: 'changeQuestion',
+                    values: {
+                      item: currentQuestion,
+                      index: currentQuestion.index()
+                    }
+                  });
                 }
             },
 
@@ -1268,63 +1273,65 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 						},
 
             showQuestionObject: function (obj) {
+
                 if (!obj.length && bitOptions.forcingQuestionSolve && bitOptions.quizSummeryHide && bitOptions.reviewQustion) {
-                    for (var i = 0, c = $e.find('.quizMaster_listItem').length; i < c; i++) {
-                        if (!quizSolved[i]) {
-                            alert(QuizMasterGlobal.questionsNotSolved);
-                            return false;
-                        }
+                  for (var i = 0, c = $e.find('.quizMaster_listItem').length; i < c; i++) {
+                    if (!quizSolved[i]) {
+                      alert(QuizMasterGlobal.questionsNotSolved);
+                      return false;
                     }
+                  }
                 }
 
                 currentQuestion.hide();
                 currentQuestion = obj.show();
 
-								//Change last name
+								// Change last name
 								if( plugin.methode.questionCount() == currentQuestion.index() +1 ) {
 									var $lastButton = globalElements.next.last();
 									lastButtonValue = $lastButton.val();
 									$lastButton.val(config.lbn);
 								}
 
-                plugin.methode.scrollTo(globalElements.quiz);
+                plugin.methode.scrollTo( globalElements.quiz );
 
+								// Change Question Trigger
                 $e.trigger({
                     type: 'changeQuestion',
                     values: {
-                        item: currentQuestion,
-                        index: currentQuestion.index()
+                      item: currentQuestion,
+                      index: currentQuestion.index()
                     }
                 });
 
-                if (!currentQuestion.length) {
-                    plugin.methode.showQuizSummary();
-                } else {
-                    var questionId = currentQuestion.find(globalNames.questionList).data('question_id');
-                    questionTimer.questionStart(questionId);
+                if ( !currentQuestion.length ) {
+                  plugin.methode.showQuizSummary();
+              	} else {
+                  var questionId = currentQuestion.find(globalNames.questionList).data('question_id');
+                  questionTimer.questionStart(questionId);
                 }
             },
 
             skipQuestion: function () {
-                $e.trigger({
-                    type: 'skipQuestion',
-                    values: {
-                        item: currentQuestion,
-                        index: currentQuestion.index()
-                    }
-                });
+              $e.trigger({
+                  type: 'skipQuestion',
+                  values: {
+                      item: currentQuestion,
+                      index: currentQuestion.index()
+                  }
+              });
 
-                plugin.methode.nextQuestion();
+              plugin.methode.nextQuestion();
             },
 
             reviewQuestion: function () {
-                $e.trigger({
-                    type: 'reviewQuestion',
-                    values: {
-                        item: currentQuestion,
-                        index: currentQuestion.index()
-                    }
-                });
+              $e.trigger({
+                  type: 'reviewQuestion',
+                  values: {
+                      item: currentQuestion,
+                      index: currentQuestion.index()
+                  }
+              });
             },
 
             showQuizSummary: function () {
@@ -1374,6 +1381,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             finishQuiz: function (timeover) {
+
                 questionTimer.questionStop();
                 questionTimer.stopQuiz();
                 timelimit.stop();
@@ -1384,7 +1392,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 $e.find('.quizMaster_quiz_time span').text(plugin.methode.parseTime(time));
 
                 if (timeover) {
-                    globalElements.results.find('.qm-time-limit_expired').show();
+                  globalElements.results.find('.qm-time-limit_expired').show();
                 }
 
                 plugin.methode.checkQuestion(globalElements.questionList.children(), true);
@@ -1423,6 +1431,10 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 this.setCategoryOverview();
 
                 plugin.methode.sendCompletedQuiz();
+
+								// hide buttons
+								globalElements.check.hide();
+								globalElements.skip.hide();
 
                 reviewBox.hide();
 
@@ -1528,7 +1540,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 $e.find('.quizMaster_answerCorrect, .quizMaster_answerIncorrect').removeClass('quizMaster_answerCorrect quizMaster_answerIncorrect');
 
                 $e.find('.quizMaster_listItem').data('check', false);
-                $e.find('.quizMaster_response').hide().children().hide();
+                $e.find('.qm-check-answer-box').hide().children().hide();
 
                 plugin.methode.resetMatrix($e.find('.quizMaster_listItem'));
                 $e.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
@@ -1542,64 +1554,85 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 inViewQuestions = false;
             },
 
-            checkQuestion: function (list, endCheck) {
-                list = (list == undefined) ? currentQuestion : list;
+						currentQuestionId: function() {
+							return currentQuestion.find(globalNames.questionList).data('question_id');
+						},
 
-                list.each(function () {
-                    var $this = $(this);
-                    var $questionList = $this.find(globalNames.questionList);
-                    var data = config.json[$questionList.data('question_id')];
-                    var name = data.type;
+            checkQuestion: function ( list, endCheck ) {
 
-                    questionTimer.questionStop();
+							// either check list passed (at quiz finish) or use current question
+							list = (list == undefined) ? currentQuestion : list;
 
-                    if ($this.data('check')) {
-                        return true;
-                    }
+							list.each(function () {
 
-                    if (data.type == 'single' || data.type == 'multiple') {
-                        name = 'singleMulti';
-                    }
+	              var $this = $(this);
+								var $questionList = $this.find(globalNames.questionList);
+	              var data = config.json[$questionList.data('question_id')];
+	              var name = data.type;
 
-                    var result = checker(name, data, $this, $questionList);
+	              questionTimer.questionStop();
 
-                    $this.find('.quizMaster_response').show();
+	              if ( $this.data('check') ) {
+	                return true;
+	              }
 
-										// show and hide buttons
-                    $(globalNames.check).hide();
-                    $(globalNames.skip).hide();
-                    $(globalNames.next).show();
+								// check answer
+	              if (data.type == 'single' || data.type == 'multiple') {
+	                name = 'singleMulti';
+	              }
+	              var result = checker( name, data, $this, $questionList );
 
-                    results[data.id].points = result.p;
-                    results[data.id].correct = Number(result.c);
-                    results[data.id].data = result.s;
+								console.log( endCheck )
 
-                    results['comp'].points += result.p;
+								// show questionCheck box
+								if( typeof endCheck == 'undefined' ) {
 
-                    catResults[data.catId] += result.p;
+									$('.qm-check-question-points').text( result.p );
 
-                    if (result.c) {
-                        $this.find('.quizMaster_correct').show();
-                        results['comp'].correctQuestions += 1;
-                    } else {
-                        $this.find('.quizMaster_incorrect').show();
-                    }
+									// show check message
+		              if (result.c) {
+										// correct answer
+										$('.qm-check-message').html( data.correctMessage )
+										$('.qm-check-message').removeClass('qm-check-answer-incorrect')
+										$('.qm-check-message').addClass('qm-check-answer-correct')
+										$('.qm-check-message').show()
+										results['comp'].correctQuestions += 1;
+		              } else {
+										$('.qm-check-message').html( data.incorrectMessage )
+										$('.qm-check-message').removeClass('qm-check-answer-correct')
+										$('.qm-check-message').addClass('qm-check-answer-incorrect')
+										$('.qm-check-message').show()
+		              }
 
-                    $this.find('.quizMaster_responsePoints').text(result.p);
+									// show and hide buttons
+		              $(globalNames.check).hide();
+		              $(globalNames.skip).hide();
+		              $(globalNames.next).show();
+									globalElements.questionCheck.show();
 
-                    $this.data('check', true);
+								}
 
-                    if (!endCheck)
-                        $e.trigger({
-                            type: 'questionSolved',
-                            values: {
-                                item: $this,
-                                index: $this.index(),
-                                solved: true,
-                                fake: true
-                            }
-                        });
-                });
+								// organize result from checking answer
+	              results[data.id].points = result.p;
+	              results[data.id].correct = Number(result.c);
+	              results[data.id].data = result.s;
+	              results['comp'].points += result.p;
+	              catResults[data.catId] += result.p;
+								$this.data('check', true);
+
+								// end check trigger
+	              $e.trigger({
+	                type: 'questionSolved',
+	                values: {
+	                  item: currentQuestion,
+	                  index: currentQuestion.index(),
+	                  solved: true,
+	                  fake: true
+	                }
+	              });
+
+							});
+
             },
 
             showTip: function ( event ) {
@@ -1836,15 +1869,17 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                     //Reinit globalElements
                     globalElements = {
-                        back: $e.find('input[name="back"]'),
-                        next: $e.find(globalNames.next),
-                        quiz: $e.find('.quizMaster_quiz'),
-                        questionList: $e.find('.quizMaster_list'),
-                        results: $e.find('.quizMaster_results'),
-                        quizStartPage: $e.find('.qm-start-box'),
-                        timelimit: $e.find('.qm-time-limit'),
-                        toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
-                        listItems: $()
+                      back: $e.find('input[name="back"]'),
+                      next: $e.find(globalNames.next),
+											skip: $e.find(globalNames.skip),
+                      quiz: $e.find('.quizMaster_quiz'),
+                      questionList: $e.find('.quizMaster_list'),
+                      results: $e.find('.quizMaster_results'),
+											questionCheck: $e.find('.qm-check-answer-box'),
+                      quizStartPage: $e.find('.qm-start-box'),
+                      timelimit: $e.find('.qm-time-limit'),
+                      toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
+                      listItems: $()
                     };
 
                     plugin.methode.initQuiz();
@@ -1856,33 +1891,39 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             initQuiz: function () {
+
                 plugin.methode.setClozeStyle();
                 plugin.methode.registerSolved();
 
+								// Next Button Click
                 globalElements.next.click(function () {
-                    if (bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
-                        && (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
 
-                        alert(QuizMasterGlobal.questionNotSolved);
-                        return false;
-                    }
+                  if (bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
+                    && (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
 
-                    plugin.methode.nextQuestion();
+                    alert(QuizMasterGlobal.questionNotSolved);
+                    return false;
+                  }
+
+                  plugin.methode.nextQuestion();
                 });
 
                 globalElements.back.click(function () {
                     plugin.methode.prevQuestion();
                 });
 
+								// Check Answer Button Click
                 $e.find(globalNames.check).click(function () {
-                    if (bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
-                        && (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
 
-                        alert(QuizMasterGlobal.questionNotSolved);
-                        return false;
-                    }
+                  if (bitOptions.forcingQuestionSolve && !quizSolved[currentQuestion.index()]
+                      && (bitOptions.quizSummeryHide || !bitOptions.reviewQustion)) {
 
-                    plugin.methode.checkQuestion();
+                      alert(QuizMasterGlobal.questionNotSolved);
+                      return false;
+                  }
+
+                  plugin.methode.checkQuestion();
+
                 });
 
                 $e.find('input[name="checkSingle"]').click(function () {

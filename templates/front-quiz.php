@@ -1,12 +1,8 @@
-<!--
-
-Editing this template is not recommended as it contains vital aspects of loading quizzes. Override with care.
-
--->
-
 <div class="quizMaster_content" id="quizMaster_<?php echo $view->quiz->getId(); ?>">
 
   <?php
+
+		$quizData = $view->showQuizBox( $view->question_count );
 
     if (!$view->quiz->isTitleHidden()) {
       echo '<h2>', $view->quiz->getName(), '</h2>';
@@ -20,14 +16,35 @@ Editing this template is not recommended as it contains vital aspects of loading
     $view->showLoadQuizBox();
     $view->showStartOnlyRegisteredUserBox();
     $view->showPrerequisiteBox();
-    $view->showResultBox($view->result, $view->question_count);
     $view->showReviewBox($view->question_count);
     $view->showQuizAnker();
 
 		// enables quizmaster extension to load quiz boxes via action hook
 		$view->renderExtensionQuizBoxes();
 
-    $quizData = $view->showQuizBox($view->question_count);
+		quizmaster_get_template('quiz/header.php',
+			array(
+				'view'          => $view,
+				'questionCount' => $view->question_count,
+			)
+		);
+
+		$view->showResultBox( $view->result, $view->question_count );
+
+		quizmaster_get_template('quiz/question-item.php',
+			array(
+				'view'          => $view,
+				'questionCount' => $view->question_count,
+			)
+		);
+
+		quizmaster_get_template('quiz/footer.php',
+			array(
+				'view'          => $view,
+				'quiz'					=> $view->quiz,
+				'questionCount' => $view->question_count,
+			)
+		);
 
   ?>
 </div>
