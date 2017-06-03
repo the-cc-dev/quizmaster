@@ -1609,20 +1609,21 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 								// show questionCheck box
 								if( typeof endCheck == 'undefined' ) {
 
-									$('.qm-check-question-points').text( result.p );
+									// insert points earned
+									$('.qm-check-question-points span').text( result.p );
 
 									// show check message
 		              if (result.c) {
 										// correct answer
 										$('.qm-check-message').html( data.correctMessage )
-										$('.qm-check-message').removeClass('qm-check-answer-incorrect')
-										$('.qm-check-message').addClass('qm-check-answer-correct')
+										globalElements.questionCheck.removeClass('qm-check-answer-incorrect')
+										globalElements.questionCheck.addClass('qm-check-answer-correct')
 										$('.qm-check-message').show()
 										results['comp'].correctQuestions += 1;
 		              } else {
 										$('.qm-check-message').html( data.incorrectMessage )
-										$('.qm-check-message').removeClass('qm-check-answer-correct')
-										$('.qm-check-message').addClass('qm-check-answer-incorrect')
+										globalElements.questionCheck.removeClass('qm-check-answer-correct')
+										globalElements.questionCheck.addClass('qm-check-answer-incorrect')
 										$('.qm-check-message').show()
 		              }
 

@@ -2,14 +2,10 @@
 
     <div class="qm-check-result">
 
-      <span style="float: left;" class="qm-check-result-header">
-      	<?php _e('Correct', 'quizmaster'); ?>
-			</span>
-
-      <span class="qm-check-question-points" style="float: right;"></span>
+			<div class="qm-check-message"></div>
+      <h3 class="qm-check-result-header"></h3>
+      <h4 class="qm-check-question-points">Points Earned: <span></span></h4>
 
     </div>
-
-		<div class="qm-check-message"></div>
 
 </div>

@@ -130,6 +130,30 @@
     cursor: move;
 }
 
+/* Answer Box */
+.qm-check-answer-box {
+	padding: 15px;
+	border-style: solid;
+	border-width: 2px;
+}
+.qm-check-answer-box.qm-check-answer-incorrect {
+	border-color: #EC0B1B;
+	background: #FFD4CC;
+}
+.qm-check-answer-box.qm-check-answer-correct {
+	border-color: #DEF0A5;
+	background: #DEF0A5;
+}
+h3.qm-check-result-header {
+	margin: 0 0 8px 0;
+	padding: 0;
+}
+h4.qm-check-question-points {
+	margin: 0 0 8px 0;
+	padding: 0;
+	font-size: 14px;
+}
+
 /* Time Limit Box */
 .qm-time-limit  {
 	display: none;
