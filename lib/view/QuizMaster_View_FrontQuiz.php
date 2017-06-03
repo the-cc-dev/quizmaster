@@ -22,14 +22,14 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
       }
 
       $names = array(
-          'start_quiz'      => __('Start quiz', 'quizmaster'),
-          'restart_quiz'    => __('Restart quiz', 'quizmaster'),
-          'quiz_summary'    => __('Quiz Summary', 'quizmaster'),
-          'finish_quiz'     => __('Finish quiz', 'quizmaster'),
-          'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
-          'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
-          'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
-          'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
+        'start_quiz'      => __('Start quiz', 'quizmaster'),
+        'restart_quiz'    => __('Restart quiz', 'quizmaster'),
+        'quiz_summary'    => __('Quiz Summary', 'quizmaster'),
+        'finish_quiz'     => __('Finish quiz', 'quizmaster'),
+        'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
+        'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
+        'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
+        'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
       );
 
       $this->_buttonNames = apply_filters('quizmaster_button_names', $names, $this);
@@ -341,97 +341,15 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     }
 
     public function showResultBox($result, $questionCount) {
-        ?>
-        <div style="display: none;" class="quizMaster_results">
-            <h4 class="quizMaster_header"><?php _e('Results', 'quizmaster'); ?></h4>
-            <?php if (!$this->quiz->isHideResultCorrectQuestion()) { ?>
-                <p>
-                    <?php printf(__('%s of %s questions answered correctly', 'quizmaster'),
-                        '<span class="quizMaster_correct_answer">0</span>', '<span>' . $questionCount . '</span>'); ?>
-                </p>
-            <?php }
-            if (!$this->quiz->isHideResultQuizTime()) { ?>
-                <p class="quizMaster_quiz_time">
-                    <?php _e('Your time: <span></span>', 'quizmaster'); ?>
-                </p>
-            <?php } ?>
-            <p class="qm-time-limit_expired" style="display: none;">
-                <?php _e('Time has elapsed', 'quizmaster'); ?>
-            </p>
-            <?php if (!$this->quiz->isHideResultPoints()) { ?>
-                <p class="quizMaster_points">
-                    <?php printf(__('You have reached %s of %s points, (%s)', 'quizmaster'), '<span>0</span>',
-                        '<span>0</span>', '<span>0</span>'); ?>
-                </p>
-            <?php } ?>
-            <?php if ($this->quiz->isShowAverageResult()) { ?>
-                <div class="quizMaster_resultTable">
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td class="quizMaster_resultName"><?php _e('Average score', 'quizmaster'); ?></td>
-                            <td class="quizMaster_resultValue">
-                                <div style="background-color: #6CA54C;">&nbsp;</div>
-                                <span>&nbsp;</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="quizMaster_resultName"><?php _e('Your score', 'quizmaster'); ?></td>
-                            <td class="quizMaster_resultValue">
-                                <div style="background-color: #F79646;">&nbsp;</div>
-                                <span>&nbsp;</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            <?php } ?>
-            <div class="quizMaster_catOverview" <?php $this->isDisplayNone($this->quiz->isShowCategoryScore()); ?>>
-                <h4><?php _e('Categories', 'quizmaster'); ?></h4>
 
-                <div style="margin-top: 10px;">
-                    <ol>
+			quizmaster_get_template('quiz/results-box.php',
+        array(
+          'view' => $this,
+					'questionCount' => $questionCount,
+					'result' => $result,
+        )
+      );
 
-                      <li data-category_id="0">
-                        <span class="quizMaster_catName"><?php print __('Uncategorized', 'quizmaster') ?></span>
-                        <span class="quizMaster_catPercent">0%</span>
-                      </li>
-
-                      <?php
-                        if( !empty( $this->category )) :
-                          foreach ( $this->category as $catId ) { ?>
-                            <li data-category_id="<?php echo $catId; ?>">
-                              <span class="quizMaster_catName"><?php echo get_term( $catId )->name; ?></span>
-                              <span class="quizMaster_catPercent">0%</span>
-                            </li>
-                      <?php } endif; ?>
-                    </ol>
-                </div>
-            </div>
-            <div>
-                <ul class="quizMaster_resultsList">
-                  <?php if(!empty( $result['text'] )): foreach ($result['text'] as $resultText) { ?>
-                      <li style="display: none;">
-                          <div>
-                              <?php echo do_shortcode(apply_filters('comment_text', $resultText)); ?>
-                          </div>
-                      </li>
-                  <?php } endif; ?>
-                </ul>
-            </div>
-
-            <div style="margin: 10px 0px;">
-                <?php if (!$this->quiz->isBtnRestartQuizHidden()) { ?>
-                    <input class="qm-button" type="button" name="restartQuiz"
-                           value="<?php echo $this->_buttonNames['restart_quiz']; ?>">
-                <?php }
-                if (!$this->quiz->isBtnViewQuestionHidden()) { ?>
-                    <input class="qm-button" type="button" name="reShowQuestion"
-                           value="<?php _e('View questions', 'quizmaster'); ?>">
-                <?php } ?>
-            </div>
-        </div>
-        <?php
     }
 
     public function showQuizBox( $questionCount ) {
@@ -439,7 +357,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 			$globalPoints = $this->setGlobalPoints( $this->question );
       $json = $this->setQuizJson( $this->question );
       return array('globalPoints' => $globalPoints, 'json' => $json, 'catPoints' => array());
-			
+
     }
 
     public function setGlobalPoints( $questions ) {

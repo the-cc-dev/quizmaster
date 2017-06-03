@@ -175,9 +175,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 						check: $e.find(globalNames.check),
             quiz: $e.find('.quizMaster_quiz'),
             questionList: $e.find('.quizMaster_list'),
-            results: $e.find('.quizMaster_results'),
+            results: $e.find('.qm-results-box'),
 						questionCheck: $e.find('.qm-check-answer-box'),
-            quizStartPage: $e.find('.qm-start-box'),
+            quizStartPage: $e.find('.qm-quiz-start-box'),
             timelimit: $e.find('.qm-time-limit'),
             toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
             listItems: $()
@@ -1134,9 +1134,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                         $e.trigger({
                             type: 'questionSolved',
                             values: {
-                                item: $p,
-                                index: $p.index(),
-                                solved: true
+                              item: $p,
+                              index: $p.index(),
+                              solved: true
                             }
                         });
                     }
@@ -1156,6 +1156,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                                 solved: true
                             }
                         });
+
                     }
                 }).disableSelection();
 
@@ -1167,9 +1168,12 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                 results = {
                     comp: {
-                        points: 0,
-                        correctQuestions: 0,
-                        quizTime: 0
+                      points: 0,
+                      correctQuestions: 0,
+                      quizTime: 0,
+											answered: 0,
+											skipped: 0,
+											solved: 0,
                     }
                 };
 
@@ -1177,8 +1181,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     var questionId = $(this).data('question_id');
 
                     results[questionId] = {
-                        time: 0,
-                        solved: 0
+                      time: 0,
+                      solved: 0
                     };
                 });
 
@@ -1400,13 +1404,15 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                 results.comp.result = Math.round(results.comp.points / config.globalPoints * 100 * 100) / 100;
                 results.comp.solved = 0;
+								results.comp.answered = 0;
+								results.comp.skipped = 0;
                 var $pointFields = $e.find('.quizMaster_points span');
 
                 $pointFields.eq(0).text(results.comp.points);
                 $pointFields.eq(1).text(config.globalPoints);
                 $pointFields.eq(2).text(results.comp.result + '%');
 
-                var $resultText = $e.find('.quizMaster_resultsList > li').eq(0);
+                var $resultText = $e.find('.qm-results-boxList > li').eq(0);
 
                 var formData = formClass.getFormData();
 
@@ -1472,6 +1478,16 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 var $questionList = e.values.item.find(globalNames.questionList);
                 var data = config.json[$questionList.data('question_id')];
                 results[data.id].solved = Number(e.values.fake ? results[data.id].solved : e.values.solved);
+
+								// record as answered, solved/skipped
+								if( e.values.fake ) {
+									results.comp.answered++
+									if( results[data.id].solved ) {
+										results.comp.solved++
+									} else {
+										results.comp.skipped++
+									}
+								}
             },
 
             sendCompletedQuiz: function () {
@@ -1526,8 +1542,16 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             restartQuiz: function () {
+
+							console.log('restartQuiz')
+
                 globalElements.results.hide();
                 globalElements.quizStartPage.show();
+
+								console.log( globalElements.quizStartPage )
+
+								return;
+
                 globalElements.questionList.children().hide();
                 globalElements.toplistShowInButton.hide();
                 reviewBox.hide();
@@ -1544,7 +1568,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                 plugin.methode.resetMatrix($e.find('.quizMaster_listItem'));
                 $e.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
-                $e.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .quizMaster_resultsList > li').hide();
+                $e.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .qm-results-boxList > li').hide();
 
                 $e.find('.quizMaster_question_page, input[name="tip"]').show();
                 $e.find('.quizMaster_resultForm').text('').hide();
@@ -1581,8 +1605,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 	                name = 'singleMulti';
 	              }
 	              var result = checker( name, data, $this, $questionList );
-
-								console.log( endCheck )
 
 								// show questionCheck box
 								if( typeof endCheck == 'undefined' ) {
@@ -1630,6 +1652,18 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 	                  fake: true
 	                }
 	              });
+
+								// global event
+								$(document).trigger({
+									type: 'quizmasterQuestionSolved',
+									values: {
+	                  item: currentQuestion,
+	                  index: currentQuestion.index(),
+										questionCount: plugin.methode.questionCount(),
+	                  solved: true,
+										results: results,
+	                }
+								});
 
 							});
 
@@ -1772,24 +1806,26 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             registerSolved: function () {
-                $e.find('.quizMaster_questionInput[type="text"]').change(function (e) {
-                    var $this = $(this);
-                    var $p = $this.parents('.quizMaster_listItem');
-                    var s = false;
 
-                    if ($this.val() != '') {
-                        s = true;
-                    }
+              $e.find('.quizMaster_questionInput[type="text"]').change(function (e) {
+                var $this = $(this);
+                var $p = $this.parents('.quizMaster_listItem');
+                var s = false;
 
-                    $e.trigger({
-                        type: 'questionSolved',
-                        values: {
-                            item: $p,
-                            index: $p.index(),
-                            solved: s
-                        }
-                    });
+                if ($this.val() != '') {
+                  s = true;
+                }
+
+                $e.trigger({
+                  type: 'questionSolved',
+                  values: {
+                    item: $p,
+                    index: $p.index(),
+                    solved: s
+                  }
                 });
+
+              });
 
                 $e.find('.quizMaster_questionList[data-type="single"] .quizMaster_questionInput, .quizMaster_questionList[data-type="assessment_answer"] .quizMaster_questionInput').change(function (e) {
                     var $this = $(this);
@@ -1804,6 +1840,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                             solved: s
                         }
                     });
+
                 });
 
                 $e.find('.quizMaster_cloze input').change(function () {
@@ -1826,6 +1863,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                             solved: s
                         }
                     });
+
                 });
 
                 $e.find('.quizMaster_questionList[data-type="multiple"] .quizMaster_questionInput').change(function (e) {
@@ -1874,9 +1912,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 											skip: $e.find(globalNames.skip),
                       quiz: $e.find('.quizMaster_quiz'),
                       questionList: $e.find('.quizMaster_list'),
-                      results: $e.find('.quizMaster_results'),
+                      results: $e.find('.qm-results-box'),
 											questionCheck: $e.find('.qm-check-answer-box'),
-                      quizStartPage: $e.find('.qm-start-box'),
+                      quizStartPage: $e.find('.qm-quiz-start-box'),
                       timelimit: $e.find('.qm-time-limit'),
                       toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
                       listItems: $()
