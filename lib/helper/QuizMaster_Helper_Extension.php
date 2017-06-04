@@ -33,11 +33,12 @@ class QuizMaster_Helper_Extension {
 
 		// get extension registry
 		$extObj = new QuizMaster_Helper_Extension;
+		$registeredExtensions = $extObj->register();
+
 		if( empty( $registeredExtensions )) {
 			return; // no registered extensions
 		}
 
-		$registeredExtensions = $extObj->register();
 		foreach( $registeredExtensions as $ext => $extSettings ) {
 			if( $extSettings['type'] == 'pro' ) {
 
@@ -82,17 +83,7 @@ class QuizMaster_Helper_Extension {
 
 	public function register() {
 
-		$registeredExtensions = array(
-			'teachers' => array(
-				'type' => 'pro',
-				'name' => 'Teachers',
-			),
-			'quiz-access-by-code' => array(
-				'type' => 'pro',
-				'name' => 'Quiz Access by code',
-			),
-		);
-
+		$registeredExtensions = array();
 		return apply_filters( 'quizmaster_extension_registry', $registeredExtensions );
 
 	}
