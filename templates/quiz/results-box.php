@@ -1,10 +1,10 @@
 <div class="quizmaster-container qm-results-box">
 	<div class="quizmaster-row">
-		<div class="quizmaster-col-12">
+		<div class="quizmaster-col-12 center">
 
 			<div class="qm-results-box-inner">
 
-					<h4 class="quizMaster_header"><?php _e('Results', 'quizmaster'); ?></h4>
+					<h4 class="quizMaster_header"><?php _e('Quiz Results', 'quizmaster'); ?></h4>
 					<?php if (!$view->quiz->isHideResultCorrectQuestion()) { ?>
 							<p>
 									<?php printf(__('%s of %s questions answered correctly', 'quizmaster'),
@@ -81,6 +81,8 @@
 							</ul>
 					</div>
 
+					<?php do_action('quizmaster_results_before_render_buttons', $view ); ?>
+
 					<!-- Navigate with restart or review questions -->
 					<div class="results-box-nav">
 							<?php if (!$view->quiz->isBtnRestartQuizHidden()) { ?>
@@ -92,6 +94,8 @@
 												 value="<?php _e('View questions', 'quizmaster'); ?>">
 							<?php } ?>
 					</div>
+
+					<?php do_action('quizmaster_results_after_render_buttons', $view ); ?>
 
 			</div>
 

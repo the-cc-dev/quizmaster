@@ -73,7 +73,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         $this->resultsProzent = array(0);
       }
 
-      return quizmaster_parse_template( 'front-quiz.php', array('view' => $this));
+      return quizmaster_parse_template( 'quiz/loader.php', array('view' => $this));
 
     }
 
@@ -107,7 +107,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         $result = $this->quiz->getResultText();
 
         ?>
-        <div class="quizMaster_content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
+        <div class="qm-quiz-content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
             <?php
 
             if (!$this->quiz->isTitleHidden()) {
@@ -223,64 +223,28 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     }
 
     public function showPrerequisiteBox() {
-
 			quizmaster_get_template('quiz/prerequisites.php',
         array(
           'view' => $this,
         )
       );
-
     }
 
-    public function showCheckPageBox($questionCount)
-    {
-        ?>
-        <div class="quizMaster_checkPage" style="display: none;">
-            <h4 class="quizMaster_header"><?php echo $this->_buttonNames['quiz_summary']; ?></h4>
-
-            <p>
-                <?php printf(__('%s of %s questions completed', 'quizmaster'), '<span>0</span>', $questionCount); ?>
-            </p>
-
-            <p><?php _e('Questions', 'quizmaster'); ?>:</p>
-
-            <div style="margin-bottom: 20px;" class="quizMaster_box">
-                <ol>
-                    <?php for ($xy = 1; $xy <= $questionCount; $xy++) { ?>
-                        <li><?php echo $xy; ?></li>
-                    <?php } ?>
-                </ol>
-                <div style="clear: both;"></div>
-            </div>
-
-            <?php
-            if ($this->quiz->isFormActivated() && $this->quiz->getFormShowPosition() == QuizMaster_Model_Quiz::QUIZ_FORM_POSITION_END
-                && ($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide())
-            ) {
-
-                ?>
-                <h4 class="quizMaster_header"><?php _e('Information', 'quizmaster'); ?></h4>
-                <?php
-            }
-
-            ?>
-
-            <input type="button" name="endQuizSummary" value="<?php echo $this->_buttonNames['finish_quiz']; ?>"
-                   class="qm-button">
-        </div>
-        <?php
+    public function showCheckPageBox( $questionCount ) {
+			quizmaster_get_template('quiz/check.php',
+				array(
+					'view' => $this,
+					'questionCount' => $questionCount,
+				)
+			);
     }
 
-    public function showInfoPageBox()
-    {
-        ?>
-        <div class="quizMaster_infopage" style="display: none;">
-            <h4><?php _e('Information', 'quizmaster'); ?></h4>
-
-            <input type="button" name="endInfopage" value="<?php echo $this->_buttonNames['finish_quiz']; ?>"
-                   class="qm-button">
-        </div>
-        <?php
+    public function showInfoPageBox() {
+			quizmaster_get_template('quiz/info.php',
+        array(
+          'view' => $this,
+        )
+      );
     }
 
     public function showStartQuizBox() {
@@ -299,45 +263,13 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
       );
     }
 
-    public function showReviewBox($questionCount)
-    {
-        ?>
-        <div class="quizMaster_reviewDiv" style="display: none;">
-            <div class="quizMaster_reviewQuestion">
-                <ol>
-                    <?php for ($xy = 1; $xy <= $questionCount; $xy++) { ?>
-                        <li><?php echo $xy; ?></li>
-                    <?php } ?>
-                </ol>
-                <div style="display: none;"></div>
-            </div>
-            <div class="quizMaster_reviewLegend">
-                <ol>
-                    <li>
-                        <span class="quizMaster_reviewColor" style="background-color: #6CA54C;"></span>
-                        <span class="quizMaster_reviewText"><?php _e('Answered', 'quizmaster'); ?></span>
-                    </li>
-                    <li>
-                        <span class="quizMaster_reviewColor" style="background-color: #FFB800;"></span>
-                        <span class="quizMaster_reviewText"><?php _e('Review', 'quizmaster'); ?></span>
-                    </li>
-                </ol>
-                <div style="clear: both;"></div>
-            </div>
-            <div>
-                <?php if ($this->quiz->getQuizModus() != QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE) { ?>
-                    <input type="button" name="review" value="<?php _e('Review question', 'quizmaster'); ?>"
-                           class="qm_button">
-                    <?php if (!$this->quiz->isQuizSummaryHide()) { ?>
-                        <input type="button" name="quizSummary"
-                               value="<?php echo $this->_buttonNames['quiz_summary']; ?>" class="qm-button"
-                               style="float: right;">
-                    <?php } ?>
-                    <div style="clear: both;"></div>
-                <?php } ?>
-            </div>
-        </div>
-        <?php
+    public function showReviewBox($questionCount) {
+			quizmaster_get_template('quiz/review.php',
+        array(
+          'view' => $this,
+					'questionCount' => $questionCount,
+        )
+      );
     }
 
     public function showResultBox($result, $questionCount) {

@@ -254,6 +254,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             var itemsStatus = [];
 
             this.init = function () {
+
                 $contain = $e.find('.quizMaster_reviewQuestion');
                 $cursor = $contain.find('div');
                 $list = $contain.find('ol');
@@ -335,10 +336,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             };
 
             this.show = function (save) {
-                if (bitOptions.reviewQustion)
-                    $contain.parent().show();
 
-                $e.find('.quizMaster_reviewDiv .quizMaster_button2').show();
+								if (bitOptions.reviewQustion)
+                  $contain.parent().show();
 
                 if (save)
                     return;
@@ -367,27 +367,26 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             };
 
             this.toggle = function () {
-                if (bitOptions.reviewQustion) {
-                    $contain.parent().toggle();
-                    $items.removeClass('quizMaster_reviewQuestionTarget');
-                    $e.find('.quizMaster_reviewDiv .quizMaster_button2').hide();
+              if (bitOptions.reviewQustion) {
 
-                    $list.attr('style', 'margin-top: 0px !important');
-                    $cursor.css({top: 0});
+                $contain.parent().toggle();
+                $items.removeClass('quizMaster_reviewQuestionTarget');
 
-                    var h = $list.outerHeight();
-                    var c = $contain.height();
-                    x = c - $cursor.height();
-                    offset = 0;
-                    max = h - c;
-                    diff = max / x;
+                $cursor.css({top: 0});
 
-                    if (h > 100) {
-                        $cursor.show();
-                    }
+                var h = $list.outerHeight();
+                var c = $contain.height();
+                x = c - $cursor.height();
+                offset = 0;
+                max = h - c;
+                diff = max / x;
 
-                    top = $cursor.offset().top;
+                if (h > 100) {
+                  $cursor.show();
                 }
+
+                top = $cursor.offset().top;
+              }
             };
 
             this.reset = function () {
@@ -1339,6 +1338,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             showQuizSummary: function () {
+
                 questionTimer.questionStop();
                 questionTimer.stopQuiz();
 
@@ -1346,7 +1346,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     if (bitOptions.formActivated && config.formPos == formPosConst.END) {
                         reviewBox.hide();
                         globalElements.quiz.hide();
-                        plugin.methode.scrollTo($e.find('.quizMaster_infopage').show());
+                        plugin.methode.scrollTo($e.find('.qm-info-page').show());
                     } else {
                         plugin.methode.finishQuiz();
                     }
@@ -1354,7 +1354,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     return;
                 }
 
-                var quizSummary = $e.find('.quizMaster_checkPage');
+                var quizSummary = $e.find('.qm-check-page');
 
                 quizSummary.find('ol:eq(0)').empty()
                     .append($e.find('.quizMaster_reviewQuestion ol li').clone().removeClass('quizMaster_reviewQuestionTarget'))
@@ -1386,68 +1386,82 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             finishQuiz: function (timeover) {
 
-                questionTimer.questionStop();
-                questionTimer.stopQuiz();
-                timelimit.stop();
+              questionTimer.questionStop();
+              questionTimer.stopQuiz();
+              timelimit.stop();
 
-                var time = (+new Date() - startTime) / 1000;
-                time = (config.timelimit && time > config.timelimit) ? config.timelimit : time;
+              var time = (+new Date() - startTime) / 1000;
+              time = (config.timelimit && time > config.timelimit) ? config.timelimit : time;
 
-                $e.find('.quizMaster_quiz_time span').text(plugin.methode.parseTime(time));
+              $e.find('.quizMaster_quiz_time span').text(plugin.methode.parseTime(time));
 
-                if (timeover) {
-                  globalElements.results.find('.qm-time-limit_expired').show();
+              if (timeover) {
+                globalElements.results.find('.qm-time-limit_expired').show();
+              }
+
+              plugin.methode.checkQuestion(globalElements.questionList.children(), true);
+              $e.find('.quizMaster_correct_answer').text(results.comp.correctQuestions);
+
+              results.comp.result = Math.round(results.comp.points / config.globalPoints * 100 * 100) / 100;
+              var $pointFields = $e.find('.quizMaster_points span');
+
+              $pointFields.eq(0).text(results.comp.points);
+              $pointFields.eq(1).text(config.globalPoints);
+              $pointFields.eq(2).text(results.comp.result + '%');
+
+              var $resultText = $e.find('.qm-results-boxList > li').eq(0);
+
+              var formData = formClass.getFormData();
+
+              $resultText.find('.quizMaster_resultForm').each(function () {
+                var $this = $(this);
+                var formId = $this.data('form_id');
+                var data = formData[formId];
+
+                if (typeof data === 'object') {
+                    data = data['day'] + '-' + data['month'] + '-' + data['year'];
                 }
 
-                plugin.methode.checkQuestion(globalElements.questionList.children(), true);
-                $e.find('.quizMaster_correct_answer').text(results.comp.correctQuestions);
+                $this.text(data).show();
+              });
 
-                results.comp.result = Math.round(results.comp.points / config.globalPoints * 100 * 100) / 100;
-                results.comp.solved = 0;
-								results.comp.answered = 0;
-								results.comp.skipped = 0;
-                var $pointFields = $e.find('.quizMaster_points span');
+              $resultText.show();
 
-                $pointFields.eq(0).text(results.comp.points);
-                $pointFields.eq(1).text(config.globalPoints);
-                $pointFields.eq(2).text(results.comp.result + '%');
+              //Result-Text END
 
-                var $resultText = $e.find('.qm-results-boxList > li').eq(0);
+              plugin.methode.setAverageResult(results.comp.result, false);
 
-                var formData = formClass.getFormData();
+              this.setCategoryOverview();
 
-                $resultText.find('.quizMaster_resultForm').each(function () {
-                    var $this = $(this);
-                    var formId = $this.data('form_id');
-                    var data = formData[formId];
+              plugin.methode.sendCompletedQuiz();
 
-                    if (typeof data === 'object') {
-                        data = data['day'] + '-' + data['month'] + '-' + data['year'];
-                    }
+							// hide buttons
+							globalElements.check.hide();
+							globalElements.skip.hide();
 
-                    $this.text(data).show();
-                });
+              reviewBox.hide();
 
-                $resultText.show();
+              $e.find('.qm-check-page, .qm-info-page').hide();
+              globalElements.quiz.hide();
+              globalElements.results.show();
+              plugin.methode.scrollTo(globalElements.results);
 
-                //Result-Text END
+							/* global trigger */
+							$(document).trigger({
+								type: 'quizmasterQuizCompleted',
+								values: {
+									questionCount: plugin.methode.questionCount(),
+									results: results,
+								}
+							});
 
-                plugin.methode.setAverageResult(results.comp.result, false);
+							// reset result comp
+							/*
+							results.comp.solved 	= 0;
+							results.comp.answered = 0;
+							results.comp.skipped 	= 0;
+							*/
 
-                this.setCategoryOverview();
-
-                plugin.methode.sendCompletedQuiz();
-
-								// hide buttons
-								globalElements.check.hide();
-								globalElements.skip.hide();
-
-                reviewBox.hide();
-
-                $e.find('.quizMaster_checkPage, .quizMaster_infopage').hide();
-                globalElements.quiz.hide();
-                globalElements.results.show();
-                plugin.methode.scrollTo(globalElements.results);
             },
 
             setCategoryOverview: function () {
@@ -1499,13 +1513,13 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 var formData = formClass.getFormData();
 
                 plugin.methode.ajax({
-                    action: 'quizmaster_admin_ajax',
-                    func: 'completedQuiz',
-                    data: {
-                        quizId: config.quizId,
-                        results: results,
-                        forms: formData
-                    }
+                  action: 'quizmaster_admin_ajax',
+                  func: 'completedQuiz',
+                  data: {
+                    quizId: config.quizId,
+                    results: results,
+                    forms: formData
+                  }
                 });
             },
 
@@ -1543,39 +1557,37 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             restartQuiz: function () {
 
-							console.log('restartQuiz')
+              globalElements.results.hide();
+              globalElements.quizStartPage.show();
+              globalElements.questionList.children().hide();
+              globalElements.toplistShowInButton.hide();
+              reviewBox.hide();
 
-                globalElements.results.hide();
-                globalElements.quizStartPage.show();
+              $e.find('.quizMaster_questionInput, .quizMaster_cloze input').removeAttr('disabled').removeAttr('checked')
+                  .css('background-color', '');
 
-								console.log( globalElements.quizStartPage )
+              $e.find('.quizMaster_questionListItem input[type="text"]').val('');
 
-								return;
+              $e.find('.quizMaster_answerCorrect, .quizMaster_answerIncorrect').removeClass('quizMaster_answerCorrect quizMaster_answerIncorrect');
 
-                globalElements.questionList.children().hide();
-                globalElements.toplistShowInButton.hide();
-                reviewBox.hide();
+              $e.find('.quizMaster_listItem').data('check', false);
 
-                $e.find('.quizMaster_questionInput, .quizMaster_cloze input').removeAttr('disabled').removeAttr('checked')
-                    .css('background-color', '');
+							// $e.find('.qm-check-answer-box').hide().children().hide();
+							$e.find('.qm-check-answer-box').hide();
 
-                $e.find('.quizMaster_questionListItem input[type="text"]').val('');
+              plugin.methode.resetMatrix($e.find('.quizMaster_listItem'));
+              $e.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
+              $e.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .qm-results-boxList > li').hide();
 
-                $e.find('.quizMaster_answerCorrect, .quizMaster_answerIncorrect').removeClass('quizMaster_answerCorrect quizMaster_answerIncorrect');
+              $e.find('.quizMaster_question_page, input[name="tip"]').show();
+              $e.find('.quizMaster_resultForm').text('').hide();
 
-                $e.find('.quizMaster_listItem').data('check', false);
-                $e.find('.qm-check-answer-box').hide().children().hide();
+              globalElements.results.find('.qm-time-limit_expired').hide();
 
-                plugin.methode.resetMatrix($e.find('.quizMaster_listItem'));
-                $e.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
-                $e.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .qm-results-boxList > li').hide();
+							// @TODO add trigger that extensions can use to reset items on restart
 
-                $e.find('.quizMaster_question_page, input[name="tip"]').show();
-                $e.find('.quizMaster_resultForm').text('').hide();
+              inViewQuestions = false;
 
-                globalElements.results.find('.qm-time-limit_expired').hide();
-
-                inViewQuestions = false;
             },
 
 						currentQuestionId: function() {
@@ -2033,11 +2045,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     return;
 
                 plugin.methode.finishQuiz();
-            });
-
-            $e.find('input[name="endInfopage"]').click(function () {
-                if (formClass.checkForm())
-                    plugin.methode.finishQuiz();
             });
 
             $e.find('input[name="showToplist"]').click(function () {

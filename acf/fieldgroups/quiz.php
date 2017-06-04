@@ -426,6 +426,25 @@ $fieldGroup = array (
 			),
 		),
 		array (
+			'tabs' => 'all',
+			'toolbar' => 'basic',
+			'media_upload' => 1,
+			'default_value' => '',
+			'delay' => 0,
+			'key' => 'field_5885dd64f48f5',
+			'label' => 'Result Text',
+			'name' => 'qmqu_result_text',
+			'type' => 'wysiwyg',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+		),
+		array (
 			'name' => '',
 			'type' => 'tab',
 			'placement' => 'left',
@@ -474,11 +493,6 @@ $fieldGroup = array (
 			'name' => 'qmqu_btn_view_question_hidden',
 			'type' => 'true_false',
 		),
-
-
-
-
-
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
@@ -586,25 +600,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-		),
-		array (
-			'tabs' => 'all',
-			'toolbar' => 'basic',
-			'media_upload' => 1,
-			'default_value' => '',
-			'delay' => 0,
-			'key' => 'field_5885dd64f48f5',
-			'label' => 'Result Text',
-			'name' => 'qmqu_result_text',
-			'type' => 'wysiwyg',
-			'instructions' => '',
-			'required' => 0,
-			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'placement' => 'top',

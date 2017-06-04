@@ -80,7 +80,7 @@
         <?php _e('Loading', 'quizmaster'); ?>
     </div>
 
-    <div id="quizMaster_content" style="display: block;">
+    <div id="qm-quiz-content" style="display: block;">
         <?php $view->showHistory(); ?>
         <?php $view->showTabOverview(); ?>
     </div>

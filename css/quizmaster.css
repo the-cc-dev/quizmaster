@@ -1,3 +1,8 @@
+/* Hide Quiz Boxes */
+.qm-hidden {
+	display: none;
+}
+
 /* Start Quiz Box */
 .qm-quiz-start-box {
 	display: none;
@@ -25,12 +30,12 @@
     font-weight: bold;
 }
 
-.quizMaster_content {
+.qm-quiz-content {
     margin-top: 25px;
     margin-bottom: 10px;
 }
 
-.quizMaster_content h2 {
+.qm-quiz-content h2 {
     margin-bottom: 10px;
 }
 
@@ -446,11 +451,11 @@ h4.qm-check-question-points {
     background-color: #F8FAF5;
 }
 
-.quizMaster_checkPage h3 {
+.qm-check-page h3 {
     margin: 10px 0 10px 0;
 }
 
-.quizMaster_reviewQuestion ol, .quizMaster_checkPage ol {
+.quizMaster_reviewQuestion ol, .qm-check-page ol {
     list-style-type: none;
     margin: 0;
     padding: 5px 12px 0 5px;
@@ -473,7 +478,7 @@ h4.qm-check-question-points {
     box-shadow: 0 0 2px 1px #C4C4C4;
 }
 
-.quizMaster_reviewQuestion li, .quizMaster_checkPage li {
+.quizMaster_reviewQuestion li, .qm-check-page li {
     float: left;
     margin: 0 5px 5px 0;
     border: 1px solid #CFCFCF;
@@ -526,7 +531,7 @@ h4.qm-check-question-points {
     margin-right: 2px;
 }
 
-.quizMaster_reviewDiv {
+.qmr-review-box {
     margin: 20px 0 20px 0;
 }
 

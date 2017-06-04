@@ -1,5 +1,15 @@
 <div class="quizmaster-container qm-quiz-header">
 
+	<div class="quizmaster-row center">
+		<div class="quizmaster-col-12">
+			<?php
+				if (!$view->quiz->isTitleHidden()) {
+					echo '<h2>' . __( $view->quiz->getName(), 'quizmaster' ) . '</h2>';
+				}
+			?>
+		</div>
+	</div>
+
 	<div class="quizmaster-row">
 		<div class="quizmaster-col-3">
 

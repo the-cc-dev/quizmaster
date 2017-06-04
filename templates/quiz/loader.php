@@ -1,27 +1,10 @@
-<div class="quizMaster_content" id="quizMaster_<?php echo $view->quiz->getId(); ?>">
+<div class="qm-quiz-content" id="quizMaster_<?php echo $view->quiz->getId(); ?>">
 
   <?php
 
 		$quizData = $view->showQuizBox( $view->question_count );
 
-    if (!$view->quiz->isTitleHidden()) {
-      echo '<h2>', $view->quiz->getName(), '</h2>';
-    }
-
-    $view->showTimeLimitBox();
-    $view->showCheckPageBox($view->question_count);
-    $view->showInfoPageBox();
-    $view->showStartQuizBox();
-    $view->showLockBox();
-    $view->showLoadQuizBox();
-    $view->showStartOnlyRegisteredUserBox();
-    $view->showPrerequisiteBox();
-    $view->showReviewBox($view->question_count);
-    $view->showQuizAnker();
-
-		// enables quizmaster extension to load quiz boxes via action hook
-		$view->renderExtensionQuizBoxes();
-
+		// output quiz header
 		quizmaster_get_template('quiz/header.php',
 			array(
 				'view'          => $view,
@@ -29,15 +12,16 @@
 			)
 		);
 
-		$view->showResultBox( $view->result, $view->question_count );
-
-		quizmaster_get_template('quiz/question-item.php',
+		// output quiz body
+		quizmaster_get_template('quiz/body.php',
 			array(
 				'view'          => $view,
+				'quiz'					=> $view->quiz,
 				'questionCount' => $view->question_count,
 			)
 		);
 
+		// output quiz footer
 		quizmaster_get_template('quiz/footer.php',
 			array(
 				'view'          => $view,
