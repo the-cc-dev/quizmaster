@@ -3,7 +3,7 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.5.3
+Version: 0.5.4
 Author: GoldHat Group
 Author URI: https://goldhat.ca
 Copyright: GoldHat Group, Julius Fischer (WP Pro Quiz)
@@ -11,7 +11,7 @@ Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.5.3');
+define('QUIZMASTER_VERSION', '0.5.4');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
@@ -61,10 +61,6 @@ function quizMasterDeactivation() {
   QuizMaster_Extension::doDeactivation();
 }
 
-function quizmasterRemoveRoles() {
-
-}
-
 function quizMasterActivation() {
   quizmasterTestForACF();
   quizMasterAddAdminCaps();
@@ -95,8 +91,8 @@ if (is_admin()) {
   new QuizMaster_Controller_Front();
 }
 
-function quizMaster_autoload($class)
-{
+function quizMaster_autoload( $class ) {
+
     $c = explode('_', $class);
 
     if ($c === false || count($c) != 3 || $c[0] !== 'QuizMaster') {
@@ -188,11 +184,11 @@ function quizmaster_parse_template( $template_name, $args = array(), $template_p
  * @param string 	$string $template_path	Path to templates.
  * @param string	$default_path			Default path to template files.
  */
-function quizmaster_get_template( $template_name, $args = array(), $tempate_path = '', $default_path = '' ) {
+function quizmaster_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 	if ( is_array( $args ) && isset( $args ) ) :
 		extract( $args );
 	endif;
-	$template_file = quizmaster_locate_template( $template_name, $tempate_path, $default_path );
+	$template_file = quizmaster_locate_template( $template_name, $template_path, $default_path );
 
   if ( ! file_exists( $template_file ) ) :
 		_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
@@ -954,26 +950,6 @@ function generateRandomString($length = 10) {
   }
   return $randomString;
 }
-
-function generateAccessCode() {
-  $code = generateRandomString( 8 );
-  return strtoupper( $code );
-}
-
-add_filter('acf/load_field/name=qmqu_access_code', 'setQuizAccessCodeReadonly');
-function setQuizAccessCodeReadonly( $field ) {
-  $field['readonly'] = true;
-  return $field;
-}
-
-add_filter('acf/load_value/name=qmqu_access_code', 'makeQuizAccessCode', 10, 3);
-function makeQuizAccessCode( $value, $post_id, $field ) {
-  if( empty( $value )) {
-    return generateAccessCode();
-  }
-  return $value;
-}
-
 
 /* Remove Email View Link */
 add_filter( 'post_row_actions', 'remove_row_actions', 10, 1 );
