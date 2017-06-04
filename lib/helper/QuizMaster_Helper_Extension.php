@@ -2,12 +2,6 @@
 
 class QuizMaster_Helper_Extension {
 
-	public function __construct() {
-
-
-
-	}
-
 	public static function ajaxRegisterExtensionScriptCallbacks() {
 		$callbacks = array();
 		$callbacks = apply_filters( 'quizmaster_register_extension_script_callbacks', $callbacks );
@@ -67,6 +61,7 @@ class QuizMaster_Helper_Extension {
 
 		if ( file_exists( $classPath )) {
 
+			require_once( $classPath );
 			$ext = str_replace( '-', ' ', $ext );
 			$ext = ucwords( $ext );
 			$ext = str_replace( ' ', '', $ext );
@@ -87,6 +82,17 @@ class QuizMaster_Helper_Extension {
 
 	public function register() {
 
+		$registeredExtensions = array(
+			'teachers' => array(
+				'type' => 'pro',
+				'name' => 'Teachers',
+			),
+			'quiz-access-by-code' => array(
+				'type' => 'pro',
+				'name' => 'Quiz Access by code',
+			),
+		);
+
 		return apply_filters( 'quizmaster_extension_registry', $registeredExtensions );
 
 	}
@@ -94,6 +100,7 @@ class QuizMaster_Helper_Extension {
 	public static function doActivation() {
 
 		$extObj = new QuizMaster_Helper_Extension;
+		$extObj->loadAll();
 		$extensions = $extObj->register();
 		foreach( $extensions as $extKey => $extSettings ) {
 			$ext = $extObj->load( $extKey );
@@ -105,6 +112,7 @@ class QuizMaster_Helper_Extension {
 	public static function doDeactivation() {
 
 		$extObj = new QuizMaster_Helper_Extension;
+		$extObj->loadAll();
 		$extensions = $extObj->register();
 		foreach( $extensions as $extKey => $extSettings ) {
 			$ext = $extObj->load( $extKey );
