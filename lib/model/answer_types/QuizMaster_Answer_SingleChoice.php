@@ -13,14 +13,14 @@ class QuizMaster_Answer_SingleChoice extends QuizMaster_Model_Answer {
 
   public function load( $data ) {
 
-    $acfAnswerData = $data['qmqe_single_choice_answers'];
+    $fieldAnswerData = $data['qmqe_single_choice_answers'];
     $answerData = array();
-    $acfAnswer = $acfAnswerData[0];
+    $fieldAnswer = $fieldAnswerData[0];
 
     // correct answer
     $rep = 'qmqe_single_correct_answer_repeater';
     $field = 'qmqe_single_correct_answer';
-    $answer['answer'] = $acfAnswer[ $rep ][0][ $field ];
+    $answer['answer'] = $fieldAnswer[ $rep ][0][ $field ];
     $answer['correct'] = true;
     $answerData[] = new self( $answer );
 
@@ -28,7 +28,7 @@ class QuizMaster_Answer_SingleChoice extends QuizMaster_Model_Answer {
     $rep = 'qmqe_single_incorrect_answer_repeater';
     $field = 'qmqe_single_incorrect_answer';
 
-    foreach( $acfAnswer[ $rep ] as $ia ) {
+    foreach( $fieldAnswer[ $rep ] as $ia ) {
 
       $answer['answer'] = $ia[ $field ];
       $answer['correct'] = false;

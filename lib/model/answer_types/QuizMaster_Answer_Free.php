@@ -13,10 +13,10 @@ class QuizMaster_Answer_Free extends QuizMaster_Model_Answer {
 
   public function load( $data ) {
 
-    $acfAnswerData = array(
+    $fieldAnswerData = array(
       'answer' => $data['qmqe_free_choice_answers']
     );
-    $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+    $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswerData );
     return $answerData;
 
   }

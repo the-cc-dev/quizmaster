@@ -239,24 +239,24 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
     }
 
     public function loadAnswerDataAssessment( $fields ) {
-      $acfAnswerData['answer'] = $fields['qmqe_assessment_answers'];
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      $fieldAnswerData['answer'] = $fields['qmqe_assessment_answers'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswerData );
       return $answerData;
     }
 
     public function loadAnswerDataCloze( $fields ) {
-      $acfAnswerData['answer'] = $fields['qmqe_cloze_answers'];
-      $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswerData );
+      $fieldAnswerData['answer'] = $fields['qmqe_cloze_answers'];
+      $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswerData );
       return $answerData;
     }
 
     public function loadAnswerDataMatrixSortingAnswer( $fields ) {
-      $acfAnswerData = $fields['qmqe_matrix_sorting_answers'];
+      $fieldAnswerData = $fields['qmqe_matrix_sorting_answers'];
       $answerData = array();
-      foreach( $acfAnswerData as $acfAnswer ) {
-        $acfAnswer['answer'] = $acfAnswer['qmqe_matrix_sorting_criterion'];
-        $acfAnswer['sort_string'] = $acfAnswer['qmqe_matrix_sorting_sort_string'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $acfAnswer );
+      foreach( $fieldAnswerData as $fieldAnswer ) {
+        $fieldAnswer['answer'] = $fieldAnswer['qmqe_matrix_sorting_criterion'];
+        $fieldAnswer['sort_string'] = $fieldAnswer['qmqe_matrix_sorting_sort_string'];
+        $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswer );
       }
       return $answerData;
     }

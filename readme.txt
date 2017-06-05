@@ -12,7 +12,7 @@ The best quiz system plugin for WordPress.
 
 == Description ==
 
-The best quiz system plugin for WordPress. Highly extendable and developer-friendly. Requires ACF Pro. Forked in 2016 from WP Pro Quiz, a free quiz plugin developed by Julius Fischer (http://www.it-gecko.de/).
+The best quiz system plugin for WordPress. Highly extendable and developer-friendly. Requires FieldMaster (Free) or ACF Pro. Forked in 2016 from WP Pro Quiz, a free quiz plugin developed by Julius Fischer (http://www.it-gecko.de/).
 
 = Features =
 * Single Choice Question Type
@@ -54,6 +54,12 @@ Added teachers extension with capability to add quizzes and questions.
 == Upgrade Notice ==
 
 N/A
+
+== FAQ ==
+
+= Why does the plugin require a fields API? =
+
+We originally included ACF Pro because of it's great UX fields and because it allows us to offer great support for extending the plugin. Developers are able to easily add fields into the UX and there is great consistency in the interface by using ACF. However we were not able to strike a deal with the ACF developer to enable us to embed ACF Pro into the plugin, and QuizMaster already relied on certain pro features including repeater field and options pages. Thus we invented the new fields plugin FieldMaster which is a fork of ACF Pro, and available for free. We recommend using FieldMaster unless you already have ACF Pro installed, because we are bundling additional ACF integration plugins that provide an even better UX, such as collapsing repeater fields.
 
 == Screenshots ==
 

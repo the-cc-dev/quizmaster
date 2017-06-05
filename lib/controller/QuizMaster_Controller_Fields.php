@@ -10,14 +10,15 @@ class QuizMaster_Controller_Fields {
 
     foreach( $this->fieldGroups() as $fieldGroupKey ) {
       $fieldGroup = $this->loadFieldGroup( $fieldGroupKey );
-      acf_add_local_field_group( $fieldGroup );
+			$addFieldGroupFunc = quizmaster_get_fields_prefix() . '_add_local_field_group';
+      $addFieldGroupFunc( $fieldGroup );
     }
 
   }
 
   public function loadFieldGroup( $fieldGroupKey ) {
 
-    include( QUIZMASTER_PATH . '/acf/fieldgroups/' . $fieldGroupKey . '.php' );
+    include( QUIZMASTER_PATH . '/fields/fieldgroups/' . $fieldGroupKey . '.php' );
 
     // $fieldGroup loaded from file include
     $allFields = array();

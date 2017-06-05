@@ -3,7 +3,7 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.5.5
+Version: 0.6.0
 Author: GoldHat Group
 Author URI: https://goldhat.ca
 Copyright: GoldHat Group, Julius Fischer (WP Pro Quiz)
@@ -11,7 +11,7 @@ Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.5.5');
+define('QUIZMASTER_VERSION', '0.6.0');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
@@ -62,7 +62,7 @@ function quizMasterDeactivation() {
 }
 
 function quizMasterActivation() {
-  quizmasterTestForACF();
+  quizmasterFieldsApiTest();
   quizMasterAddAdminCaps();
   quizmasterCreateDefaultEmails();
   quizmasterCreateStudentReportPage();
@@ -70,14 +70,15 @@ function quizMasterActivation() {
 	QuizMaster_Extension::doActivation();
 }
 
-function quizmasterTestForACF() {
+function quizmasterFieldsApiTest() {
   include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
   $isAcfActive = is_plugin_active('advanced-custom-fields-pro/acf.php');
-  if( !$isAcfActive ) {
+	$isFieldMasterActive = is_plugin_active('fieldmaster/fieldmaster.php');
+  if( !$isAcfActive && !$isFieldMasterActive ) {
     deactivate_plugins( plugin_basename( __FILE__ ) );
-    wp_die( __( 'QuizMaster requires ACF Pro! Visit <a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a> to purchase or
+    wp_die( __( 'QuizMaster requires either FieldMaster (Free Fields Plugin, download latest release at <a href="https://github.com/goldhat/fieldmaster/releases/latest/">https://github.com/goldhat/fieldmaster/releases/tag/</a>) or ACF (Advanced Custom Fields) Pro! Visit <a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a> to purchase or
       return to <a href="' . get_admin_url( null, 'plugins.php' ) . '">Manage Plugins</a>.
-      ', 'quizmaster-migrate' ) );
+      ', 'quizmaster' ) );
   }
 }
 
@@ -575,12 +576,12 @@ function quizMasterInit() {
 
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
-    add_filter('acf/settings/show_admin', '__return_false');
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/email.php' );
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/question.php' );
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/quiz.php' );
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/score.php' );
-    include_once( QUIZMASTER_PATH . '/acf/fieldgroups/settings.php' );
+    add_filter( quizmaster_get_fields_prefix() . '/settings/show_admin', '__return_false');
+    include_once( QUIZMASTER_PATH . '/fields/fieldgroups/email.php' );
+    include_once( QUIZMASTER_PATH . '/fields/fieldgroups/question.php' );
+    include_once( QUIZMASTER_PATH . '/fields/fieldgroups/quiz.php' );
+    include_once( QUIZMASTER_PATH . '/fields/fieldgroups/score.php' );
+    include_once( QUIZMASTER_PATH . '/fields/fieldgroups/settings.php' );
   }
 
 	quizMasterAddOptionsPages();
@@ -593,7 +594,8 @@ function quizMasterInit() {
 function quizMasterAddOptionsPages() {
 
   /* Options Pages */
-  $option_page = acf_add_options_page(array(
+	$addOptionsPageFunc = quizmaster_get_fields_prefix() . '_add_options_page';
+  $option_page = $addOptionsPageFunc(array(
 		'page_title' 	=> 'QuizMaster Settings',
 		'menu_title' 	=> 'Settings',
 		'menu_slug' 	=> 'quizmaster-settings',
@@ -851,7 +853,7 @@ function revisionTest( $post_id, $post, $update ) {
     return;
   }
 
-  acf_copy_postmeta( $post_id, $revision_id );
+  fieldmaster_copy_postmeta( $post_id, $revision_id );
 
   return $post_id;
 
@@ -1004,3 +1006,11 @@ add_action('init', 'quizmasterLoadExtensions', 15);
 function quizmasterLoadExtensions() {
 	QuizMaster_Extension::loadAll();
 }
+
+// convenience function to get the fields prefix
+function quizmaster_get_fields_prefix() {
+	return QuizMaster_Helper_Fields::getFieldApiPrefix();
+}
+
+// basic implementation of loaded hook but needs to be moved when this file is refactored
+do_action('quizmaster_loaded');
