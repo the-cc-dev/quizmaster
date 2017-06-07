@@ -1725,7 +1725,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
               var id = currentQuestion.find(globalNames.questionList).data('question_id');
 
 							// get tip div
-							var $tip = currentQuestion.find('.quizMaster_tipp').html();
+							var $hint = currentQuestion.find('.quizMaster_tipp')
+							var $tip = $hint.html();
 							$tipModal = $('.qm-hint-modal');
 							$tipModalContents = $('.qm-hint-modal .qm-hint-content');
 
@@ -2041,6 +2042,16 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
 						// if hint if open when question solved hide it
 						$e.bind('changeQuestion', plugin.methode.hintHide);
+
+						// disable hint if not activated for question
+						$e.bind('changeQuestion', function() {
+							var $hint = currentQuestion.find('.quizMaster_tipp')
+							if( ! $hint.length ) {
+								plugin.methode.hintDisable()
+							} else {
+								plugin.methode.hintEnable()
+							}
+						});
 
 						// hint close button
 						$e.find('.qm-hint-modal .qm-hint-close').on('click', plugin.methode.hintHide)
