@@ -180,6 +180,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             quizStartPage: $e.find('.qm-quiz-start-box'),
             timelimit: $e.find('.qm-time-limit'),
             toplistShowInButton: $e.find('.quizMaster_toplistShowInButton'),
+						hintTrigger: $e.find('.qm-hint-trigger'),
             listItems: $()
         };
 
@@ -1015,6 +1016,10 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             startQuiz: function (loadData) {
 
+							// enable hint
+							console.log(1020)
+							plugin.methode.hintEnable();
+
               if ( quizStatus.loadLock ) {
                 quizStatus.isQuizStart = 1;
                 return;
@@ -1386,6 +1391,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             finishQuiz: function (timeover) {
 
+							// deactivate hint trigger
+							plugin.methode.hintDisable();
+
               questionTimer.questionStop();
               questionTimer.stopQuiz();
               timelimit.stop();
@@ -1682,7 +1690,36 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             },
 
-            showTip: function ( event ) {
+						hintDisable: function () {
+
+							$tipModal = $('.qm-hint-modal');
+							$tipModal.hide();
+							globalElements.hintTrigger.removeClass('qm-hint-enabled')
+							globalElements.hintTrigger.addClass('qm-hint-disabled')
+							globalElements.hintTrigger.off( 'click', plugin.methode.hintHide )
+							globalElements.hintTrigger.off( 'click', plugin.methode.hintShow )
+
+						},
+
+						hintEnable: function () {
+
+							globalElements.hintTrigger.removeClass('qm-hint-disabled')
+							globalElements.hintTrigger.addClass('qm-hint-enabled')
+							globalElements.hintTrigger.off( 'click', plugin.methode.hintHide )
+							globalElements.hintTrigger.on( 'click', plugin.methode.hintShow )
+
+						},
+
+						hintHide: function ( event ) {
+
+							$tipModal = $('.qm-hint-modal');
+							$tipModal.hide();
+							globalElements.hintTrigger.off( 'click', plugin.methode.hintHide )
+							globalElements.hintTrigger.on( 'click', plugin.methode.hintShow )
+
+						},
+
+            hintShow: function ( event ) {
 
               var $this = $(this);
               var id = currentQuestion.find(globalNames.questionList).data('question_id');
@@ -1690,32 +1727,24 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 							// get tip div
 							var $tip = currentQuestion.find('.quizMaster_tipp').html();
 							$tipModal = $('.qm-hint-modal');
+							$tipModalContents = $('.qm-hint-modal .qm-hint-content');
 
-							// check if element is Visible
-							var isVisible = $tipModal.is(':visible');
+							// populate modal with current question tip
+							$tipModalContents.html( $tip )
 
-							// show or hide the tip
-							if (isVisible === true) {
+							// adjust modal position
+							$tipModal.css({
+								position: "absolute",
+								left: $this.position().left + "px",
+								top: ($this.position().top + $this.outerHeight()) + "px",
+								display: "block",
+							});
 
-							   $tipModal.hide();
+							globalElements.hintTrigger.on( 'click', plugin.methode.hintHide )
+							globalElements.hintTrigger.off( 'click', plugin.methode.hintShow )
 
-							} else {
-
-								// populate modal with current question tip
-								$tipModal.html( $tip )
-
-								// adjust modal position
-								$tipModal.css({
-									position: "absolute",
-									left: $this.position().left + "px",
-									top: ($this.position().top + $this.outerHeight()) + "px",
-									display: "block",
-								});
-
-								// record use of tip
-                results[id].tip = 1;
-
-							}
+							// record use of tip
+              results[id].tip = 1;
 
             },
 
@@ -1990,7 +2019,9 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     plugin.methode.showQuizSummary();
                 });
 
-                $e.find('.qm-hint-trigger').click(plugin.methode.showTip);
+								// enable hint
+                //plugin.methode.hintEnable()
+
                 $e.find('input[name="skip"]').click(plugin.methode.skipQuestion);
 
                 $e.find('input[name="quizMaster_pageLeft"]').click(function () {
@@ -2007,6 +2038,12 @@ quizmasterQuizRegistry = quizMasterReady(function () {
          * @memberOf plugin
          */
         plugin.preInit = function () {
+
+						// if hint if open when question solved hide it
+						$e.bind('changeQuestion', plugin.methode.hintHide);
+
+						// hint close button
+						$e.find('.qm-hint-modal .qm-hint-close').on('click', plugin.methode.hintHide)
 
             plugin.methode.parseBitOptions();
             reviewBox.init();

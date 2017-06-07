@@ -741,12 +741,30 @@ span.quizMaster_catPercent {
 	border: solid 1px #d3d3d3;
 	padding: 25px;
 	background: #f2f2f2;
+	min-width: 320px;
 }
 .qm-hint-trigger {
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: bold;
 	color: #999;
+}
+.qm-hint-trigger.qm-hint-enabled:hover {
+	color: #1CAFF6;
+}
+.qm-hint-trigger.qm-hint-disabled {
+	color: #BBB;
+	cursor: default;
+}
+.qm-hint-trigger.qm-hint-disabled:hover {
+	color: #BBB;
+}
+.qm-hint-modal .qm-hint-close {
+	width: 20px;
+	height: 20px;
+	float: right;
+	display: inline-block;
+	margin: -20px -20px 10px 10px;
 }
 
 
@@ -901,4 +919,45 @@ input[type="button"].qm-button-check {
 }
 .quizmaster-col-12 {
   width: 100%;
+}
+
+/* Close Buttons */
+.qm-close {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+	cursor: pointer;
+}
+.qm-close:hover::before, .qm-close:hover::after {
+  background: #a5000d;
+}
+.qm-close::before, .qm-close::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  background: #EC0B1B;
+}
+.qm-close::before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.qm-close::after {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.qm-close::before, .qm-close::after {
+  height: 3px;
+  margin-top: -4px;
 }

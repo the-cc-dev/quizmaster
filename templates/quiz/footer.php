@@ -21,4 +21,7 @@
 </div>
 
 <!-- Hint Modal -->
-<div class="qm-hint-modal"></div>
+<div class="qm-hint-modal">
+	<div class="qm-hint-close"></div>
+	<div class="qm-hint-content"></div>
+</div>
