@@ -853,7 +853,8 @@ function revisionTest( $post_id, $post, $update ) {
     return;
   }
 
-  fieldmaster_copy_postmeta( $post_id, $revision_id );
+	$copyPostMetaFunc = quizmaster_get_fields_prefix() . '_copy_postmeta';
+  $copyPostMetaFunc( $post_id, $revision_id );
 
   return $post_id;
 
