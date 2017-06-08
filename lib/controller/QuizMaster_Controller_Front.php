@@ -121,16 +121,21 @@ class QuizMaster_Controller_Front {
 
     public function shortcode( $attr ) {
 
-        $id = $attr[0];
-        $content = '';
+      $id = $attr['id'];
+			if( $id == null ) {
+				$id = reset($attr);
+			}
 
-        $this->loadJsScripts();
+      $content = '';
 
-        if (is_numeric($id)) {
-            $content = $this->handleShortCode( $id );
-        }
+      $this->loadJsScripts();
 
-        return $content;
+      if (is_numeric($id)) {
+        $content = $this->handleShortCode( $id );
+      }
+
+      return $content;
+
     }
 
     public function handleShortCode( $id, $return = true ) {
@@ -171,7 +176,7 @@ class QuizMaster_Controller_Front {
             print $content;
           }
         }
-
+				
         $view->quiz = $quiz;
         $view->question = $question;
         $view->category = $quiz->fetchQuestionCategoriesByQuiz();
