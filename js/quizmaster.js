@@ -1017,7 +1017,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             startQuiz: function (loadData) {
 
 							// enable hint
-							console.log(1020)
 							plugin.methode.hintEnable();
 
               if ( quizStatus.loadLock ) {

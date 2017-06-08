@@ -63,6 +63,11 @@ function quizMasterDeactivation() {
 
 function quizMasterActivation() {
   quizmasterFieldsApiTest();
+
+	// create post types and flush rewrite rules
+	quizmasterAddPostTypes();
+	flush_rewrite_rules();
+
   quizMasterAddAdminCaps();
   quizmasterCreateDefaultEmails();
   quizmasterCreateStudentReportPage();
