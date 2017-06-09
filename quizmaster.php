@@ -949,7 +949,7 @@ function quizmaster_simplify_key( $key ) {
   return str_replace( 'quizmaster_', '', $key);
 }
 
-function generateRandomString($length = 10) {
+function quizmasterGenerateRandomString($length = 10) {
   $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   $charactersLength = strlen($characters);
   $randomString = '';

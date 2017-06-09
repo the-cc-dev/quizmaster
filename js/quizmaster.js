@@ -1739,38 +1739,46 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     }
                 }, function (json) {
 
-									// run callback hooks
-									var quizLockCallbacks = callbacks['checkQuizLock'];
-									$.each( quizLockCallbacks, function( index, value ) {
+								// global trigger
+								$(document).trigger({
+									type: 'quizmasterCheckQuizLock',
+									values: {
+										lockData: json,
+									}
+								});
 
-										// find object
-										var fn = window[value.object][value.func];
+								// run callback hooks
+								var quizLockCallbacks = callbacks['checkQuizLock'];
+								$.each( quizLockCallbacks, function( index, value ) {
 
-										// is object a function?
-										if (typeof fn === "function") {
-											var quizMasterFront = this;
-											fn( json, quizStatus, globalElements );
-										}
+									// find object
+									var fn = window[value.object][value.func];
 
-									});
+									// is object a function?
+									if (typeof fn === "function") {
+										var quizMasterFront = this;
+										fn( json, quizStatus, globalElements );
+									}
 
-                  if (json.lock != undefined) {
-                    quizStatus.isLocked = json.lock.is;
+								});
 
-                    if ( json.lock.pre ) {
-                      $e.find('input[name="restartQuiz"]').hide();
-                    }
+                if (json.lock != undefined) {
+                  quizStatus.isLocked = json.lock.is;
+
+                  if ( json.lock.pre ) {
+                    $e.find('input[name="restartQuiz"]').hide();
                   }
+                }
 
-                  if (json.startUserLock != undefined) {
-                    quizStatus.isUserStartLocked = json.startUserLock;
-                  }
+                if (json.startUserLock != undefined) {
+                  quizStatus.isUserStartLocked = json.startUserLock;
+                }
 
-                  quizStatus.loadLock = 0;
+                quizStatus.loadLock = 0;
 
-                  if ( quizStatus.isQuizStart ) {
-                    plugin.methode.startQuiz();
-                  }
+                if ( quizStatus.isQuizStart ) {
+                  plugin.methode.startQuiz();
+                }
 
                 });
             },
