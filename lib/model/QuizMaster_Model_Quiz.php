@@ -37,7 +37,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_showMaxQuestionValue = 1;
     protected $_showMaxQuestionPercent = false;
     protected $_showAverageResult = false;
-    protected $_prerequisite = false;
     protected $_quizModus = 0;
     protected $_showReviewQuestion = false;
     protected $_quizSummaryHide = false;
@@ -352,19 +351,6 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     {
         return $this->_showMaxQuestionPercent;
     }
-
-    public function setPrerequisite($_prerequisite)
-    {
-        $this->_prerequisite = (bool)$_prerequisite;
-
-        return $this;
-    }
-
-    public function isPrerequisite()
-    {
-        return $this->_prerequisite;
-    }
-
 
     public function setQuizModus($_quizModus) {
       $this->_quizModus = (int)$_quizModus;

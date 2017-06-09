@@ -29,7 +29,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         'quiz_is_loading' => __('Quiz is loading...', 'quizmaster'),
         'lock_box_msg'    => __('You have already completed the quiz before and only 1 attempt is allowed.', 'quizmaster'),
         'only_registered_user_msg'  => __('You must sign in or sign up to start the quiz.', 'quizmaster'),
-        'prerequisite_msg'          => __('You have to finish following quiz, to start this quiz:', 'quizmaster'),
       );
 
       $this->_buttonNames = apply_filters('quizmaster_button_names', $names, $this);
@@ -84,7 +83,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         $bo |= ((int)$this->quiz->isAnswerRandom()) << 0;
         $bo |= ((int)$this->quiz->isQuestionRandom()) << 1;
         $bo |= ((int)$this->quiz->isDisabledAnswerMark()) << 2;
-        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isPrerequisite() || $this->quiz->isStartOnlyRegisteredUser() )) << 3;
+        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isStartOnlyRegisteredUser() )) << 3;
         $bo |= ((int)$preview) << 4;
         $bo |= ((int)get_option('quizMaster_corsActivated')) << 5;
         $bo |= ((int)$this->quiz->isShowReviewQuestion()) << 7;
@@ -121,7 +120,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
             $this->showLockBox();
             $this->showLoadQuizBox();
             $this->showStartOnlyRegisteredUserBox();
-            $this->showPrerequisiteBox();
             $this->showResultBox($result, $question_count);
             $this->showReviewBox($question_count);
             $this->showQuizAnker();
@@ -216,14 +214,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     public function showStartOnlyRegisteredUserBox() {
 			quizmaster_get_template('quiz/registered.php',
-        array(
-          'view' => $this,
-        )
-      );
-    }
-
-    public function showPrerequisiteBox() {
-			quizmaster_get_template('quiz/prerequisites.php',
         array(
           'view' => $this,
         )

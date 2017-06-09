@@ -28,6 +28,15 @@ class QuizMaster_Model_Model {
       $fields = $this->processFieldsDuringModelSet( $fields );
       $this->setModelData( $fields );
       $this->afterSetModel();
+
+			// enables extensions to define and add data to properties of the current model instance
+			$propertyArray = apply_filters( 'quizmaster_model_add_data', array(), $this, get_class( $this ) );
+			if( is_array( $propertyArray ) && ! empty( $propertyArray )) {
+				foreach( $propertyArray as $property => $data ) {
+					$this->{$property} = $data;
+				}
+			}
+
     }
 
     public function setPost( $post ) {
@@ -181,7 +190,7 @@ class QuizMaster_Model_Model {
     }
 
 		public function __get( $name ) {
-			
+
 			$fieldKey = $this->fieldKeyByPropertyName( $name );
 			return get_field( $this->getFieldPrefix() . $fieldKey, $this->getId() );
 

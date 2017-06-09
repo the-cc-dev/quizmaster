@@ -155,7 +155,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             isQuizStart: 0,
             isLocked: 0,
             loadLock: 0,
-            isPrerequisite: 0,
             isUserStartLocked: 0
         };
 
@@ -252,7 +251,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
             var $contain = [], $cursor = [], $list = [], $items = [];
             var x = 0, offset = 0, diff = 0, top = 0, max = 0;
-            var itemsStatus = [];
 
             this.init = function () {
 
@@ -274,11 +272,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 
                 $items.click(function (e) {
                     plugin.methode.showQuestion($(this).index());
-                });
-
-                $e.bind('questionSolved', function (e) {
-                    itemsStatus[e.values.index].solved = e.values.solved;
-                    setColor(e.values.index);
                 });
 
                 $e.bind('changeQuestion', function (e) {
@@ -306,11 +299,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 								// show skip button if set
 								if (bitOptions.skipButton)
 									$(globalNames.skip).show();
-
-                $e.bind('reviewQuestion', function (e) {
-                    itemsStatus[e.values.index].review = !itemsStatus[e.values.index].review;
-                    setColor(e.values.index);
-                });
 
                 $contain.bind('mousewheel DOMMouseScroll', function (e) {
                     e.preventDefault();
@@ -354,8 +342,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 max = h - c;
                 diff = max / x;
 
-                this.reset();
-
                 if (h > 100) {
                     $cursor.show();
                 }
@@ -390,14 +376,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
               }
             };
 
-            this.reset = function () {
-                for (var i = 0, c = $items.length; i < c; i++) {
-                    itemsStatus[i] = {};
-                }
-
-                $items.removeClass('quizMaster_reviewQuestionTarget').css('background-color', '');
-            };
-
             function scroll(index) {
                 var $item = $items.eq(index);
                 var iTop = $item.offset().top;
@@ -417,18 +395,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 }
             }
 
-            function setColor(index) {
-                var color = '';
-                var itemStatus = itemsStatus[index];
 
-                if (itemStatus.review) {
-                    color = '#FFB800';
-                } else if (itemStatus.solved) {
-                    color = '#6CA54C';
-                }
-
-                $items.eq(index).css('background-color', color);
-            }
 
             function moveScroll(e) {
                 e.preventDefault();
@@ -1037,95 +1004,89 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 return;
               }
 
-              if ( quizStatus.isPrerequisite ) {
+              if ( quizStatus.isUserStartLocked ) {
                 globalElements.quizStartPage.hide();
-                $e.find('.quizMaster_prerequisite').show();
+                $e.find('.qm-lock-box').show();
                 return;
               }
 
-                if ( quizStatus.isUserStartLocked ) {
-                  globalElements.quizStartPage.hide();
-                  $e.find('.qm-lock-box').show();
+              if (bitOptions.maxShowQuestion && !loadData) {
+
+								globalElements.quizStartPage.hide();
+                $e.find('.quizMaster_loadQuiz').show();
+                plugin.methode.loadQuizDataAjax(true);
+                return;
+
+              }
+
+              if (bitOptions.formActivated && config.formPos == formPosConst.START) {
+                if (!formClass.checkForm())
                   return;
-                }
+              }
 
-                if (bitOptions.maxShowQuestion && !loadData) {
+              plugin.methode.loadQuizData();
 
-										globalElements.quizStartPage.hide();
-                    $e.find('.quizMaster_loadQuiz').show();
-                    plugin.methode.loadQuizDataAjax(true);
-                    return;
+              if (bitOptions.randomQuestion) {
+                plugin.methode.random(globalElements.questionList);
+              }
 
-                }
+              if (bitOptions.randomAnswer) {
+                plugin.methode.random($e.find(globalNames.questionList));
+              }
 
-                if (bitOptions.formActivated && config.formPos == formPosConst.START) {
-	                if (!formClass.checkForm())
-	                  return;
-                }
+              if (bitOptions.sortCategories) {
+                  plugin.methode.sortCategories();
+              }
 
-                plugin.methode.loadQuizData();
+              plugin.methode.random($e.find('.quizMaster_sortStringList'));
+              plugin.methode.random($e.find('[data-type="sort_answer"]'));
 
-                if (bitOptions.randomQuestion) {
-                  plugin.methode.random(globalElements.questionList);
-                }
+              $e.find('.quizMaster_listItem').each(function (i, v) {
+                  var $this = $(this);
+                  $this.find('.quizMaster_question_page span:eq(0)').text(i + 1);
+                  $this.find('> h5 span').text(i + 1);
 
-                if (bitOptions.randomAnswer) {
-                  plugin.methode.random($e.find(globalNames.questionList));
-                }
+                  $this.find('.quizMaster_questionListItem').each(function (i, v) {
+                      $(this).find('> span:not(.quizMaster_cloze)').text(i + 1 + '. ');
+                  });
+              });
 
-                if (bitOptions.sortCategories) {
-                    plugin.methode.sortCategories();
-                }
+              globalElements.next = $e.find(globalNames.next);
 
-                plugin.methode.random($e.find('.quizMaster_sortStringList'));
-                plugin.methode.random($e.find('[data-type="sort_answer"]'));
+              switch (config.mode) {
+                case 3:
+                  $e.find('input[name="checkSingle"]').show();
+                  break;
+                case 2:
 
-                $e.find('.quizMaster_listItem').each(function (i, v) {
-                    var $this = $(this);
-                    $this.find('.quizMaster_question_page span:eq(0)').text(i + 1);
-                    $this.find('> h5 span').text(i + 1);
+                  $(globalNames.check).show();
 
-                    $this.find('.quizMaster_questionListItem').each(function (i, v) {
-                        $(this).find('> span:not(.quizMaster_cloze)').text(i + 1 + '. ');
-                    });
-                });
+                  if ( bitOptions.skipButton || bitOptions.reviewQustion)
+                    $e.find(globalNames.skip).show();
 
-                globalElements.next = $e.find(globalNames.next);
+                  break;
 
-                switch (config.mode) {
-                    case 3:
-                        $e.find('input[name="checkSingle"]').show();
-                        break;
-                    case 2:
-
-                        $(globalNames.check).show();
-
-                        if ( bitOptions.skipButton || bitOptions.reviewQustion)
-                          $e.find(globalNames.skip).show();
-
-                        break;
-
-                    case 1:
-                        $e.find('input[name="back"]').slice(1).show();
-                    case 0:
-                        globalElements.next.show();
-                        break;
-                }
+                case 1:
+                  $e.find('input[name="back"]').slice(1).show();
+                case 0:
+                  globalElements.next.show();
+                  break;
+              }
 
                 if (bitOptions.hideQuestionPositionOverview || config.mode == 3)
-                    $e.find('.quizMaster_question_page').hide();
+                  $e.find('.quizMaster_question_page').hide();
 
-                var $listItem = globalElements.questionList.children();
+	                var $listItem = globalElements.questionList.children();
 
-                globalElements.listItems = $e.find('.quizMaster_list > li');
+	                globalElements.listItems = $e.find('.quizMaster_list > li');
 
                 if (config.mode == 3) {
-                    plugin.methode.showSinglePage(0);
+                  plugin.methode.showSinglePage(0);
                 } else {
-                    currentQuestion = $listItem.eq(0).show();
+                  currentQuestion = $listItem.eq(0).show();
 
-                    var questionId = currentQuestion.find(globalNames.questionList).data('question_id');
-                    questionTimer.questionStart(questionId);
+                  var questionId = currentQuestion.find(globalNames.questionList).data('question_id');
+                  questionTimer.questionStart(questionId);
                 }
 
                 questionTimer.startQuiz();
@@ -1494,11 +1455,13 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             },
 
             questionSolved: function (e) {
-                quizSolved[e.values.index] = e.values.solved;
 
-                var $questionList = e.values.item.find(globalNames.questionList);
-                var data = config.json[$questionList.data('question_id')];
-                results[data.id].solved = Number(e.values.fake ? results[data.id].solved : e.values.solved);
+              quizSolved[e.values.index] = e.values.solved;
+
+              var $questionList = e.values.item.find( globalNames.questionList );
+              var data = config.json[$questionList.data('question_id')];
+
+              results[data.id].solved = Number(e.values.fake ? results[data.id].solved : e.values.solved);
 
 								// record as answered, solved/skipped
 								if( e.values.fake ) {
@@ -1626,7 +1589,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 	              var result = checker( name, data, $this, $questionList );
 
 								// show questionCheck box
-								if( typeof endCheck == 'undefined' ) {
+								if( endCheck == true ) {
 
 									// insert points earned
 									$('.qm-check-question-points span').text( result.p );
@@ -1651,6 +1614,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
 		              $(globalNames.skip).hide();
 		              $(globalNames.next).show();
 									globalElements.questionCheck.show();
+
+									return;
 
 								}
 
@@ -1795,11 +1760,6 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     if ( json.lock.pre ) {
                       $e.find('input[name="restartQuiz"]').hide();
                     }
-                  }
-
-                  if (json.prerequisite != undefined) {
-                    quizStatus.isPrerequisite = 1;
-                    $e.find('.quizMaster_prerequisite span').text(json.prerequisite);
                   }
 
                   if (json.startUserLock != undefined) {
@@ -2059,8 +2019,8 @@ quizmasterQuizRegistry = quizMasterReady(function () {
             reviewBox.init();
 
             $e.find('input[name="startQuiz"]').click(function () {
-                plugin.methode.startQuiz();
-                return false;
+              plugin.methode.startQuiz();
+              return false;
             });
 
 						// check quiz lock
@@ -2094,19 +2054,21 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                 plugin.methode.finishQuiz();
             });
 
-            $e.find('input[name="showToplist"]').click(function () {
-                globalElements.quiz.hide();
-                globalElements.toplistShowInButton.toggle();
-            });
-
             $e.bind('questionSolved', plugin.methode.questionSolved);
 
             if (!bitOptions.maxShowQuestion) {
-                plugin.methode.initQuiz();
+              plugin.methode.initQuiz();
             }
 
-            if (bitOptions.autoStart)
-                plugin.methode.startQuiz();
+						// start quiz if autostart active, otherwise show quiz start page
+            if (bitOptions.autoStart) {
+							plugin.methode.startQuiz();
+						} else {
+							globalElements.quizStartPage.show();
+						}
+
+
+
         };
 
         plugin.preInit();
