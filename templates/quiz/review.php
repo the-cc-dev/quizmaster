@@ -1,4 +1,4 @@
-<div class="qmr-review-box qm-hidden">
+<div class="qm-review-box qm-hidden">
 
 	<div class="quizMaster_reviewQuestion">
 		<ol>

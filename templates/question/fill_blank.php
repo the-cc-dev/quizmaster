@@ -17,7 +17,7 @@
   <ul class="qm-question-list" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
-    <li class="qm-question-listItem" data-pos="0">
+    <li class="qm-question-list-item" data-pos="0">
 
       <?php
         $answer_index = 0;

@@ -24,7 +24,7 @@
           $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
           ?>
 
-          <li class="qm-question-listItem" data-pos="<?php echo $answer_index; ?>">
+          <li class="qm-question-list-item" data-pos="<?php echo $answer_index; ?>">
             <span></span>
             <label>
                 <input class="quizMaster_questionInput"

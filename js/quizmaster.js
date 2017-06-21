@@ -38,7 +38,7 @@ jQuery(document).ready(function( $ ) {
 			questionListClass: '.qm-question-list',
 			questionList: quizmaster.find('.quizMaster_list'),
 			resultsBox: quizmaster.find('.qm-results-box'),
-			reviewBox: quizmaster.find('.quizMaster_reviewQuestion'),
+			reviewBox: quizmaster.find('.qm-review-box'),
 			questionCheck: quizmaster.find('.qm-check-answer-box'),
 			startPage: quizmaster.find('.qm-quiz-start-box'),
 			timeLimitBox: quizmaster.find('.qm-time-limit'),
@@ -49,6 +49,12 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.startPageShow = function() {
 
 			quizmaster.elements.startPage.show();
+
+			// hide hint button
+			quizmaster.hint.buttonHide();
+
+			// hide next button
+			quizmaster.elements.nextButton.hide();
 
 		};
 
@@ -75,7 +81,21 @@ jQuery(document).ready(function( $ ) {
 		};
 
 		quizmaster.nextQuestion = function () {
+
+			if( !quizmaster.data.currentQuestion.next().length ) {
+				quizmaster.showQuizSummary();
+				return;
+			}
+
 			quizmaster.showQuestionObject( quizmaster.data.currentQuestion.next() );
+
+			// question show event
+			quizmaster.trigger({
+				type: 'quizmaster.nextQuestion',
+				nextQuestion: quizmaster.data.currentQuestion.next(),
+				currentQuestion: quizmaster.data.currentQuestion,
+			});
+
 		};
 
 		quizmaster.prevQuestion = function () {
@@ -107,10 +127,12 @@ jQuery(document).ready(function( $ ) {
 				}
 				*/
 
+				// hide current question, show new and set storage of current question
 				quizmaster.data.currentQuestion.hide();
-				quizmaster.data.currentQuestion = obj.show();
+				obj.show();
+				quizmaster.setCurrentQuestion( obj );
 
-				// Change last name
+				// change last name
 				if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
 					var $lastButton = quizmaster.elements.nextButton.last();
 					lastButtonValue = $lastButton.val();
@@ -126,11 +148,7 @@ jQuery(document).ready(function( $ ) {
 					questionIndex: quizmaster.data.currentQuestion.index()
 				});
 
-				if ( !quizmaster.data.currentQuestion.length ) {
-					quizmaster.showQuizSummary();
-				} else {
-					quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
-				}
+				quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
 
 		};
 
@@ -140,35 +158,9 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.showQuizSummary = function () {
 
 				quizmaster.finishQuiz();
-
-				var quizSummary = quizmaster.find('.qm-check-page');
-
-				quizSummary.find('ol:eq(0)').empty()
-						.append(quizmaster.find('.quizMaster_reviewQuestion ol li').clone().removeClass('quizMaster_reviewQuestionTarget'))
-						.children().click(function (e) {
-								quizSummary.hide();
-								quizmaster.elements.quiz.show();
-								reviewBox.show(true);
-
-								quizmaster.showQuestion($(this).index());
-						});
-
-				var cSolved = 0;
-
-				for (var i = 0, c = quizmaster.data.quizSolved.length; i < c; i++) {
-						if ( quizmaster.data.quizSolved[i] ) {
-								cSolved++;
-						}
-				}
-
-				quizSummary.find('span:eq(0)').text(cSolved);
-
 				quizmaster.elements.reviewBox.hide();
 				quizmaster.elements.quiz.hide();
 
-				quizSummary.show();
-
-				quizmaster.scrollTo(quizSummary);
 		};
 
 		quizmaster.checkButtonInit = function() {
@@ -187,23 +179,80 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
-		quizmaster.checker = function (name, data) {
+		quizmaster.userAnswerData = {
+
+			singleMulti: function( $questionId, $questionElement ) {
+
+				var userAnswerData = {
+					answerIndexes: []
+				};
+
+				var input = $questionElement.find('.quizMaster_questionInput')
+
+				console.log( input )
+
+				$questionElement.find('.qm-question-list-item').each(function (i) {
+
+					console.log( $(this) )
+
+
+					var $item = $(this);
+					var index = $item.data('pos');
+					var checked = input.eq(i).is(':checked');
+
+					console.log( index )
+
+					if( checked ) {
+						userAnswerData.answerIndexes.push( index )
+					}
+
+				});
+
+				return userAnswerData
+
+			},
+
+		};
+
+		quizmaster.checker = function ( $questionId, $questionElement ) {
+
+			var userAnswerData = quizmaster.userAnswerData.singleMulti( $questionId, $questionElement )
+
+			console.log( userAnswerData )
+
+			quizmaster.ajax({
+				action: 'quizmaster_admin_ajax',
+				func: 'checkAnswer',
+				data: {
+					quizId: quizmaster.config.quizId,
+					question: $questionId,
+					userAnswerData: userAnswerData,
+				}
+			});
+
+
+			/*
+
 				var correct = true;
 				var points = 0;
-				var isDiffPoints = $.isArray(data.points);
+				var isDiffPoints = $.isArray(quizmaster.data.points);
 				var statistcAnswerData = {};
 
+
 				var func = {
+
 						singleMulti: function () {
+
 								var input = quizmaster.elements.questionList.find('.quizMaster_questionInput').attr('disabled', 'disabled');
-								var isDiffMode = data.diffMode;
+								var isDiffMode = quizmaster.data.diffMode;
 
 								quizmaster.elements.questionList.children().each(function (i) {
 										var $item = $(this);
 										var index = $item.data('pos');
+
 										var checked = input.eq(i).is(':checked');
 
-										if (data.correct[index]) {
+										if (quizmaster.data.correct[index]) {
 												if (!checked) {
 														correct = false;
 												} else {
@@ -275,50 +324,8 @@ jQuery(document).ready(function( $ ) {
 								quizmaster.elements.questionList.append($items);
 						},
 
-						matrix_sort_answer: function () {
-								var $items = quizmaster.elements.questionList.children();
-								var matrix = new Array();
-								statistcAnswerData = {0: -1};
-
-								$items.each(function () {
-										var $this = $(this);
-										var i = $this.data('pos');
-										var $stringUl = $this.find('.quizMaster_maxtrixSortCriterion');
-										var $stringItem = $stringUl.children();
-
-										if ($stringItem.length)
-												statistcAnswerData[i] = $stringItem.data('pos');
-
-										if ($stringItem.length && $.inArray(String(i), String($stringItem.data('correct')).split(',')) >= 0) {
-//						if(i == $stringItem.data('pos')) {
-												quizmaster.marker($stringUl, true);
-
-												if (isDiffPoints) {
-														points += data.points[i];
-												}
-										} else {
-												correct = false;
-												quizmaster.marker($stringUl, false);
-										}
-
-										matrix[i] = $stringUl;
-								});
-
-								quizmaster.resetMatrix($question);
-
-								$question.find('.quizMaster_sortStringItem').each(function () {
-										var x = matrix[$(this).data('pos')];
-										if (x != undefined)
-												x.append(this);
-								}).css({
-										'box-shadow': '0 0',
-										'cursor': 'auto'
-								});
-
-								$question.find('.quizMaster_sortStringList, .quizMaster_maxtrixSortCriterion').sortable("destroy");
-						},
-
 						free_answer: function () {
+
 								var $li = quizmaster.elements.questionList.children();
 								var value = $li.find('.quizMaster_questionInput').attr('disabled', 'disabled').val();
 
@@ -360,17 +367,8 @@ jQuery(document).ready(function( $ ) {
 								});
 						},
 
-						assessment_answer: function () {
-								correct = true;
-								var $input = quizmaster.elements.questionList.find('.quizMaster_questionInput').attr('disabled', 'disabled');
-								var val = 0;
 
-								$input.filter(':checked').each(function () {
-										val += parseInt($(this).val());
-								});
 
-								points = val;
-						}
 				};
 
 				func[name]();
@@ -384,6 +382,9 @@ jQuery(document).ready(function( $ ) {
 						p: points,
 						s: statistcAnswerData
 				};
+
+				*/
+
 		};
 
 		quizmaster.marker = function (e, correct) {
@@ -397,7 +398,6 @@ jQuery(document).ready(function( $ ) {
 			}
 
 		};
-
 
 		quizmaster.checkQuestion = function( list, endCheck ) {
 
@@ -417,7 +417,8 @@ jQuery(document).ready(function( $ ) {
 				name = 'singleMulti';
 			}
 
-			var result = quizmaster.checker( name, data );
+			var userAnswerData = {};
+			var result = quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
 
 			// organize result from checking answer
 			quizmaster.data.results[data.id].points = result.p;
@@ -429,7 +430,7 @@ jQuery(document).ready(function( $ ) {
 
 			// end check trigger
 			quizmaster.trigger({
-				type: 'questionSolved',
+				type: 'quizmaster.questionChecked',
 				values: {
 					item: quizmaster.data.currentQuestion,
 					index: quizmaster.data.currentQuestion.index(),
@@ -438,18 +439,24 @@ jQuery(document).ready(function( $ ) {
 				}
 			});
 
-			// global event
-			$(document).trigger({
-				type: 'quizmasterQuestionSolved',
-				values: {
-					item: quizmaster.data.currentQuestion,
-					index: quizmaster.data.currentQuestion.index(),
-					questionCount: quizmaster.questionCount(),
-					solved: true,
-					results: quizmaster.data.results,
-				}
-			});
+		};
 
+		quizmaster.questionSolved = function (e) {
+
+			quizmaster.data.quizSolved[ e.values.index ] = e.values.solved;
+			var data = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
+
+			quizmaster.data.results[data.id].solved = Number(e.values.fake ? quizmaster.data.results[data.id].solved : e.values.solved);
+
+				// record as answered, solved/skipped
+				if( e.values.fake ) {
+					quizmaster.data.results.comp.answered++
+					if( quizmaster.data.results[data.id].solved ) {
+						quizmaster.data.results.comp.solved++
+					} else {
+						quizmaster.data.results.comp.skipped++
+					}
+				}
 		};
 
 		quizmaster.parseBitOptions = function () {
@@ -525,9 +532,6 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.startPageHide();
 			quizmaster.loadQuizData();
 
-			quizmaster.elements.nextButton = $('.qm-button-next');
-			quizmaster.elements.checkButton.show();
-
 			var $listItem = quizmaster.elements.questionList.children();
 			quizmaster.elements.listItems = $('.quizMaster_list > li');
 
@@ -568,11 +572,48 @@ jQuery(document).ready(function( $ ) {
 			// start timer
 			quizmaster.timer.quiz.start();
 
-			// get first question object and show
-			var $listItem = quizmaster.elements.questionList.children();
-			quizmaster.setCurrentQuestion( $listItem.eq(0) );
-			quizmaster.showQuestionObject( 'current' );
+			// quiz start event
+			quizmaster.trigger({
+				type: 'quizmaster.startQuiz',
+				mode: quizmaster.config.mode,
+			});
 
+		};
+
+		quizmaster.showSinglePage = function (page) {
+				$listItem = quizmaster.elements.questionList.children().hide();
+
+				if (!quizmaster.config.qpp) {
+						$listItem.show();
+
+						return;
+				}
+
+				page = page ? +page : 1;
+				var maxPage = Math.ceil($e.find('.quizMaster_list > li').length / quizmaster.config.qpp);
+
+				if (page > maxPage)
+						return;
+
+				var pl = $e.find(quizmaster.elements.singlePageLeft).hide();
+				var pr = $e.find(quizmaster.elements.singlePageRight).hide();
+				var cs = $e.find('input[name="checkSingle"]').hide();
+
+				if (page > 1) {
+						pl.val(pl.data('text').replace(/%d/, page - 1)).show();
+				}
+
+				if (page == maxPage) {
+					cs.show();
+				} else {
+					pr.val(pr.data('text').replace(/%d/, page + 1)).show();
+				}
+
+				currentPage = page;
+				var start = config.qpp * (page - 1);
+
+				$listItem.slice(start, start + config.qpp).show();
+				quizmaster.scrollTo( quizmaster.elements.quiz );
 		};
 
 		quizmaster.setCurrentQuestion = function( $question ) {
@@ -650,12 +691,10 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.scrollTo(quizmaster.elements.resultsBox);
 
 			/* global trigger */
-			$(document).trigger({
-				type: 'quizmasterQuizCompleted',
-				values: {
-					questionCount: quizmaster.questionCount(),
-					results: quizmaster.data.results,
-				}
+			quizmaster.trigger({
+				type: 'quizmaster.quizCompleted',
+				questionCount: quizmaster.questionCount(),
+				results: quizmaster.data.results,
 			});
 
 			// reset result comp
@@ -669,6 +708,18 @@ jQuery(document).ready(function( $ ) {
      * Hint Handler Functions
 		 */
 
+		quizmaster.hint = {
+
+			buttonHide: function() {
+				quizmaster.elements.hintTrigger.hide();
+			},
+
+			buttonShow: function() {
+				quizmaster.elements.hintTrigger.show();
+			},
+
+		};
+
 		 quizmaster.hintInit = function() {
 
  			quizmaster.on('quizmaster.questionShow', function() {
@@ -677,6 +728,7 @@ jQuery(document).ready(function( $ ) {
 				if( ! $hint.length ) {
 					quizmaster.hintDisable();
 				} else {
+					quizmaster.hint.buttonShow();
 					quizmaster.hintEnable();
 				}
 
@@ -785,9 +837,6 @@ jQuery(document).ready(function( $ ) {
 						$timeDiv.css('width', (elapsedTime / quizmaster.config.timeLimit * 100) + '%');
 
 						if (elapsedTime <= 0) {
-
-							console.log('elapsed time: ' + elapsedTime)
-
 							quizmaster.timer.limit.stop();
 							quizmaster.finishQuiz( true );
 						}
@@ -826,16 +875,11 @@ jQuery(document).ready(function( $ ) {
 						quizmaster.stopQuiz();
 
 					quizmaster.timer.quizStartTime = +new Date();
-
-
 					quizmaster.data.isQuizStarted = true;
 
-					console.log( 'quizmaster.data.isQuizStarted ' + quizmaster.data.isQuizStarted )
 				},
 
 				stop: function () {
-
-					console.log( 'quizmaster.data.isQuizStarted ' + quizmaster.data.isQuizStarted )
 
 					if ( !quizmaster.data.isQuizStarted ) {
 						return;
@@ -856,9 +900,6 @@ jQuery(document).ready(function( $ ) {
 
 			parseTime: function (ms) {
 
-				console.log( 'parseTime' )
-				console.log( ms )
-
 				var seconds = parseInt(ms / 1000);
 				var minutes = parseInt((seconds / 60) % 60);
 				var hours = parseInt((seconds / 3600) % 24);
@@ -866,8 +907,6 @@ jQuery(document).ready(function( $ ) {
 				seconds = (seconds > 9 ? '' : '0') + seconds;
 				minutes = (minutes > 9 ? '' : '0') + minutes;
 				hours = (hours > 9 ? '' : '0') + hours;
-
-				console.log( hours + ':' + minutes + ':' + seconds )
 
 				return hours + ':' + minutes + ':' + seconds;
 			},
@@ -921,15 +960,16 @@ jQuery(document).ready(function( $ ) {
 		};
 
 		quizmaster.fetchAllAnswerData = function (resultData) {
-				quizmaster.find('.quizMaster_questionList').each(function () {
+
+				quizmaster.find('.quizMaster_question-list').each(function () {
 						var $this = $(this);
 						var questionId = $this.data('question_id');
 						var type = $this.data('type');
 						var data = {};
 
 						if (type == 'single' || type == 'multiple') {
-								$this.find('.quizMaster_questionListItem').each(function () {
-										data[$(this).data('pos')] = +$(this).find('.quizMaster_questionInput').is(':checked');
+								$this.find('.qm-question-list-item').each(function () {
+									data[$(this).data('pos')] = +$(this).find('.quizMaster_questionInput').is(':checked');
 								});
 						} else if (type == 'free_answer') {
 								data[0] = $this.find('.quizMaster_questionInput').val();
@@ -941,12 +981,6 @@ jQuery(document).ready(function( $ ) {
 								var i = 0;
 								$this.find('.quizMaster_cloze input').each(function () {
 										data[i++] = $(this).val();
-								});
-						} else if (type == 'assessment_answer') {
-								data[0] = '';
-
-								$this.find('.quizMaster_questionInput:checked').each(function () {
-										data[$(this).data('index')] = $(this).val();
 								});
 						}
 
@@ -961,7 +995,7 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.questionReviewButtonInit = function() {
 
 			quizmaster.elements.questionReviewButton.on( 'click', function () {
-					quizmaster.showQuestionList();
+				quizmaster.showQuestionList();
 			});
 
 		};
@@ -1036,6 +1070,80 @@ jQuery(document).ready(function( $ ) {
 				});
 		};
 
+		quizmaster.modeHandler = function() {
+
+			// mode handling
+			switch (quizmaster.config.mode) {
+
+				// single page mode
+				case 3:
+
+					quizmaster.elements.nextButton.show();
+					quizmaster.find('.quizMaster_question_page').hide();
+					var $questionList = quizmaster.elements.questionList.children();
+					quizmaster.setCurrentQuestion( $questionList.last() );
+					quizmaster.showSinglePage(0);
+					break;
+
+				// check/continue mode
+				case 2:
+
+					// show check button at start
+					quizmaster.elements.checkButton.show();
+
+					// handle buttons on questionCheck
+					quizmaster.on( 'quizmaster.questionChecked', function() {
+						quizmaster.elements.nextButton.show()
+						quizmaster.elements.checkButton.hide()
+					});
+
+					// handle buttons on nextQuestion
+					quizmaster.on( 'quizmaster.nextQuestion', function() {
+						quizmaster.elements.nextButton.hide()
+						quizmaster.elements.checkButton.show()
+					});
+
+					// maybe show skip button
+					if ( quizmaster.config.bitOptions.skipButton || quizmaster.config.bitOptions.reviewQustion)
+						quizmaster.elements.skipButton.show();
+
+					break;
+
+				// normal mode plus back button
+				case 1:
+					quizmaster.elements.backButton.show();
+
+				// default normal mode
+				case 0:
+					quizmaster.elements.nextButton.show();
+					break;
+			}
+
+			// maybe hide question position overview
+			if ( quizmaster.config.bitOptions.hideQuestionPositionOverview ) {
+				quizmaster.find('.quizMaster_question_page').hide();
+			}
+
+			// unless single page mode, show first question
+			if (quizmaster.config.mode != 3) {
+				quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
+			}
+
+		};
+
+		quizmaster.startQuizShowQuestion = function() {
+
+			if( quizmaster.config.mode != 3 ) {
+
+				// get first question object and show
+				var $questionList = quizmaster.elements.questionList.children();
+				quizmaster.setCurrentQuestion( $questionList.eq(0) );
+				quizmaster.showQuestionObject( 'current' );
+
+			}
+
+		};
+
 		quizmaster.init = function( options ) {
 
 			// parse options to quizmaster.config
@@ -1068,6 +1176,19 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.restartButtonInit();
 			quizmaster.questionReviewButtonInit();
 			quizmaster.hintInit();
+
+			quizmaster.on( 'quizmaster.startQuiz', quizmaster.modeHandler );
+			quizmaster.on( 'quizmaster.startQuiz', quizmaster.startQuizShowQuestion );
+
+			// bind questionSolved to questionCheck
+			quizmaster.on( 'quizmaster.questionChecked', quizmaster.questionSolved );
+
+			quizmaster.on( 'quizmaster.quizCompleted', function() {
+				quizmaster.elements.nextButton.hide()
+				quizmaster.elements.checkButton.hide()
+				quizmaster.elements.hintTrigger.hide()
+			});
+
 
     };
 
