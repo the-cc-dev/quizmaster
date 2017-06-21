@@ -1,4 +1,4 @@
-<div style="display: none;" class="qm-time-limit">
+<div style="display: none;" class="qm-time-limit">TIME LIMIT BOX
 	<div class="time"><?php _e('Time Limit', 'quizmaster'); ?>: <span>0</span></div>
 	<div class="qm-progress-box"></div>
 </div>

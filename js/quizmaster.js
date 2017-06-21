@@ -41,7 +41,7 @@ jQuery(document).ready(function( $ ) {
 			reviewBox: quizmaster.find('.quizMaster_reviewQuestion'),
 			questionCheck: quizmaster.find('.qm-check-answer-box'),
 			startPage: quizmaster.find('.qm-quiz-start-box'),
-			timelimitBox: quizmaster.find('.qm-time-limit'),
+			timeLimitBox: quizmaster.find('.qm-time-limit'),
 			hintTrigger: quizmaster.find('.qm-hint-trigger'),
 			listItems: $()
 		};
@@ -531,6 +531,9 @@ jQuery(document).ready(function( $ ) {
 			var $listItem = quizmaster.elements.questionList.children();
 			quizmaster.elements.listItems = $('.quizMaster_list > li');
 
+			// start time limit
+			quizmaster.timer.limit.start();
+
 			quizmaster.data.quizSolved = [];
 			quizmaster.data.results = {
 				comp: {
@@ -593,12 +596,12 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.timer.limit.stop();
 
 			var time = (+new Date() - quizmaster.timer.quizStartTime);
-			time = (quizmaster.config.timelimit && time > quizmaster.config.timelimit) ? quizmaster.config.timelimit : time;
+			time = (quizmaster.config.timeLimit && time > quizmaster.config.timeLimit) ? quizmaster.config.timeLimit : time;
 
 			quizmaster.find('.quizMaster_quiz_time span').text( quizmaster.timer.parseTime(time) );
 
 			if (timeover) {
-				quizmaster.elements.results.find('.qm-time-limit_expired').show();
+				quizmaster.elements.resultsBox.find('.qm-time-limit_expired').show();
 			}
 
 			quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
@@ -744,47 +747,49 @@ jQuery(document).ready(function( $ ) {
 		 */
 		quizmaster.timer = {
 
-			counter: quizmaster.config.timelimit,
-			intervalId: 0,
 			questionStartTime: 0,
 			quizStartTime: 0,
 
 			limit: {
 
+				intervalId: 0,
+
 				stop: function () {
-					if ( quizmaster.timer.counter ) {
-						window.clearInterval(quizmaster.timer.intervalId);
-						quizmaster.elements.timelimitBox.hide();
+					if ( quizmaster.config.timeLimit ) {
+						window.clearInterval( quizmaster.timer.limit.intervalId );
+						quizmaster.elements.timeLimitBox.hide();
 					}
 				},
 
 				start: function () {
 
-					if (! quizmaster.timer.counter )
+					if (! quizmaster.config.timeLimit )
 						return;
 
-					var x = quizmaster.timer.counter * 1000;
-					var $timeText = quizmaster.elements.timelimitBox.find('span').text( quizmaster.timer.parseTime( quizmaster.timer.counter ) );
-					var $timeDiv = quizmaster.elements.timelimitBox.find('.qm-progress-box');
+					var $timeText = quizmaster.elements.timeLimitBox.find('span').text( quizmaster.timer.parseTime( quizmaster.config.timeLimit ) );
+					var $timeDiv = quizmaster.elements.timeLimitBox.find('.qm-progress-box');
 
-					quizmaster.elements.timelimitBox.show();
+					quizmaster.elements.timeLimitBox.show();
 
 					var beforeTime = +new Date();
 
-					quizmaster.timer.intervalId = window.setInterval(function () {
+					quizmaster.timer.limit.intervalId = window.setInterval(function () {
 
 						var diff = (+new Date() - beforeTime);
-						var elapsedTime = x - diff;
+						var elapsedTime = (quizmaster.config.timeLimit) - diff;
 
 						if (diff >= 500) {
-							$timeText.text( quizmaster.timer.parseTime(Math.ceil(elapsedTime / 1000)) );
+							$timeText.text( quizmaster.timer.parseTime(Math.ceil(elapsedTime)) );
 						}
 
-						$timeDiv.css('width', (elapsedTime / x * 100) + '%');
+						$timeDiv.css('width', (elapsedTime / quizmaster.config.timeLimit * 100) + '%');
 
 						if (elapsedTime <= 0) {
-							instance.stop();
-							quizmaster.finishQuiz(true);
+
+							console.log('elapsed time: ' + elapsedTime)
+
+							quizmaster.timer.limit.stop();
+							quizmaster.finishQuiz( true );
 						}
 
 					});
@@ -839,14 +844,20 @@ jQuery(document).ready(function( $ ) {
 					quizmaster.data.results['comp'].quizTime += new Date() - quizmaster.timer.quizStartTime;
 					quizmaster.data.isQuizStarted = false;
 
-					quizmaster.timer.quizStartTime = 0;
-					quizmaster.timer.counter = 0;
-
 				},
 
 			},
 
+			convertTimeLimitMs: function() {
+				if( quizmaster.config.timeLimit ) {
+					quizmaster.config.timeLimit = quizmaster.config.timeLimit * 1000;
+				}
+			},
+
 			parseTime: function (ms) {
+
+				console.log( 'parseTime' )
+				console.log( ms )
 
 				var seconds = parseInt(ms / 1000);
 				var minutes = parseInt((seconds / 60) % 60);
@@ -855,6 +866,8 @@ jQuery(document).ready(function( $ ) {
 				seconds = (seconds > 9 ? '' : '0') + seconds;
 				minutes = (minutes > 9 ? '' : '0') + minutes;
 				hours = (hours > 9 ? '' : '0') + hours;
+
+				console.log( hours + ':' + minutes + ':' + seconds )
 
 				return hours + ':' + minutes + ':' + seconds;
 			},
@@ -1037,6 +1050,9 @@ jQuery(document).ready(function( $ ) {
 				}
 
 	    }, options );
+
+			// convert the time limit set in seconds to ms
+			quizmaster.timer.convertTimeLimitMs();
 
 			// bind to new event
 			$( quizmaster.events ).bind("questionShow", function() {

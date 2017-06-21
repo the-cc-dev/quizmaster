@@ -41,7 +41,7 @@
 				quizId: <?php echo (int)$view->quiz->getId(); ?>,
 				mode: <?php echo (int)$view->quiz->getQuizModus(); ?>,
 				globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
-				timelimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
+				timeLimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
 				bo: <?php echo $view->createOption(false); ?>,
 				qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
 				catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
