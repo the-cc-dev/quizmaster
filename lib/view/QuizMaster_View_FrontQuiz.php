@@ -132,7 +132,8 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function ($) {
-                $('#quizMaster_<?php echo $this->quiz->getId(); ?>').quizMasterFront({
+
+                $('#quizMaster_<?php echo $this->quiz->getId(); ?>').quizmaster({
                     quizId: <?php echo (int)$this->quiz->getId(); ?>,
                     mode: <?php echo (int)$this->quiz->getQuizModus(); ?>,
                     timelimit: <?php echo (int)$this->quiz->getTimeLimit(); ?>,
@@ -141,6 +142,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
                     formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,
                     lbn: <?php echo json_encode(($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide()) ? $this->_buttonNames['quiz_summary'] : $this->_buttonNames['finish_quiz']); ?>
                 });
+								
             });
         </script>
         <?php

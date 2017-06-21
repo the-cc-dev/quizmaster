@@ -3,7 +3,6 @@
 	<div class="quizMaster_reviewQuestion">
 		<ol>
 			<?php for ($xy = 1; $xy <= $questionCount; $xy++) { ?>
-					<div></div>
 					<li>
 						<?php echo $xy; ?>
 					</li>
