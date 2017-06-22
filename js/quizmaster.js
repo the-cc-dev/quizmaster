@@ -189,18 +189,11 @@ jQuery(document).ready(function( $ ) {
 
 				var input = $questionElement.find('.quizMaster_questionInput')
 
-				console.log( input )
-
 				$questionElement.find('.qm-question-list-item').each(function (i) {
-
-					console.log( $(this) )
-
 
 					var $item = $(this);
 					var index = $item.data('pos');
 					var checked = input.eq(i).is(':checked');
-
-					console.log( index )
 
 					if( checked ) {
 						userAnswerData.answerIndexes.push( index )
@@ -208,36 +201,88 @@ jQuery(document).ready(function( $ ) {
 
 				});
 
-				return userAnswerData
+				return userAnswerData;
+
+			},
+
+			free: function( $questionId, $questionElement ) {
+
+			},
+
+			fillBlank: function( $questionId, $questionElement ) {
+
+			},
+
+			sorting: function( $questionId, $questionElement ) {
 
 			},
 
 		};
 
+
 		quizmaster.checker = function ( $questionId, $questionElement ) {
 
-			var userAnswerData = quizmaster.userAnswerData.singleMulti( $questionId, $questionElement )
+			var questionData = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
 
-			console.log( userAnswerData )
+			console.log( questionData.type )
+
+			switch( questionData.type ) {
+
+				case 'single':
+				case 'multiple':
+					var userAnswerData = quizmaster.userAnswerData.singleMulti( $questionId, $questionElement )
+				break;
+
+				case 'free':
+					var userAnswerData = quizmaster.userAnswerData.free( $questionId, $questionElement )
+				break;
+
+				case 'fill_blank':
+					var userAnswerData = quizmaster.userAnswerData.fillBlank( $questionId, $questionElement )
+				break;
+
+				case 'sorting':
+					var userAnswerData = quizmaster.userAnswerData.sorting( $questionId, $questionElement )
+				break;
+
+			}
+
+
 
 			quizmaster.ajax({
-				action: 'quizmaster_admin_ajax',
-				func: 'checkAnswer',
-				data: {
-					quizId: quizmaster.config.quizId,
-					question: $questionId,
-					userAnswerData: userAnswerData,
-				}
+					action: 'quizmaster_admin_ajax',
+					func: 'checkAnswer',
+					data: {
+
+						answerType: questionData.type,
+						quizId: quizmaster.config.quizId,
+						questionId: $questionId,
+						userAnswerData: userAnswerData,
+
+					}
+			}, function (json) {
+
+					// organize result from checking answer
+					quizmaster.data.results[ $questionId ].points = json.points;
+					quizmaster.data.results[ $questionId ].correct = json.correct;
+					// quizmaster.data.results[ $questionId ].data = json.sortAnswerData;
+					quizmaster.data.results['comp'].points += json.points;
+
+					if( json.correct ) {
+						quizmaster.data.results['comp'].correctQuestions += 1;
+					}
+
+					quizmaster.data.catResults[ questionData.catId ] += json.points;
+					quizmaster.getCurrentQuestion().data('check', true);
+
 			});
 
 
+
+
+
+
 			/*
-
-				var correct = true;
-				var points = 0;
-				var isDiffPoints = $.isArray(quizmaster.data.points);
-				var statistcAnswerData = {};
-
 
 				var func = {
 
@@ -404,29 +449,13 @@ jQuery(document).ready(function( $ ) {
 			// stop timer
 			quizmaster.timer.question.stop();
 
-			// check current question
-			var data = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
-			var name = data.type;
-
+			// answer already checked
 			if ( quizmaster.getCurrentQuestion().data('check') ) {
 				return true;
 			}
 
-			// check answer
-			if (data.type == 'single' || data.type == 'multiple') {
-				name = 'singleMulti';
-			}
-
-			var userAnswerData = {};
-			var result = quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
-
-			// organize result from checking answer
-			quizmaster.data.results[data.id].points = result.p;
-			quizmaster.data.results[data.id].correct = Number(result.c);
-			quizmaster.data.results[data.id].data = result.s;
-			quizmaster.data.results['comp'].points += result.p;
-			quizmaster.data.catResults[data.catId] += result.p;
-			quizmaster.getCurrentQuestion().data('check', true);
+			// run checker to check answer
+			quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
 
 			// end check trigger
 			quizmaster.trigger({
@@ -515,6 +544,7 @@ jQuery(document).ready(function( $ ) {
 		 */
 		quizmaster.nextButtonInit = function() {
 
+
 			quizmaster.elements.nextButton.click(function () {
 
 				if ( quizmaster.config.bitOptions.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.getCurrentQuestion().index() ]
@@ -523,6 +553,7 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				quizmaster.nextQuestion();
+
 			});
 
 		};
@@ -1063,11 +1094,11 @@ jQuery(document).ready(function( $ ) {
 						quizId: quizmaster.config.quizId
 					}
 			}, function (json) {
-					quizmaster.config.globalPoints = json.globalPoints;
-					quizmaster.config.catPoints = json.catPoints;
-					quizmaster.config.json = json.json;
-					quizmaster.find('.quizMaster_quizAnker').after(json.content);
-				});
+				quizmaster.config.globalPoints = json.globalPoints;
+				quizmaster.config.catPoints = json.catPoints;
+				quizmaster.config.json = json.json;
+				quizmaster.find('.quizMaster_quizAnker').after(json.content);
+			});
 		};
 
 		quizmaster.modeHandler = function() {
