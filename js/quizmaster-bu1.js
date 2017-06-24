@@ -616,7 +616,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     }
                 },
 
-                cloze_answer: function () {
+                fill_blank: function () {
                     $questionList.find('.quizMaster_cloze').each(function (i, v) {
                         var $this = $(this);
                         var cloze = $this.children();
@@ -814,7 +814,7 @@ quizmasterQuizRegistry = quizMasterReady(function () {
                     return true;
                 } else if (type == 'matrix_sort_answer') {
                     return true;
-                } else if (type == 'cloze_answer') {
+                } else if (type == 'fill_blank') {
                     var i = 0;
                     $this.find('.quizMaster_cloze input').each(function () {
                         data[i++] = $(this).val();

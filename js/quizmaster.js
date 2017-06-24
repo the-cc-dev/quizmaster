@@ -207,14 +207,21 @@ jQuery(document).ready(function( $ ) {
 
 			free: function( $questionId, $questionElement ) {
 
+				var userAnswerData = $questionElement.find('.quizMaster_questionInput').val();
+				return userAnswerData;
+
 			},
 
 			fillBlank: function( $questionId, $questionElement ) {
 
+				return $questionElement.find('.quizMaster_cloze input').val();
+
 			},
 
 			sorting: function( $questionId, $questionElement ) {
-
+				return {
+					test: 5,
+				};
 			},
 
 		};
@@ -224,8 +231,6 @@ jQuery(document).ready(function( $ ) {
 
 			var questionData = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
 
-			console.log( questionData.type )
-
 			switch( questionData.type ) {
 
 				case 'single':
@@ -233,7 +238,7 @@ jQuery(document).ready(function( $ ) {
 					var userAnswerData = quizmaster.userAnswerData.singleMulti( $questionId, $questionElement )
 				break;
 
-				case 'free':
+				case 'free_answer':
 					var userAnswerData = quizmaster.userAnswerData.free( $questionId, $questionElement )
 				break;
 
@@ -241,13 +246,14 @@ jQuery(document).ready(function( $ ) {
 					var userAnswerData = quizmaster.userAnswerData.fillBlank( $questionId, $questionElement )
 				break;
 
-				case 'sorting':
+				case 'sort_answer':
 					var userAnswerData = quizmaster.userAnswerData.sorting( $questionId, $questionElement )
 				break;
 
 			}
 
-
+			console.log(253)
+			console.log( userAnswerData )
 
 			quizmaster.ajax({
 					action: 'quizmaster_admin_ajax',
@@ -256,8 +262,9 @@ jQuery(document).ready(function( $ ) {
 
 						answerType: questionData.type,
 						quizId: quizmaster.config.quizId,
-						questionId: $questionId,
 						userAnswerData: userAnswerData,
+						questionId: $questionId,
+
 
 					}
 			}, function (json) {
@@ -276,159 +283,6 @@ jQuery(document).ready(function( $ ) {
 					quizmaster.getCurrentQuestion().data('check', true);
 
 			});
-
-
-
-
-
-
-			/*
-
-				var func = {
-
-						singleMulti: function () {
-
-								var input = quizmaster.elements.questionList.find('.quizMaster_questionInput').attr('disabled', 'disabled');
-								var isDiffMode = quizmaster.data.diffMode;
-
-								quizmaster.elements.questionList.children().each(function (i) {
-										var $item = $(this);
-										var index = $item.data('pos');
-
-										var checked = input.eq(i).is(':checked');
-
-										if (quizmaster.data.correct[index]) {
-												if (!checked) {
-														correct = false;
-												} else {
-														if (isDiffPoints) {
-																if (isDiffMode)
-																		points = data.points[index];
-																else
-																		points += data.points[index];
-														}
-												}
-
-												if (data.disCorrect) {
-														correct = true;
-												} else {
-														quizmaster.marker($item, true);
-												}
-
-										} else {
-												if (checked) {
-														if (!data.disCorrect) {
-																quizmaster.marker($item, false);
-																correct = false;
-														} else {
-																correct = true;
-														}
-
-														if (isDiffMode)
-																points = data.points[index];
-												} else {
-														if (isDiffPoints && !isDiffMode) {
-																points += data.points[index];
-														}
-												}
-										}
-								});
-						},
-
-						sort_answer: function () {
-								var $items = quizmaster.elements.questionList.children();
-
-								$items.each(function (i, v) {
-										var $this = $(this);
-
-										statistcAnswerData[i] = $this.data('pos');
-
-										if (i == $this.data('pos')) {
-												quizmaster.marker($this, true);
-
-												if (isDiffPoints) {
-														points += data.points[i];
-												}
-										} else {
-												quizmaster.marker($this, false);
-												correct = false;
-										}
-								});
-
-								$items.children().css({
-										'box-shadow': '0 0',
-										'cursor': 'auto'
-								});
-
-								quizmaster.elements.questionList.sortable("destroy");
-
-								$items.sort(function (a, b) {
-										return $(a).data('pos') > $(b).data('pos') ? 1 : -1;
-								});
-
-								quizmaster.elements.questionList.append($items);
-						},
-
-						free_answer: function () {
-
-								var $li = quizmaster.elements.questionList.children();
-								var value = $li.find('.quizMaster_questionInput').attr('disabled', 'disabled').val();
-
-								if ($.inArray($.trim(value).toLowerCase(), data.correct) >= 0) {
-										quizmaster.marker($li, true);
-								} else {
-										quizmaster.marker($li, false);
-										correct = false;
-								}
-						},
-
-						cloze_answer: function () {
-								quizmaster.elements.questionList.find('.quizMaster_cloze').each(function (i, v) {
-										var $this = $(this);
-										var cloze = $this.children();
-										var input = cloze.eq(0);
-										var span = cloze.eq(1);
-										var inputText = quizmaster.cleanupCurlyQuotes(input.val());
-
-										if ($.inArray(inputText, data.correct[i]) >= 0) {
-												if (isDiffPoints) {
-														points += data.points[i];
-												}
-
-												if (!bitOptions.disabledAnswerMark) {
-														input.css('background-color', '#B0DAB0');
-												}
-										} else {
-												if (!bitOptions.disabledAnswerMark) {
-														input.css('background-color', '#FFBABA');
-												}
-
-												correct = false;
-
-												span.show();
-										}
-
-										input.attr('disabled', 'disabled');
-								});
-						},
-
-
-
-				};
-
-				func[name]();
-
-				if (!isDiffPoints && correct) {
-						points = data.points;
-				}
-
-				return {
-						c: correct,
-						p: points,
-						s: statistcAnswerData
-				};
-
-				*/
 
 		};
 
@@ -621,14 +475,14 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				page = page ? +page : 1;
-				var maxPage = Math.ceil($e.find('.quizMaster_list > li').length / quizmaster.config.qpp);
+				var maxPage = Math.ceil(quizmaster.find('.quizMaster_list > li').length / quizmaster.config.qpp);
 
 				if (page > maxPage)
 						return;
 
-				var pl = $e.find(quizmaster.elements.singlePageLeft).hide();
-				var pr = $e.find(quizmaster.elements.singlePageRight).hide();
-				var cs = $e.find('input[name="checkSingle"]').hide();
+				var pl = quizmaster.find(quizmaster.elements.singlePageLeft).hide();
+				var pr = quizmaster.find(quizmaster.elements.singlePageRight).hide();
+				var cs = quizmaster.find('input[name="checkSingle"]').hide();
 
 				if (page > 1) {
 						pl.val(pl.data('text').replace(/%d/, page - 1)).show();
@@ -1008,7 +862,7 @@ jQuery(document).ready(function( $ ) {
 								return true;
 						} else if (type == 'matrix_sort_answer') {
 								return true;
-						} else if (type == 'cloze_answer') {
+						} else if (type == 'fill_blank') {
 								var i = 0;
 								$this.find('.quizMaster_cloze input').each(function () {
 										data[i++] = $(this).val();
@@ -1070,8 +924,6 @@ jQuery(document).ready(function( $ ) {
 
 			// quizmaster.find('.qm-check-answer-box').hide().children().hide();
 			quizmaster.find('.qm-check-answer-box').hide();
-
-			quizmaster.find('.quizMaster_sortStringItem, .quizMaster_sortable').removeAttr('style');
 			quizmaster.find('.quizMaster_clozeCorrect, .quizMaster_QuestionButton, .qm-results-boxList > li').hide();
 
 			quizmaster.find('.quizMaster_question_page, input[name="tip"]').show();
@@ -1175,6 +1027,30 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
+		quizmaster.sortableInit = function () {
+
+			console.log('init sortable')
+			var match = quizmaster.find('.quizMaster_sortable').parents('ul');
+			console.log( match )
+
+			quizmaster.find('.quizMaster_sortable').parents('ul').sortable({
+				update: function (event, ui) {
+					var $p = $(this).parents('.quizMaster_listItem');
+
+					quizmaster.trigger({
+							type: 'quizmaster.questionSolved',
+							values: {
+								item: $p,
+								index: $p.index(),
+								solved: true
+							}
+					});
+				}
+			}).disableSelection();
+
+
+		}
+
 		quizmaster.init = function( options ) {
 
 			// parse options to quizmaster.config
@@ -1207,6 +1083,7 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.restartButtonInit();
 			quizmaster.questionReviewButtonInit();
 			quizmaster.hintInit();
+			quizmaster.sortableInit();
 
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.modeHandler );
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.startQuizShowQuestion );

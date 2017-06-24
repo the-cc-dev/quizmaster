@@ -16,6 +16,8 @@ class QuizMaster_Helper_CheckAnswers {
 		$question = $questionMapper->fetch( $questionId );
 		$answerType = $question->getAnswerType();
 
+		print $answerType;
+
 		// run check function based on answer type
 		switch( $answerType ) {
 			case 'single':
@@ -24,13 +26,13 @@ class QuizMaster_Helper_CheckAnswers {
 			case 'multiple':
 				$checkAnswers->checkMultiple( $question, $userAnswerData );
 				break;
-			case 'free':
+			case 'free_answer':
 				$checkAnswers->checkFree( $question, $userAnswerData );
 				break;
 			case 'fill_blank':
 				$checkAnswers->checkFillBlank( $question, $userAnswerData );
 				break;
-			case 'sorting':
+			case 'sort_answer':
 				$checkAnswers->checkSorting( $question, $userAnswerData );
 				break;
 		}
@@ -93,27 +95,15 @@ class QuizMaster_Helper_CheckAnswers {
 
 	public function checkFree( $question, $userAnswerData ) {
 
-		$incorrect = false;
+		$answerData = $question->getAnswerData();
+		$answer = $answerData[0]->getAnswer();
 
-		foreach( $question->getAnswerData() as $answerIndex => $answerObj ) {
+		if( $answer === $userAnswerData ) {
 
-			if( $answerObj->isCorrect() ) {
-
-				// check if the user answer index matches this answer index
-				// even if answers are randomized in display the indexes will continue to match the order set in the question
-				if( ! in_array( $userAnswerData['answerIndexes'], $answerIndex )) {
-					$this->correct = 0;
-					$this->points  = 0;
-					return;
-				}
-
-			}
+			$this->correct = 1;
+			$this->points = $question->getPoints();
 
 		}
-
-		// answer was correct
-		$this->correct = 1;
-		$this->points = $question->getPoints();
 
 	}
 
@@ -122,6 +112,9 @@ class QuizMaster_Helper_CheckAnswers {
 	}
 
 	public function checkSorting( $question, $userAnswerData ) {
+
+		$answerData = $question->getAnswerData();
+		var_dump( $answerData );
 
 	}
 

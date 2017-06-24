@@ -8,7 +8,7 @@
   print quizmaster_get_template( 'quiz/question-points.php', array( 'question' => $question, 'quiz' => $quiz ));
 ?>
 
-<div class="quizMaster_question">
+<div class="qm-question">
 
   <div class="qm-question-text">
     <?php echo do_shortcode(apply_filters('comment_text', $question->getQuestion())); ?>
@@ -20,13 +20,13 @@
     <?php
       $answer_index = 0;
       foreach ($question->getAnswerData() as $v) :
-        $answer_text = $v->isHtml() ? $v->getAnswer() : esc_html($v->getAnswer());
+        $answer_text = $v->getAnswer();
     ?>
 
-      <li class="qm-question-list-item" data-pos="<?php echo $answer_index; ?>">
-        <div class="quizMaster_sortable">
-          <?php echo $answer_text; ?>
-        </div>
+      <li class="qm-question-list-item quizMaster_sortable" data-pos="<?php echo $answer_index; ?>">
+
+				<?php echo $answer_text; ?>
+
       </li>
 
       <?php $answer_index++; endforeach;?>

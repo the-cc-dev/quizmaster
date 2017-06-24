@@ -261,7 +261,7 @@ jQuery(document).ready(function ($) {
 //					case 'matrix_sort_answer':
 //						formListener.displayMatrixSortAnswer();
 //						break;
-//					case 'cloze_answer':
+//					case 'fill_blank':
 //						formListener.displayClozeAnswer();
 //						break;
 //					}
@@ -351,7 +351,7 @@ jQuery(document).ready(function ($) {
 //			},
 //
 //			displayClozeAnswer: function() {
-//				$('.cloze_answer').show();
+//				$('.fill_blank').show();
 //			},
 //
 //			addAnswer: function(obj) {
@@ -524,7 +524,7 @@ jQuery(document).ready(function ($) {
 //					alert(quizMasterLocalize.no_answer_msg);
 //					return false;
 //				}
-//			} else if(type.val() == 'cloze_answer') {
+//			} else if(type.val() == 'fill_blank') {
 //				var clozeText = '';
 //
 //				if(tinymce.editors.cloze != undefined && !tinymce.editors.cloze.isHidden()) {
@@ -2255,7 +2255,7 @@ jQuery(document).ready(function ($) {
                         return true;
                     },
 
-                    cloze_answer: function () {
+                    fill_blank: function () {
                         if (global.isEmpty(global.getMceContent('cloze'))) {
                             alert(quizMasterLocalize.no_answer_msg);
                             return false;

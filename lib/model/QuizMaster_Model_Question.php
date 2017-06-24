@@ -164,25 +164,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
      * @param bool|false $serialize
      * @return QuizMaster_Model_AnswerTypes[]|null|string
      */
-    public function getAnswerData($serialize = false) {
-      if ($this->_answerData === null) {
-          return null;
-      }
-
-      if (is_array($this->_answerData) || $this->_answerData instanceof QuizMaster_Model_AnswerTypes) {
-          if ($serialize) {
-              return @serialize($this->_answerData);
-          }
-      } else {
-          if (!$serialize) {
-              if (QuizMaster_Helper_Until::saveUnserialize($this->_answerData, $into) === false) {
-                  return null;
-              }
-
-              $this->_answerData = $into;
-          }
-      }
-
+    public function getAnswerData() {
       return $this->_answerData;
     }
 
@@ -245,7 +227,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
     }
 
     public function loadAnswerDataCloze( $fields ) {
-      $fieldAnswerData['answer'] = $fields['qmqe_cloze_answers'];
+      $fieldAnswerData['answer'] = $fields['qmqe_fill_blanks'];
       $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswerData );
       return $answerData;
     }
@@ -316,7 +298,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
         case 'sort_answer':
           $answerData = $this->loadAnswerDataSortingChoice( $fields );
           break;
-        case 'cloze_answer':
+        case 'fill_blank':
           $answerData = $this->loadAnswerDataCloze( $fields );
           break;
       }
@@ -407,7 +389,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 	        return  new QuizMaster_Answer_Free;
 	      case 'sort_answer':
 	        return new QuizMaster_Answer_Sorting;
-	      case 'cloze_answer':
+	      case 'fill_blank':
 	      	return  new QuizMaster_Answer_Fill_Blank;
 	    }
 
