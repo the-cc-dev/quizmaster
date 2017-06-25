@@ -69,6 +69,8 @@ class QuizMaster_Controller_Admin {
         wp_enqueue_style('jquery-ui',
             'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 
+				wp_enqueue_style( 'quizmaster-admin-css', plugins_url('css/quizmaster-admin.css', QUIZMASTER_FILE), array(), QUIZMASTER_VERSION );
+
         $this->localizeScript();
     }
 
@@ -128,9 +130,11 @@ class QuizMaster_Controller_Admin {
         );
 
         foreach ($pages as $p) {
-          add_action('admin_print_scripts-' . $p, array($this, 'enqueueScript'));
+
           add_action('load-' . $p, array($this, 'routeLoadAction'));
         }
+
+				add_action('admin_print_scripts', array($this, 'enqueueScript'));
     }
 
     public function routeLoadAction() {

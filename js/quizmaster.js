@@ -219,8 +219,12 @@ jQuery(document).ready(function( $ ) {
 			},
 
 			sorting: function( $questionId, $questionElement ) {
+
+
+				var answerOrder = $questionElement.find('.qm-sortable').sortable('toArray');
+
 				return {
-					test: 5,
+					test: answerOrder,
 				};
 			},
 
@@ -251,9 +255,6 @@ jQuery(document).ready(function( $ ) {
 				break;
 
 			}
-
-			console.log(253)
-			console.log( userAnswerData )
 
 			quizmaster.ajax({
 					action: 'quizmaster_admin_ajax',
@@ -1029,11 +1030,7 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.sortableInit = function () {
 
-			console.log('init sortable')
-			var match = quizmaster.find('.quizMaster_sortable').parents('ul');
-			console.log( match )
-
-			quizmaster.find('.quizMaster_sortable').parents('ul').sortable({
+			quizmaster.find('.qm-sortable').sortable({
 				update: function (event, ui) {
 					var $p = $(this).parents('.quizMaster_listItem');
 
@@ -1047,7 +1044,6 @@ jQuery(document).ready(function( $ ) {
 					});
 				}
 			}).disableSelection();
-
 
 		}
 

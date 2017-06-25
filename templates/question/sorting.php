@@ -14,7 +14,7 @@
     <?php echo do_shortcode(apply_filters('comment_text', $question->getQuestion())); ?>
   </div>
 
-  <ul class="qm-question-list" data-question_id="<?php echo $question->getId(); ?>"
+  <ul class="qm-question-list qm-sortable" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
     <?php
@@ -23,7 +23,7 @@
         $answer_text = $v->getAnswer();
     ?>
 
-      <li class="qm-question-list-item quizMaster_sortable" data-pos="<?php echo $answer_index; ?>">
+      <li class="qm-question-list-item" id="<?php echo $answer_index; ?>" data-pos="<?php echo $answer_index; ?>">
 
 				<?php echo $answer_text; ?>
 

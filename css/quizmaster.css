@@ -127,7 +127,7 @@
     display: none;
 }
 
-.quizMaster_sortable, .quizMaster_sortStringItem {
+.qm-sortable, .quizMaster_sortStringItem {
     padding: 5px;
     border: 1px solid lightGrey;
     box-shadow: 2px 2px 1px #EEE;

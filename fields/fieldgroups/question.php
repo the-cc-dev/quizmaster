@@ -260,6 +260,12 @@ $fieldGroup = array (
 		),
 		array (
 			'sub_fields' => array (
+				array(
+					'key' => 'field_590eafc31392k',
+					'label' => 'Answer ID',
+					'name' => 'qmqe_sorting_choice_answer_id',
+					'type' => 'text',
+				),
 				array (
 					'tabs' => 'all',
 					'toolbar' => 'basic',
