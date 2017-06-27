@@ -16,8 +16,6 @@ class QuizMaster_Helper_CheckAnswers {
 		$question = $questionMapper->fetch( $questionId );
 		$answerType = $question->getAnswerType();
 
-		print $answerType;
-
 		// run check function based on answer type
 		switch( $answerType ) {
 			case 'single':
@@ -107,16 +105,36 @@ class QuizMaster_Helper_CheckAnswers {
 
 	}
 
-	public function checkFillBlank( $question, $userAnswerData ) {
-
-	}
-
 	public function checkSorting( $question, $userAnswerData ) {
 
 		$answerData = $question->getAnswerData();
+
 		var_dump( $answerData );
+		var_dump( $userAnswerData );
+
+
+		foreach( $answerData as $answerIndex => $answer ) {
+
+			var_dump( $answer->getAnswerId() );
+
+			if( $answer->getAnswerId() != $userAnswerData[ $answerIndex ] ) {
+
+				var_dump('not match: ' . $answer->getAnswerId() );
+
+				$this->correct = 0;
+				$this->points  = 0;
+				return;
+
+			}
+		}
+
+		$this->correct = 1;
+		$this->points = $question->getPoints();
 
 	}
 
+	public function checkFillBlank( $question, $userAnswerData ) {
+
+	}
 
 }

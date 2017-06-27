@@ -19,11 +19,13 @@
 
     <?php
       $answer_index = 0;
-      foreach ($question->getAnswerData() as $v) :
+			$sortingAnswers = $question->getAnswerData();
+			shuffle( $sortingAnswers );
+      foreach ( $sortingAnswers as $v ) :
         $answer_text = $v->getAnswer();
     ?>
 
-      <li class="qm-question-list-item" id="<?php echo $answer_index; ?>" data-pos="<?php echo $answer_index; ?>">
+      <li class="qm-question-list-item" id="<?php print $v->getAnswerId(); ?>" data-pos="<?php echo $answer_index; ?>">
 
 				<?php echo $answer_text; ?>
 

@@ -232,17 +232,6 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       return $answerData;
     }
 
-    public function loadAnswerDataMatrixSortingAnswer( $fields ) {
-      $fieldAnswerData = $fields['qmqe_matrix_sorting_answers'];
-      $answerData = array();
-      foreach( $fieldAnswerData as $fieldAnswer ) {
-        $fieldAnswer['answer'] = $fieldAnswer['qmqe_matrix_sorting_criterion'];
-        $fieldAnswer['sort_string'] = $fieldAnswer['qmqe_matrix_sorting_sort_string'];
-        $answerData[] = new QuizMaster_Model_AnswerTypes( $fieldAnswer );
-      }
-      return $answerData;
-    }
-
     public function loadAnswerDataSortingChoice( $data ) {
 
       // load answer model

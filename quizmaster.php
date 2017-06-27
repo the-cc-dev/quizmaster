@@ -54,7 +54,13 @@ class quizmaster {
 	}
 
 	public function makeSortingChoiceAnswerId( $value ) {
-		return quizmasterGenerateRandomString( 12 );
+
+		if( $value == '' || strlen( $value ) <= 6 ) {
+			return quizmasterGenerateRandomString( 12 );
+		}
+
+		return $value;
+
 	}
 
 }

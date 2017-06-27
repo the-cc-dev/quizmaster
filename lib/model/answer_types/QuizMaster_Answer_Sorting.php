@@ -3,6 +3,8 @@
 
 class QuizMaster_Answer_Sorting extends QuizMaster_Model_Answer {
 
+	protected $_answer_id;
+
   public function getKey() {
     return 'sorting';
   }
@@ -18,10 +20,20 @@ class QuizMaster_Answer_Sorting extends QuizMaster_Model_Answer {
 
     foreach( $fieldAnswerData as $fieldAnswer ) {
       $answer['answer'] = $fieldAnswer['qmqe_sorting_choice_answer'];
+			$answer['answer_id'] = $fieldAnswer['qmqe_sorting_choice_answer_id'];
       $answerData[] = new self( $answer );
     }
+
     return $answerData;
 
   }
+
+	public function getAnswerId() {
+		return $this->_answer_id;
+	}
+
+	public function setAnswerId( $_answer_id ) {
+		$this->_answer_id = $_answer_id;
+	}
 
 }

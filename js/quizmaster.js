@@ -220,12 +220,9 @@ jQuery(document).ready(function( $ ) {
 
 			sorting: function( $questionId, $questionElement ) {
 
-
 				var answerOrder = $questionElement.find('.qm-sortable').sortable('toArray');
-
-				return {
-					test: answerOrder,
-				};
+				return answerOrder;
+				
 			},
 
 		};
