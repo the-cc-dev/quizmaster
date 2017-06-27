@@ -207,14 +207,19 @@ jQuery(document).ready(function( $ ) {
 
 			free: function( $questionId, $questionElement ) {
 
-				var userAnswerData = $questionElement.find('.quizMaster_questionInput').val();
-				return userAnswerData;
+				return $questionElement.find('.quizMaster_questionInput').val();
 
 			},
 
 			fillBlank: function( $questionId, $questionElement ) {
 
-				return $questionElement.find('.quizMaster_cloze input').val();
+				var answers = [];
+
+				$questionElement.find('.quizMaster_cloze input').each(function (i, v) {
+					answers.push( $(this).val() );
+				});
+
+				return answers;
 
 			},
 
@@ -222,7 +227,7 @@ jQuery(document).ready(function( $ ) {
 
 				var answerOrder = $questionElement.find('.qm-sortable').sortable('toArray');
 				return answerOrder;
-				
+
 			},
 
 		};

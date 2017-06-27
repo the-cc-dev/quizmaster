@@ -109,17 +109,8 @@ class QuizMaster_Helper_CheckAnswers {
 
 		$answerData = $question->getAnswerData();
 
-		var_dump( $answerData );
-		var_dump( $userAnswerData );
-
-
 		foreach( $answerData as $answerIndex => $answer ) {
-
-			var_dump( $answer->getAnswerId() );
-
 			if( $answer->getAnswerId() != $userAnswerData[ $answerIndex ] ) {
-
-				var_dump('not match: ' . $answer->getAnswerId() );
 
 				$this->correct = 0;
 				$this->points  = 0;
@@ -134,6 +125,32 @@ class QuizMaster_Helper_CheckAnswers {
 	}
 
 	public function checkFillBlank( $question, $userAnswerData ) {
+
+		$answerData = $question->getAnswerData();
+
+		//var_dump( $answerData );
+		//var_dump( $userAnswerData );
+
+		preg_match_all("/{([^}]+)}/", $answerData[0]->getAnswer(), $answers );
+		$answers = $answers[1]; // matches without delimiters
+		if( empty( $answers )) {
+
+			$this->correct = 0;
+			$this->points  = 0;
+			return;
+
+		}
+
+		foreach( $answers as $answerIndex => $answer ) {
+			if( $answer != $userAnswerData[$answerIndex] ) {
+				$this->correct = 0;
+				$this->points  = 0;
+				return;
+			}
+		}
+
+		$this->correct = 1;
+		$this->points = $question->getPoints();
 
 	}
 
