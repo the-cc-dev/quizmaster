@@ -128,9 +128,6 @@ class QuizMaster_Helper_CheckAnswers {
 
 		$answerData = $question->getAnswerData();
 
-		//var_dump( $answerData );
-		//var_dump( $userAnswerData );
-
 		preg_match_all("/{([^}]+)}/", $answerData[0]->getAnswer(), $answers );
 		$answers = $answers[1]; // matches without delimiters
 		if( empty( $answers )) {
