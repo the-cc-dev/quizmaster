@@ -23,13 +23,14 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.elements = {
 			checkButtonClass: '.qm-button-check',
 			nextButtonClass: '.qm-button-next',
-			skipButtonClass: 'input[name="skip"]',
+			skipButtonClass: '.qm-skip-button',
 			singlePageLeft: 'input[name="quizMaster_pageLeft"]',
 			singlePageRight: 'input[name="quizMaster_pageRight"]',
 			startButton: quizmaster.find('.qm-start-button'),
-			backButton: quizmaster.find('input[name="back"]'),
+			backButtonClass: '.qm-back-button',
+			backButton: quizmaster.find('.qm-back-button'),
 			nextButton: quizmaster.find('.qm-button-next'),
-			skipButton: quizmaster.find('input[name="skip"]'),
+			skipButton: quizmaster.find('.qm-skip-button'),
 			checkButton: quizmaster.find('.qm-button-check'),
 			restartButtonClass: '.qm-restart-quiz-button',
 			restartButton: quizmaster.find('.qm-restart-quiz-button'),
@@ -167,8 +168,8 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.elements.checkButton.click( function () {
 
-				if (quizmaster.config.bitOptions.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.data.currentQuestion.index() ]
-					&& (quizmaster.config.bitOptions.quizSummeryHide || !quizmaster.config.bitOptions.reviewQustion)) {
+				if (quizmaster.config.options.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.data.currentQuestion.index() ]
+					&& (quizmaster.config.options.quizSummeryHide || !quizmaster.config.options.reviewQustion)) {
 
 					return false;
 				}
@@ -291,7 +292,7 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.marker = function (e, correct) {
 
-			if ( !quizmaster.config.bitOptions.disabledAnswerMark ) {
+			if ( !quizmaster.config.options.disabledAnswerMark ) {
 				if (correct) {
 					e.addClass('quizMaster_answerCorrect');
 				} else {
@@ -345,45 +346,16 @@ jQuery(document).ready(function( $ ) {
 				}
 		};
 
-		quizmaster.parseBitOptions = function () {
-
-			if (quizmaster.config.bo) {
-				quizmaster.config.bitOptions.randomAnswer = quizmaster.config.bo & (1 << 0);
-				quizmaster.config.bitOptions.randomQuestion = quizmaster.config.bo & (1 << 1);
-				quizmaster.config.bitOptions.disabledAnswerMark = quizmaster.config.bo & (1 << 2);
-				quizmaster.config.bitOptions.checkBeforeStart = quizmaster.config.bo & (1 << 3);
-				quizmaster.config.bitOptions.preview = quizmaster.config.bo & (1 << 4);
-				quizmaster.config.bitOptions.isAddAutomatic = quizmaster.config.bo & (1 << 6);
-				quizmaster.config.bitOptions.reviewQustion = quizmaster.config.bo & ( 1 << 7);
-				quizmaster.config.bitOptions.quizSummeryHide = quizmaster.config.bo & (1 << 8);
-				quizmaster.config.bitOptions.skipButton = quizmaster.config.bo & (1 << 9);
-				quizmaster.config.bitOptions.autoStart = quizmaster.config.bo & (1 << 10);
-				quizmaster.config.bitOptions.forcingQuestionSolve = quizmaster.config.bo & (1 << 11);
-				quizmaster.config.bitOptions.hideQuestionPositionOverview = quizmaster.config.bo & (1 << 12);
-				quizmaster.config.bitOptions.formActivated = quizmaster.config.bo & (1 << 13);
-				quizmaster.config.bitOptions.maxShowQuestion = quizmaster.config.bo & (1 << 14);
-				quizmaster.config.bitOptions.sortCategories = quizmaster.config.bo & (1 << 15);
-
-				var cors = quizmaster.config.bo & (1 << 5);
-
-				if (cors && jQuery.support != undefined && jQuery.support.cors != undefined && jQuery.support.cors == false) {
-					quizmaster.config.bitOptions.cors = cors;
-				}
-			}
-
-		};
-
-
 		quizmaster.ajax = function (data, success, dataType) {
 				dataType = dataType || 'json';
 
-				if (quizmaster.config.bitOptions.cors) {
+				if (quizmaster.config.options.cors) {
 						jQuery.support.cors = true;
 				}
 
 				$.post(QuizMasterGlobal.ajaxurl, data, success, dataType);
 
-				if (quizmaster.config.bitOptions.cors) {
+				if (quizmaster.config.options.cors) {
 						jQuery.support.cors = false;
 				}
 		};
@@ -404,8 +376,8 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.elements.nextButton.click(function () {
 
-				if ( quizmaster.config.bitOptions.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.getCurrentQuestion().index() ]
-					&& ( quizmaster.config.bitOptions.quizSummeryHide || !quizmaster.config.bitOptions.reviewQustion )) {
+				if ( quizmaster.config.options.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.getCurrentQuestion().index() ]
+					&& ( quizmaster.config.options.quizSummeryHide || !quizmaster.config.options.reviewQustion )) {
 					return false;
 				}
 
@@ -455,7 +427,21 @@ jQuery(document).ready(function( $ ) {
 			});
 
 			quizmaster.elements.quiz.show();
-			quizmaster.elements.reviewBox.show();
+
+			// maybe show reviewBox
+			if( quizmaster.config.options.isShowReviewQuestion ) {
+				quizmaster.elements.reviewBox.show();
+			}
+
+			// maybe show skip button
+			if ( quizmaster.config.options.isShowSkipButton || quizmaster.config.options.isShowReviewQuestion ) {
+				quizmaster.elements.skipButton.show();
+			}
+
+			// maybe show back button
+			if ( quizmaster.config.options.isShowBackButton ) {
+				quizmaster.elements.backButton.show();
+			}
 
 			// start timer
 			quizmaster.timer.quiz.start();
@@ -893,7 +879,11 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.elements.quiz.toggle();
 				quizmaster.find('.quizMaster_QuestionButton').hide();
 				quizmaster.elements.questionList.children().show();
-				quizmaster.elements.reviewBox.toggle();
+
+				if( quizmaster.options.showReviewBox ) {
+					quizmaster.elements.reviewBox.toggle();
+				}
+
 				quizmaster.find('.quizMaster_question_page').hide();
 
 		};
@@ -962,7 +952,7 @@ jQuery(document).ready(function( $ ) {
 			switch (quizmaster.config.mode) {
 
 				// single page mode
-				case 3:
+				case 2:
 
 					quizmaster.elements.nextButton.show();
 					quizmaster.find('.quizMaster_question_page').hide();
@@ -972,7 +962,7 @@ jQuery(document).ready(function( $ ) {
 					break;
 
 				// check/continue mode
-				case 2:
+				case 1:
 
 					// show check button at start
 					quizmaster.elements.checkButton.show();
@@ -989,15 +979,7 @@ jQuery(document).ready(function( $ ) {
 						quizmaster.elements.checkButton.show()
 					});
 
-					// maybe show skip button
-					if ( quizmaster.config.bitOptions.skipButton || quizmaster.config.bitOptions.reviewQustion)
-						quizmaster.elements.skipButton.show();
-
 					break;
-
-				// normal mode plus back button
-				case 1:
-					quizmaster.elements.backButton.show();
 
 				// default normal mode
 				case 0:
@@ -1006,12 +988,12 @@ jQuery(document).ready(function( $ ) {
 			}
 
 			// maybe hide question position overview
-			if ( quizmaster.config.bitOptions.hideQuestionPositionOverview ) {
+			if ( quizmaster.config.options.hideQuestionPositionOverview ) {
 				quizmaster.find('.quizMaster_question_page').hide();
 			}
 
 			// unless single page mode, show first question
-			if (quizmaster.config.mode != 3) {
+			if (quizmaster.config.mode != 2) {
 				quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
 			}
 
@@ -1019,7 +1001,7 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.startQuizShowQuestion = function() {
 
-			if( quizmaster.config.mode != 3 ) {
+			if( quizmaster.config.mode != 2 ) {
 
 				// get first question object and show
 				var $questionList = quizmaster.elements.questionList.children();
@@ -1075,7 +1057,6 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.loadQuizDataAjax()
 			quizmaster.checkButtonInit();
 			quizmaster.nextButtonInit();
-			quizmaster.parseBitOptions();
 			quizmaster.startButtonInit();
 			quizmaster.startPageShow();
 			quizmaster.restartButtonInit();

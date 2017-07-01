@@ -57,6 +57,7 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
     protected $_categoryName = '';
 		protected $_staticHeaderMessage;
 		protected $_showSkipButton;
+		protected $_showBackButton;
 
     public function setId($_id)
     {
@@ -672,6 +673,14 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
 
 		public function isShowSkipButton() {
 			return $this->_showSkipButton;
+		}
+
+		public function setShowBackButton( $_showBackButton ) {
+			$this->_showBackButton = $_showBackButton;
+		}
+
+		public function isShowBackButton() {
+			return $this->_showBackButton;
 		}
 
     public function fieldGroupKey() {

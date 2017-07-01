@@ -8,6 +8,11 @@
 	display: none;
 }
 
+.qm-button.qm-back-button,
+.qm-button.qm-skip-button {
+	display: none;
+}
+
 /* Question Check */
 .qm-question-check {
 	display: none;

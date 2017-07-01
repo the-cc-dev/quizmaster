@@ -76,27 +76,27 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     }
 
-    public function createOption($preview)
-    {
-        $bo = 0;
+    public function createOption() {
+      $options = array(
+				'isAnswerRandom' => (int)$this->quiz->isAnswerRandom(),
+				'isQuestionRandom'  => (int)$this->quiz->isQuestionRandom(),
+				'isDisabledAnswerMark' => (int)$this->quiz->isDisabledAnswerMark(),
+				'isQuizRunOnce' => (int)$this->quiz->isQuizRunOnce(),
+				'isStartOnlyRegisteredUser' => $this->quiz->isStartOnlyRegisteredUser(),
+				'isCorsActivated' => (int)get_option('quizMaster_corsActivated'),
+				'isShowReviewQuestion' => (int)$this->quiz->isShowReviewQuestion(),
+				'isQuizSummaryHide' => (int)$this->quiz->isQuizSummaryHide(),
+				'isShowSkipButton' => (int)$this->quiz->isShowSkipButton(),
+				'isAutostart' => (int)$this->quiz->isAutostart(),
+				'isForcingQuestionSolve' => (int)$this->quiz->isForcingQuestionSolve(),
+				'isHideQuestionPositionOverview' => (int)$this->quiz->isHideQuestionPositionOverview(),
+				'isFormActivated' => (int)$this->quiz->isFormActivated(),
+				'isShowMaxQuestion' => (int)$this->quiz->isShowMaxQuestion(),
+				'isSortCategories' => (int)$this->quiz->isSortCategories(),
+				'isShowBackButton' => (int)$this->quiz->isShowBackButton(),
+			);
 
-        $bo |= ((int)$this->quiz->isAnswerRandom()) << 0;
-        $bo |= ((int)$this->quiz->isQuestionRandom()) << 1;
-        $bo |= ((int)$this->quiz->isDisabledAnswerMark()) << 2;
-        $bo |= ((int)($this->quiz->isQuizRunOnce() || $this->quiz->isStartOnlyRegisteredUser() )) << 3;
-        $bo |= ((int)$preview) << 4;
-        $bo |= ((int)get_option('quizMaster_corsActivated')) << 5;
-        $bo |= ((int)$this->quiz->isShowReviewQuestion()) << 7;
-        $bo |= ((int)$this->quiz->isQuizSummaryHide()) << 8;
-        $bo |= ((int)$this->quiz->isShowSkipButton()) << 9;
-        $bo |= ((int)$this->quiz->isAutostart()) << 10;
-        $bo |= ((int)$this->quiz->isForcingQuestionSolve()) << 11;
-        $bo |= ((int)$this->quiz->isHideQuestionPositionOverview()) << 12;
-        $bo |= ((int)$this->quiz->isFormActivated()) << 13;
-        $bo |= ((int)$this->quiz->isShowMaxQuestion()) << 14;
-        $bo |= ((int)$this->quiz->isSortCategories()) << 15;
-
-        return $bo;
+			print json_encode( $options );
     }
 
     public function showMaxQuestion() {
@@ -142,7 +142,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
                     formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,
                     lbn: <?php echo json_encode(($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide()) ? $this->_buttonNames['quiz_summary'] : $this->_buttonNames['finish_quiz']); ?>
                 });
-								
+
             });
         </script>
         <?php

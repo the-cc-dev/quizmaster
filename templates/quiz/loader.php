@@ -42,7 +42,7 @@
 				mode: <?php echo (int)$view->quiz->getQuizModus(); ?>,
 				globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
 				timeLimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
-				bo: <?php echo $view->createOption(false); ?>,
+				options: <?php echo $view->createOption(); ?>,
 				qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
 				catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
 				formPos: <?php echo (int)$view->quiz->getFormShowPosition(); ?>,

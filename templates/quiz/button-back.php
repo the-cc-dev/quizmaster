@@ -1,2 +1,1 @@
-<input type="button" name="back" value="<?php _e('Back', 'quizmaster'); ?>"
-       class="qm-button quizMaster_QuestionButton">
+<input type="button" value="<?php _e('Back', 'quizmaster'); ?>" class="qm-back-button qm-button">
