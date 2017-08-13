@@ -63,24 +63,6 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.elements.startPage.hide();
 		};
 
-		quizmaster.loadQuizData = function () {
-
-			quizmaster.ajax({
-				action: 'quizmaster_admin_ajax',
-				func: 'loadQuizData',
-				data: {
-					quizId: quizmaster.config.quizId
-				}
-			}, function (json) {
-
-					if (json.averageResult != undefined) {
-						//quizmaster.setAverageResult(json.averageResult, true);
-					}
-
-			});
-
-		};
-
 		/*
   		* Moves quiz to next question
 		 */
@@ -98,6 +80,8 @@ jQuery(document).ready(function( $ ) {
 				nextQuestion: quizmaster.data.currentQuestion.next(),
 				currentQuestion: quizmaster.data.currentQuestion,
 			});
+
+			quizmaster.quizDataLoaded
 
 		};
 
@@ -442,7 +426,6 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.startQuiz = function() {
 
 			quizmaster.startPageHide();
-			quizmaster.loadQuizData();
 
 			var $listItem = quizmaster.elements.questionList.children();
 			quizmaster.elements.listItems = $('.quizMaster_list > li');
@@ -573,9 +556,6 @@ jQuery(document).ready(function( $ ) {
 
 			// check all answers if mode is single page
 			if( quizmaster.config.mode == 2 ) {
-
-				console.log( 'checking all stacked mode')
-
 				quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
 			}
 
@@ -979,7 +959,7 @@ jQuery(document).ready(function( $ ) {
      * Important utility functions
 		 */
 
-		quizmaster.loadQuizDataAjax = function () {
+		quizmaster.loadQuizData = function () {
 
 			quizmaster.ajax({
 					action: 'quizmaster_admin_ajax',
@@ -988,10 +968,17 @@ jQuery(document).ready(function( $ ) {
 						quizId: quizmaster.config.quizId
 					}
 			}, function (json) {
+
 				quizmaster.config.globalPoints = json.globalPoints;
 				quizmaster.config.catPoints = json.catPoints;
 				quizmaster.config.json = json.json;
 				quizmaster.find('.quizMaster_quizAnker').after(json.content);
+
+				// quiz data loaded event
+				quizmaster.trigger({
+					type: 'quizmaster.quizDataLoaded',
+				});
+
 			});
 		};
 
@@ -1104,16 +1091,25 @@ jQuery(document).ready(function( $ ) {
 			// convert the time limit set in seconds to ms
 			quizmaster.timer.convertTimeLimitMs();
 
-			quizmaster.loadQuizDataAjax()
+			quizmaster.loadQuizData()
 			quizmaster.checkButtonInit();
 			quizmaster.backButtonInit();
 			quizmaster.nextButtonInit();
 			quizmaster.startButtonInit();
-			quizmaster.startPageShow();
 			quizmaster.restartButtonInit();
 			quizmaster.questionReviewButtonInit();
 			quizmaster.hintInit();
 			quizmaster.sortableInit();
+
+			/*
+  		 * Maybe start quiz or show start page
+			 */
+			if( quizmaster.config.options.isAutostart ) {
+				quizmaster.on( 'quizmaster.quizDataLoaded', quizmaster.startQuiz )
+			} else {
+				quizmaster.startPageShow();
+			}
+
 
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.modeHandler );
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.startQuizShowQuestion );
