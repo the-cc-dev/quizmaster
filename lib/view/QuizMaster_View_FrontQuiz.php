@@ -99,55 +99,6 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 			print json_encode( $options );
     }
 
-    public function showMaxQuestion() {
-
-        $this->loadButtonNames();
-        $question_count = count($this->question);
-        $result = $this->quiz->getResultText();
-
-        ?>
-        <div class="qm-quiz-content" id="quizMaster_<?php echo $this->quiz->getId(); ?>">
-            <?php
-
-            if (!$this->quiz->isTitleHidden()) {
-                echo '<h2>', $this->quiz->getName(), '</h2>';
-            }
-
-            $this->showTimeLimitBox();
-            $this->showCheckPageBox($question_count);
-            $this->showInfoPageBox();
-            $this->showStartQuizBox();
-            $this->showLockBox();
-            $this->showLoadQuizBox();
-            $this->showStartOnlyRegisteredUserBox();
-            $this->showResultBox($result, $question_count);
-            $this->showReviewBox($question_count);
-            $this->showQuizAnker();
-            ?>
-        </div>
-        <?php
-
-        $bo = $this->createOption(false);
-
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
-
-                $('#quizMaster_<?php echo $this->quiz->getId(); ?>').quizmaster({
-                    quizId: <?php echo (int)$this->quiz->getId(); ?>,
-                    mode: <?php echo (int)$this->quiz->getQuizModus(); ?>,
-                    timelimit: <?php echo (int)$this->quiz->getTimeLimit(); ?>,
-                    bo: <?php echo $bo ?>,
-                    qpp: <?php echo $this->quiz->getQuestionsPerPage(); ?>,
-                    formPos: <?php echo (int)$this->quiz->getFormShowPosition(); ?>,
-                    lbn: <?php echo json_encode(($this->quiz->isShowReviewQuestion() && !$this->quiz->isQuizSummaryHide()) ? $this->_buttonNames['quiz_summary'] : $this->_buttonNames['finish_quiz']); ?>
-                });
-
-            });
-        </script>
-        <?php
-    }
-
     public function getQuizData() {
 
       ob_start();

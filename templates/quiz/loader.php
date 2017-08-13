@@ -46,17 +46,10 @@
 				qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
 				catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
 				formPos: <?php echo (int)$view->quiz->getFormShowPosition(); ?>,
+				showReviewBox: 0,
 				lbn: <?php echo json_encode(($view->quiz->isShowReviewQuestion() && !$view->quiz->isQuizSummaryHide()) ? $view->_buttonNames['quiz_summary'] : $view->_buttonNames['finish_quiz']); ?>,
 				json: <?php echo json_encode($quizData['json']); ?>
 
-			});
-
-			// test binding to events outside scope of plugin
-			var quizmaster = $('#quizMaster_42').quizmaster();
-			//console.log( quizmaster )
-
-			$( quizmaster ).on("quizmaster.questionShow", function() {
-				//console.log('questionShowEvent GLOBAL')
 			});
 
 		});

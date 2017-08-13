@@ -1019,16 +1019,6 @@ jQuery(document).ready(function ($) {
                 return false;
             });
 
-            $('input[name="showMaxQuestion"]').change(function () {
-                if (this.checked) {
-//					$('input[name="statisticsOn"]').removeAttr('checked').attr('disabled', 'disabled').change();
-                    $('#quizMaster_showMaxBox').show();
-                } else {
-//					$('input[name="statisticsOn"]').removeAttr('disabled');
-                    $('#quizMaster_showMaxBox').hide();
-                }
-            });
-
             $('#btnPrerequisiteAdd').click(function () {
                 $('select[name="quizList"] option:selected').removeAttr('selected').appendTo('select[name="prerequisiteList[]"]');
             });
@@ -1073,7 +1063,6 @@ jQuery(document).ready(function ($) {
             $('#quizMaster_resultGradeEnabled').change();
             $('input[name="quizRunOnce"]').change();
             $('input[name="quizRunOnceType"]:checked').change();
-            $('input[name="showMaxQuestion"]').change();
 
             $('#form_add').click(function () {
                 $('#form_table tbody > tr:eq(0)').clone(true).appendTo('#form_table tbody').show();

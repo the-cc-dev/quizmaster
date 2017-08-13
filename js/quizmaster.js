@@ -81,11 +81,13 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
+		/*
+  		* Moves quiz to next question
+		 */
 		quizmaster.nextQuestion = function () {
 
 			if( !quizmaster.data.currentQuestion.next().length ) {
-				quizmaster.showQuizSummary();
-				return;
+				return; // no next question (end of quiz)
 			}
 
 			quizmaster.showQuestionObject( quizmaster.data.currentQuestion.next() );
@@ -191,6 +193,7 @@ jQuery(document).ready(function( $ ) {
 					return false;
 				}
 
+				quizmaster.fireQuestionAnsweredEvent()
 				quizmaster.checkQuestion();
 
 			});
@@ -290,18 +293,26 @@ jQuery(document).ready(function( $ ) {
 					}
 			}, function (json) {
 
-					// organize result from checking answer
-					quizmaster.data.results[ $questionId ].points = json.points;
-					quizmaster.data.results[ $questionId ].correct = json.correct;
-					// quizmaster.data.results[ $questionId ].data = json.sortAnswerData;
-					quizmaster.data.results['comp'].points += json.points;
+				// organize result from checking answer
+				quizmaster.data.results[ $questionId ].points = json.points;
+				quizmaster.data.results[ $questionId ].correct = json.correct;
+				quizmaster.data.results['comp'].points += json.points;
 
-					if( json.correct ) {
-						quizmaster.data.results['comp'].correctQuestions += 1;
+				if( json.correct ) {
+					quizmaster.data.results['comp'].correctQuestions += 1;
+				}
+
+				quizmaster.data.catResults[ questionData.catId ] += json.points;
+				quizmaster.getCurrentQuestion().data('check', true);
+
+				// answerCheckComplete event
+				quizmaster.trigger({
+					type: 'quizmaster.answerCheckComplete',
+					values: {
+						question: quizmaster.data.currentQuestion,
+						isCorrect: json.correct
 					}
-
-					quizmaster.data.catResults[ questionData.catId ] += json.points;
-					quizmaster.getCurrentQuestion().data('check', true);
+				});
 
 			});
 
@@ -390,7 +401,6 @@ jQuery(document).ready(function( $ ) {
 		 */
 		quizmaster.nextButtonInit = function() {
 
-
 			quizmaster.elements.nextButton.click(function () {
 
 				if ( quizmaster.config.options.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.getCurrentQuestion().index() ]
@@ -398,8 +408,23 @@ jQuery(document).ready(function( $ ) {
 					return false;
 				}
 
+				// question answered event
+				if( quizmaster.config.mode == 0 ) {
+					quizmaster.fireQuestionAnsweredEvent()
+				}
+
 				quizmaster.nextQuestion();
 
+			});
+
+		};
+
+		quizmaster.fireQuestionAnsweredEvent = function() {
+
+			// question answered event
+			quizmaster.trigger({
+				type: 'quizmaster.questionAnswered',
+				question: quizmaster.data.currentQuestion,
 			});
 
 		};
@@ -544,8 +569,19 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.elements.resultsBox.find('.qm-time-limit_expired').show();
 			}
 
-			quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
-			quizmaster.find('.quizMaster_correct_answer').text(quizmaster.data.results.comp.correctQuestions);
+			// check all answers if mode is single page
+			if( quizmaster.config.mode == 2 ) {
+				quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
+			}
+
+			/*
+       * Show the quiz summary
+       * Needs to fire after question check for last question is completed
+			 */
+
+			// show the correct answer count
+			var correctAnswerEl = quizmaster.find('.quizMaster_correct_answer');
+			correctAnswerEl.text( quizmaster.data.results.comp.correctQuestions )
 
 			quizmaster.data.results.comp.result = Math.round(quizmaster.data.results.comp.points / quizmaster.config.globalPoints * 100 * 100) / 100;
 			var $pointFields = quizmaster.find('.quizMaster_points span');
@@ -554,23 +590,6 @@ jQuery(document).ready(function( $ ) {
 			$pointFields.eq(1).text(quizmaster.config.globalPoints);
 			$pointFields.eq(2).text(quizmaster.data.results.comp.result + '%');
 
-			var $resultText = quizmaster.find('.qm-results-boxList > li').eq(0);
-
-			$resultText.find('.quizMaster_resultForm').each(function () {
-				var $this = $(this);
-				var formId = $this.data('form_id');
-				var data = formData[formId];
-
-				if (typeof data === 'object') {
-						data = data['day'] + '-' + data['month'] + '-' + data['year'];
-				}
-
-				$this.text(data).show();
-			});
-
-			$resultText.show();
-
-			//Result-Text END
 
 			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
 
@@ -905,7 +924,7 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.find('.quizMaster_QuestionButton').hide();
 				quizmaster.elements.questionList.children().show();
 
-				if( quizmaster.options.showReviewBox ) {
+				if( quizmaster.config.showReviewBox ) {
 					quizmaster.elements.reviewBox.toggle();
 				}
 
@@ -1058,6 +1077,8 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.init = function( options ) {
 
+			console.log( options )
+
 			// parse options to quizmaster.config
 			quizmaster.config = $.extend({
 
@@ -1096,10 +1117,25 @@ jQuery(document).ready(function( $ ) {
 			// bind questionSolved to questionCheck
 			quizmaster.on( 'quizmaster.questionChecked', quizmaster.questionSolved );
 
+			// bind to quizCompleted event
 			quizmaster.on( 'quizmaster.quizCompleted', function() {
 				quizmaster.elements.nextButton.hide()
 				quizmaster.elements.checkButton.hide()
 				quizmaster.elements.hintTrigger.hide()
+			});
+
+			// bind to questionAnswered event
+			quizmaster.on( 'quizmaster.questionAnswered', function() {
+				quizmaster.checkQuestion()
+			});
+
+			// show quiz summary and finish quiz if no more questions left in quiz
+			quizmaster.on( 'quizmaster.answerCheckComplete', function() {
+
+				if( !quizmaster.data.currentQuestion.next().length ) {
+					quizmaster.showQuizSummary();
+				}
+
 			});
 
 
