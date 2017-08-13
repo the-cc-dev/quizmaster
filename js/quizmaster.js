@@ -101,10 +101,28 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.prevQuestion = function () {
 			quizmaster.showQuestionObject( quizmaster.data.currentQuestion.prev() );
+
+			quizmaster.fireChangeScreenEvent('question')
 		};
 
 		quizmaster.getCurrentQuestion = function () {
 			return quizmaster.data.currentQuestion;
+		}
+
+		quizmaster.isLastQuestion = function( $questionId = 0 ) {
+			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		quizmaster.isFirstQuestion = function( $questionId ) {
+			if( 0 == quizmaster.data.currentQuestion.index() ) {
+				return true;
+			}
+
+			return false;
 		}
 
 		quizmaster.getCurrentQuestionId = function () {
@@ -117,52 +135,51 @@ jQuery(document).ready(function( $ ) {
 				obj = quizmaster.data.currentQuestion;
 			}
 
-				/*
-				if (!obj.length && bitOptions.forcingQuestionSolve && bitOptions.quizSummeryHide && bitOptions.reviewQustion) {
-					for (var i = 0, c = $('.quizMaster_listItem').length; i < c; i++) {
-						if (!quizSolved[i]) {
-							alert(QuizMasterGlobal.questionsNotSolved);
-							return false;
-						}
-					}
-				}
-				*/
+			// hide current question, show new and set storage of current question
+			quizmaster.data.currentQuestion.hide();
+			obj.show();
+			quizmaster.setCurrentQuestion( obj );
 
-				// hide current question, show new and set storage of current question
-				quizmaster.data.currentQuestion.hide();
-				obj.show();
-				quizmaster.setCurrentQuestion( obj );
+			// change last name
+			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
+				var $lastButton = quizmaster.elements.nextButton.last();
+				lastButtonValue = $lastButton.val();
+				$lastButton.val(quizmaster.config.lbn);
+			}
 
-				// change last name
-				if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
-					var $lastButton = quizmaster.elements.nextButton.last();
-					lastButtonValue = $lastButton.val();
-					$lastButton.val(quizmaster.config.lbn);
-				}
+			quizmaster.scrollTo( quizmaster.elements.quiz );
 
-				quizmaster.scrollTo( quizmaster.elements.quiz );
+			// question show event
+			quizmaster.trigger({
+				type: 'quizmaster.questionShow',
+				question: quizmaster.data.currentQuestion,
+				questionIndex: quizmaster.data.currentQuestion.index()
+			});
 
-				// question show event
-				quizmaster.trigger({
-					type: 'quizmaster.questionShow',
-					question: quizmaster.data.currentQuestion,
-					questionIndex: quizmaster.data.currentQuestion.index()
-				});
-
-				quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
+			quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
 
 		};
 
 		/*
      * Show quiz summary
 		 */
-		quizmaster.showQuizSummary = function () {
+		quizmaster.showQuizSummary = function() {
 
 				quizmaster.finishQuiz();
 				quizmaster.elements.reviewBox.hide();
 				quizmaster.elements.quiz.hide();
 
 		};
+
+		quizmaster.fireChangeScreenEvent = function( $screen ) {
+
+			// change event
+			quizmaster.trigger({
+				type: 'quizmaster.changeScreen',
+				screen: $screen
+			});
+
+		}
 
 		quizmaster.checkButtonInit = function() {
 
@@ -386,6 +403,14 @@ jQuery(document).ready(function( $ ) {
 			});
 
 		};
+
+		quizmaster.backButtonInit = function() {
+
+			quizmaster.elements.backButton.click( function () {
+				quizmaster.prevQuestion();
+			});
+
+		}
 
 		quizmaster.startQuiz = function() {
 
@@ -1056,6 +1081,7 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.loadQuizDataAjax()
 			quizmaster.checkButtonInit();
+			quizmaster.backButtonInit();
 			quizmaster.nextButtonInit();
 			quizmaster.startButtonInit();
 			quizmaster.startPageShow();
