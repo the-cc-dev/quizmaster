@@ -194,7 +194,6 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				quizmaster.fireQuestionAnsweredEvent()
-				quizmaster.checkQuestion();
 
 			});
 
@@ -332,6 +331,8 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.checkQuestion = function( list, endCheck ) {
 
+			quizmaster.setStatus('checkQuestion')
+
 			// stop timer
 			quizmaster.timer.question.stop();
 
@@ -409,7 +410,8 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				// question answered event
-				if( quizmaster.config.mode == 0 ) {
+				// don't fire for mode 1 (check/continue) because it's fired from check button click
+				if( quizmaster.config.mode != 1 ) {
 					quizmaster.fireQuestionAnsweredEvent()
 				}
 
@@ -571,6 +573,9 @@ jQuery(document).ready(function( $ ) {
 
 			// check all answers if mode is single page
 			if( quizmaster.config.mode == 2 ) {
+
+				console.log( 'checking all stacked mode')
+
 				quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
 			}
 
@@ -1036,10 +1041,8 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.find('.quizMaster_question_page').hide();
 			}
 
-			// unless single page mode, show first question
-			if (quizmaster.config.mode != 2) {
-				quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
-			}
+			// start timer
+			quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() )
 
 		};
 
@@ -1075,9 +1078,15 @@ jQuery(document).ready(function( $ ) {
 
 		}
 
-		quizmaster.init = function( options ) {
+		quizmaster.setStatus = function ( statusCode ) {
+			quizmaster.status = statusCode;
+		}
 
-			console.log( options )
+		quizmaster.getStatus = function () {
+			return quizmaster.status;
+		}
+
+		quizmaster.init = function( options ) {
 
 			// parse options to quizmaster.config
 			quizmaster.config = $.extend({
@@ -1133,6 +1142,10 @@ jQuery(document).ready(function( $ ) {
 
 			});
 
+			/*
+ 			 * Set initial status
+			 */
+			quizmaster.setStatus('initialized')
 
     };
 
