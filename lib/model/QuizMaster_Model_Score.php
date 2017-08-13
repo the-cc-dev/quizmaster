@@ -178,9 +178,18 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
   }
 
   public function createPost() {
+
+		$userId = $this->getUserId();
+
+		if( $userId == 0 ) {
+			$post_title = __( 'Score for Quiz #' . $this->getQuizId() . ' taken by anonymous user', 'quizmaster' );
+		} else {
+			$post_title = __( 'Score for Quiz #' . $this->getQuizId() . ' taken by User #' . $this->getUserId(), 'quizmaster' );
+		}
+
     $post = array(
       'post_type'     => 'quizmaster_score',
-      'post_title'    => 'Score for Quiz #' . $this->getQuizId() . ' taken by User #' . $this->getUserId(),
+      'post_title'    => $post_title,
       'post_status'   => 'publish',
       'post_author'   => 1,
     );

@@ -709,7 +709,11 @@ function quizmaster_score_column_content( $column, $post_id ) {
       break;
     case 'user' :
       $user = get_field( $score->getFieldPrefix() . 'user', $post_id );
-      print $user['display_name'];
+			if( is_array( $user )) {
+				print $user['display_name'];
+			} else {
+				print __('anonymous', 'quizmaster');
+			}
       break;
     case 'points' :
       $totals = $score->getTotals();
