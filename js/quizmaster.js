@@ -6,7 +6,7 @@ jQuery(document).ready(function( $ ) {
 		var quizmaster = this;
 
 		quizmaster.config = {},
-		quizmaster.events = {};
+		quizmaster.status = {};
 
 		quizmaster.data = {
 			results: new Object(),
@@ -1094,11 +1094,6 @@ jQuery(document).ready(function( $ ) {
 
 			// convert the time limit set in seconds to ms
 			quizmaster.timer.convertTimeLimitMs();
-
-			// bind to new event
-			$( quizmaster.events ).bind("questionShow", function() {
-
-			});
 
 			quizmaster.loadQuizDataAjax()
 			quizmaster.checkButtonInit();
