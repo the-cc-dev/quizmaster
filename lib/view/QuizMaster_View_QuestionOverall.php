@@ -8,13 +8,13 @@
  * @property int perPage
  */
 class QuizMaster_View_QuestionOverall extends QuizMaster_View_View {
-	
+
 	public function show() {
 ?>
 <style>
 .quizMaster_questionCopy, .quizMaster_setQuestionCategoryList {
-	padding: 20px; 
-	background-color: rgb(223, 238, 255); 
+	padding: 20px;
+	background-color: rgb(223, 238, 255);
 	border: 1px dotted;
 	margin-top: 10px;
 }
@@ -337,7 +337,7 @@ class QuizMaster_View_QuestionOverall extends QuizMaster_View_View {
 
 		?>
 			<p class="search-box">
-				<?php $table->search_box( __('Search'), 'search_id' ); ?>
+				<?php $table->search_box( __('Search', 'quizmaster'), 'search_id' ); ?>
 			</p>
 		<?php
 

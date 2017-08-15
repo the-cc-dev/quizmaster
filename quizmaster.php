@@ -81,9 +81,15 @@ function quizmasterFieldsApiTest() {
 	$isFieldMasterActive = is_plugin_active('fieldmaster/fieldmaster.php');
   if( !$isAcfActive && !$isFieldMasterActive ) {
     deactivate_plugins( plugin_basename( __FILE__ ) );
-    wp_die( __( 'QuizMaster requires either FieldMaster (Free Fields Plugin, download latest release at <a href="https://github.com/goldhat/fieldmaster/releases/latest/">https://github.com/goldhat/fieldmaster/releases/tag/</a>) or ACF (Advanced Custom Fields) Pro! Visit <a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a> to purchase or
-      return to <a href="' . get_admin_url( null, 'plugins.php' ) . '">Manage Plugins</a>.
-      ', 'quizmaster' ) );
+		$activationMsg = __( 'QuizMaster requires either FieldMaster (Free Fields Plugin, download latest release at' , 'quizmaster');
+		$activationMsg .= '<a href="https://github.com/goldhat/fieldmaster/releases/latest/">https://github.com/goldhat/fieldmaster/releases/tag/</a>';
+		$activationMsg .= __( 'or ACF (Advanced Custom Fields) Pro! Visit ', 'quizmaster' );
+		$activationMsg .= '<a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a>';
+		$activationMsg .= __( 'to purchase or return to ', 'quizmaster' );
+		$activationMsg .= '<a href="' . get_admin_url( null, 'plugins.php' ) . '">';
+		$activationMsg .= __( 'Manage Plugins', 'quizmaster' );
+		$activationMsg .= '</a>.';
+    wp_die( $activationMsg );
   }
 }
 
@@ -446,10 +452,10 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_question',
     array(
       'labels' => array(
-        'name' => __( 'Questions' ),
-        'singular_name' => __( 'Question' ),
-        'add_new' => __( 'Add New Question' ),
-        'add_new_item' => __( 'Add New Question' ),
+        'name' => __( 'Questions', 'quizmaster' ),
+        'singular_name' => __( 'Question', 'quizmaster' ),
+        'add_new' => __( 'Add New Question', 'quizmaster' ),
+        'add_new_item' => __( 'Add New Question', 'quizmaster' ),
       ),
       'public' => true,
       'has_archive' => true,
@@ -477,8 +483,8 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_email',
     array(
       'labels' => array(
-        'name' => __( 'Emails' ),
-        'singular_name' => __( 'Email' )
+        'name' => __( 'Emails', 'quizmaster' ),
+        'singular_name' => __( 'Email', 'quizmaster' )
       ),
       'public' => true,
       'has_archive' => false,
@@ -504,8 +510,8 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_score',
     array(
       'labels' => array(
-        'name' => __( 'Scores' ),
-        'singular_name' => __( 'Score' )
+        'name' => __( 'Scores', 'quizmaster' ),
+        'singular_name' => __( 'Score', 'quizmaster' )
       ),
       'public' => true,
       'has_archive' => false,
@@ -537,7 +543,7 @@ function quizmasterRegisterTaxonomies() {
 		'quizmaster_quiz_category',
 		'quizmaster_quiz',
 		array(
-			'label' => __( 'Quiz Category' ),
+			'label' => __( 'Quiz Category', 'quizmaster' ),
 			'rewrite' => array( 'slug' => 'quiz-category' ),
 			'hierarchical' => true,
 		)
@@ -546,7 +552,7 @@ function quizmasterRegisterTaxonomies() {
 		'quizmaster_quiz_tag',
 		'quizmaster_quiz',
 		array(
-			'label' => __( 'Quiz Tag' ),
+			'label' => __( 'Quiz Tag', 'quizmaster' ),
 			'rewrite' => array( 'slug' => 'quiz-tag' ),
 			'hierarchical' => false,
 		)
@@ -555,7 +561,7 @@ function quizmasterRegisterTaxonomies() {
 		'quizmaster_question_category',
 		'quizmaster_question',
 		array(
-			'label' => __( 'Question Category' ),
+			'label' => __( 'Question Category', 'quizmaster' ),
 			'rewrite' => array( 'slug' => 'question-category' ),
 			'hierarchical' => true,
 		)
@@ -564,7 +570,7 @@ function quizmasterRegisterTaxonomies() {
 		'quizmaster_question_tag',
 		'quizmaster_question',
 		array(
-			'label' => __( 'Question Tag' ),
+			'label' => __( 'Question Tag', 'quizmaster' ),
 			'rewrite' => array( 'slug' => 'question-tag' ),
 			'hierarchical' => false,
 		)

@@ -13,8 +13,8 @@ class QuizMaster_Helper_Submenu {
 
     return add_submenu_page(
       $parent_slug,
-      __($page_title, 'quizmaster'),
-      __($menu_title, 'quizmaster'),
+      $page_title,
+      $menu_title,
       $capability,
       $menu_slug,
       $function
