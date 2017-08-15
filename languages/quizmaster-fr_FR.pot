@@ -1,36 +1,30 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: quizmaster-fr_FR.pot conversion\n"
+"Project-Id-Version: Package Name\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-14 02:33+0000\n"
-"PO-Revision-Date: 2017-08-14 02:33+0000\n"
-"Last-Translator: \n"
-"Language-Team: French (France)\n"
-"Language: fr-FR\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"POT-Creation-Date: 2017-08-13 21:07-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Loco-Source-Locale: en_CA\n"
-"X-Loco-Parser: loco_parse_po\n"
-"X-Generator: Loco - https://localise.biz/"
 
 #: quizmaster.php:418
 msgid "Quizzes"
 msgstr ""
 
-#: quizmaster.php:419 lib/view/QuizMaster_View_QuestionOverallTable.php:29 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:30 
-#: lib/view/QuizMaster_View_QuizOverallTable.php:30 
+#: quizmaster.php:419 lib/view/QuizMaster_View_QuestionOverallTable.php:29
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:30
+#: lib/view/QuizMaster_View_QuizOverallTable.php:30
 #: lib/view/QuizMaster_View_QuizOverallTable.php:31
 msgid "Quiz"
 msgstr ""
 
 #: quizmaster.php:420 quizmaster.php:421
 msgid "Add New Quiz"
-msgstr "PARLE VU BIATCH"
+msgstr ""
 
-#: quizmaster.php:449 lib/view/QuizMaster_View_QuizOverallTable.php:70 
+#: quizmaster.php:449 lib/view/QuizMaster_View_QuizOverallTable.php:70
 #: templates/quiz/check.php:9
 msgid "Questions"
 msgstr ""
@@ -119,8 +113,8 @@ msgstr ""
 msgid "No quiz selected"
 msgstr ""
 
-#: lib/controller/QuizMaster_Controller_Admin.php:38 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:43 
+#: lib/controller/QuizMaster_Controller_Admin.php:38
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:43
 #: lib/view/QuizMaster_View_QuizOverallTable.php:44
 msgid "No data available"
 msgstr ""
@@ -150,7 +144,7 @@ msgstr ""
 msgid "You must specify a template name."
 msgstr ""
 
-#: lib/controller/QuizMaster_Controller_Admin.php:45 
+#: lib/controller/QuizMaster_Controller_Admin.php:45
 #: templates/reports/score-modal.php:3
 msgid "Close"
 msgstr ""
@@ -159,21 +153,21 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: lib/controller/QuizMaster_Controller_Admin.php:111 
-#: lib/controller/QuizMaster_Controller_Admin.php:112 
-#: lib/controller/QuizMaster_Controller_Quiz.php:104 
+#: lib/controller/QuizMaster_Controller_Admin.php:111
+#: lib/controller/QuizMaster_Controller_Admin.php:112
+#: lib/controller/QuizMaster_Controller_Quiz.php:104
 #: templates/quiz/results-box.php:51
 msgid "Categories"
 msgstr ""
 
-#: lib/controller/QuizMaster_Controller_Admin.php:122 
+#: lib/controller/QuizMaster_Controller_Admin.php:122
 #: lib/controller/QuizMaster_Controller_Admin.php:123
 msgid "Help"
 msgstr ""
 
-#: lib/controller/QuizMaster_Controller_Front.php:112 
-#: lib/view/QuizMaster_View_QuestionOverall.php:362 
-#: templates/reports/score-history.php:69 templates/reports/score-modal.php:12 
+#: lib/controller/QuizMaster_Controller_Front.php:112
+#: lib/view/QuizMaster_View_QuestionOverall.php:362
+#: templates/reports/score-history.php:69 templates/reports/score-modal.php:12
 #: templates/reports/score-tab.php:40 templates/reports/scores.php:80
 msgid "Loading"
 msgstr ""
@@ -194,7 +188,7 @@ msgstr ""
 msgid "Not categorized"
 msgstr ""
 
-#: lib/model/QuizMaster_Model_Score.php:185 
+#: lib/model/QuizMaster_Model_Score.php:185
 #: lib/model/QuizMaster_Model_Score.php:187
 msgid "Score for Quiz #"
 msgstr ""
@@ -228,7 +222,7 @@ msgstr ""
 msgid "You must sign in or sign up to start the quiz."
 msgstr ""
 
-#: lib/view/QuizMaster_View_GlobalHelperTabs.php:32 
+#: lib/view/QuizMaster_View_GlobalHelperTabs.php:32
 #: lib/view/QuizMaster_View_QuizOverall.php:328
 msgid "QuizMaster"
 msgstr ""
@@ -302,8 +296,8 @@ msgstr ""
 msgid ""
 "We strive to reply to your email within 24-hours. If you do not hear a reply "
 "after 2 business days or more it is likely because of a delivery issue, in "
-"that even please try resending or get our attention on GitHub (open an issue)"
-" or visit https://goldhat.ca and open a live chat."
+"that even please try resending or get our attention on GitHub (open an "
+"issue) or visit https://goldhat.ca and open a live chat."
 msgstr ""
 
 #: lib/view/QuizMaster_View_QuestionOverall.php:301
@@ -315,8 +309,9 @@ msgstr ""
 msgid "Add question"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:309 
-#: lib/view/QuizMaster_View_StyleManager.php:14 templates/reports/scores.php:56
+#: lib/view/QuizMaster_View_QuestionOverall.php:309
+#: lib/view/QuizMaster_View_StyleManager.php:14
+#: templates/reports/scores.php:56
 msgid "back to overview"
 msgstr ""
 
@@ -328,12 +323,12 @@ msgstr ""
 msgid "Sort Question"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:316 
+#: lib/view/QuizMaster_View_QuestionOverall.php:316
 #: lib/view/QuizMaster_View_QuestionOverall.php:357
 msgid "Copy questions from another Quiz"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:340 
+#: lib/view/QuizMaster_View_QuestionOverall.php:340
 #: lib/view/QuizMaster_View_QuizOverall.php:366
 msgid "Search"
 msgstr ""
@@ -360,41 +355,41 @@ msgstr ""
 msgid "You can assign classify category for a question."
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:397 
+#: lib/view/QuizMaster_View_QuestionOverall.php:397
 #: lib/view/QuizMaster_View_QuizOverall.php:479
 msgid "You can manage categories in global settings."
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:401 
-#: lib/view/QuizMaster_View_QuestionOverall.php:411 
-#: lib/view/QuizMaster_View_QuizOverall.php:484 
+#: lib/view/QuizMaster_View_QuestionOverall.php:401
+#: lib/view/QuizMaster_View_QuestionOverall.php:411
+#: lib/view/QuizMaster_View_QuizOverall.php:484
 #: lib/view/QuizMaster_View_QuizOverall.php:496
 msgid "Create new category"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:402 
+#: lib/view/QuizMaster_View_QuestionOverall.php:402
 #: lib/view/QuizMaster_View_QuizOverall.php:485
 msgid "No category"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:413 
+#: lib/view/QuizMaster_View_QuestionOverall.php:413
 #: lib/view/QuizMaster_View_QuizOverall.php:499
 msgid "Create"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverall.php:420 
-#: lib/view/QuizMaster_View_QuestionOverall.php:436 
-#: lib/view/QuizMaster_View_QuestionOverall.php:443 
+#: lib/view/QuizMaster_View_QuestionOverall.php:420
+#: lib/view/QuizMaster_View_QuestionOverall.php:436
+#: lib/view/QuizMaster_View_QuestionOverall.php:443
 #: lib/view/QuizMaster_View_QuizOverall.php:508
 msgid "Save"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:18 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:18
 #: lib/view/QuizMaster_View_QuizOverallTable.php:18
 msgid "Name"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:19 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:19
 #: lib/view/QuizMaster_View_QuizOverallTable.php:19
 msgid "Category"
 msgstr ""
@@ -403,37 +398,37 @@ msgstr ""
 msgid "Points"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:71 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:71
 #: lib/view/QuizMaster_View_QuizOverallTable.php:75
 msgid "Edit"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:77 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:96 
-#: lib/view/QuizMaster_View_QuizOverallTable.php:80 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:77
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:96
+#: lib/view/QuizMaster_View_QuizOverallTable.php:80
 #: lib/view/QuizMaster_View_QuizOverallTable.php:101
 msgid "Delete"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:100 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:100
 #: lib/view/QuizMaster_View_QuizOverallTable.php:109
 msgid "Set Category"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:114 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:114
 #: lib/view/QuizMaster_View_QuizOverallTable.php:123
 msgid "Filter by category"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:116 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:116
 #: lib/view/QuizMaster_View_QuizOverallTable.php:125
 msgid "All categories"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuestionOverallTable.php:125 
-#: lib/view/QuizMaster_View_QuizOverallTable.php:134 
-#: templates/reports/score-history.php:6 
-#: templates/reports/score-history.php:57 templates/reports/score-tab.php:4 
+#: lib/view/QuizMaster_View_QuestionOverallTable.php:125
+#: lib/view/QuizMaster_View_QuizOverallTable.php:134
+#: templates/reports/score-history.php:6
+#: templates/reports/score-history.php:57 templates/reports/score-tab.php:4
 #: templates/reports/score-tab.php:28
 msgid "Filter"
 msgstr ""
@@ -442,13 +437,13 @@ msgstr ""
 msgid "Quiz overview"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuizOverall.php:304 
+#: lib/view/QuizMaster_View_QuizOverall.php:304
 #: lib/view/QuizMaster_View_QuizOverall.php:349
 msgid "Add quiz"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuizOverall.php:308 
-#: lib/view/QuizMaster_View_QuizOverall.php:353 
+#: lib/view/QuizMaster_View_QuizOverall.php:308
+#: lib/view/QuizMaster_View_QuizOverall.php:353
 #: lib/view/QuizMaster_View_QuizOverall.php:402
 msgid "Import"
 msgstr ""
@@ -474,7 +469,7 @@ msgstr ""
 msgid "Start import"
 msgstr ""
 
-#: lib/view/QuizMaster_View_QuizOverall.php:433 
+#: lib/view/QuizMaster_View_QuizOverall.php:433
 #: lib/view/QuizMaster_View_QuizOverallTable.php:105
 msgid "Export"
 msgstr ""

@@ -87,7 +87,7 @@ function quizmasterFieldsApiTest() {
   }
 }
 
-add_action('plugins_loaded', 'quizMaster_pluginLoaded');
+add_action('init', 'quizmasterPluginsLoaded', 5);
 add_action('init', 'quizmasterAddPostTypes', 10, 2);
 add_action('init', 'quizmasterMenuItems', 20, 2);
 
@@ -143,14 +143,9 @@ function quizMaster_autoload( $class ) {
 
 }
 
-function quizMaster_pluginLoaded() {
+function quizmasterPluginsLoaded() {
 
-    load_plugin_textdomain('quizmaster', false, QUIZMASTER_PPATH . '/languages');
-
-    if (get_option('quizMaster_version') !== QUIZMASTER_VERSION) {
-        QuizMaster_Helper_Upgrade::upgrade();
-    }
-
+  $lang = load_plugin_textdomain('quizmaster', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 }
 
@@ -420,10 +415,10 @@ function quizmasterAddPostTypes() {
   register_post_type( 'quizmaster_quiz',
     array(
       'labels' => array(
-        'name' => __( 'Quizzes' ),
-        'singular_name' => __( 'Quiz' ),
-        'add_new' => __( 'Add New Quiz' ),
-        'add_new_item' => __( 'Add New Quiz' ),
+        'name' => __( 'Quizzes', 'quizmaster' ),
+        'singular_name' => __( 'Quiz', 'quizmaster' ),
+        'add_new' => __( 'Add New Quiz', 'quizmaster' ),
+        'add_new_item' => __( 'Add New Quiz', 'quizmaster' ),
       ),
       'public' => true,
       'has_archive' => true,
