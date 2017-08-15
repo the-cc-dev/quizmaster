@@ -184,7 +184,7 @@ class QuizMaster_Model_Score extends QuizMaster_Model_Model {
 		if( $userId == 0 ) {
 			$post_title = printf( __( 'Score for Quiz #%s taken by anonymous user', 'quizmaster' ), $this->getQuizId() );
 		} else {
-			$post_title = printf__( 'Score for Quiz #%1$s taken by User #%2s quizmaster' ),
+			$post_title = printf( __( 'Score for Quiz #%1$s taken by User #%2s quizmaster' ),
 				$this->getQuizId(),
 				$this->getUserId()
 				);
