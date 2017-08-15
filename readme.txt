@@ -4,7 +4,7 @@ Donate link: https://goldhat.ca/donate/
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 0.6.4
+Stable tag: 0.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,9 +47,8 @@ Visit https://goldhat.ca/plugins/quizmaster
 
 == Changelog ==
 
-= 0.0.2 =
-
-Added teachers extension with capability to add quizzes and questions.
+= 0.6.5 =
+Includes support for translation, updated .pot file and fixes to translation functions.
 
 == Upgrade Notice ==
 
