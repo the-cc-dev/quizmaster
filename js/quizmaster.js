@@ -559,6 +559,41 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
 			}
 
+
+			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
+			quizmaster.setCategoryOverview();
+
+			quizmaster.sendCompletedQuiz();
+
+			/* global trigger */
+			quizmaster.trigger({
+				type: 'quizmaster.quizCompleted',
+				questionCount: quizmaster.questionCount(),
+				results: quizmaster.data.results,
+			});
+
+		};
+
+		quizmaster.afterQuizFinish = function() {
+
+			// hide buttons and elements
+			quizmaster.elements.checkButton.hide();
+			quizmaster.elements.skipButton.hide();
+			quizmaster.elements.reviewBox.hide();
+			quizmaster.find('.qm-check-page, .qm-info-page').hide();
+			quizmaster.elements.quiz.hide();
+			quizmaster.elements.resultsBox.show();
+			quizmaster.scrollTo(quizmaster.elements.resultsBox);
+
+			// reset result comp
+			quizmaster.data.results.comp.solved 	= 0;
+			quizmaster.data.results.comp.answered = 0;
+			quizmaster.data.results.comp.skipped 	= 0;
+
+		}
+
+		quizmaster.showQuizSummary = function() {
+
 			/*
        * Show the quiz summary
        * Needs to fire after question check for last question is completed
@@ -575,37 +610,7 @@ jQuery(document).ready(function( $ ) {
 			$pointFields.eq(1).text(quizmaster.config.globalPoints);
 			$pointFields.eq(2).text(quizmaster.data.results.comp.result + '%');
 
-
-			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
-
-			quizmaster.setCategoryOverview();
-
-			quizmaster.sendCompletedQuiz();
-
-			// hide buttons
-			quizmaster.elements.checkButton.hide();
-			quizmaster.elements.skipButton.hide();
-
-			quizmaster.elements.reviewBox.hide();
-
-			quizmaster.find('.qm-check-page, .qm-info-page').hide();
-			quizmaster.elements.quiz.hide();
-			quizmaster.elements.resultsBox.show();
-			quizmaster.scrollTo(quizmaster.elements.resultsBox);
-
-			/* global trigger */
-			quizmaster.trigger({
-				type: 'quizmaster.quizCompleted',
-				questionCount: quizmaster.questionCount(),
-				results: quizmaster.data.results,
-			});
-
-			// reset result comp
-			quizmaster.data.results.comp.solved 	= 0;
-			quizmaster.data.results.comp.answered = 0;
-			quizmaster.data.results.comp.skipped 	= 0;
-
-		};
+		}
 
 		/*
      * Hint Handler Functions
@@ -1122,6 +1127,14 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.elements.nextButton.hide()
 				quizmaster.elements.checkButton.hide()
 				quizmaster.elements.hintTrigger.hide()
+			});
+
+			quizmaster.on( 'quizmaster.quizCompleted', function() {
+				quizmaster.showQuizSummary();
+			});
+
+			quizmaster.on( 'quizmaster.quizCompleted', function() {
+				quizmaster.afterQuizFinish();
 			});
 
 			// bind to questionAnswered event

@@ -17,6 +17,7 @@
 
 			<?php print quizmaster_get_template( 'quiz/button-check.php' ); ?>
 			<?php print quizmaster_get_template( 'quiz/button-next.php' ); ?>
+			<?php print quizmaster_get_template( 'quiz/button-finish.php' ); ?>
 
 		</div>
 	</div>
