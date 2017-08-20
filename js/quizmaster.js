@@ -86,8 +86,6 @@ jQuery(document).ready(function( $ ) {
 				currentQuestion: quizmaster.data.currentQuestion,
 			});
 
-			quizmaster.quizDataLoaded
-
 		};
 
 		quizmaster.prevQuestion = function () {
@@ -131,12 +129,7 @@ jQuery(document).ready(function( $ ) {
 			obj.show();
 			quizmaster.setCurrentQuestion( obj );
 
-			// change last name
-			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
-				quizmaster.elements.nextButton.hide();
-				quizmaster.elements.finishButton.show();
-			}
-
+			// scroll to quiz area
 			quizmaster.scrollTo( quizmaster.elements.quiz );
 
 			// question show event
@@ -145,6 +138,17 @@ jQuery(document).ready(function( $ ) {
 				question: quizmaster.data.currentQuestion,
 				questionIndex: quizmaster.data.currentQuestion.index()
 			});
+
+			// last question load event
+			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
+
+				quizmaster.trigger({
+					type: 'quizmaster.lastQuestionLoaded',
+					question: quizmaster.data.currentQuestion,
+					questionIndex: quizmaster.data.currentQuestion.index()
+				});
+
+			}
 
 			quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
 
@@ -1019,17 +1023,26 @@ jQuery(document).ready(function( $ ) {
 
 					// show check button at start
 					quizmaster.elements.checkButton.show();
+					quizmaster.elements.finishButton.hide();
+					quizmaster.elements.nextButton.hide();
 
 					// handle buttons on questionCheck
 					quizmaster.on( 'quizmaster.questionChecked', function() {
+
 						quizmaster.elements.nextButton.show()
 						quizmaster.elements.checkButton.hide()
+
 					});
 
 					// handle buttons on nextQuestion
 					quizmaster.on( 'quizmaster.nextQuestion', function() {
+
 						quizmaster.elements.nextButton.hide()
-						quizmaster.elements.checkButton.show()
+
+						if( !quizmaster.isLastQuestion() ) {
+							quizmaster.elements.checkButton.show()
+						}
+
 					});
 
 					break;
@@ -1128,9 +1141,13 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.startPageShow();
 			}
 
-
+			// quiz setup functions
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.modeHandler );
 			quizmaster.on( 'quizmaster.startQuiz', quizmaster.startQuizShowQuestion );
+
+			/*
+   		 * Event Handlers
+			 */
 
 			// bind questionSolved to questionCheck
 			quizmaster.on( 'quizmaster.questionChecked', quizmaster.questionSolved );
@@ -1140,6 +1157,15 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.elements.nextButton.hide()
 				quizmaster.elements.checkButton.hide()
 				quizmaster.elements.hintTrigger.hide()
+			});
+
+			quizmaster.on( 'quizmaster.lastQuestionLoaded', function() {
+
+				quizmaster.elements.finishButton.show();
+				quizmaster.elements.checkButton.hide();
+				quizmaster.elements.nextButton.hide();
+
+
 			});
 
 			quizmaster.on( 'quizmaster.quizCompleted', function() {
