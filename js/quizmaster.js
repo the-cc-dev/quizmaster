@@ -73,9 +73,13 @@ jQuery(document).ready(function( $ ) {
 		 */
 		quizmaster.nextQuestion = function () {
 
+			console.log(76)
+
 			if( !quizmaster.data.currentQuestion.next().length ) {
 				return; // no next question (end of quiz)
 			}
+
+			console.log(82)
 
 			quizmaster.showQuestionObject( quizmaster.data.currentQuestion.next() );
 
@@ -124,6 +128,9 @@ jQuery(document).ready(function( $ ) {
 				obj = quizmaster.data.currentQuestion;
 			}
 
+			console.log(130)
+			console.log(obj)
+
 			// hide current question, show new and set storage of current question
 			quizmaster.data.currentQuestion.hide();
 			obj.show();
@@ -141,6 +148,8 @@ jQuery(document).ready(function( $ ) {
 
 			// last question load event
 			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
+
+				console.log('last question loaded fire')
 
 				quizmaster.trigger({
 					type: 'quizmaster.lastQuestionLoaded',
@@ -1169,6 +1178,9 @@ jQuery(document).ready(function( $ ) {
 			});
 
 			quizmaster.on( 'quizmaster.quizCompleted', function() {
+
+				console.log('on quizCompleted')
+
 				quizmaster.showQuizSummary();
 			});
 
@@ -1179,15 +1191,6 @@ jQuery(document).ready(function( $ ) {
 			// bind to questionAnswered event
 			quizmaster.on( 'quizmaster.questionAnswered', function() {
 				quizmaster.checkQuestion()
-			});
-
-			// show quiz summary and finish quiz if no more questions left in quiz
-			quizmaster.on( 'quizmaster.answerCheckComplete', function() {
-
-				if( !quizmaster.data.currentQuestion.next().length ) {
-					quizmaster.showQuizSummary();
-				}
-
 			});
 
 			/*
