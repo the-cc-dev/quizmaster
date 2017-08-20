@@ -23,6 +23,7 @@ jQuery(document).ready(function( $ ) {
 		quizmaster.elements = {
 			checkButtonClass: '.qm-button-check',
 			nextButtonClass: '.qm-button-next',
+			finishButtonClass: '.qm-button-finish',
 			skipButtonClass: '.qm-skip-button',
 			singlePageLeft: 'input[name="quizMaster_pageLeft"]',
 			singlePageRight: 'input[name="quizMaster_pageRight"]',
@@ -30,6 +31,7 @@ jQuery(document).ready(function( $ ) {
 			backButtonClass: '.qm-back-button',
 			backButton: quizmaster.find('.qm-back-button'),
 			nextButton: quizmaster.find('.qm-button-next'),
+			finishButton: quizmaster.find('.qm-button-finish'),
 			skipButton: quizmaster.find('.qm-skip-button'),
 			checkButton: quizmaster.find('.qm-button-check'),
 			restartButtonClass: '.qm-restart-quiz-button',
@@ -56,6 +58,9 @@ jQuery(document).ready(function( $ ) {
 
 			// hide next button
 			quizmaster.elements.nextButton.hide();
+
+			// hide next button
+			quizmaster.elements.finishButton.hide();
 
 		};
 
@@ -128,9 +133,8 @@ jQuery(document).ready(function( $ ) {
 
 			// change last name
 			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
-				var $lastButton = quizmaster.elements.nextButton.last();
-				lastButtonValue = $lastButton.val();
-				$lastButton.val(quizmaster.config.lbn);
+				quizmaster.elements.nextButton.hide();
+				quizmaster.elements.finishButton.show();
 			}
 
 			quizmaster.scrollTo( quizmaster.elements.quiz );
@@ -143,17 +147,6 @@ jQuery(document).ready(function( $ ) {
 			});
 
 			quizmaster.timer.question.start( quizmaster.getCurrentQuestionId() );
-
-		};
-
-		/*
-     * Show quiz summary
-		 */
-		quizmaster.showQuizSummary = function() {
-
-				quizmaster.finishQuiz();
-				quizmaster.elements.reviewBox.hide();
-				quizmaster.elements.quiz.hide();
 
 		};
 
@@ -382,7 +375,7 @@ jQuery(document).ready(function( $ ) {
 		};
 
 		/*
-     *
+     * Initialize Next Button
 		 */
 		quizmaster.nextButtonInit = function() {
 
@@ -400,6 +393,19 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				quizmaster.nextQuestion();
+
+			});
+
+		};
+
+		/*
+     * Initialize Finish Button
+		 */
+		quizmaster.finishButtonInit = function() {
+
+			quizmaster.elements.finishButton.click(function () {
+
+				quizmaster.finishQuiz();
 
 			});
 
@@ -538,6 +544,9 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.finishQuiz = function (timeover) {
 
+			// hide finish button
+			quizmaster.elements.finishButton.hide();
+
 			// deactivate hint trigger
 			quizmaster.hintDisable();
 
@@ -593,6 +602,9 @@ jQuery(document).ready(function( $ ) {
 		}
 
 		quizmaster.showQuizSummary = function() {
+
+			quizmaster.elements.reviewBox.hide();
+			quizmaster.elements.quiz.hide();
 
 			/*
        * Show the quiz summary
@@ -995,7 +1007,7 @@ jQuery(document).ready(function( $ ) {
 				// single page mode
 				case 2:
 
-					quizmaster.elements.nextButton.show();
+					quizmaster.elements.finishButton.show();
 					quizmaster.find('.quizMaster_question_page').hide();
 					var $questionList = quizmaster.elements.questionList.children();
 					quizmaster.setCurrentQuestion( $questionList.last() );
@@ -1100,6 +1112,7 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.checkButtonInit();
 			quizmaster.backButtonInit();
 			quizmaster.nextButtonInit();
+			quizmaster.finishButtonInit();
 			quizmaster.startButtonInit();
 			quizmaster.restartButtonInit();
 			quizmaster.questionReviewButtonInit();
