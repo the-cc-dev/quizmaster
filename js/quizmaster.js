@@ -73,13 +73,9 @@ jQuery(document).ready(function( $ ) {
 		 */
 		quizmaster.nextQuestion = function () {
 
-			console.log(76)
-
 			if( !quizmaster.data.currentQuestion.next().length ) {
 				return; // no next question (end of quiz)
 			}
-
-			console.log(82)
 
 			quizmaster.showQuestionObject( quizmaster.data.currentQuestion.next() );
 
@@ -128,9 +124,6 @@ jQuery(document).ready(function( $ ) {
 				obj = quizmaster.data.currentQuestion;
 			}
 
-			console.log(130)
-			console.log(obj)
-
 			// hide current question, show new and set storage of current question
 			quizmaster.data.currentQuestion.hide();
 			obj.show();
@@ -148,8 +141,6 @@ jQuery(document).ready(function( $ ) {
 
 			// last question load event
 			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
-
-				console.log('last question loaded fire')
 
 				quizmaster.trigger({
 					type: 'quizmaster.lastQuestionLoaded',
@@ -1038,18 +1029,24 @@ jQuery(document).ready(function( $ ) {
 					// handle buttons on questionCheck
 					quizmaster.on( 'quizmaster.questionChecked', function() {
 
-						quizmaster.elements.nextButton.show()
-						quizmaster.elements.checkButton.hide()
+						if( quizmaster.isLastQuestion() ) {
+							quizmaster.elements.finishButton.show()
+							quizmaster.elements.checkButton.hide()
+						} else {
+							quizmaster.elements.nextButton.show()
+							quizmaster.elements.checkButton.hide()
+						}
 
 					});
 
 					// handle buttons on nextQuestion
 					quizmaster.on( 'quizmaster.nextQuestion', function() {
 
-						quizmaster.elements.nextButton.hide()
+						if( quizmaster.config.mode == 1 ) {
 
-						if( !quizmaster.isLastQuestion() ) {
-							quizmaster.elements.checkButton.show()
+								quizmaster.elements.checkButton.show()
+								quizmaster.elements.nextButton.hide()
+
 						}
 
 					});
@@ -1170,17 +1167,15 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.on( 'quizmaster.lastQuestionLoaded', function() {
 
-				quizmaster.elements.finishButton.show();
-				quizmaster.elements.checkButton.hide();
-				quizmaster.elements.nextButton.hide();
-
+				if( quizmaster.config.mode == 0 ) {
+					quizmaster.elements.finishButton.show();
+					quizmaster.elements.checkButton.hide();
+					quizmaster.elements.nextButton.hide();
+				}
 
 			});
 
 			quizmaster.on( 'quizmaster.quizCompleted', function() {
-
-				console.log('on quizCompleted')
-
 				quizmaster.showQuizSummary();
 			});
 
