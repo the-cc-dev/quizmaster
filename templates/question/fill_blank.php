@@ -14,10 +14,10 @@
     <?php print $question->getQuestion(); ?>
   </div>
 
-  <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
+  <ul class="qm-question-list" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
-    <li class="quizMaster_questionListItem" data-pos="0">
+    <li class="qm-question-list-item" data-pos="0">
 
       <?php
         $answer_index = 0;

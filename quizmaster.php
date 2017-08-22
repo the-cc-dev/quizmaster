@@ -49,6 +49,18 @@ class quizmaster {
 	public function init() {
 		$enableCopyPosts = array( 'quizmaster_quiz', 'quizmaster_question' );
 		new QuizMaster_Helper_CopyPost( $enableCopyPosts );
+
+		add_filter( quizmaster_get_fields_prefix() . '/load_value/name=qmqe_sorting_choice_answer_id', array( $this, 'makeSortingChoiceAnswerId' ), 10, 3 );
+	}
+
+	public function makeSortingChoiceAnswerId( $value ) {
+
+		if( $value == '' || strlen( $value ) <= 6 ) {
+			return quizmasterGenerateRandomString( 12 );
+		}
+
+		return $value;
+
 	}
 
 }

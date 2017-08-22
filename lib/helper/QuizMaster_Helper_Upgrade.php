@@ -57,7 +57,7 @@ class QuizMaster_Helper_Upgrade {
         $results = $wpdb->get_results("
 			SELECT id, answer_data
 			FROM {$wpdb->prefix}quizmaster_question
-			WHERE answer_type = 'cloze_answer' AND answer_points_activated = 1", ARRAY_A);
+			WHERE answer_type = 'fill_blank' AND answer_points_activated = 1", ARRAY_A);
 
         foreach ($results as $row) {
             if (QuizMaster_Helper_Until::saveUnserialize($row['answer_data'], $into)) {
@@ -102,7 +102,7 @@ class QuizMaster_Helper_Upgrade {
                     $dPoints = 0;
 
                     foreach ($into as $c) {
-                        if ($row['answer_type'] == 'cloze_answer') {
+                        if ($row['answer_type'] == 'fill_blank') {
                             preg_match_all('#\{(.*?)(?:\|(\d+))?(?:[\s]+)?\}#im', $c->getAnswer(), $matches);
 
                             foreach ($matches[2] as $match) {

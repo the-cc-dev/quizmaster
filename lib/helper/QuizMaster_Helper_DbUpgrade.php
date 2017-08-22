@@ -475,7 +475,7 @@ class QuizMaster_Helper_DbUpgrade
                     $newData[] = $x;
 
                 }
-            } elseif ($row['answer_type'] == 'cloze_answer') {
+            } elseif ($row['answer_type'] == 'fill_blank') {
                 $x = new QuizMaster_Model_AnswerTypes();
 
                 $x->setAnswer($data['answer_cloze']['text']);

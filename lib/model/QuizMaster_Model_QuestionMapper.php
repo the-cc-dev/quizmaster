@@ -42,7 +42,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
       'multiple'      => 'QuizMaster_Question_MultipleChoice',
       'free_answer'   => 'QuizMaster_Question_Free',
       'sort_answer'   => 'QuizMaster_Question_Sorting',
-      'cloze_answer'  => 'QuizMaster_Question_FillBlank',
+      'fill_blank'  => 'QuizMaster_Question_FillBlank',
     );
 
     $qTypes = apply_filters('quizmaster_question_type_registry', $qTypes );

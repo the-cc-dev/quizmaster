@@ -16,7 +16,7 @@
 		<?php do_action('quizmaster_question_text_after'); ?>
   </div>
 
-  <ul class="quizMaster_questionList" data-question_id="<?php echo $question->getId(); ?>"
+  <ul class="qm-question-list" data-question_id="<?php echo $question->getId(); ?>"
     data-type="<?php echo $question->getAnswerType(); ?>">
 
     <?php
@@ -29,7 +29,7 @@
       }
     ?>
 
-    <li class="quizMaster_questionListItem" data-pos="<?php echo $answer_index; ?>">
+    <li class="qm-question-list-item" data-pos="<?php echo $answer_index; ?>">
       <label>
         <input class="quizMaster_questionInput" type="text"
           name="question_<?php echo $question->getId(); ?>"

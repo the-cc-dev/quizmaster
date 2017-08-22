@@ -261,7 +261,7 @@ jQuery(document).ready(function ($) {
 //					case 'matrix_sort_answer':
 //						formListener.displayMatrixSortAnswer();
 //						break;
-//					case 'cloze_answer':
+//					case 'fill_blank':
 //						formListener.displayClozeAnswer();
 //						break;
 //					}
@@ -351,7 +351,7 @@ jQuery(document).ready(function ($) {
 //			},
 //
 //			displayClozeAnswer: function() {
-//				$('.cloze_answer').show();
+//				$('.fill_blank').show();
 //			},
 //
 //			addAnswer: function(obj) {
@@ -524,7 +524,7 @@ jQuery(document).ready(function ($) {
 //					alert(quizMasterLocalize.no_answer_msg);
 //					return false;
 //				}
-//			} else if(type.val() == 'cloze_answer') {
+//			} else if(type.val() == 'fill_blank') {
 //				var clozeText = '';
 //
 //				if(tinymce.editors.cloze != undefined && !tinymce.editors.cloze.isHidden()) {
@@ -1019,16 +1019,6 @@ jQuery(document).ready(function ($) {
                 return false;
             });
 
-            $('input[name="showMaxQuestion"]').change(function () {
-                if (this.checked) {
-//					$('input[name="statisticsOn"]').removeAttr('checked').attr('disabled', 'disabled').change();
-                    $('#quizMaster_showMaxBox').show();
-                } else {
-//					$('input[name="statisticsOn"]').removeAttr('disabled');
-                    $('#quizMaster_showMaxBox').hide();
-                }
-            });
-
             $('#btnPrerequisiteAdd').click(function () {
                 $('select[name="quizList"] option:selected').removeAttr('selected').appendTo('select[name="prerequisiteList[]"]');
             });
@@ -1073,7 +1063,6 @@ jQuery(document).ready(function ($) {
             $('#quizMaster_resultGradeEnabled').change();
             $('input[name="quizRunOnce"]').change();
             $('input[name="quizRunOnceType"]:checked').change();
-            $('input[name="showMaxQuestion"]').change();
 
             $('#form_add').click(function () {
                 $('#form_table tbody > tr:eq(0)').clone(true).appendTo('#form_table tbody').show();
@@ -2255,7 +2244,7 @@ jQuery(document).ready(function ($) {
                         return true;
                     },
 
-                    cloze_answer: function () {
+                    fill_blank: function () {
                         if (global.isEmpty(global.getMceContent('cloze'))) {
                             alert(quizMasterLocalize.no_answer_msg);
                             return false;

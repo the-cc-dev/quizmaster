@@ -1,2 +1,1 @@
-<input type="button" class="qm-button-next qm-button" value="<?php _e('Next', 'quizmaster'); ?>"
-       class="qm-button quizMaster_QuestionButton" style="float: right; display: none;">
+<input type="button" class="qm-button-next qm-button" value="<?php _e('Next', 'quizmaster'); ?>">

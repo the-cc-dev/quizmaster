@@ -7,7 +7,7 @@
         $index++;
     ?>
 
-    <li class="quizMaster_listItem" style="display: none;">
+    <li class="quizMaster_listItem" style="display: none;" data-pos="<?php print $index; ?>">
 
         <div class="quizMaster_question_page" <?php $view->isDisplayNone($view->quiz->getQuizModus() != QuizMaster_Model_Quiz::QUIZ_MODUS_SINGLE && !$view->quiz->isHideQuestionPositionOverview()); ?> >
             <?php printf(__('Question %s of %s', 'quizmaster'), '<span>' . $index . '</span>',

@@ -33,30 +33,24 @@
   ?>
 </div>
 
-<?php
-
-$bo = $view->createOption($view->preview);
-
-?>
-
 <script type="text/javascript">
+		jQuery(document).ready(function ($) {
 
-  window.quizmasterQuizRegistry = window.quizmasterQuizRegistry || [];
+			$('#quizMaster_<?php echo $view->quiz->getId(); ?>').quizmaster({
 
-  window.quizmasterQuizRegistry.push({
-    id: '#quizMaster_<?php echo $view->quiz->getId(); ?>',
-    init: {
-      quizId: <?php echo (int)$view->quiz->getId(); ?>,
-      mode: <?php echo (int)$view->quiz->getQuizModus(); ?>,
-      globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
-      timelimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
-      bo: <?php echo $bo ?>,
-      qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
-      catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
-      formPos: <?php echo (int)$view->quiz->getFormShowPosition(); ?>,
-      lbn: <?php echo json_encode(($view->quiz->isShowReviewQuestion() && !$view->quiz->isQuizSummaryHide()) ? $view->_buttonNames['quiz_summary'] : $view->_buttonNames['finish_quiz']); ?>,
-      json: <?php echo json_encode($quizData['json']); ?>
-    }
-  });
+				quizId: <?php echo (int)$view->quiz->getId(); ?>,
+				mode: <?php echo (int)$view->quiz->getQuizModus(); ?>,
+				globalPoints: <?php echo (int)$quizData['globalPoints']; ?>,
+				timeLimit: <?php echo (int)$view->quiz->getTimeLimit(); ?>,
+				options: <?php echo $view->createOption(); ?>,
+				qpp: <?php echo $view->quiz->getQuestionsPerPage(); ?>,
+				catPoints: <?php echo json_encode($quizData['catPoints']); ?>,
+				formPos: <?php echo (int)$view->quiz->getFormShowPosition(); ?>,
+				showReviewBox: 0,
+				lbn: <?php echo json_encode(($view->quiz->isShowReviewQuestion() && !$view->quiz->isQuizSummaryHide()) ? $view->_buttonNames['quiz_summary'] : $view->_buttonNames['finish_quiz']); ?>,
+				json: <?php echo json_encode($quizData['json']); ?>
 
+			});
+
+		});
 </script>

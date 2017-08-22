@@ -15,9 +15,8 @@ $fieldGroup = array (
 			'layout' => 'horizontal',
 			'choices' => array (
 				0 => 'Standard Flow',
-				1 => 'Standard Flow with Back Button',
-				2 => 'Check & Continue',
-				3 => 'Questions Stacked',
+				1 => 'Check & Continue',
+				2 => 'Questions Stacked',
 			),
 			'return_format' => 'value',
 			'key' => 'field_5885ca04166e5',
@@ -470,6 +469,14 @@ $fieldGroup = array (
 			'name' => 'qmqu_show_skip_button',
 			'type' => 'true_false',
 			'instructions' => 'Show skip button to allow quiz takers to skip the question.',
+		),
+		array (
+			'default_value' => 0,
+			'key' => 'field_588c5e56c59p7',
+			'label' => 'Show Back Button',
+			'name' => 'qmqu_show_back_button',
+			'type' => 'true_false',
+			'instructions' => 'Show back button to allow quiz takers to review previous questions.',
 		),
 		array (
 			'default_value' => 0,

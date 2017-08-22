@@ -8,6 +8,11 @@
 	display: none;
 }
 
+.qm-button.qm-back-button,
+.qm-button.qm-skip-button {
+	display: none;
+}
+
 /* Question Check */
 .qm-question-check {
 	display: none;
@@ -78,7 +83,7 @@
     text-align: left;
 }
 
-.quizMaster_list, .quizMaster_listItem, .quizMaster_questionList, .quizMaster_sortStringList, .quizMaster_sortStringList, .quizMaster_maxtrixSortCriterion, .qm-results-boxList, .quizMaster_catOverview ol {
+.quizMaster_list, .qm-question-list-item, .quizMaster_listItem, .quizMaster_questionList, .quizMaster_sortStringList, .quizMaster_sortStringList, .quizMaster_maxtrixSortCriterion, .qm-results-boxList, .quizMaster_catOverview ol {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -127,7 +132,7 @@
     display: none;
 }
 
-.quizMaster_sortable, .quizMaster_sortStringItem {
+.qm-sortable, .quizMaster_sortStringItem {
     padding: 5px;
     border: 1px solid lightGrey;
     box-shadow: 2px 2px 1px #EEE;

@@ -27,7 +27,7 @@ $fieldGroup = array (
 				'multiple' => 'Multiple Choice',
 				'free_answer' => 'Free Choice',
 				'sort_answer' => 'Sorting',
-				'cloze_answer' => 'Fill in the Blank',
+				'fill_blank' => 'Fill in the Blank',
 			),
 			'default_value' => '',
 			'other_choice' => 0,
@@ -260,6 +260,12 @@ $fieldGroup = array (
 		),
 		array (
 			'sub_fields' => array (
+				array(
+					'key' => 'field_590eafc31392k',
+					'label' => 'Answer ID',
+					'name' => 'qmqe_sorting_choice_answer_id',
+					'type' => 'text',
+				),
 				array (
 					'tabs' => 'all',
 					'toolbar' => 'basic',
@@ -341,7 +347,7 @@ $fieldGroup = array (
 			'rows' => '',
 			'key' => 'field_588a8e01fbde9',
 			'label' => 'Fill in the Blank Answer',
-			'name' => 'qmqe_cloze_answers',
+			'name' => 'qmqe_fill_blanks',
 			'type' => 'textarea',
 			'instructions' => 'Enclose the searched words with { } e.g. "I {play} soccer". Capital and small letters will be ignored.
 You can specify multiple options for a search word. Enclose the word with [ ] e.g. "I {[play][love][hate]} soccer" . In this case answers play, love OR hate are correct.
@@ -353,7 +359,7 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 					array (
 						'field' => 'field_5885e9f669c6f',
 						'operator' => '==',
-						'value' => 'cloze_answer',
+						'value' => 'fill_blank',
 					),
 				),
 			),
