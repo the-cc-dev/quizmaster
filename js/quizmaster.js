@@ -7,6 +7,7 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.config = {},
 		quizmaster.status = {};
+		quizmaster.finish = false;
 
 		quizmaster.data = {
 			results: new Object(),
@@ -310,12 +311,27 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
-		quizmaster.checkQuestion = function( list, endCheck ) {
+		/*
+     * Checks multiple questions
+     * Used for single page (stacked mode) quizzes where all answers submitted at once
+		 */
+		quizmaster.checkQuestionMultiple = function() {
 
-			quizmaster.setStatus('checkQuestion')
+			quizmaster.setStatus('check_question_multiple')
 
-			// stop timer
-			quizmaster.timer.question.stop();
+			// get all questions
+			// var questions = quizmaster.getQuestions();
+			// questions.each quizmaster.checkQuestion()
+
+		}
+
+		/*
+     * Checks a single question
+		 */
+		quizmaster.checkQuestion = function() {
+
+			// move this so the function can be used by multiple check
+			quizmaster.setStatus('check_question')
 
 			// answer already checked
 			if ( quizmaster.getCurrentQuestion().data('check') ) {
@@ -396,8 +412,6 @@ jQuery(document).ready(function( $ ) {
 					quizmaster.fireQuestionAnsweredEvent()
 				}
 
-				quizmaster.nextQuestion();
-
 			});
 
 		};
@@ -409,7 +423,8 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.elements.finishButton.click(function () {
 
-				quizmaster.finishQuiz();
+				quizmaster.finish = true;
+				quizmaster.fireQuestionAnsweredEvent()
 
 			});
 
@@ -569,7 +584,7 @@ jQuery(document).ready(function( $ ) {
 
 			// check all answers if mode is single page
 			if( quizmaster.config.mode == 2 ) {
-				quizmaster.checkQuestion(quizmaster.elements.questionList.children(), true);
+				quizmaster.checkQuestion( quizmaster.elements.questionList.children() );
 			}
 
 
@@ -589,31 +604,8 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.afterQuizFinish = function() {
 
-			// hide buttons and elements
-			quizmaster.elements.checkButton.hide();
-			quizmaster.elements.skipButton.hide();
-			quizmaster.elements.reviewBox.hide();
-			quizmaster.find('.qm-check-page, .qm-info-page').hide();
-			quizmaster.elements.quiz.hide();
-			quizmaster.elements.resultsBox.show();
-			quizmaster.scrollTo(quizmaster.elements.resultsBox);
-
-			// reset result comp
-			quizmaster.data.results.comp.solved 	= 0;
-			quizmaster.data.results.comp.answered = 0;
-			quizmaster.data.results.comp.skipped 	= 0;
-
-		}
-
-		quizmaster.showQuizSummary = function() {
-
 			quizmaster.elements.reviewBox.hide();
 			quizmaster.elements.quiz.hide();
-
-			/*
-       * Show the quiz summary
-       * Needs to fire after question check for last question is completed
-			 */
 
 			// show the correct answer count
 			var correctAnswerEl = quizmaster.find('.quizMaster_correct_answer');
@@ -625,6 +617,23 @@ jQuery(document).ready(function( $ ) {
 			$pointFields.eq(0).text(quizmaster.data.results.comp.points);
 			$pointFields.eq(1).text(quizmaster.config.globalPoints);
 			$pointFields.eq(2).text(quizmaster.data.results.comp.result + '%');
+
+			// hide buttons and elements
+			quizmaster.elements.nextButton.hide()
+			quizmaster.elements.hintTrigger.hide()
+			quizmaster.elements.checkButton.hide();
+			quizmaster.elements.skipButton.hide();
+			quizmaster.elements.finishButton.hide();
+			quizmaster.elements.reviewBox.hide();
+			quizmaster.find('.qm-check-page, .qm-info-page').hide();
+			quizmaster.elements.quiz.hide();
+			quizmaster.elements.resultsBox.show();
+			quizmaster.scrollTo(quizmaster.elements.resultsBox);
+
+			// reset result comp
+			quizmaster.data.results.comp.solved 	= 0;
+			quizmaster.data.results.comp.answered = 0;
+			quizmaster.data.results.comp.skipped 	= 0;
 
 		}
 
@@ -974,6 +983,9 @@ jQuery(document).ready(function( $ ) {
 
 			quizmaster.elements.resultsBox.find('.qm-time-limit_expired').hide();
 
+			// reset finish tracker
+			quizmaster.finish = false;
+
 		};
 
 		/*
@@ -1103,6 +1115,12 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.setStatus = function ( statusCode ) {
 			quizmaster.status = statusCode;
+
+			// status change event
+			quizmaster.trigger({
+				type: 'quizmaster.statusChange',
+				status: statusCode,
+			});
 		}
 
 		quizmaster.getStatus = function () {
@@ -1155,14 +1173,35 @@ jQuery(document).ready(function( $ ) {
    		 * Event Handlers
 			 */
 
+			//
+			quizmaster.on( 'quizmaster.answerCheckComplete', function() {
+
+				if( quizmaster.finish ) {
+					quizmaster.finishQuiz()
+					return true;
+				}
+
+				quizmaster.nextQuestion();
+			});
+
+			// stop timer on question_check status change
+			quizmaster.on( 'quizmaster.statusChange', function( e ) {
+
+				var status = e.status;
+
+				if( status == 'check_question' || status == 'check_question_multiple' ) {
+					quizmaster.timer.question.stop();
+				}
+
+			});
+
+
 			// bind questionSolved to questionCheck
 			quizmaster.on( 'quizmaster.questionChecked', quizmaster.questionSolved );
 
 			// bind to quizCompleted event
 			quizmaster.on( 'quizmaster.quizCompleted', function() {
-				quizmaster.elements.nextButton.hide()
-				quizmaster.elements.checkButton.hide()
-				quizmaster.elements.hintTrigger.hide()
+				quizmaster.afterQuizFinish();
 			});
 
 			quizmaster.on( 'quizmaster.lastQuestionLoaded', function() {
@@ -1173,14 +1212,6 @@ jQuery(document).ready(function( $ ) {
 					quizmaster.elements.nextButton.hide();
 				}
 
-			});
-
-			quizmaster.on( 'quizmaster.quizCompleted', function() {
-				quizmaster.showQuizSummary();
-			});
-
-			quizmaster.on( 'quizmaster.quizCompleted', function() {
-				quizmaster.afterQuizFinish();
 			});
 
 			// bind to questionAnswered event
