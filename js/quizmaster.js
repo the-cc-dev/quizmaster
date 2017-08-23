@@ -100,11 +100,13 @@ jQuery(document).ready(function( $ ) {
 		}
 
 		quizmaster.isLastQuestion = function( $questionId = 0 ) {
+
 			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
 				return true;
 			}
 
 			return false;
+
 		}
 
 		quizmaster.isFirstQuestion = function( $questionId ) {
@@ -407,10 +409,23 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				// question answered event
-				// don't fire for mode 1 (check/continue) because it's fired from check button click
-				if( quizmaster.config.mode != 1 ) {
-					quizmaster.fireQuestionAnsweredEvent()
+				quizmaster.fireQuestionAnsweredEvent()
+
+			});
+
+		};
+
+		quizmaster.nextButtonInitCheckContinueMode = function() {
+
+			quizmaster.elements.nextButton.click(function () {
+
+				if ( quizmaster.config.options.forcingQuestionSolve && !quizmaster.data.quizSolved[ quizmaster.getCurrentQuestion().index() ]
+					&& ( quizmaster.config.options.quizSummeryHide || !quizmaster.config.options.reviewQustion )) {
+					return false;
 				}
+
+				// question answered event
+				quizmaster.nextQuestion()
 
 			});
 
@@ -425,6 +440,16 @@ jQuery(document).ready(function( $ ) {
 
 				quizmaster.finish = true;
 				quizmaster.fireQuestionAnsweredEvent()
+
+			});
+
+		};
+
+		quizmaster.finishButtonInitCheckContinueMode = function() {
+
+			quizmaster.elements.finishButton.click(function () {
+
+				quizmaster.finishQuiz()
 
 			});
 
@@ -506,11 +531,21 @@ jQuery(document).ready(function( $ ) {
 			// start timer
 			quizmaster.timer.quiz.start();
 
+			// determine if this is a restart
+			var restart = false;
+			if( quizmaster.getStatus() == 'restart' ) {
+				restart = true;
+			}
+
 			// quiz start event
 			quizmaster.trigger({
 				type: 'quizmaster.startQuiz',
 				mode: quizmaster.config.mode,
+				restart: restart,
 			});
+
+			// change status
+			quizmaster.setStatus('started');
 
 		};
 
@@ -587,10 +622,8 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.checkQuestion( quizmaster.elements.questionList.children() );
 			}
 
-
 			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
 			quizmaster.setCategoryOverview();
-
 			quizmaster.sendCompletedQuiz();
 
 			/* global trigger */
@@ -629,11 +662,6 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.elements.quiz.hide();
 			quizmaster.elements.resultsBox.show();
 			quizmaster.scrollTo(quizmaster.elements.resultsBox);
-
-			// reset result comp
-			quizmaster.data.results.comp.solved 	= 0;
-			quizmaster.data.results.comp.answered = 0;
-			quizmaster.data.results.comp.skipped 	= 0;
 
 		}
 
@@ -804,8 +832,6 @@ jQuery(document).ready(function( $ ) {
 			quiz: {
 
 				start: function () {
-					if ( quizmaster.data.isQuizStarted )
-						quizmaster.stopQuiz();
 
 					quizmaster.timer.quizStartTime = +new Date();
 					quizmaster.data.isQuizStarted = true;
@@ -960,6 +986,10 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.restartQuiz = function () {
 
+			// reset current question
+			var $questionList = quizmaster.elements.questionList.children();
+			quizmaster.setCurrentQuestion( $questionList.eq(0) );
+
 			quizmaster.elements.resultsBox.hide();
 			quizmaster.elements.startPage.show();
 			quizmaster.elements.questionList.children().hide();
@@ -985,6 +1015,9 @@ jQuery(document).ready(function( $ ) {
 
 			// reset finish tracker
 			quizmaster.finish = false;
+
+			// set status
+			quizmaster.setStatus('restart')
 
 		};
 
@@ -1015,7 +1048,9 @@ jQuery(document).ready(function( $ ) {
 			});
 		};
 
-		quizmaster.modeHandler = function() {
+		quizmaster.modeHandler = function( e ) {
+
+			var restart = e.restart;
 
 			// mode handling
 			switch (quizmaster.config.mode) {
@@ -1028,6 +1063,9 @@ jQuery(document).ready(function( $ ) {
 					var $questionList = quizmaster.elements.questionList.children();
 					quizmaster.setCurrentQuestion( $questionList.last() );
 					quizmaster.showSinglePage(0);
+					quizmaster.finishButtonInit();
+					quizmaster.nextButtonInit();
+
 					break;
 
 				// check/continue mode
@@ -1039,35 +1077,58 @@ jQuery(document).ready(function( $ ) {
 					quizmaster.elements.nextButton.hide();
 
 					// handle buttons on questionCheck
-					quizmaster.on( 'quizmaster.questionChecked', function() {
+					if( !restart ) {
 
-						if( quizmaster.isLastQuestion() ) {
-							quizmaster.elements.finishButton.show()
-							quizmaster.elements.checkButton.hide()
-						} else {
-							quizmaster.elements.nextButton.show()
-							quizmaster.elements.checkButton.hide()
-						}
+						quizmaster.on( 'quizmaster.questionChecked', function() {
 
-					});
+							if( quizmaster.isLastQuestion() ) {
+								quizmaster.elements.finishButton.show()
+								quizmaster.elements.checkButton.hide()
+							} else {
+								quizmaster.elements.nextButton.show()
+								quizmaster.elements.checkButton.hide()
+							}
 
-					// handle buttons on nextQuestion
-					quizmaster.on( 'quizmaster.nextQuestion', function() {
+						});
 
-						if( quizmaster.config.mode == 1 ) {
+						// handle buttons on nextQuestion
+						quizmaster.on( 'quizmaster.nextQuestion', function() {
 
-								quizmaster.elements.checkButton.show()
-								quizmaster.elements.nextButton.hide()
+							quizmaster.elements.checkButton.show()
+							quizmaster.elements.nextButton.hide()
 
-						}
+						});
 
-					});
+						quizmaster.finishButtonInitCheckContinueMode();
+						quizmaster.nextButtonInitCheckContinueMode();
+
+					}
 
 					break;
 
-				// default normal mode
+				// default standard mode
 				case 0:
+
 					quizmaster.elements.nextButton.show();
+
+					if( !restart ) {
+
+						quizmaster.finishButtonInit();
+						quizmaster.nextButtonInit();
+
+						// answer check completed
+						quizmaster.on( 'quizmaster.answerCheckComplete', function() {
+
+							if( quizmaster.isLastQuestion() ) {
+								quizmaster.finishQuiz()
+							} else {
+								quizmaster.nextQuestion();
+							}
+
+						});
+
+					}
+
 					break;
 			}
 
@@ -1148,8 +1209,6 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.loadQuizData()
 			quizmaster.checkButtonInit();
 			quizmaster.backButtonInit();
-			quizmaster.nextButtonInit();
-			quizmaster.finishButtonInit();
 			quizmaster.startButtonInit();
 			quizmaster.restartButtonInit();
 			quizmaster.questionReviewButtonInit();
@@ -1172,17 +1231,6 @@ jQuery(document).ready(function( $ ) {
 			/*
    		 * Event Handlers
 			 */
-
-			//
-			quizmaster.on( 'quizmaster.answerCheckComplete', function() {
-
-				if( quizmaster.finish ) {
-					quizmaster.finishQuiz()
-					return true;
-				}
-
-				quizmaster.nextQuestion();
-			});
 
 			// stop timer on question_check status change
 			quizmaster.on( 'quizmaster.statusChange', function( e ) {
