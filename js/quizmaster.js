@@ -733,6 +733,7 @@ jQuery(document).ready(function( $ ) {
 
  			$tipModal = $('.qm-hint-modal');
  			$tipModal.hide();
+			quizmaster.elements.hintTrigger.hide()
  			quizmaster.elements.hintTrigger.removeClass('qm-hint-enabled')
  			quizmaster.elements.hintTrigger.addClass('qm-hint-disabled')
  			quizmaster.elements.hintTrigger.off( 'click', quizmaster.hintHide )

@@ -6,12 +6,3 @@
     </div>
   </div>
 <?php } ?>
-
-<?php
-
-if ($question->isTipEnabled()) {
-	// @TODO make this question setting work outside question
-  print quizmaster_get_template( 'quiz/button-hint.php' );
-}
-
-?>
