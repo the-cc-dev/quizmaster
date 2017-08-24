@@ -1294,18 +1294,11 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.marker = function ( $question, $isCorrect ) {
 
-			console.log('marker')
-			console.log( $question )
-			console.log( $isCorrect )
-			console.log( quizmaster.getQuestionInput( $question ))
-
 			$questionInput = quizmaster.getQuestionInput( $question );
 			$questionInput.each( function( index ) {
 
 				$answerChoice = $( this );
 				var checked =  $questionInput.eq(index).is(':checked');
-
-				console.log('checked: ' + checked)
 
 				if( checked ) {
 					// mark input label
