@@ -241,6 +241,22 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
+		/*
+ 		 * Get Question Data
+ 		 * Question data stored in json array
+ 		 * Key is the question id, pass question id to load specific question data
+ 		 * Default return is current question loaded into quiz
+		 */
+		quizmaster.getQuestionData = function( $questionId ) {
+
+			if( $questionId == undefined ) {
+				$questionId = quizmaster.getCurrentQuestionId();
+			}
+
+			return quizmaster.config.json[ $questionId ];
+
+		}
+
 		quizmaster.checker = function ( $questionId, $questionElement ) {
 
 			var questionData = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
@@ -310,18 +326,21 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.setCheckMessage = function ( $isCorrect, $pointsEarned ) {
 
+			$questionData = quizmaster.getQuestionData();
+
 			// points
 			quizmaster.setCheckMessagePoints( $pointsEarned )
 
 			// messages
 			if ( $isCorrect ) {
 				// correct answer
-				$('.qm-check-message').html( quizmaster.data.correctMessage )
+
+				$('.qm-check-message').html( $questionData.correctMessage )
 				$('.qm-check-message').removeClass('qm-check-answer-incorrect')
 				$('.qm-check-message').addClass('qm-check-answer-correct')
 
 	    } else {
-				$('.qm-check-message').html( quizmaster.data.incorrectMessage )
+				$('.qm-check-message').html( $questionData.incorrectMessage )
 				$('.qm-check-message').removeClass('qm-check-answer-correct')
 				$('.qm-check-message').addClass('qm-check-answer-incorrect')
 			}
@@ -1109,6 +1128,8 @@ jQuery(document).ready(function( $ ) {
 						quizId: quizmaster.config.quizId
 					}
 			}, function (json) {
+
+				console.log( json )
 
 				quizmaster.config.globalPoints = json.globalPoints;
 				quizmaster.config.catPoints = json.catPoints;
