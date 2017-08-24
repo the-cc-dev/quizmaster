@@ -4,7 +4,7 @@ Donate link: https://goldhat.ca/donate/
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 0.7.0
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
