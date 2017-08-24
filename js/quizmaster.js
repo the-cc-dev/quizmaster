@@ -295,15 +295,53 @@ jQuery(document).ready(function( $ ) {
 				// answerCheckComplete event
 				quizmaster.trigger({
 					type: 'quizmaster.answerCheckComplete',
-					values: {
-						question: quizmaster.getCurrentQuestion(),
-						isCorrect: json.correct
-					}
+					question: quizmaster.getCurrentQuestion(),
+					isCorrect: json.correct,
+					pointsEarned: json.points,
 				});
 
 			});
 
 		};
+
+		quizmaster.setCheckMessagePoints = function( $pointsEarned ) {
+			$('.qm-check-question-points span').text( $pointsEarned );
+		}
+
+		quizmaster.setCheckMessage = function ( $isCorrect, $pointsEarned ) {
+
+			// points
+			quizmaster.setCheckMessagePoints( $pointsEarned )
+
+			// messages
+			if ( $isCorrect ) {
+				// correct answer
+				$('.qm-check-message').html( quizmaster.data.correctMessage )
+				$('.qm-check-message').removeClass('qm-check-answer-incorrect')
+				$('.qm-check-message').addClass('qm-check-answer-correct')
+
+	    } else {
+				$('.qm-check-message').html( quizmaster.data.incorrectMessage )
+				$('.qm-check-message').removeClass('qm-check-answer-correct')
+				$('.qm-check-message').addClass('qm-check-answer-incorrect')
+			}
+
+			quizmaster.checkMessageBoxShow()
+
+		};
+
+		quizmaster.checkMessageBoxShow = function() {
+			// show check message
+			$('.qm-check-answer-box').show()
+			$('.qm-check-message').show()
+			$('.qm-check-result').show()
+		}
+
+		quizmaster.checkMessageBoxHide = function() {
+			$('.qm-check-answer-box').hide()
+			$('.qm-check-message').hide()
+			$('.qm-check-result').hide()
+		}
 
 		quizmaster.marker = function (e, correct) {
 
@@ -1140,6 +1178,17 @@ jQuery(document).ready(function( $ ) {
 						quizmaster.nextButtonInitCheckContinueMode();
 
 					}
+
+					// answer check completed
+					quizmaster.on( 'quizmaster.answerCheckComplete', function( e ) {
+
+						// get check results from event
+						var $pointsEarned = e.pointsEarned;
+						var $isCorrect = e.isCorrect;
+
+						quizmaster.setCheckMessage( $isCorrect, $pointsEarned );
+
+					});
 
 					break;
 
