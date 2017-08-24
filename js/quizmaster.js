@@ -243,9 +243,6 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.checker = function ( $questionId, $questionElement ) {
 
-			console.log('checker')
-			console.log($questionId)
-
 			var questionData = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
 
 			switch( questionData.type ) {
@@ -336,10 +333,9 @@ jQuery(document).ready(function( $ ) {
 			var $questionList = quizmaster.getQuestions();
 
 			$questionList.each( function( index, element ){
+
 				$question = $(this);
 				quizmaster.setCurrentQuestion( $question );
-
-				console.log(342)
 				quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
 
 				// after last question checked do finishQuiz()
@@ -376,7 +372,6 @@ jQuery(document).ready(function( $ ) {
 			}
 
 			// run checker to check answer
-			console.log(379)
 			quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
 
 			// end check trigger
