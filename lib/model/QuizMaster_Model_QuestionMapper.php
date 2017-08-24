@@ -66,7 +66,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
     $a = array();
 
-    $quizPost = get_post( $quizId );
+		$quiz = new QuizMaster_Model_Quiz( $quizId );
+
     $quizQuestions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
 
     if( empty($quizQuestions)) {

@@ -149,7 +149,7 @@ class QuizMaster_Controller_Front {
         $quizMapper = new QuizMaster_Model_QuizMapper();
         $questionMapper = new QuizMaster_Model_QuestionMapper();
 
-        $quiz = $quizMapper->fetch($id);
+        $quiz = $quizMapper->fetch( $id );
         $maxQuestion = false;
 
         if ($quiz->isShowMaxQuestion() && $quiz->getShowMaxQuestionValue() > 0) {
@@ -162,11 +162,11 @@ class QuizMaster_Controller_Front {
                 $value = ceil($count * $value / 100);
             }
 
-            $question = $questionMapper->fetchAll($id, true, $value);
+            $question = $questionMapper->fetchAll( $id, true, $value );
             $maxQuestion = true;
 
         } else {
-          $question = $questionMapper->fetchAll($id);
+          $question = $questionMapper->fetchAll( $id );
         }
 
         if (empty($quiz) || empty($question)) {
@@ -176,8 +176,14 @@ class QuizMaster_Controller_Front {
             print $content;
           }
         }
-				
+
         $view->quiz = $quiz;
+
+				// randomize question if question random set
+				if( $quiz->isQuestionRandom() ) {
+					shuffle( $question );
+				}
+				
         $view->question = $question;
         $view->category = $quiz->fetchQuestionCategoriesByQuiz();
 
@@ -224,6 +230,11 @@ class QuizMaster_Controller_Front {
         if (empty($quiz) || empty($question)) {
             return null;
         }
+
+				// randomize question if question random set
+				if( $quiz->isQuestionRandom() ) {
+					shuffle( $question );
+				}
 
         $view->quiz = $quiz;
         $view->question = $question;
