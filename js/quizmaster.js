@@ -242,6 +242,21 @@ jQuery(document).ready(function( $ ) {
 		};
 
 		/*
+ 		 * Get Question Input
+ 		 * Usually checkbox, radio button element
+ 		 * Defaults to input from current question
+		 */
+		quizmaster.getQuestionInput = function( $question ) {
+
+			if( $question == undefined ) {
+				$question = quizmaster.getCurrentQuestion();
+			}
+
+			 return $question.find('.quizMaster_questionInput');
+
+		}
+
+		/*
  		 * Get Question Data
  		 * Question data stored in json array
  		 * Key is the question id, pass question id to load specific question data
@@ -361,18 +376,6 @@ jQuery(document).ready(function( $ ) {
 			$('.qm-check-message').hide()
 			$('.qm-check-result').hide()
 		}
-
-		quizmaster.marker = function (e, correct) {
-
-			if ( !quizmaster.config.options.disabledAnswerMark ) {
-				if (correct) {
-					e.addClass('quizMaster_answerCorrect');
-				} else {
-					e.addClass('quizMaster_answerIncorrect');
-				}
-			}
-
-		};
 
 		quizmaster.getQuestions = function() {
 			return quizmaster.elements.questionList.children();
@@ -548,7 +551,7 @@ jQuery(document).ready(function( $ ) {
 			// question answered event
 			quizmaster.trigger({
 				type: 'quizmaster.questionAnswered',
-				question: quizmaster.data.currentQuestion,
+				question: quizmaster.getCurrentQuestion(),
 			});
 
 		};
@@ -1129,8 +1132,6 @@ jQuery(document).ready(function( $ ) {
 					}
 			}, function (json) {
 
-				console.log( json )
-
 				quizmaster.config.globalPoints = json.globalPoints;
 				quizmaster.config.catPoints = json.catPoints;
 				quizmaster.config.json = json.json;
@@ -1291,6 +1292,41 @@ jQuery(document).ready(function( $ ) {
 			});
 		}
 
+		quizmaster.marker = function ( $question, $isCorrect ) {
+
+			console.log('marker')
+			console.log( $question )
+			console.log( $isCorrect )
+			console.log( quizmaster.getQuestionInput( $question ))
+
+			$questionInput = quizmaster.getQuestionInput( $question );
+			$questionInput.each( function( index ) {
+
+				$answerChoice = $( this );
+				var checked =  $questionInput.eq(index).is(':checked');
+
+				console.log('checked: ' + checked)
+
+				if( checked ) {
+					// mark input label
+					if( $isCorrect ) {
+						$answerChoice.parent().addClass('quizMaster_answerCorrect')
+					} else {
+						$answerChoice.parent('label').addClass('quizMaster_answerIncorrect')
+					}
+				}
+
+			})
+
+			// mark entire question correct/incorrect
+			if( $isCorrect ) {
+				//$question.addClass('quizMaster_answerCorrect')
+			} else {
+				// $question.addClass('quizMaster_answerIncorrect')
+			}
+
+		}
+
 		quizmaster.getStatus = function () {
 			return quizmaster.status;
 		}
@@ -1338,6 +1374,24 @@ jQuery(document).ready(function( $ ) {
 			/*
    		 * Event Handlers
 			 */
+
+			quizmaster.on( 'quizmaster.questionAnswered', function() {
+				quizmaster.getQuestionInput().attr('disabled', 'disabled')
+			});
+
+			// mark questions on answer check completion
+			if ( !quizmaster.config.options.disabledAnswerMark ) {
+
+				quizmaster.on( 'quizmaster.answerCheckComplete', function( e ) {
+
+					$question = e.question;
+					$isCorrect = e.isCorrect;
+					quizmaster.marker( $question, $isCorrect );
+
+				});
+
+			}
+
 
 			// stop timer on question_check status change
 			quizmaster.on( 'quizmaster.statusChange', function( e ) {

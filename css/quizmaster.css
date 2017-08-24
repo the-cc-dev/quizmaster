@@ -27,12 +27,12 @@
 }
 
 .quizMaster_answerCorrect label {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .quizMaster_answerIncorrect {
-    background: #FF9191;
-    font-weight: bold;
+  background: #FF9191;
+  font-weight: bold;
 }
 
 .qm-quiz-content {
