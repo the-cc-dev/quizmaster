@@ -7,6 +7,7 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.config = {},
 		quizmaster.status = {};
+		quizmaster.restarted = false,
 		quizmaster.finish = false;
 
 		quizmaster.data = {
@@ -99,9 +100,13 @@ jQuery(document).ready(function( $ ) {
 			return quizmaster.data.currentQuestion;
 		}
 
-		quizmaster.isLastQuestion = function( $questionId = 0 ) {
+		quizmaster.isLastQuestion = function( $question ) {
 
-			if( quizmaster.questionCount() == quizmaster.data.currentQuestion.index() +1 ) {
+			if( $question == undefined ) {
+				$question = quizmaster.getCurrentQuestion()
+			}
+
+			if( quizmaster.questionCount() == $question.index() +1 ) {
 				return true;
 			}
 
@@ -236,8 +241,10 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
-
 		quizmaster.checker = function ( $questionId, $questionElement ) {
+
+			console.log('checker')
+			console.log($questionId)
 
 			var questionData = quizmaster.config.json[ quizmaster.getCurrentQuestionId() ];
 
@@ -292,7 +299,7 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.trigger({
 					type: 'quizmaster.answerCheckComplete',
 					values: {
-						question: quizmaster.data.currentQuestion,
+						question: quizmaster.getCurrentQuestion(),
 						isCorrect: json.correct
 					}
 				});
@@ -313,6 +320,10 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
+		quizmaster.getQuestions = function() {
+			return quizmaster.elements.questionList.children();
+		}
+
 		/*
      * Checks multiple questions
      * Used for single page (stacked mode) quizzes where all answers submitted at once
@@ -322,7 +333,31 @@ jQuery(document).ready(function( $ ) {
 			quizmaster.setStatus('check_question_multiple')
 
 			// get all questions
-			// var questions = quizmaster.getQuestions();
+			var $questionList = quizmaster.getQuestions();
+
+			$questionList.each( function( index, element ){
+				$question = $(this);
+				quizmaster.setCurrentQuestion( $question );
+
+				console.log(342)
+				quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
+
+				// after last question checked do finishQuiz()
+				if( quizmaster.isLastQuestion( $question ) ) {
+
+					quizmaster.finish = true;
+					quizmaster.on( 'quizmaster.answerCheckComplete', function( e ) {
+
+						$question = e.question;
+						if( quizmaster.isLastQuestion( $question ) ) {
+							quizmaster.finishQuiz();
+						}
+
+					});
+				}
+
+			});
+
 			// questions.each quizmaster.checkQuestion()
 
 		}
@@ -341,6 +376,7 @@ jQuery(document).ready(function( $ ) {
 			}
 
 			// run checker to check answer
+			console.log(379)
 			quizmaster.checker( quizmaster.getCurrentQuestionId(), quizmaster.getCurrentQuestion() );
 
 			// end check trigger
@@ -445,7 +481,7 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
-		quizmaster.finishButtonInitCheckContinueMode = function() {
+		quizmaster.finishButtonInitFinishQuiz = function() {
 
 			quizmaster.elements.finishButton.click(function () {
 
@@ -598,6 +634,13 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.finishQuiz = function (timeover) {
 
+			// when quiz mode is single page and not set to finish ready state, do check question multiple
+			// after checkQuestionMultiple() checks all the questions quizmaster.finish is set to true
+			if( quizmaster.config.mode == 2 && quizmaster.finish == false ) {
+				quizmaster.checkQuestionMultiple()
+				return;
+			}
+
 			// hide finish button
 			quizmaster.elements.finishButton.hide();
 
@@ -615,11 +658,6 @@ jQuery(document).ready(function( $ ) {
 
 			if (timeover) {
 				quizmaster.elements.resultsBox.find('.qm-time-limit_expired').show();
-			}
-
-			// check all answers if mode is single page
-			if( quizmaster.config.mode == 2 ) {
-				quizmaster.checkQuestion( quizmaster.elements.questionList.children() );
 			}
 
 			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
@@ -986,6 +1024,9 @@ jQuery(document).ready(function( $ ) {
 
 		quizmaster.restartQuiz = function () {
 
+			// flag that the quiz has been restarted
+			quizmaster.restarted = true;
+
 			// reset current question
 			var $questionList = quizmaster.elements.questionList.children();
 			quizmaster.setCurrentQuestion( $questionList.eq(0) );
@@ -1063,7 +1104,7 @@ jQuery(document).ready(function( $ ) {
 					var $questionList = quizmaster.elements.questionList.children();
 					quizmaster.setCurrentQuestion( $questionList.last() );
 					quizmaster.showSinglePage(0);
-					quizmaster.finishButtonInit();
+					quizmaster.finishButtonInitFinishQuiz();
 					quizmaster.nextButtonInit();
 
 					break;
@@ -1099,7 +1140,7 @@ jQuery(document).ready(function( $ ) {
 
 						});
 
-						quizmaster.finishButtonInitCheckContinueMode();
+						quizmaster.finishButtonInitFinishQuiz();
 						quizmaster.nextButtonInitCheckContinueMode();
 
 					}
