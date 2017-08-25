@@ -1194,6 +1194,8 @@ jQuery(document).ready(function( $ ) {
 							quizmaster.elements.checkButton.show()
 							quizmaster.elements.nextButton.hide()
 
+							quizmaster.checkMessageBoxHide()
+
 						});
 
 						quizmaster.finishButtonInitFinishQuiz();
