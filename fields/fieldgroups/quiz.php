@@ -224,37 +224,21 @@ $fieldGroup = array (
 			),
 		),
 		array (
-			'sub_fields' => array (
-				array (
-					'post_type' => array (
-						0 => 'quizmaster_question',
-					),
-					'taxonomy' => array (
-					),
-					'allow_null' => 0,
-					'multiple' => 0,
-					'return_format' => 'id',
-					'ui' => 1,
-					'key' => 'field_588a50ca0d692',
-					'label' => 'Question',
-					'name' => 'qmqu_question',
-					'type' => 'post_object',
-					'instructions' => '',
-					'required' => 1,
-				),
+			'post_type' => array (
+				0 => 'quizmaster_question',
 			),
-			'min' => 1,
-			'max' => 0,
-			'layout' => 'table',
-			'button_label' => '',
-			'collapsed' => '',
-			'key' => 'field_588a50ca0d691',
-			'label' => 'Questions',
+			'taxonomy' => array (
+			),
+			'allow_null' => 0,
+			'multiple' => 1,
+			'return_format' => 'id',
+			'ui' => 1,
+			'key' => 'field_588a50ca0d817',
+			'label' => 'Question',
 			'name' => 'qmqu_questions',
-			'type' => 'repeater',
+			'type' => 'post_object',
 			'instructions' => '',
 			'required' => 1,
-			'conditional_logic' => 0,
 		),
 		array (
 			'default_value' => 0,

@@ -25,6 +25,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
   }
 
   public static function questionTypeById( $id ) {
+
     $qType = get_field( self::QUESTION_TYPE_FIELD, $id );
 
     if( !$qType || !isset( $qType ) ) {
@@ -42,7 +43,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
       'multiple'      => 'QuizMaster_Question_MultipleChoice',
       'free_answer'   => 'QuizMaster_Question_Free',
       'sort_answer'   => 'QuizMaster_Question_Sorting',
-      'fill_blank'  => 'QuizMaster_Question_FillBlank',
+      'fill_blank'  	=> 'QuizMaster_Question_FillBlank',
     );
 
     $qTypes = apply_filters('quizmaster_question_type_registry', $qTypes );
@@ -64,7 +65,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
    */
   public function fetchAll( $quizId ) {
 
-    $a = array();
+    $questions = array();
 
 		$quiz = new QuizMaster_Model_Quiz( $quizId );
 
@@ -74,12 +75,11 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
       return false;
     }
 
-    foreach( $quizQuestions as $qq ) {
-      $qId = $qq[ QUIZMASTER_QUESTION_REFERENCE_FIELD ];
-      $a[] = $this->fetch( $qId );
-    }
+		foreach( $quizQuestions as $questionId ) {
+			$questions[] = $this->fetch( $questionId );
+		}
 
-    return $a;
+    return $questions;
   }
 
 }

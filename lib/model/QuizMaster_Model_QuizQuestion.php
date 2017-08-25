@@ -19,14 +19,10 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 			$questionId = $question;
 		}
 
-		// QUIZMASTER_QUESTION_REFERENCE_FIELD
-
 		// adds question to end of quiz
-		$questionRow = array(
-			QUIZMASTER_QUESTION_REFERENCE_FIELD => $questionId
-		);
-		add_row( QUIZMASTER_QUESTION_SELECTOR_FIELD, $questionRow, $quizId );
-		$existingQuestions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
+		$questions = get_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $quizId );
+		$questions[] = $questionId;
+		update_field( QUIZMASTER_QUESTION_SELECTOR_FIELD, $questions, $quizId );
 
 	}
 

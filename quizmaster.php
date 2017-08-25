@@ -21,7 +21,6 @@ define('QUIZMASTER_PLUGIN_PATH', QUIZMASTER_PATH . '/plugin');
 
 define('QUIZMASTER_ANSWER_TYPE_FIELD', 'qmqe_answer_type');
 define('QUIZMASTER_QUESTION_SELECTOR_FIELD', 'qmqu_questions');
-define('QUIZMASTER_QUESTION_REFERENCE_FIELD', 'qmqu_question');
 
 $uploadDir = wp_upload_dir();
 
