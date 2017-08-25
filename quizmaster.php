@@ -687,19 +687,7 @@ function filter_function_name( $num, $post ) {
   return $num;
 }
 
-/* Quiz Score Columns */
-add_filter('manage_quizmaster_score_posts_columns', 'quizmaster_score_columns');
-function quizmaster_score_columns( $columns ) {
-  $columns['date'] = 'Taken At';
-  return array_merge($columns,
-    array(
-      'quiz'    => 'Quiz',
-      'user'    => 'User',
-      'points'  => 'Points',
-      'correct' => 'Correct'
-    )
-  );
-}
+
 
 add_action( 'admin_footer-edit.php', 'quizmasterRemovePostEditTitle' );
 function quizmasterRemovePostEditTitle() {
@@ -710,42 +698,10 @@ function quizmasterRemovePostEditTitle() {
   <?php
 }
 
-add_filter('manage_quizmaster_score_posts_custom_column', 'quizmaster_score_column_content', 10, 2);
-function quizmaster_score_column_content( $column, $post_id ) {
-
-  $score = new QuizMaster_Model_Score( $post_id );
-
-  switch ( $column ) {
-    case 'quiz' :
-      $quizRevisionId = get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
-      print get_the_title( $quizRevisionId );
-      break;
-    case 'user' :
-      $user = get_field( $score->getFieldPrefix() . 'user', $post_id );
-			if( is_array( $user )) {
-				print $user['display_name'];
-			} else {
-				print __('anonymous', 'quizmaster');
-			}
-      break;
-    case 'points' :
-      $totals = $score->getTotals();
-      print $totals['pointsEarned'];
-      break;
-    case 'correct' :
-      $totals = $score->getTotals();
-      print $totals['qCorrect'] . '/' . $totals['qCount'];
-      break;
-  }
-}
-
-add_filter('manage_edit-quizmaster_score_sortable_columns', 'quizmaster_score_sortable_column');
-function quizmaster_score_sortable_column( $columns ) {
-  $columns['quiz']   = 'quiz';
-  $columns['user']   = 'user';
-  $columns['points'] = 'points';
-  return $columns;
-}
+/*
+ * Setup Admin Columns, Filters
+ */
+QuizMaster_Helper_Admin::init();
 
 /* Quiz Scores Filters */
 add_action( 'restrict_manage_posts', 'quizmaster_score_filter_quiz' );
