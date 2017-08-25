@@ -4,6 +4,9 @@ class QuizMaster_Helper_Admin {
 
 	public static function init() {
 
+		/* Quiz Metaboxes */
+		add_action( 'add_meta_boxes_quizmaster_quiz', array( get_class(), 'quiz_meta_box' ));
+
 		/* Quiz Columns */
 		add_filter('manage_quizmaster_quiz_posts_columns', array( get_class(), 'quiz_columns' ));
 		add_filter('manage_quizmaster_quiz_posts_custom_column', array( get_class(), 'quiz_column_content' ), 10, 2);
@@ -13,6 +16,25 @@ class QuizMaster_Helper_Admin {
 		add_filter('manage_quizmaster_score_posts_columns', array( get_class(), 'score_columns' ));
 		add_filter('manage_quizmaster_score_posts_custom_column', array( get_class(), 'score_column_content' ), 10, 2);
 		add_filter('manage_edit-quizmaster_score_sortable_columns', array( get_class(), 'score_sortable_column' ));
+
+	}
+
+	public function quiz_meta_box() {
+
+		add_meta_box(
+  	  'quizmaster_quiz_shortcode_metabox', // $id
+  	  'Shortcode', // $title
+  	  array( get_class(), 'quiz_meta_box_callback' ), // $callback
+  	  'quizmaster_quiz', // $screen
+  	  'side', // $context
+  	  'low' // $priority
+  	);
+
+	}
+
+	public function quiz_meta_box_callback( $post ) {
+
+		print '[quizmaster id="'. $post->ID . '"]';
 
 	}
 
