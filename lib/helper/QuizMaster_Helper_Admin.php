@@ -19,8 +19,66 @@ class QuizMaster_Helper_Admin {
 
 		/* ACF Save Hooks to Associate Quiz Questions */
 		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'quiz_associate_questions'), 5 );
+		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'question_associate_quizzes'), 5 );
+
 
 	}
+
+
+	public function question_associate_quizzes( $postId ) {
+
+		// bail early if no ACF data
+    if( 'quizmaster_question' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
+      return;
+    }
+
+		// data setup
+		$questionId = $postId;
+		$newQuizzes = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
+		$currentQuizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+		$quizQuestion = new QuizMaster_Model_QuizQuestion;
+
+		// nothing to do if old and new are both empty
+		if( empty($newQuizzes) && empty($currentQuizzes)) {
+			return;
+		}
+
+		// disassociate questions removed from quiz question list
+		if( !empty( $currentQuizzes )) {
+
+			if( empty( $newQuizzes )) {
+				$quizzesRemoved = $currentQuizzes;
+			} else {
+				$quizzesRemoved = array_diff( $currentQuizzes, $newQuizzes );
+			}
+
+			if( !empty( $quizzesRemoved )) {
+				foreach( $quizzesRemoved as $quizId ) {
+					$quizQuestion->clearAssociatedQuestionsFromQuiz( $quizId, $questionId );
+				}
+			}
+
+		}
+
+		// associate quizzes added to the quiz tab from question editor
+		if( !empty( $newQuizzes )) {
+
+			if( empty( $currentQuizzes )) {
+				$quizzesAdded = $newQuizzes;
+			} else {
+				$quizzesAdded = array_diff( $newQuizzes, $currentQuizzes );
+			}
+
+			if( !empty( $quizzesAdded )) {
+				foreach( $quizzesAdded as $quizId ) {
+					$quizQuestion->associateQuestionFromQuiz( $quizId, $questionId );
+				}
+			}
+
+		}
+
+	}
+
 
 	public function quiz_associate_questions( $postId ) {
 
@@ -35,16 +93,42 @@ class QuizMaster_Helper_Admin {
 		$currentQuestions = get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
-		// disassociate questions removed from quiz question list
-		$questionsRemoved = array_diff( $currentQuestions, $newQuestions );
-		foreach( $questionsRemoved as $questionId ) {
-			$quizQuestion->clearAssociatedQuizzesFromQuestion( $questionId, $quizId );
+		if( empty($newQuestions) && empty($currentQuestions)) {
+			return; // nothing to do
 		}
 
-		// associate questions added to quiz question list
-		$questionsAdded = array_diff( $newQuestions, $currentQuestions );
-		foreach( $questionsAdded as $questionId ) {
-			$quizQuestion->associateQuizFromQuestion( $quizId, $questionId );
+		// disassociate questions removed from quiz question list
+		if( !empty( $currentQuestions )) {
+
+			if( !empty( $newQuestions )) {
+				$questionsRemoved = array_diff( $currentQuestions, $newQuestions );
+			} else {
+				$questionsRemoved = $currentQuestions;
+			}
+
+			foreach( $questionsRemoved as $questionId ) {
+				$quizQuestion->clearAssociatedQuizzesFromQuestion( $questionId, $quizId );
+			}
+
+		}
+
+		if( !empty( $newQuestions )) {
+
+			// associate questions added to quiz question list
+			if( !empty( $currentQuestions )) {
+				$questionsAdded = array_diff( $newQuestions, $currentQuestions );
+			} else {
+				$questionsAdded = $newQuestions;
+			}
+
+			if( !empty( $questionsAdded )) {
+
+				foreach( $questionsAdded as $questionId ) {
+					$quizQuestion->associateQuizFromQuestion( $quizId, $questionId );
+				}
+
+			}
+
 		}
 
 	}
