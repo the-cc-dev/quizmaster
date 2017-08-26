@@ -396,6 +396,17 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
 		}
 
+		public static function isAssociatedQuiz( $quizId ) {
+
+			$quiz = new QuizMaster_Model_Quiz( $quizId );
+			$questions = $questionMapper->fetchAll( $quizId );
+			if( in_array( $this->getId(), $questions )) {
+				return true;
+			}
+			return false;
+
+		}
+
     public function fieldGroupKey() {
       return 'question';
     }

@@ -20,7 +20,8 @@ define('QUIZMASTER_PPATH', dirname(plugin_basename(__FILE__)));
 define('QUIZMASTER_PLUGIN_PATH', QUIZMASTER_PATH . '/plugin');
 
 define('QUIZMASTER_ANSWER_TYPE_FIELD', 'qmqe_answer_type');
-define('QUIZMASTER_QUESTION_SELECTOR_FIELD', 'qmqu_questions');
+define('QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD', 'qmqu_questions');
+define('QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD', 'qmqe_quizzes');
 
 $uploadDir = wp_upload_dir();
 
@@ -700,7 +701,14 @@ function quizmasterRemovePostEditTitle() {
 /*
  * Setup Admin Columns, Filters
  */
-QuizMaster_Helper_Admin::init();
+if( is_admin() ) {
+	add_action('init', 'setup_admin_helper');
+}
+
+function setup_admin_helper() {
+	QuizMaster_Helper_Admin::init();
+
+}
 
 /* Quiz Scores Filters */
 add_action( 'restrict_manage_posts', 'quizmaster_score_filter_quiz' );

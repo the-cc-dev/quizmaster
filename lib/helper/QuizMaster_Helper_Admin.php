@@ -17,6 +17,36 @@ class QuizMaster_Helper_Admin {
 		add_filter('manage_quizmaster_score_posts_custom_column', array( get_class(), 'score_column_content' ), 10, 2);
 		add_filter('manage_edit-quizmaster_score_sortable_columns', array( get_class(), 'score_sortable_column' ));
 
+		/* ACF Save Hooks to Associate Quiz Questions */
+		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'quiz_associate_questions'), 5 );
+
+	}
+
+	public function quiz_associate_questions( $postId ) {
+
+		// bail early if no ACF data
+    if( 'quizmaster_quiz' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
+      return;
+    }
+
+		// data setup
+		$quizId = $postId;
+		$newQuestions = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD ];
+		$currentQuestions = get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		$quizQuestion = new QuizMaster_Model_QuizQuestion;
+
+		// disassociate questions removed from quiz question list
+		$questionsRemoved = array_diff( $currentQuestions, $newQuestions );
+		foreach( $questionsRemoved as $questionId ) {
+			$quizQuestion->clearAssociatedQuizzesFromQuestion( $questionId, $quizId );
+		}
+
+		// associate questions added to quiz question list
+		$questionsAdded = array_diff( $newQuestions, $currentQuestions );
+		foreach( $questionsAdded as $questionId ) {
+			$quizQuestion->associateQuizFromQuestion( $quizId, $questionId );
+		}
+
 	}
 
 	public function quiz_meta_box() {

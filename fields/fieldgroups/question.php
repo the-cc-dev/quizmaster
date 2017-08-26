@@ -566,7 +566,39 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 				'id' => '',
 			),
 		),
+
+		array (
+			'placement' => 'left',
+			'key' => 'field_5885e8b50cy2p',
+			'label' => 'Quizzes',
+			'type' => 'tab',
+			'instructions' => 'Attach this question to quizzes.',
+		),
+
+		array (
+			'post_type' => array (
+				0 => 'quizmaster_quiz',
+			),
+			'taxonomy' => array (
+			),
+			'allow_null' => 0,
+			'multiple' => 1,
+			'return_format' => 'id',
+			'ui' => 1,
+			'key' => 'qmqe_quizzes',
+			'label' => 'Quizzes',
+			'name' => 'qmqe_quizzes',
+			'type' => 'relationship',
+			'instructions' => 'Select quizzes from the quiz list on the left by clicking on them. Quizzes disabled from selection already include this quiz. Questions will appear at the end of the quiz, unless randomization settings for the quiz are applied. Edit the quiz question list directly to reorder the question list.',
+			'filters' => array (
+				0 => 'search',
+			),
+		),
+
+
+
 	),
+
 	'location' => array (
 		array (
 			array (
