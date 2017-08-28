@@ -953,9 +953,14 @@ jQuery(document).ready(function( $ ) {
 
 			parseTime: function (ms) {
 
-				var seconds = parseInt(ms / 1000);
-				var minutes = parseInt((seconds / 60) % 60);
-				var hours = parseInt((seconds / 3600) % 24);
+				x = ms / 1000
+				seconds = parseInt( x % 60 )
+				x /= 60
+				minutes = parseInt( x % 60 )
+				x /= 60
+				hours = parseInt( x % 24 )
+
+
 
 				seconds = (seconds > 9 ? '' : '0') + seconds;
 				minutes = (minutes > 9 ? '' : '0') + minutes;
