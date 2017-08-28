@@ -123,7 +123,7 @@ class QuizMaster_Controller_Front {
 
       $id = $attr['id'];
 			if( $id == null ) {
-				$id = reset($attr);
+				return;
 			}
 
       $content = '';
@@ -183,7 +183,7 @@ class QuizMaster_Controller_Front {
 				if( $quiz->isQuestionRandom() ) {
 					shuffle( $question );
 				}
-				
+
         $view->question = $question;
         $view->category = $quiz->fetchQuestionCategoriesByQuiz();
 
