@@ -3,8 +3,8 @@ Contributors: goldhat
 Donate link: https://goldhat.ca/donate/
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 4.0
-Tested up to: 4.3
-Stable tag: 0.8.0
+Tested up to: 4.8.1
+Stable tag: 0.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,7 +54,7 @@ OR
 
 = 0.8.0 =
 
-Adds bidirectional quiz/question management, the ability to add a question to a quiz from the question editor. Improved selection field for adding questions from the quiz editor. 
+Adds bidirectional quiz/question management, the ability to add a question to a quiz from the question editor. Improved selection field for adding questions from the quiz editor.
 
 = 0.7.3 =
 
