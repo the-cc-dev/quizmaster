@@ -121,6 +121,10 @@ class QuizMaster_Controller_Front {
 
     public function shortcode( $attr ) {
 
+			if( !array_key_exists( 'id', $attr )) {
+				return;
+			}
+
       $id = $attr['id'];
 			if( $id == null ) {
 				return;
