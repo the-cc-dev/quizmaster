@@ -10,7 +10,7 @@ class QuizMaster_Controller_Fields {
 
     foreach( $this->fieldGroups() as $fieldGroupKey ) {
       $fieldGroup = $this->loadFieldGroup( $fieldGroupKey );
-			$addFieldGroupFunc = quizmaster_get_fields_prefix() . '_add_local_field_group';
+			$addFieldGroupFunc = 'register_field_group';
       $addFieldGroupFunc( $fieldGroup );
     }
 
@@ -32,7 +32,7 @@ class QuizMaster_Controller_Fields {
 			// enable extensions to add fields
 			if( $baseField['type'] != 'tab' ) {
 				$addFields = apply_filters('quizmaster_add_fields_after_' . $baseField['name'], array() );
-			} 
+			}
 
 			if( !empty( $addFields )) {
 				foreach( $addFields as $field ) {
