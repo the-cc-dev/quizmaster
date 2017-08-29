@@ -176,16 +176,13 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
         return json_encode(array());
     }
 
-    public static function ajaxCompletedQuiz( $data )
-    {
+    public static function ajaxCompletedQuiz( $data ) {
         // workaround ...
         $_POST = $_POST['data'];
         $ctr = new QuizMaster_Controller_Quiz();
 
         $lockMapper = new QuizMaster_Model_LockMapper();
         $quizMapper = new QuizMaster_Model_QuizMapper();
-
-				var_dump( $data['results'] );
 
         $is100P = $data['results']['comp']['result'] == 100;
 
