@@ -133,7 +133,7 @@ class QuizMaster_Helper_Admin {
 
 	}
 
-	public function quiz_meta_box() {
+	public static function quiz_meta_box() {
 
 		add_meta_box(
   	  'quizmaster_quiz_shortcode_metabox', // $id
@@ -146,13 +146,13 @@ class QuizMaster_Helper_Admin {
 
 	}
 
-	public function quiz_meta_box_callback( $post ) {
+	public static function quiz_meta_box_callback( $post ) {
 
 		print '[quizmaster id="'. $post->ID . '"]';
 
 	}
 
-	public function quiz_columns( $columns ) {
+	public static function quiz_columns( $columns ) {
 		return array_merge($columns,
 			array(
 				'shortcode'    => 'Shortcode',
@@ -160,7 +160,7 @@ class QuizMaster_Helper_Admin {
 		);
 	}
 
-	public function quiz_column_content( $column, $post_id ) {
+	public static function quiz_column_content( $column, $post_id ) {
 
 	  $quiz = new QuizMaster_Model_Quiz( $post_id );
 

@@ -5,13 +5,17 @@ class QuizMaster_Helper_CheckAnswers {
 	private $correct = false;
 	private $points = 0;
 
-	public function ajaxCheckAnswer() {
+	public static function ajaxCheckAnswer() {
 
 		$checkAnswers = new QuizMaster_Helper_CheckAnswers;
 		$_POST = $_POST['data'];
 		$quizId = $_POST['quizId'];
 		$questionId = $_POST['questionId'];
-		$userAnswerData = $_POST['userAnswerData'];
+		if( array_key_exists( 'userAnswerData', $_POST )) {
+			$userAnswerData = $_POST['userAnswerData'];
+		} else {
+			$userAnswerData = array();
+		}
 		$questionMapper = new QuizMaster_Model_QuestionMapper();
 		$question = $questionMapper->fetch( $questionId );
 		$answerType = $question->getAnswerType();
@@ -48,6 +52,10 @@ class QuizMaster_Helper_CheckAnswers {
 
 	public function checkSingle( $question, $userAnswerData ) {
 
+		if( empty( $userAnswerData )) {
+			return;
+		}
+
 		foreach( $question->getAnswerData() as $answerIndex => $answerObj ) {
 
 			if( $answerObj->isCorrect() ) {
@@ -66,6 +74,10 @@ class QuizMaster_Helper_CheckAnswers {
 	}
 
 	public function checkMultiple( $question, $userAnswerData ) {
+
+		if( empty( $userAnswerData )) {
+			return;
+		}
 
 		foreach( $question->getAnswerData() as $answerIndex => $answerObj ) {
 
