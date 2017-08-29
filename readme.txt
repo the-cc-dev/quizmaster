@@ -1,10 +1,10 @@
 === QuizMaster ===
 Contributors: goldhat
-Donate link: https://goldhat.ca/donate/
+Donate link: http://wpquizmaster.com
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 4.0
 Tested up to: 4.8.1
-Stable tag: 0.8.2
+Stable tag: 0.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,32 +15,31 @@ The most extendable, feature-rich quiz system plugin for WordPress.
 The most extendable, feature-rich quiz system plugin for WordPress. Developer-friendly, customizable and extension based with numerous extensions available to extend the feature set. Requires FieldMaster (Free) or ACF Pro. Forked in 2016 from WP Pro Quiz, a free quiz plugin developed by Julius Fischer (http://www.it-gecko.de/).
 
 = Features =
-* Single Choice Question Type
-* Multiple Choice Question Type
-* Sorting Choice Question Type
-* Free Choice Question Type
-* Fill in the Blank Question Type
-* Time Limit
-* Randomize Answers
-* Randomize Questions
+* 5 Question Types: Single Choice, Multiple Choice, Sorting Choice, Free Choice, Fill in the Blank
+* Unique slug/url for each quiz and each question
+* Time limit setting for quizzes
+* Randomize question display order
+* Randomize answers within questions
 * Correct or incorrect response message for all questions
 * Different points for each answer
-* Result text with gradations
-* Preview-function
-* Statistics
-* Quiz requirements
-* Hints
-* E-mail notification
-* Category support
-* Quiz summary
+* Quiz score tracking and quiz history for students
+* Hints button and tracking of hints used
+* Email notification system
+* Categorization and tagging for quizzes and questions
+* Quiz summary displayed on quiz completion
+* Decentralized question pool, allows a question to be placed in multiple quizzes
+* Migration extension available for importing from WP Pro Quiz
 
-= QuizMaster Wiki =
-https://github.com/goldhat/quizmaster/wiki
+= QuizMaster Official Plugin Site =
+http://wpquizmaster.com
 
 = Support =
-Visit https://goldhat.ca/plugins/quizmaster
+https://wordpress.org/support/plugin/quizmaster or open an issue at GitHub https://github.com/goldhat/quizmaster
 
 == Installation ==
+
+
+Before installing QuizMaster check that you have ACF Pro installed and activated, or if you don't have it download and install FieldMaster, a free alternative from https://github.com/goldhat/fieldmaster. Make sure when unzipping FieldMaster that the main plugin directory is renamed to "fieldmaster", removing any version information that comes with GitHub downloads.
 
 1. Search for "quizmaster" from your Add New Plugin page in the WP Admin.
 2. Click to install, then activate.
@@ -51,6 +50,10 @@ OR
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.8.3 =
+
+Fixes warnings regarding tab naming and other issues.
 
 = 0.8.0 =
 
