@@ -715,6 +715,9 @@ jQuery(document).ready(function( $ ) {
 				quizmaster.elements.resultsBox.find('.qm-time-limit_expired').show();
 			}
 
+			// average result
+			quizmaster.data.results.comp.result = Math.round(quizmaster.data.results.comp.points / quizmaster.config.globalPoints * 100 * 100) / 100;
+
 			quizmaster.setAverageResult(quizmaster.data.results.comp.result, false);
 			quizmaster.setCategoryOverview();
 			quizmaster.sendCompletedQuiz();
@@ -737,7 +740,6 @@ jQuery(document).ready(function( $ ) {
 			var correctAnswerEl = quizmaster.find('.quizMaster_correct_answer');
 			correctAnswerEl.text( quizmaster.data.results.comp.correctQuestions )
 
-			quizmaster.data.results.comp.result = Math.round(quizmaster.data.results.comp.points / quizmaster.config.globalPoints * 100 * 100) / 100;
 			var $pointFields = quizmaster.find('.quizMaster_points span');
 
 			$pointFields.eq(0).text(quizmaster.data.results.comp.points);

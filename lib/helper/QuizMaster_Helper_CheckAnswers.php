@@ -85,7 +85,7 @@ class QuizMaster_Helper_CheckAnswers {
 
 				// check if the user answer index matches this answer index
 				// even if answers are randomized in display the indexes will continue to match the order set in the question
-				if( ! in_array( $userAnswerData['answerIndexes'], $answerIndex )) {
+				if( ! in_array( $answerIndex, $userAnswerData['answerIndexes'] )) {
 
 					$this->correct = 0;
 					$this->points  = 0;

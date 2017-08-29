@@ -25,7 +25,7 @@ class QuizMaster_Helper_Admin {
 	}
 
 
-	public function question_associate_quizzes( $postId ) {
+	public static function question_associate_quizzes( $postId ) {
 
 		// bail early if no ACF data
     if( 'quizmaster_question' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
@@ -80,7 +80,7 @@ class QuizMaster_Helper_Admin {
 	}
 
 
-	public function quiz_associate_questions( $postId ) {
+	public static function quiz_associate_questions( $postId ) {
 
 		// bail early if no ACF data
     if( 'quizmaster_quiz' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
@@ -175,7 +175,7 @@ class QuizMaster_Helper_Admin {
    * Score Columns
 	 */
 
-	public function score_columns( $columns ) {
+	public static function score_columns( $columns ) {
 		return array_merge($columns,
 			array(
 				'date'		=> 'Taken At',
@@ -187,7 +187,7 @@ class QuizMaster_Helper_Admin {
 		);
 	}
 
-	public function score_column_content( $column, $post_id ) {
+	public static function score_column_content( $column, $post_id ) {
 
 	  $score = new QuizMaster_Model_Score( $post_id );
 
@@ -215,7 +215,7 @@ class QuizMaster_Helper_Admin {
 	  }
 	}
 
-	public function score_sortable_column( $columns ) {
+	public static function score_sortable_column( $columns ) {
 	  $columns['quiz']   = 'quiz';
 	  $columns['user']   = 'user';
 	  $columns['points'] = 'points';
