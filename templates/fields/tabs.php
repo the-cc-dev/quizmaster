@@ -4,7 +4,7 @@
 
 		<?php foreach( $tabs as $tab ) : ?>
 
-			<li data-tab-key="<?php print $tab['key']; ?>">
+			<li data-key="<?php print $tab['key']; ?>">
 				<?php print $tab['label']; ?>
 			</li>
 
@@ -16,6 +16,11 @@
 
 <style>
 
+.qm-field-wrap {
+	display: none;
+	margin: 20px 0;
+}
+
 #quizmaster-quiz-metabox > .handlediv,
 #quizmaster-quiz-metabox > .hndle {
 	display: none;
@@ -24,6 +29,7 @@
 #quizmaster-quiz-metabox.postbox {
 	border: none;
 	background: none;
+	min-height: 350px;
 }
 #quizmaster-quiz-metabox.postbox .inside {
 	padding: 0 0 12px 0;
@@ -93,6 +99,11 @@
 		padding-left: 20px;
 	}
 
+
+	.qm-field-wrap {
+		margin: 20px 0;
+	}
+
 </style>
 
 <script>
@@ -100,8 +111,16 @@
 jQuery(document).ready(function( $ ) {
 
 	$('.qm-tabs li').click( function() {
+
+		// make tab active
 		$('.qm-tabs li').removeClass('active');
 		$(this).addClass('active');
+
+		// show matching fields
+		var tabKey = $(this).data('key');
+		$('.qm-field-wrap').hide();
+		$('.qm-field-wrap[data-tab=' + tabKey + ']').show();
+
 	});
 
 });

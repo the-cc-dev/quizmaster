@@ -1,4 +1,4 @@
-<div class="qm-field-relationship">
+<div class="qm-field qm-field-relationship">
 
 	RELATIONSHIP
 

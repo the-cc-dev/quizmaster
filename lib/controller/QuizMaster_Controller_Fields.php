@@ -3,7 +3,8 @@
 class QuizMaster_Controller_Fields {
 
 	private $fieldGroups = array();
-	private $activeFieldGroup = array();
+	private $activeFieldGroup = false;
+	private $activeTab = false;
 
   public function __construct() {
   }
@@ -36,6 +37,10 @@ class QuizMaster_Controller_Fields {
 		 }
 	}
 
+	public function setActiveTab( $tab ) {
+		$this->activeTab = $tab;
+	}
+
 	public function renderFieldGroup() {
 		$fg = $this->activeFieldGroup;
 		$render = '';
@@ -44,22 +49,30 @@ class QuizMaster_Controller_Fields {
 		$render .= $this->renderTabs( $fg );
 
 		// render fields
-		$render .= $this->renderFieldWrapOpen();
+		$render .= $this->renderFieldFormWrapOpen();
+
+
 		foreach( $fg['fields'] as $field ) {
-			if( $field['type'] != 'tab' ) {
-				$render .= $this->renderField( $field );
+
+			if( $field['type'] == 'tab' ) {
+				$this->setActiveTab( $field );
+				continue;
 			}
+
+			$render .= $this->renderField( $field );
+
 		}
-		$render .= $this->renderFieldWrapClose();
+
+		$render .= $this->renderFieldFormWrapClose();
 
 		return $render;
 	}
 
-	public function renderFieldWrapOpen() {
+	public function renderFieldFormWrapOpen() {
 		return '<div class="qm-field-form">';
 	}
 
-	public function renderFieldWrapClose() {
+	public function renderFieldFormWrapClose() {
 		return '</div>';
 	}
 
@@ -87,11 +100,20 @@ class QuizMaster_Controller_Fields {
 	public function renderField( $field, $template = false ) {
 		$content = '';
 
+		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
+			'field' => $field,
+			'tab' => $this->activeTab,
+		));
+
 		if( !$template ) {
 			$content .= quizmaster_parse_template( 'fields/' . $field['type'] . '/input.php', array(
 				'field' => $field,
 			));
 		}
+
+		$content .= quizmaster_parse_template( 'fields/field-wrap-after.php', array(
+			'field' => $field,
+		));
 
 		return $content;
 	}
