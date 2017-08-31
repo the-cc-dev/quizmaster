@@ -18,7 +18,7 @@ class QuizMaster_Model_Model {
     }
 
     public function setModelByID( $id ) {
-      $fields = get_fields( $id );
+      $fields = quizmaster_field( $id );
       if( !empty( $fields )) {
         $fields = $this->stripFieldPrefixes( $fields );
       }

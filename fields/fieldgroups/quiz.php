@@ -1,7 +1,7 @@
 <?php
 
 $fieldGroup = array (
-	'key' => 'group_58850e7d30db8',
+	'key' => 'quiz',
 	'title' => 'QuizMaster Quiz',
 	'fields' => array (
 		array (

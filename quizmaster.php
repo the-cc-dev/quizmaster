@@ -37,48 +37,13 @@ register_activation_hook( __FILE__, 'quizMasterActivation' );
 
 register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
 
-// TEST custom location rules
-add_filter('acf/location/rule_types', 'acf_location_rules_types');
-function acf_location_rules_types( $choices ) {
-
-    $choices['Basic']['settings'] = 'Settings';
-    return $choices;
-
-}
-
-add_filter('acf/location/rule_values/settings', 'acf_location_rules_values_settings');
-function acf_location_rules_values_settings( $choices ) {
-
-  $choices[ 0 ] = 'Alpha';
-	$choices[ 1 ] = 'Beta';
-  return $choices;
-
-}
-
-add_filter('acf/location/match_field_groups', 'match_field_groups', 10, 2 );
-function match_field_groups( $match, $options ) {
-
-}
-
-add_filter('acf/location/rule_match/settings', 'acf_location_rules_match_settings', 10, 3);
-function acf_location_rules_match_settings( $match, $rule, $options ) {
-
-	//var_dump( $rule );
-	//var_dump( $options );
-	//die();
-
-	if( $rule['operator'] == "==" && $rule['param'] == 'settings' ) {
-
-	}
-}
-
 /*
  * Main plugin class
  */
 class quizmaster {
 
 	public function __construct() {
-		$this->init();
+
 	}
 
 	public function init() {
@@ -88,6 +53,9 @@ class quizmaster {
 		add_filter( quizmaster_get_fields_prefix() . '/load_value/name=qmqe_sorting_choice_answer_id', array( $this, 'makeSortingChoiceAnswerId' ), 10, 3 );
 
 		add_filter('acf/location/rule_types', 'acf_location_rules_types');
+
+		// register global
+		$GLOBALS['quizmaster'] = new quizmaster();
 
 	}
 
@@ -104,7 +72,8 @@ class quizmaster {
 }
 
 // initiate quizmaster
-new quizmaster();
+$quizmaster = new quizmaster();
+$quizmaster->init();
 
 /* remove stuff at deactivation */
 function quizMasterDeactivation() {
@@ -112,7 +81,6 @@ function quizMasterDeactivation() {
 }
 
 function quizMasterActivation() {
-  quizmasterFieldsApiTest();
 
 	// create post types and flush rewrite rules
 	quizmasterAddPostTypes();
@@ -123,28 +91,6 @@ function quizMasterActivation() {
   quizmasterCreateStudentReportPage();
 
 	QuizMaster_Extension::doActivation();
-}
-
-function quizmasterFieldsApiTest() {
-  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  $isAcfActive = is_plugin_active('advanced-custom-fields-pro/acf.php');
-	$isFieldMasterActive = is_plugin_active('fieldmaster/fieldmaster.php');
-
-	// test with ACF Free
-	$isAcfActive = is_plugin_active('advanced-custom-fields/acf.php');
-
-  if( !$isAcfActive && !$isFieldMasterActive ) {
-    deactivate_plugins( plugin_basename( __FILE__ ) );
-		$activationMsg = __( 'QuizMaster requires either FieldMaster (Free Fields Plugin, download latest release at' , 'quizmaster');
-		$activationMsg .= '<a href="https://github.com/goldhat/fieldmaster/releases/latest/">https://github.com/goldhat/fieldmaster/releases/tag/</a>';
-		$activationMsg .= __( 'or ACF (Advanced Custom Fields) Pro! Visit ', 'quizmaster' );
-		$activationMsg .= '<a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a>';
-		$activationMsg .= __( 'to purchase or return to ', 'quizmaster' );
-		$activationMsg .= '<a href="' . get_admin_url( null, 'plugins.php' ) . '">';
-		$activationMsg .= __( 'Manage Plugins', 'quizmaster' );
-		$activationMsg .= '</a>.';
-    wp_die( $activationMsg );
-  }
 }
 
 add_action('init', 'quizmasterPluginsLoaded', 5);
@@ -1040,6 +986,21 @@ function quizmasterLoadExtensions() {
 // convenience function to get the fields prefix
 function quizmaster_get_fields_prefix() {
 	return QuizMaster_Helper_Fields::getFieldApiPrefix();
+}
+
+function quizmaster_field() {
+	return array();
+}
+
+add_action('admin_init', 'quizmasterMetaboxes', 15);
+function quizmasterMetaboxes() {
+	$metaboxes = new QuizMaster_Controller_Metabox();
+}
+
+add_action('admin_init', 'quizmasterFields', 10);
+function quizmasterFields() {
+	$fields = new QuizMaster_Controller_Fields();
+	$fields->init();
 }
 
 // basic implementation of loaded hook but needs to be moved when this file is refactored
