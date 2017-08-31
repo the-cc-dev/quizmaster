@@ -1,7 +1,144 @@
-/* Hide Data Fields */
-[data-name="qmqe_sorting_choice_answer_id"] {
+
+.qm-field-wrap {
+	display: none;
+	margin: 30px 0;
+}
+.qm-field-wrap:first-child {
+	margin-top: 0;
+}
+
+#quizmaster-quiz-metabox > .handlediv,
+#quizmaster-quiz-metabox > .hndle {
 	display: none;
 }
-[data-name="qmqe_sorting_choice_answer"] {
-	width: 100%;
+
+#quizmaster-quiz-metabox.postbox {
+	border: none;
+	background: none;
+	min-height: 350px;
+}
+#quizmaster-quiz-metabox.postbox .inside {
+	padding: 0 0 12px 0;
+}
+
+
+.qm-tabs {
+	float: left;
+	display: table;
+	min-width: 140px;
+	max-width: 180px;
+	display: block;
+	overflow: auto;
+}
+
+.qm-tabs ul {
+	margin: 0;
+	padding: 0;
+}
+
+.qm-tabs li {
+	border: 1px solid #ccc;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	    background: #F1F1F1;
+			border: 1px solid #DFDFDF;
+			border-bottom-width: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #0074a2;
+  padding: 10px;
+  font-weight: normal;
+  margin-right: 1px;
+}
+
+.qm-tabs li.active {
+	background: #4EA0D4;
+	color: #fff;
+	border-right-color: #4EA0D4;
+	border-left-color: #4EA0D4;
+}
+
+.qm-tabs li.active:hover {
+	background: #4EA0D4;
+	color: #fff;
+}
+
+.qm-tabs li:hover {
+	background: #D9D9D9;
+}
+
+
+
+.qm-tabs li:first-child{
+	border-radius: 3px 0 0 0;
+	}
+
+.qm-tabs li:last-child {
+	    border-radius: 0 0 0 3px;
+			    border-bottom: #ccc solid 1px;
+}
+
+/* Field Column */
+.qm-field-form {
+	display: table;
+	padding-left: 20px;
+	max-width: 100%;
+}
+
+.qm-field-wrap .qm-field-true_false {
+	margin-bottom: 18px;
+}
+.qm-field-true_false label {
+	font-weight: bold;
+	font-size: 13px;
+}
+
+
+.qm-field-radio li label {
+	padding: 10px 8px 10px 8px;
+	background: #e6e6e6;
+	display: inline-block;
+	font-size: 14px;
+}
+
+.qm-field-radio li label:hover {
+	border-bottom: solid 4px #d6d6d6;
+	padding-bottom: 6px;
+}
+
+.qm-field-radio li label.selected {
+	border-bottom: solid 4px #4EA0D4;
+	background: #d8d8d8;
+	padding-bottom: 6px;
+
+}
+
+.qm-field-radio ul {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.qm-field-radio li {
+	float: left;
+	display: inline-block;
+	padding: 0;
+	margin: 0 10px 0 0;
+}
+
+.qm-field-radio input {
+	position: absolute;
+	opacity: 0;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
+
+.qm-field-wrap .qm-field-label {
+	padding: 0 !important;
+	margin: 0 0 10px 0 !important;
+	font-weight: bold;
+	font-size: 14px !important;
+	display: inline-block;
 }

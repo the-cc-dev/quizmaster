@@ -41,6 +41,14 @@ class QuizMaster_Controller_Fields {
 		$this->activeTab = $tab;
 	}
 
+	public function renderTabOpen() {
+		return '<div class="qm-tab">';
+	}
+
+	public function renderTabClose() {
+		return '</div>';
+	}
+
 	public function renderFieldGroup() {
 		$fg = $this->activeFieldGroup;
 		$render = '';
@@ -51,17 +59,28 @@ class QuizMaster_Controller_Fields {
 		// render fields
 		$render .= $this->renderFieldFormWrapOpen();
 
-
+		// loop through fields
 		foreach( $fg['fields'] as $field ) {
 
 			if( $field['type'] == 'tab' ) {
+
+				if( !empty( $this->activeTab )) {
+					$render .= $this->renderTabClose();
+				}
+
+				$render .= $this->renderTabOpen();
 				$this->setActiveTab( $field );
+
 				continue;
+
 			}
 
 			$render .= $this->renderField( $field );
 
 		}
+
+		// close tabs
+		$render .= $this->renderTabClose();
 
 		$render .= $this->renderFieldFormWrapClose();
 
