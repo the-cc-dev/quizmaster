@@ -37,11 +37,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -58,11 +53,6 @@ $fieldGroup = array (
 			'instructions' => 'Enter 0 for no time limit.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -77,11 +67,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -96,11 +81,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -115,11 +95,6 @@ $fieldGroup = array (
 			'instructions' => __( 'If you enable this option, maximum number of displayed questions will be X from X questions. (The output of questions is random)', 'quizmaster' ),
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 10,
@@ -144,11 +119,6 @@ $fieldGroup = array (
 					),
 				),
 			),
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -163,11 +133,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, the quiz will start automatically after the page is loaded.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'tabs' => 'all',
@@ -182,11 +147,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'tabs' => 'all',
@@ -201,11 +161,6 @@ $fieldGroup = array (
 			'instructions' => 'This message will appear above the quiz content and remain in place throughout the quiz.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'placement' => 'left',
@@ -217,11 +172,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'post_type' => array (
@@ -264,11 +214,6 @@ $fieldGroup = array (
 			'instructions' => 'If this option is activated, all answers are numbered (only single and multiple choice)',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -283,11 +228,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, the correct or incorrect message will be displayed.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -302,11 +242,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, answers won\'t be color highlighted as correct or incorrect.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -321,11 +256,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, the user is forced to answer each question. If the option "Question overview" is activated, this notification will appear after end of the quiz, otherwise after each question.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -340,11 +270,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, the question position overview is hidden.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -359,11 +284,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, the question numbering is hidden.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -378,11 +298,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, category will be displayed in the question.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'placement' => 'left',
@@ -394,11 +309,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'tabs' => 'all',
@@ -413,11 +323,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'name' => '',
@@ -486,11 +391,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 1,
@@ -505,11 +405,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -533,11 +428,6 @@ $fieldGroup = array (
 						'value' => '1',
 					),
 				),
-			),
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
 			),
 		),
 		array (
@@ -564,11 +454,6 @@ $fieldGroup = array (
 					),
 				),
 			),
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -594,11 +479,6 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -613,11 +493,6 @@ $fieldGroup = array (
 			'instructions' => 'If you enable this option, only registered users allowed start the quiz.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 0,
@@ -632,43 +507,6 @@ $fieldGroup = array (
 			'instructions' => 'If you activate this option, the user can complete the quiz only once. Afterwards the quiz is blocked for this user.',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 	),
-	'location' => array (
-		array (
-			array (
-				'param' => 'post_type',
-				'operator' => '==',
-				'value' => 'quizmaster_quiz',
-			),
-		),
-	),
-	'menu_order' => 0,
-	'position' => 'normal',
-	'style' => 'seamless',
-	'label_placement' => 'top',
-	'instruction_placement' => 'label',
-	'hide_on_screen' => array (
-		//0 => 'permalink',
-		1 => 'the_content',
-		2 => 'excerpt',
-		3 => 'custom_fields',
-		4 => 'discussion',
-		5 => 'comments',
-		6 => 'revisions',
-		7 => 'author',
-		8 => 'format',
-		9 => 'page_attributes',
-		10 => 'featured_image',
-		11 => 'categories',
-		12 => 'tags',
-		13 => 'send-trackbacks',
-	),
-	'active' => 1,
-	'description' => '',
 );
