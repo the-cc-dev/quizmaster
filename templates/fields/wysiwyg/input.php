@@ -4,6 +4,6 @@
 	<?php
 		$args = array();
 
-		wp_editor( 'This is the default text!', $field['key'], $args );
+		wp_editor( $field['value'], $field['key'], $args );
 	?>
 </div>

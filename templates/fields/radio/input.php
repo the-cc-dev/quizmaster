@@ -2,8 +2,8 @@
 <ul>
 	<?php foreach( $field['choices'] as $value => $choice ) : ?>
 		<li>
-			<label title="This is the title description.">
-				<input type="radio" id="<?php print $field['key'] ?>" name="<?php print $field['key'] ?>[]" value="<?php print $value; ?>">
+			<label title="<?php if( array_key_exists( 'instructions', $field )) { print $field['instructions']; } ?>">
+				<input<?php if( $field['value'] == $value ) { print ' checked'; } ?> type="radio" name="<?php print $field['key'] ?>" value="<?php print $value; ?>">
 					<?php print $choice; ?>
 				</input>
 			</label>
@@ -15,6 +15,10 @@
 
 jQuery(document).ready(function( $ ) {
 
+	// init
+	$('input[name=<?php print $field['key']; ?>]:checked', '.qm-field-radio').closest('label').addClass('selected')
+
+	// selection
 	$('.qm-field-radio label').click( function() {
 		$('.qm-field-radio input').prop('checked', false)
 		$(this).find('input').prop('checked', true)

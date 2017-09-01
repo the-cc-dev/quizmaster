@@ -127,6 +127,10 @@ class QuizMaster_Controller_Fields {
 	public function renderField( $field, $template = false ) {
 		$content = '';
 
+		// load value
+		global $post_id;
+		$field['value'] = get_post_meta( $post_id, $field['key'], true );
+
 		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,
 			'tab' => $this->activeTab,
@@ -160,9 +164,8 @@ class QuizMaster_Controller_Fields {
 	public function registerFieldGroup( $fieldGroup ) {
 
 		global $quizmaster;
-		//var_dump($fieldGroup);
-		//var_dump($quizmaster); die();
 		return;
+		
 	}
 
   public function loadFieldGroup( $fieldGroupKey ) {
@@ -180,7 +183,7 @@ class QuizMaster_Controller_Fields {
 
 			// enable extensions to add fields
 			if( $baseField['type'] != 'tab' ) {
-				$addFields = apply_filters('quizmaster_add_fields_after_' . $baseField['name'], array() );
+				$addFields = apply_filters('quizmaster_add_fields_after_' . $baseField['key'], array() );
 			}
 
 			if( !empty( $addFields )) {
@@ -200,13 +203,8 @@ class QuizMaster_Controller_Fields {
   public function loadField( $baseField ) {
 
 		// tabs have no name param
-		if( $baseField['type'] != 'tab' ) {
-			$name = $baseField['name'];
-		} else {
-			$name = 'tab';
-		}
-
-		return apply_filters('quizmaster_add_field', $baseField, $name );
+		$key = $baseField['key'];
+		return apply_filters('quizmaster_add_field', $baseField, $key );
 
   }
 
