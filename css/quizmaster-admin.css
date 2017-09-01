@@ -127,7 +127,6 @@
 	margin: 0 10px 0 0;
 }
 
-/*
 .qm-field-radio input {
 	position: absolute;
 	opacity: 0;
@@ -135,7 +134,6 @@
 	width: 0;
 	overflow: hidden;
 }
-*/
 
 .qm-field-wrap .qm-field-label {
 	padding: 0 !important;

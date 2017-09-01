@@ -206,8 +206,10 @@ jQuery(document).ready(function( $ ) {
 	}
 
 	// show remove on hover over selected item
-	$( document ).on( 'hover', '.qm-relationship-selections li', function() {
-		$( 'span.remove', this ).show()
+	$( document ).on('mouseenter', '.qm-relationship-selections li', function( event ) {
+    $( 'span.remove', this ).show()
+	}).on('mouseleave', '.qm-relationship-selections li', function( event ) {
+		$( 'span.remove', this ).hide()
 	});
 
 });
