@@ -176,6 +176,8 @@ $fieldGroup = array (
 			'filters' => array (
 				0 => 'search',
 			),
+			'selection_title' => 'Question Pool',
+			'selected_title' => 'Selected Questions',
 		),
 		array (
 			'default_value' => 0,

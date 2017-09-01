@@ -1,29 +1,36 @@
-<label class="qm-field-label"><?php print $field['label']; ?></label>
 
 <?php
 
-// var_dump($field);
+//var_dump($field);
 
 $post_type = $field['post_type'][0];
 
-$choices = array(
-	'0' => 'First',
-	'1' => 'Second',
-	'2' => 'Third',
-);
+$posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => 10 ));
+
+$choices = array();
+
+foreach( $posts as $post ) {
+	//var_dump($post);
+	$choices[ $post->ID ] = $post->post_title;
+}
+
 
 ?>
 
 <div class="qm-field qm-field-relationship-wrap" style="overflow: hidden;">
 
+	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value="<?php print $field['value']; ?>" />
+
+	<label class="qm-field-label"><?php print $field['label']; ?></label>
+
 	<div>
-		<h2>Search Bar</h2>
+		<h3>Search Bar</h3>
 	</div>
 
 
 	<div class="qm-field-relationship-left qm-relationship-pool">
 
-		<h2>RELATIONSHIP Pool</h2>
+		<h2><?php print $field['selection_title']; ?></h2>
 
 		<?php
 			foreach( $choices as $choiceKey => $choice ) : ?>
@@ -35,7 +42,8 @@ $choices = array(
 	</div>
 
 	<div class="qm-field-relationship-right">
-		<h2>Selected RELATIONSHIP ITEMS</h2>
+
+		<h2><?php print $field['selected_title']; ?></h2>
 
 		<div class="qm-relationship-selections">
 			<ul>
@@ -96,6 +104,35 @@ $choices = array(
 
 jQuery(document).ready(function( $ ) {
 
+	quizmasterRelationshipInit();
+
+	function quizmasterRelationshipInit() {
+
+		var value = getRelationshipValue()
+		$.each( value, function( index, id ) {
+
+			var item = $('.qm-relationship-pool li[data-key="' + id + '"]')
+			initSelection( item )
+
+		});
+
+	}
+
+	function getRelationshipValue() {
+
+		var value = $('.qm-relationship-data').val()
+		if( value.length ) {
+			return JSON.parse( value )
+		} else {
+			return []
+		}
+
+	}
+
+	function saveRelationshipValue( data ) {
+		 $('.qm-relationship-data').val( JSON.stringify( data ))
+	}
+
 	// relationship pool selection
 	$('.qm-relationship-pool li').on( 'click', function() {
 
@@ -105,22 +142,37 @@ jQuery(document).ready(function( $ ) {
 			return;
 		}
 
-		var allRelationships = $('.qm-tabs li');
-
-		// set relationship selected
-		item.addClass('selected');
-
 		// assign to quiz
 		makeSelection( item )
 
 	});
 
-	function makeSelection( item ) {
+	function initSelection( item ) {
+
+		// set relationship selected
+		item.addClass('selected');
 
 		var selectedRelationshipHolder = $('.qm-relationship-selections ul');
 		var itemCopy = item.clone()
 		var selectedItem = selectedRelationshipHolder.append( itemCopy )
 		selectedItem.find( itemCopy ).append('<span class="remove">Remove</span>')
+
+	}
+
+	function makeSelection( item ) {
+
+		// set relationship selected
+		item.addClass('selected');
+
+		var selectedRelationshipHolder = $('.qm-relationship-selections ul');
+		var itemCopy = item.clone()
+		var selectedItem = selectedRelationshipHolder.append( itemCopy )
+		selectedItem.find( itemCopy ).append('<span class="remove">Remove</span>')
+
+		// save value
+		var value = getRelationshipValue();
+		value.push( item.data('key') )
+		saveRelationshipValue( value )
 
 	}
 
@@ -139,8 +191,15 @@ jQuery(document).ready(function( $ ) {
 		var itemSelector = $('.qm-relationship-pool li[data-key="' + itemKey + '"]')
 		itemSelector.removeClass('selected')
 
+		// remove from stored relationship data
+		var value = getRelationshipValue()
+		var index = value.indexOf( itemKey );
 
-		console.log( itemSelector )
+    if (index > -1) {
+    	value.splice(index, 1);
+    }
+
+		saveRelationshipValue( value )
 
 		item.remove()
 
@@ -148,10 +207,6 @@ jQuery(document).ready(function( $ ) {
 
 	// show remove on hover over selected item
 	$( document ).on( 'hover', '.qm-relationship-selections li', function() {
-
-
-		console.log( $( 'span.remove', this ) );
-
 		$( 'span.remove', this ).show()
 	});
 
