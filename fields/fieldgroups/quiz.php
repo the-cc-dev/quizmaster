@@ -8,7 +8,7 @@ $fieldGroup = array (
 			'name' => '',
 			'type' => 'tab',
 			'placement' => 'left',
-			'key' => 'field_5885c9ee166e4',
+			'key' => 'quiz_settings',
 			'label' => 'Quiz',
 		),
 		array (
@@ -165,7 +165,7 @@ $fieldGroup = array (
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'field_58850fe20fd70',
+			'key' => 'quiz_questions',
 			'label' => 'Questions',
 			'name' => '',
 			'type' => 'tab',
@@ -302,7 +302,7 @@ $fieldGroup = array (
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'field_5885c9428141a',
+			'key' => 'quiz_results',
 			'label' => 'Results',
 			'name' => '',
 			'type' => 'tab',
@@ -328,7 +328,7 @@ $fieldGroup = array (
 			'name' => '',
 			'type' => 'tab',
 			'placement' => 'left',
-			'key' => 'field_5885c9ee169w3',
+			'key' => 'quiz_navigation',
 			'label' => 'Navigation',
 		),
 		array (

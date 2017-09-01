@@ -5,8 +5,15 @@ class QuizMaster_Controller_Fields {
 	private $fieldGroups = array();
 	private $activeFieldGroup = false;
 	private $activeTab = false;
+	private $openTab = false;
 
   public function __construct() {
+
+		if( array_key_exists( 'qm-tab', $_GET )) {
+			$this->openTab = $_GET['qm-tab'];
+		}
+
+
   }
 
 	public function init() {
@@ -110,6 +117,7 @@ class QuizMaster_Controller_Fields {
 
 		$content .= quizmaster_parse_template( 'fields/tabs.php', array(
 			'tabs' => $tabs,
+			'openTab' => $this->openTab,
 		));
 
 		return $content;
