@@ -1,6 +1,6 @@
 === QuizMaster ===
 Contributors: goldhat
-Donate link: http://wpquizmaster.com
+Donate link: https://wpquizmaster.com/product/development-donation/
 Tags: quiz, test, answer, question, learning, assessment
 Requires at least: 4.0
 Tested up to: 4.8.1
@@ -100,4 +100,4 @@ QuizMaster has a sophisticated templating system similar to that found in most a
 
 == Credits ==
 
-This plugin would not be possible with the work of Julius Fischer, the developer of WP Pro Quiz.
+This plugin would not be possible without the work of Julius Fischer, the original developer of WP Pro Quiz.
