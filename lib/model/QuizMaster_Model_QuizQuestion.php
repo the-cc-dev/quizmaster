@@ -114,6 +114,11 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 
 		// adds quiz to list of selected quizzes associated from question editor
 		$quizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+
+		if( empty( $quizzes )) {
+			return;
+		}
+
 		if( !in_array( $quizId, $quizzes )) {
 			$quizzes[] = $quizId;
 			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes, $questionId );
