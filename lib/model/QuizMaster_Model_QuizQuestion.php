@@ -38,6 +38,11 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		} else {
 			// selective approach: remove one quiz
 			$quizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+
+			if( empty( $quizzes )) {
+				return;
+			}
+
 			if( ( $key = array_search( $quizId, $quizzes )) !== false ) {
 				unset($quizzes[$key]);
 			}
