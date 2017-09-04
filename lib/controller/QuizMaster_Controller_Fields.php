@@ -165,7 +165,7 @@ class QuizMaster_Controller_Fields {
 
 		global $quizmaster;
 		return;
-		
+
 	}
 
   public function loadFieldGroup( $fieldGroupKey ) {

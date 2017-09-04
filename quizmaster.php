@@ -50,10 +50,6 @@ class quizmaster {
 		$enableCopyPosts = array( 'quizmaster_quiz', 'quizmaster_question' );
 		new QuizMaster_Helper_CopyPost( $enableCopyPosts );
 
-		add_filter( quizmaster_get_fields_prefix() . '/load_value/name=qmqe_sorting_choice_answer_id', array( $this, 'makeSortingChoiceAnswerId' ), 10, 3 );
-
-		add_filter('acf/location/rule_types', 'acf_location_rules_types');
-
 		// register global
 		$GLOBALS['quizmaster'] = new quizmaster();
 
@@ -582,7 +578,6 @@ function quizMasterInit() {
 
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
-    add_filter( quizmaster_get_fields_prefix() . '/settings/show_admin', '__return_false');
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/email.php' );
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/question.php' );
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/quiz.php' );
@@ -602,7 +597,6 @@ function quizMasterAddOptionsPages() {
 	return false;
 
   /* Options Pages */
-	$addOptionsPageFunc = quizmaster_get_fields_prefix() . '_add_options_page';
   $option_page = $addOptionsPageFunc(array(
 		'page_title' 	=> 'QuizMaster Settings',
 		'menu_title' 	=> 'Settings',
@@ -828,8 +822,8 @@ function revisionTest( $post_id, $post, $update ) {
     return;
   }
 
-	$copyPostMetaFunc = quizmaster_get_fields_prefix() . '_copy_postmeta';
-  $copyPostMetaFunc( $post_id, $revision_id );
+	// $copyPostMetaFunc = quizmaster_quizmaster_get_fields_prefix() . '_copy_postmeta';
+  // $copyPostMetaFunc( $post_id, $revision_id );
 
   return $post_id;
 
@@ -884,7 +878,7 @@ function setStudentReportPageOption( $post_id ) {
 }
 
 function getStudentReportPageOption() {
-  return get_field('qm_student_report_page', 'option');
+  return quizmaster_get_field('qm_student_report_page', 'option');
 }
 
 function quizMasterAddAdminCaps() {
@@ -983,13 +977,25 @@ function quizmasterLoadExtensions() {
 	QuizMaster_Extension::loadAll();
 }
 
-// convenience function to get the fields prefix
-function quizmaster_get_fields_prefix() {
-	return QuizMaster_Helper_Fields::getFieldApiPrefix();
-}
-
 function quizmaster_field() {
 	return array();
+}
+
+function quizmaster_get_field( $key, $postId ) {
+
+	$value = get_post_meta( $postId, $key, 1 );
+	return $value;
+
+}
+
+function quizmaster_get_fields( $postId ) {
+	$metas = get_post_meta( $postId );
+	foreach( $metas as $index => $meta ) {
+		if( count( $meta ) == 1 ) {
+			$metas[ $index ] = $meta[0];
+		}
+	}
+	return $metas;
 }
 
 add_action('admin_init', 'quizmasterMetaboxes', 15);

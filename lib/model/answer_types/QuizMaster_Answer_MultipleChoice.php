@@ -13,6 +13,8 @@ class QuizMaster_Answer_MultipleChoice extends QuizMaster_Model_Answer {
 
   public function load( $data ) {
 
+		var_dump($data);
+
     $fieldAnswerData = $data['qmqe_multiple_choice_answers'];
     $answerData = array();
     foreach( $fieldAnswerData as $fieldAnswer ) {

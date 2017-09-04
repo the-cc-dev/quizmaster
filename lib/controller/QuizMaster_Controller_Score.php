@@ -193,10 +193,6 @@ class QuizMaster_Controller_Score extends QuizMaster_Controller_Controller {
   public static function loadById( $id ) {
 
     $scoreCtr = new QuizMaster_Controller_Score;
-
-    $post = get_post( $id );
-    $fields = quizmaster_field( $id );
-
     $score = new QuizMaster_Model_Score( $id );
     $scoreCtr->setScore( $score );
 

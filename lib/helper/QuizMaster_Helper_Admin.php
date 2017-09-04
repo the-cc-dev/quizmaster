@@ -17,25 +17,20 @@ class QuizMaster_Helper_Admin {
 		add_filter('manage_quizmaster_score_posts_custom_column', array( get_class(), 'score_column_content' ), 10, 2);
 		add_filter('manage_edit-quizmaster_score_sortable_columns', array( get_class(), 'score_sortable_column' ));
 
-		/* ACF Save Hooks to Associate Quiz Questions */
-		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'quiz_associate_questions'), 5 );
-		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'question_associate_quizzes'), 5 );
-
-
 	}
 
 
 	public static function question_associate_quizzes( $postId ) {
 
 		// bail early if no ACF data
-    if( 'quizmaster_question' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
+    if( 'quizmaster_question' != get_post_type( $postId ) ) {
       return;
     }
 
 		// data setup
 		$questionId = $postId;
-		$newQuizzes = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
-		$currentQuizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+		// $newQuizzes = $_POST[ quizmaster_quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
+		$currentQuizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
 		// nothing to do if old and new are both empty
@@ -83,14 +78,14 @@ class QuizMaster_Helper_Admin {
 	public static function quiz_associate_questions( $postId ) {
 
 		// bail early if no ACF data
-    if( 'quizmaster_quiz' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
+    if( 'quizmaster_quiz' != get_post_type( $postId ) ) {
       return;
     }
 
 		// data setup
 		$quizId = $postId;
-		$newQuestions = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD ];
-		$currentQuestions = get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		//$newQuestions = $_POST[ quizmaster_quizmaster_get_fields_prefix() ][ QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD ];
+		$currentQuestions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
 		if( empty($newQuestions) && empty($currentQuestions)) {
@@ -193,11 +188,11 @@ class QuizMaster_Helper_Admin {
 
 	  switch ( $column ) {
 	    case 'quiz' :
-	      $quizRevisionId = get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
+	      $quizRevisionId = quizmaster_get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
 	      print get_the_title( $quizRevisionId );
 	      break;
 	    case 'user' :
-	      $user = get_field( $score->getFieldPrefix() . 'user', $post_id );
+	      $user = quizmaster_get_field( $score->getFieldPrefix() . 'user', $post_id );
 				if( is_array( $user )) {
 					print $user['display_name'];
 				} else {

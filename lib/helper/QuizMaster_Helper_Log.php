@@ -7,7 +7,7 @@ class QuizMaster_Helper_Log {
   const LOGGING_MESSAGES_ENTRY = "qm_log_entry";
 
   public function isActive() {
-    return get_field( self::LOGGING_ACTIVE_FIELD, 'option' );
+    return quizmaster_get_field( self::LOGGING_ACTIVE_FIELD, 'option' );
   }
 
   public function log( $message ) {

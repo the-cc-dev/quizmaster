@@ -11,8 +11,11 @@ class QuizMaster_Controller_Metabox {
 
 	public function init() {
 
-		$quiz = $this->metaboxDefinitionQuiz();
-		$this->addMetaBox( $quiz );
+		$mb = $this->metaboxDefinitionQuiz();
+		$this->addMetaBox( $mb );
+
+		$mb = $this->metaboxDefinitionQuestion();
+		$this->addMetaBox( $mb );
 
 	}
 
@@ -39,15 +42,26 @@ class QuizMaster_Controller_Metabox {
 			$key   = $field['key'];
 			$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
 
-			/*
-			if( $key == 'qmqu_result_text') {
-				var_dump($key);
-				var_dump($value);
-				die();
+			if ( $value ) {
+				update_post_meta( $postId, $key, $value );
 			}
-			*/
+			else {
+				delete_post_meta( $postId, $key );
+			}
 
+		}
 
+	}
+
+	public function saveMetaQuestion( $postId, $fieldGroupKey = 'question' ) {
+
+		$fieldCtr = new QuizMaster_Controller_Fields();
+		$fieldGroup = $fieldCtr->loadFieldGroup( $fieldGroupKey );
+
+		foreach( $fieldGroup['fields'] as $field ) {
+
+			$key   = $field['key'];
+			$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
 
 			if ( $value ) {
 				update_post_meta( $postId, $key, $value );
@@ -59,6 +73,7 @@ class QuizMaster_Controller_Metabox {
 		}
 
 	}
+
 
 	public function addMetabox( $mb ) {
 
@@ -85,12 +100,35 @@ class QuizMaster_Controller_Metabox {
 		print $content;
 	}
 
+	public function metaboxQuestion() {
+
+		global $quizmaster;
+		$fieldCtr = $quizmaster->fields;
+
+		$fieldCtr->setActiveFieldGroup( 'question' );
+
+		$content = $fieldCtr->renderFieldGroup();
+
+		print $content;
+	}
+
 	public function metaboxDefinitionQuiz() {
 		$mb = new stdClass();
 		$mb->id = 'quizmaster-quiz-metabox';
 		$mb->title = 'Quiz Settings';
 		$mb->callback = array( $this, 'metaboxQuiz' );
 		$mb->screen = 'quizmaster_quiz';
+		$mb->context = 'normal';
+		$mb->priority = 'high';
+		return $mb;
+	}
+
+	public function metaboxDefinitionQuestion() {
+		$mb = new stdClass();
+		$mb->id = 'quizmaster-question-metabox';
+		$mb->title = 'Quiz Settings';
+		$mb->callback = array( $this, 'metaboxQuestion' );
+		$mb->screen = 'quizmaster_question';
 		$mb->context = 'normal';
 		$mb->priority = 'high';
 		return $mb;

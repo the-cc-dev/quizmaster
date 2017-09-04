@@ -12,7 +12,6 @@ class QuizMaster_Controller_Email {
   public function __construct() {
     $this->addEmailTriggers();
     $this->addShortcodes();
-    add_filter( quizmaster_get_fields_prefix() . '/load_field/name=qm_email_trigger', array( $this, 'loadEmailTriggerList'));
   }
 
   public function addShortcodes() {

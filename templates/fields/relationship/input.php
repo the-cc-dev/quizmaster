@@ -4,7 +4,6 @@
 //var_dump($field);
 
 $post_type = $field['post_type'][0];
-
 $posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => 10 ));
 
 $choices = array();
@@ -109,7 +108,10 @@ jQuery(document).ready(function( $ ) {
 	function quizmasterRelationshipInit() {
 
 		var value = getRelationshipValue()
+
 		$.each( value, function( index, id ) {
+
+			console.log( id )
 
 			var item = $('.qm-relationship-pool li[data-key="' + id + '"]')
 			initSelection( item )
@@ -120,11 +122,11 @@ jQuery(document).ready(function( $ ) {
 
 	function getRelationshipValue() {
 
-		var value = $('.qm-relationship-data').val()
-		if( value.length ) {
-			return JSON.parse( value )
+		if ( $( '.qm-relationship-data' ).val == '' ){
+		  return []
 		} else {
-			return []
+			var value = $('.qm-relationship-data').val()
+			return JSON.parse( value )
 		}
 
 	}

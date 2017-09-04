@@ -1,24 +1,18 @@
 <?php
 
 $fieldGroup = array (
-	'key' => 'group_5885e433e5b83',
+	'key' => 'question',
 	'title' => 'QuizMaster Questions',
 	'fields' => array (
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'field_5885ee4340905',
+			'key' => 'qmqe_settings',
 			'label' => 'Question',
-			'name' => '',
 			'type' => 'tab',
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'layout' => 'horizontal',
@@ -593,6 +587,8 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 			'filters' => array (
 				0 => 'search',
 			),
+			'selection_title' => 'Available Quizzes',
+			'selected_title' => 'Assigned Quizzes'
 		),
 
 
