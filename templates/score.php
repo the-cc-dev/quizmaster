@@ -19,97 +19,91 @@ $scoreView = new QuizMaster_View_Score;
 $scoreModel = $scoreCtr->getScore();
 $scoreView->setScoreQuestions( $scoreModel->getScores() );
 
-get_header(); ?>
+?>
 
-<div class="wrap quizmaster-wrap">
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+<div id="main" class="site-main" role="main">
 
-			<h1>Quiz Score</h1>
+	<h1>Quiz Score</h1>
 
-			<div class="quizmaster-score-summary">
+	<div class="quizmaster-score-summary">
 
-				<table class="quizmaster-table quizmaster-info-table display info">
+		<table class="quizmaster-table quizmaster-info-table display info">
 
-					<thead>
-						<tr>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
 
-					<tbody>
-						<tr>
-							<td>Quiz</td>
-							<td><?php print $scoreModel->getQuizName(); ?></td>
-						</tr>
-						<tr>
-							<td>User</td>
-							<td><?php print $scoreModel->getUserName(); ?></td>
-						</tr>
-						<tr>
-							<td>Overall Score</td>
-							<td><?php print $scoreModel->getScoreResult(); ?>%</td>
-						</tr>
-						<tr>
-							<td>Correct Questions</td>
-							<td><?php print $scoreModel->getCorrectRatio(); ?></td>
-						</tr>
-						<tr>
-							<td>Questions Solved</td>
-							<td><?php print $scoreModel->getSolvedPercentage(); ?>%</td>
-						</tr>
-						<tr>
-							<td>Questions Correct</td>
-							<td><?php print $scoreModel->getQuestionsCorrectPercentage(); ?>%</td>
-						</tr>
-						<tr>
-							<td>Questions Incorrect</td>
-							<td><?php print $scoreModel->getQuestionsIncorrectPercentage(); ?>%</td>
-						</tr>
-						<tr>
-							<td>Completion Time</td>
-							<td><?php print $scoreModel->getTotalTime(); ?>%</td>
-						</tr>
-						<tr>
-							<td>Total Solved</td>
-							<td><?php print $scoreModel->getTotalSolved(); ?></td>
-						</tr>
-						<tr>
-							<td>Hints Used</td>
-							<td><?php print $scoreModel->getTotalHints(); ?></td>
-						</tr>
+			<tbody>
+				<tr>
+					<td>Quiz</td>
+					<td><?php print $scoreModel->getQuizName(); ?></td>
+				</tr>
+				<tr>
+					<td>User</td>
+					<td><?php print $scoreModel->getUserName(); ?></td>
+				</tr>
+				<tr>
+					<td>Overall Score</td>
+					<td><?php print $scoreModel->getScoreResult(); ?>%</td>
+				</tr>
+				<tr>
+					<td>Correct Questions</td>
+					<td><?php print $scoreModel->getCorrectRatio(); ?></td>
+				</tr>
+				<tr>
+					<td>Questions Solved</td>
+					<td><?php print $scoreModel->getSolvedPercentage(); ?>%</td>
+				</tr>
+				<tr>
+					<td>Questions Correct</td>
+					<td><?php print $scoreModel->getQuestionsCorrectPercentage(); ?>%</td>
+				</tr>
+				<tr>
+					<td>Questions Incorrect</td>
+					<td><?php print $scoreModel->getQuestionsIncorrectPercentage(); ?>%</td>
+				</tr>
+				<tr>
+					<td>Completion Time</td>
+					<td><?php print $scoreModel->getTotalTime(); ?>%</td>
+				</tr>
+				<tr>
+					<td>Total Solved</td>
+					<td><?php print $scoreModel->getTotalSolved(); ?></td>
+				</tr>
+				<tr>
+					<td>Hints Used</td>
+					<td><?php print $scoreModel->getTotalHints(); ?></td>
+				</tr>
 
-					</tbody>
-				</table>
+			</tbody>
+		</table>
 
-			<!-- Return Link -->
-			<?php
-				$user = wp_get_current_user();
-				$adminLink = false;
-				if ( in_array( 'administrator', (array) $user->roles ) ) {
-					$adminLink = true;
-				}
+	<!-- Return Link -->
+	<?php
+		$user = wp_get_current_user();
+		$adminLink = false;
+		if ( in_array( 'administrator', (array) $user->roles ) ) {
+			$adminLink = true;
+		}
 
-				if( $adminLink ) {
-					$returnUrl = admin_url( 'edit.php?post_type=quizmaster_score' );
-				} else {
-					$returnUrl = home_url('student-report');
-				}
-			?>
-			<div class="quizmaster-score-return-button">
-				<button class="quizmaster-score-return-button">
-					<a class="quizmaster-score-return-link" href="<?php print $returnUrl; ?>">Return to Scores List</a>
-				</button>
-			</div>
+		if( $adminLink ) {
+			$returnUrl = admin_url( 'edit.php?post_type=quizmaster_score' );
+		} else {
+			$returnUrl = home_url('student-report');
+		}
+	?>
+	<div class="quizmaster-score-return-button">
+		<button class="quizmaster-score-return-button">
+			<a class="quizmaster-score-return-link" href="<?php print $returnUrl; ?>">Return to Scores List</a>
+		</button>
+	</div>
 
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
-	<?php get_sidebar(); ?>
-</div><!-- .wrap -->
-
-<?php get_footer(); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 
 <script>
 jQuery(".main-pie").easyPieChart({

@@ -37,6 +37,31 @@ register_activation_hook( __FILE__, 'quizMasterActivation' );
 
 register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
 
+add_filter( 'the_content', 'templateContentLoading' );
+function templateContentLoading( $content ) {
+
+	if( !is_single() ) {
+		return $content;
+	}
+
+	global $post;
+	$postType = get_post_type( $post->ID );
+
+	if( 'quizmaster' == substr( $postType, 0, 10) ) {
+
+			$templateName = substr( $postType, 11 );
+			$content .= quizmaster_parse_template( $templateName . '.php',
+				array(
+					'post' => $post,
+				)
+		  );
+
+	}
+
+	return $content;
+
+}
+
 /*
  * Main plugin class
  */
@@ -626,7 +651,7 @@ function quizMasterAddOptionsPages() {
 
 
 /* Single Quiz Template */
-add_filter('single_template', 'quizmaster_quiz_template');
+// add_filter('single_template', 'quizmaster_quiz_template');
 
 function quizmaster_quiz_template($single) {
   global $post;
@@ -635,17 +660,6 @@ function quizmaster_quiz_template($single) {
   }
   if ($post->post_type == "quizmaster_score") {
     return quizmaster_locate_template( 'score.php' );
-  }
-  return $single;
-}
-
-/* Single Question Template */
-add_filter('single_template', 'quizmaster_question_template');
-
-function quizmaster_question_template($single) {
-  global $post;
-  if ($post->post_type == "quizmaster_question") {
-    return quizmaster_locate_template( 'question.php' );
   }
   return $single;
 }
