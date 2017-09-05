@@ -3,7 +3,7 @@
 Plugin Name: QuizMaster
 Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
-Version: 0.8.4
+Version: 0.8.5
 Author: GoldHat Group
 Author URI: https://wpquizmaster.com
 Copyright: GoldHat Group (https://goldhat.ca), Julius Fischer (WP Pro Quiz)
@@ -11,7 +11,7 @@ Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.8.4');
+define('QUIZMASTER_VERSION', '0.8.5');
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
 define('QUIZMASTER_URL', plugins_url('', __FILE__));
