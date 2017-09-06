@@ -38,6 +38,11 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		} else {
 			// selective approach: remove one quiz
 			$quizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+
+			if( empty( $quizzes )) {
+				return;
+			}
+
 			if( ( $key = array_search( $quizId, $quizzes )) !== false ) {
 				unset($quizzes[$key]);
 			}
@@ -108,7 +113,16 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		}
 
 		// adds quiz to list of selected quizzes associated from question editor
+<<<<<<< HEAD
 		$quizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+=======
+		$quizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+
+		if( empty( $quizzes )) {
+			return;
+		}
+
+>>>>>>> master
 		if( !in_array( $quizId, $quizzes )) {
 			$quizzes[] = $quizId;
 			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes, $questionId );

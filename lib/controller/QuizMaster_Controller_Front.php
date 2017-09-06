@@ -192,11 +192,7 @@ class QuizMaster_Controller_Front {
         $view->category = $quiz->fetchQuestionCategoriesByQuiz();
 
         $view = apply_filters( 'quizmaster_view_before_render', $view );
-        if ($maxQuestion) {
-          $content = $view->showMaxQuestion();
-        } else {
-          $content = $view->show();
-        }
+        $content = $view->show();
 
         if( $return ) {
           return $content;

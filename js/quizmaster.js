@@ -761,6 +761,17 @@ jQuery(document).ready(function( $ ) {
 		}
 
 		/*
+     * ScrollTo
+		 */
+		 quizmaster.scrollTo = function (e, h) {
+       var x = e.offset().top - 100;
+
+       if (h || (window.pageYOffset || document.body.scrollTop) > x) {
+         $('html,body').animate({scrollTop: x}, 300);
+       }
+     }
+
+		/*
      * Hint Handler Functions
 		 */
 
