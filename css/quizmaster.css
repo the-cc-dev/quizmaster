@@ -858,7 +858,7 @@ input[type="button"].qm-button-check {
 	padding: 0 15px;
 }
 .quizmaster-container.fullwidth {
-  max-width : 100%;
+  width : 100%;
 }
 .quizmaster-row {
 	margin-left: -15px;

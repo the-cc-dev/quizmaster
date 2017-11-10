@@ -60,8 +60,14 @@ class QuizMaster_Controller_Fields {
 		$fg = $this->activeFieldGroup;
 		$render = '';
 
+		// open container
+		$render .= '<div class="quizmaster-container fullwidth"><div class="quizmaster-row"><div class="quizmaster-col-3">';
+
 		// render tabs
 		$render .= $this->renderTabs( $fg );
+
+		$render .= '</div>'; // close col
+		$render .= '<div class="quizmaster-col-9">';
 
 		// render fields
 		$render .= $this->renderFieldFormWrapOpen();
@@ -90,6 +96,9 @@ class QuizMaster_Controller_Fields {
 		$render .= $this->renderTabClose();
 
 		$render .= $this->renderFieldFormWrapClose();
+
+		// close col, container
+		$render .= '</div></div></div>';
 
 		return $render;
 	}

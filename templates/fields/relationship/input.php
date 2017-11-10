@@ -9,95 +9,54 @@ $posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => 10 ));
 $choices = array();
 
 foreach( $posts as $post ) {
-	//var_dump($post);
 	$choices[ $post->ID ] = $post->post_title;
 }
 
-
 ?>
 
-<div class="qm-field qm-field-relationship-wrap" style="overflow: hidden;">
+<div class="qm-field qm-field-relationship-wrap">
 
-	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value="<?php print $field['value']; ?>" />
+	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value='<?php print json_encode( $field['value'] ); ?>' />
 
-	<label class="qm-field-label"><?php print $field['label']; ?></label>
+	<div class="quizmaster-row">
+		<div class="quizmaster-col-12">
 
-	<div>
-		<h3>Search Bar</h3>
+			<label class="qm-field-label"><?php print $field['label']; ?></label>
+
+			<div>
+				<h3>Search Bar</h3>
+			</div>
+
+		</div>
 	</div>
 
+	<div class="quizmaster-row qm-field-relationship-selector">
 
-	<div class="qm-field-relationship-left qm-relationship-pool">
+		<div class="quizmaster-col-6 qm-field-relationship-left qm-relationship-pool">
 
-		<h2><?php print $field['selection_title']; ?></h2>
+			<h2><?php print $field['selection_title']; ?></h2>
 
-		<?php
-			foreach( $choices as $choiceKey => $choice ) : ?>
+			<?php
+				foreach( $choices as $choiceKey => $choice ) : ?>
 
-			<li data-key="<?php print $choiceKey; ?>"><?php print $choice; ?></li>
+				<li data-key="<?php print $choiceKey; ?>"><?php print $choice; ?></li>
 
-		<?php endforeach;
-		?>
-	</div>
+			<?php endforeach; ?>
+		</div>
 
-	<div class="qm-field-relationship-right">
+		<div class="quizmaster-col-6 qm-field-relationship-right">
 
-		<h2><?php print $field['selected_title']; ?></h2>
+			<h2><?php print $field['selected_title']; ?></h2>
 
-		<div class="qm-relationship-selections">
-			<ul>
+			<div class="qm-relationship-selections">
+				<ul></ul>
+			</div>
 
-			</ul>
 		</div>
 
 	</div>
 
 </div>
-
-<style>
-
-.qm-field-relationship-wrap li {
-	cursor: pointer;
-}
-
-.qm-field-relationship-right {
-	border: solid 1px #999;
-	padding: 15px;
-	float: left;
-	width: 50%;
-	box-sizing: border-box;
-}
-
-.qm-field-relationship-left {
-	float: left;
-	border: solid 1px #999;
-	padding: 15px;
-	width: 50%;
-	box-sizing: border-box;
-}
-
-.qm-field-relationship-left li {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.qm-relationship-pool li {
-	font-weight:bold;
-	margin: 6px 0;
-	font-size: 13px;
-}
-.qm-relationship-pool li.selected {
-	color: #ccc;
-}
-
-.qm-relationship-selections span.remove {
-	margin: 0 0 0 10px;
-	cursor: pointer;
-	display: none;
-}
-
-</style>
 
 <script>
 
@@ -107,7 +66,11 @@ jQuery(document).ready(function( $ ) {
 
 	function quizmasterRelationshipInit() {
 
+		console.log(108)
+
 		var value = getRelationshipValue()
+
+		console.log( value )
 
 		$.each( value, function( index, id ) {
 
@@ -126,6 +89,9 @@ jQuery(document).ready(function( $ ) {
 		  return []
 		} else {
 			var value = $('.qm-relationship-data').val()
+
+			console.log(value)
+
 			return JSON.parse( value )
 		}
 
@@ -210,8 +176,10 @@ jQuery(document).ready(function( $ ) {
 	// show remove on hover over selected item
 	$( document ).on('mouseenter', '.qm-relationship-selections li', function( event ) {
     $( 'span.remove', this ).show()
+		$(this).addClass('hover')
 	}).on('mouseleave', '.qm-relationship-selections li', function( event ) {
 		$( 'span.remove', this ).hide()
+		$(this).removeClass('hover')
 	});
 
 });
