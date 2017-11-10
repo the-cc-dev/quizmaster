@@ -13,9 +13,14 @@ class QuizMaster_Answer_SingleChoice extends QuizMaster_Model_Answer {
 
   public function load( $data ) {
 
+		var_dump($data);
+
     $fieldAnswerData = $data['qmqe_single_choice_answers'];
     $answerData = array();
     $fieldAnswer = $fieldAnswerData[0];
+
+		var_dump($fieldAnswerData);
+		var_dump($fieldAnswer);
 
     // correct answer
     $rep = 'qmqe_single_correct_answer_repeater';
@@ -41,7 +46,7 @@ class QuizMaster_Answer_SingleChoice extends QuizMaster_Model_Answer {
   }
 
 	public function save( $answers ) {
-		
+
 	}
 
 }

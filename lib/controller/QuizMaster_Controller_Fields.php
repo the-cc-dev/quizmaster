@@ -134,6 +134,10 @@ class QuizMaster_Controller_Fields {
 	}
 
 	public function renderField( $field, $template = false ) {
+
+
+		//var_dump($field);
+
 		$content = '';
 
 		// load value
@@ -148,6 +152,7 @@ class QuizMaster_Controller_Fields {
 		if( !$template ) {
 			$content .= quizmaster_parse_template( 'fields/' . $field['type'] . '/input.php', array(
 				'field' => $field,
+				'fieldCtr' => $this,
 			));
 		}
 

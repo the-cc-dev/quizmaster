@@ -35,6 +35,11 @@ $fieldGroup = array (
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
 		),
 		array (
 			'tabs' => 'all',
@@ -55,51 +60,103 @@ $fieldGroup = array (
 				'id' => '',
 			),
 		),
-
-		// answer tab
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'answers',
+			'key' => 'field_5885e9ec69c6e',
 			'label' => 'Answers',
-			'name' => 'answers',
+			'name' => '',
 			'type' => 'tab',
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
 		),
-
-		/*
-     * answer tab fields
-		 */
-
-		// single choice
 		array (
 			'sub_fields' => array (
 				array (
-					'default_value' => '',
-					'new_lines' => '',
-					'maxlength' => '',
-					'placeholder' => '',
-					'rows' => 4,
-					'key' => 'field_5885edd008f8b',
-					'label' => 'Single Choice Answer',
-					'name' => 'qmqe_single_choice_answer',
-					'type' => 'textarea',
+					'sub_fields' => array (
+						array (
+							'default_value' => '',
+							'new_lines' => '',
+							'maxlength' => '',
+							'placeholder' => '',
+							'rows' => 4,
+							'key' => 'field_58ba579de6e64',
+							'label' => 'Answer Text',
+							'name' => 'qmqe_single_correct_answer',
+							'type' => 'textarea',
+							'instructions' => '',
+							'required' => 0,
+							'conditional_logic' => 0,
+							'wrapper' => array (
+								'width' => '',
+								'class' => '',
+								'id' => '',
+							),
+						),
+					),
+					'min' => 1,
+					'max' => 1,
+					'layout' => 'table',
+					'button_label' => '',
+					'collapsed' => '',
+					'key' => 'field_58ba576ae6e63',
+					'label' => 'Correct Answer',
+					'name' => 'qmqe_single_correct_answer_repeater',
+					'type' => 'repeater',
 					'instructions' => '',
-					'required' => 0,
+					'required' => 1,
 					'conditional_logic' => 0,
+					'wrapper' => array (
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
 				),
 				array (
-					'default_value' => 0,
-					'message' => '',
-					'key' => 'field_5885edec08f8c',
-					'label' => 'Correct',
-					'name' => 'qmqe_single_choice_correct',
-					'type' => 'true_false',
+					'sub_fields' => array (
+						array (
+							'default_value' => '',
+							'new_lines' => '',
+							'maxlength' => '',
+							'placeholder' => '',
+							'rows' => 4,
+							'key' => 'field_58ba57dc7ad9d',
+							'label' => 'Answer Text',
+							'name' => 'qmqe_single_incorrect_answer',
+							'type' => 'textarea',
+							'instructions' => '',
+							'required' => 0,
+							'conditional_logic' => 0,
+							'wrapper' => array (
+								'width' => '',
+								'class' => '',
+								'id' => '',
+							),
+						),
+					),
+					'min' => 1,
+					'max' => 0,
+					'layout' => 'table',
+					'button_label' => 'Add Incorrect Answer',
+					'collapsed' => '',
+					'key' => 'field_58ba57dc7ad9c',
+					'label' => 'Incorrect Answers',
+					'name' => 'qmqe_single_incorrect_answer_repeater',
+					'type' => 'repeater',
 					'instructions' => '',
-					'required' => 0,
+					'required' => 1,
 					'conditional_logic' => 0,
+					'wrapper' => array (
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
 				),
 			),
 			'min' => 1,
@@ -122,9 +179,12 @@ $fieldGroup = array (
 					),
 				),
 			),
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
 		),
-
-		// multiple choice answers
 		array (
 			'sub_fields' => array (
 				array (
@@ -134,12 +194,17 @@ $fieldGroup = array (
 					'placeholder' => '',
 					'rows' => 4,
 					'key' => 'field_5885edd008f8b',
-					'label' => 'Multiple Choice Answer',
+					'label' => 'Answer',
 					'name' => 'qmqe_multiple_choice_answer',
 					'type' => 'textarea',
 					'instructions' => '',
 					'required' => 0,
 					'conditional_logic' => 0,
+					'wrapper' => array (
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
 				),
 				array (
 					'default_value' => 0,
@@ -154,6 +219,11 @@ $fieldGroup = array (
 					'instructions' => '',
 					'required' => 0,
 					'conditional_logic' => 0,
+					'wrapper' => array (
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
 				),
 			),
 			'min' => 0,
@@ -176,9 +246,20 @@ $fieldGroup = array (
 					),
 				),
 			),
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
 		),
 		array (
 			'sub_fields' => array (
+				array(
+					'key' => 'field_590eafc31392k',
+					'label' => 'Answer ID',
+					'name' => 'qmqe_sorting_choice_answer_id',
+					'type' => 'text',
+				),
 				array (
 					'tabs' => 'all',
 					'toolbar' => 'basic',
@@ -186,12 +267,17 @@ $fieldGroup = array (
 					'default_value' => '',
 					'delay' => 0,
 					'key' => 'field_588a878e635dc',
-					'label' => 'Sorting Choice Answer',
+					'label' => 'Answer',
 					'name' => 'qmqe_sorting_choice_answer',
 					'type' => 'wysiwyg',
 					'instructions' => '',
 					'required' => 0,
 					'conditional_logic' => 0,
+					'wrapper' => array (
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
 				),
 			),
 			'min' => 1,
@@ -449,6 +535,11 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
 		),
 		array (
 			'default_value' => 0,

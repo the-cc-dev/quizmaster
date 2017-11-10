@@ -70,7 +70,8 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 		$quiz = new QuizMaster_Model_Quiz( $quizId );
 
     $quizQuestions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
-		$quizQuestions = json_decode( $quizQuestions );
+
+		var_dump( $quizQuestions );
 
     if( empty($quizQuestions)) {
       return false;
