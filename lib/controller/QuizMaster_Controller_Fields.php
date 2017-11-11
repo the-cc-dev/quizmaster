@@ -48,8 +48,8 @@ class QuizMaster_Controller_Fields {
 		$this->activeTab = $tab;
 	}
 
-	public function renderTabOpen() {
-		return '<div class="qm-tab">';
+	public function renderTabOpen( $tabName ) {
+		return '<div class="qm-tab qm-tab-'. $tabName .'">';
 	}
 
 	public function renderTabClose() {
@@ -81,7 +81,7 @@ class QuizMaster_Controller_Fields {
 					$render .= $this->renderTabClose();
 				}
 
-				$render .= $this->renderTabOpen();
+				$render .= $this->renderTabOpen( $field['name'] );
 				$this->setActiveTab( $field );
 
 				continue;

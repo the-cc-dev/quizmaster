@@ -89,10 +89,13 @@ jQuery(document).ready(function( $ ) {
 		  return []
 		} else {
 			var value = $('.qm-relationship-data').val()
+			try {
+				return JSON.parse( value )
+			}
+			catch (e) {
+				return []
+			}
 
-			console.log(value)
-
-			return JSON.parse( value )
 		}
 
 	}

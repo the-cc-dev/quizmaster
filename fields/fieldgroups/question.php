@@ -8,6 +8,7 @@ $fieldGroup = array (
 			'placement' => 'left',
 			'endpoint' => 0,
 			'key' => 'qmqe_settings',
+			'name' => 'qmqe_settings',
 			'label' => 'Question',
 			'type' => 'tab',
 			'instructions' => '',
@@ -82,7 +83,7 @@ $fieldGroup = array (
 					'maxlength' => '',
 					'placeholder' => '',
 					'rows' => 4,
-					'key' => 'field_5885edd008f8b',
+					'key' => 'qmqe_single_choice_answer',
 					'label' => 'Single Choice Answer',
 					'name' => 'qmqe_single_choice_answer',
 					'type' => 'textarea',
@@ -280,18 +281,14 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'field_5885e9d484139',
+			'key' => 'messages_hints',
+			'name' => 'messages_hints',
 			'label' => 'Messages & Hints',
 			'name' => '',
 			'type' => 'tab',
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'tabs' => 'all',
@@ -380,18 +377,14 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'field_5885e8b50ce54',
+			'key' => 'scores',
+			'name' => 'scores',
 			'label' => 'Scores',
 			'name' => '',
 			'type' => 'tab',
 			'instructions' => '',
 			'required' => 0,
 			'conditional_logic' => 0,
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
 		),
 		array (
 			'default_value' => 1,
@@ -472,7 +465,8 @@ e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 poin
 
 		array (
 			'placement' => 'left',
-			'key' => 'field_5885e8b50cy2p',
+			'key' => 'quizzes',
+			'name' => 'quizzes',
 			'label' => 'Quizzes',
 			'type' => 'tab',
 			'instructions' => 'Attach this question to quizzes.',
