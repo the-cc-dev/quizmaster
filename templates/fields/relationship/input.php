@@ -66,15 +66,9 @@ jQuery(document).ready(function( $ ) {
 
 	function quizmasterRelationshipInit() {
 
-		console.log(108)
-
 		var value = getRelationshipValue()
 
-		console.log( value )
-
 		$.each( value, function( index, id ) {
-
-			console.log( id )
 
 			var item = $('.qm-relationship-pool li[data-key="' + id + '"]')
 			initSelection( item )

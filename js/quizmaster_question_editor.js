@@ -3,9 +3,17 @@ jQuery(document).ready(function( $ ) {
 	// question type selected
 	var qType = $('input[name=field_5885e9f669c6f]:checked').val()
 
+	qmQuestionTypeSelection()
 	qmShowAnswerFields( qType )
 
+	function qmQuestionTypeSelection() {
 
+		$('input[name=field_5885e9f669c6f]').click( function() {
+			var qType = $( this ).val();
+			qmShowAnswerFields( qType );
+		});
+
+	}
 
 
 	// show the relevant answer fields based on the question type selected
@@ -13,9 +21,10 @@ jQuery(document).ready(function( $ ) {
 
 		// hide all fields
 		var fields = $('.qm-tab-answers .qm-field-wrap');
-		$('.qm-tab-answers .qm-field-wrap').hide();
 
-		console.log(qType)
+		console.log(fields)
+
+		fields.hide();
 
 		switch( qType ) {
 

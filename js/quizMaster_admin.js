@@ -29,8 +29,14 @@ jQuery(document).ready(function ($) {
 
 	// open tab
 	function openTab( tabKey ) {
+
+		console.log('openTab')
+
 		$('.qm-field-wrap').hide();
 		$('.qm-field-wrap[data-tab=' + tabKey + ']').show();
+
+		var tabFields = $('.qm-field-wrap[data-tab=' + tabKey + ']');
+
 	}
 
 });
