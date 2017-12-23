@@ -81,7 +81,7 @@ class QuizMaster_Controller_Fields {
 					$render .= $this->renderTabClose();
 				}
 
-				$render .= $this->renderTabOpen( $field['name'] );
+				$render .= $this->renderTabOpen( $field['key'] );
 				$this->setActiveTab( $field );
 
 				continue;

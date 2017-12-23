@@ -32,6 +32,9 @@ class QuizMaster_Controller_Admin {
     public function enqueueScript() {
 
 			global $post;
+			if( !$post ) {
+				return;
+			}
 
       wp_enqueue_script(
           'quizmaster_admin_js',

@@ -1,7 +1,7 @@
 
 <?php
 
-//var_dump($field);
+// var_dump($field);
 
 $post_type = $field['post_type'][0];
 $posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => 10 ));
@@ -16,7 +16,7 @@ foreach( $posts as $post ) {
 
 <div class="qm-field qm-field-relationship-wrap">
 
-	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value='<?php print json_encode( $field['value'] ); ?>' />
+	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value='<?php print $field['value']; ?>' />
 
 	<div class="quizmaster-row">
 		<div class="quizmaster-col-12">
@@ -80,6 +80,7 @@ jQuery(document).ready(function( $ ) {
 	function getRelationshipValue() {
 
 		if ( $( '.qm-relationship-data' ).val == '' ){
+
 		  return []
 		} else {
 			var value = $('.qm-relationship-data').val()

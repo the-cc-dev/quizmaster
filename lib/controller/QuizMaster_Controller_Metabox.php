@@ -21,7 +21,6 @@ class QuizMaster_Controller_Metabox {
 
 	public function saveMeta( $postId ) {
 
-
 		$postType = get_post_type( $postId );
 
 		// make sure the post type belongs to quizmaster
@@ -38,6 +37,8 @@ class QuizMaster_Controller_Metabox {
 		$fieldGroup = $fieldCtr->loadFieldGroup( $fieldGroupKey );
 
 		foreach( $fieldGroup['fields'] as $field ) {
+
+
 
 			$key   = $field['key'];
 			$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
