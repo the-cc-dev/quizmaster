@@ -99,7 +99,11 @@ function quizMasterDeactivation() {
 }
 
 function quizMasterActivation() {
-  quizmasterFieldsApiTest();
+
+	// include acf
+	include_once( QUIZMASTER_PATH . '/fields/acf/advanced-custom-fields/acf.php' );
+
+  // quizmasterFieldsApiTest();
 
 	// create post types and flush rewrite rules
 	quizmasterAddPostTypes();
@@ -114,7 +118,7 @@ function quizMasterActivation() {
 
 function quizmasterFieldsApiTest() {
   include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  $isAcfActive = is_plugin_active('advanced-custom-fields-pro/acf.php');
+  $isAcfActive = is_plugin_active('advanced-custom-fields/acf.php');
 	$isFieldMasterActive = is_plugin_active('fieldmaster/fieldmaster.php');
   if( !$isAcfActive && !$isFieldMasterActive ) {
     deactivate_plugins( plugin_basename( __FILE__ ) );
@@ -617,6 +621,9 @@ function quizmasterRegisterTaxonomies() {
 add_action('init', 'quizMasterInit', 20);
 function quizMasterInit() {
 
+	// include acf
+	include_once( QUIZMASTER_PATH . '/fields/acf/advanced-custom-fields/acf.php' );
+
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
     add_filter( quizmaster_get_fields_prefix() . '/settings/show_admin', '__return_false');
@@ -637,6 +644,7 @@ function quizMasterInit() {
 function quizMasterAddOptionsPages() {
 
   /* Options Pages */
+	/*
 	$addOptionsPageFunc = quizmaster_get_fields_prefix() . '_add_options_page';
   $option_page = $addOptionsPageFunc(array(
 		'page_title' 	=> 'QuizMaster Settings',
@@ -646,6 +654,7 @@ function quizMasterAddOptionsPages() {
  		'capability' 	=> 'quizmaster_manage_settings',
 	));
   QuizMaster_Helper_Submenu::position( 'quizmaster-settings', 70 );
+	*/
 }
 
 
@@ -1009,8 +1018,19 @@ function quizmasterLoadExtensions() {
 
 // convenience function to get the fields prefix
 function quizmaster_get_fields_prefix() {
-	return QuizMaster_Helper_Fields::getFieldApiPrefix();
+	return "acf";
+
+	// return QuizMaster_Helper_Fields::getFieldApiPrefix();
 }
 
 // basic implementation of loaded hook but needs to be moved when this file is refactored
 do_action('quizmaster_loaded');
+
+
+function quizmasterAcfSettingsDir( $dir ) {
+  return QUIZMASTER_URL . '/fields/acf/advanced-custom-fields/';
+}
+
+function quizmasterAcfSettingsPath( $path ) {
+  return QUIZMASTER_PATH . '/fields/acf/advanced-custom-fields/';
+}
