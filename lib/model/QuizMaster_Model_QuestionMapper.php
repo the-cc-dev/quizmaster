@@ -26,6 +26,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 
   public static function questionTypeById( $id ) {
 
+
     $qType = quizmaster_get_field( self::QUESTION_TYPE_FIELD, $id );
 
     if( !$qType || !isset( $qType ) ) {
@@ -70,8 +71,7 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 		$quiz = new QuizMaster_Model_Quiz( $quizId );
 
     $quizQuestions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
-
-		var_dump( $quizQuestions );
+		$quizQuestions = json_decode( $quizQuestions );
 
     if( empty($quizQuestions)) {
       return false;

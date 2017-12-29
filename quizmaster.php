@@ -997,13 +997,26 @@ function quizmaster_field() {
 
 function quizmaster_get_field( $key, $postId ) {
 
-	$value = get_post_meta( $postId, $key, 1 );
+	// use helper, check field definition first, adjust loading based on type
+	// repeater stores as serialized array
+
+	if( $key == 'qmqe_multiple_choice_answers' ) {
+		$value = get_post_meta( $postId, $key, 0 );
+	} else {
+		$value = get_post_meta( $postId, $key, 1 );
+	}
+
+
 	return $value;
 
 }
 
 function quizmaster_get_fields( $postId ) {
 	$metas = get_post_meta( $postId );
+
+	var_dump($metas);
+	var_dump( get_post_meta( $postId, 'qmqe_sorting_choice_answers' ) );
+
 	foreach( $metas as $index => $meta ) {
 		if( count( $meta ) == 1 ) {
 			$metas[ $index ] = $meta[0];
@@ -1025,3 +1038,14 @@ function quizmasterFields() {
 
 // basic implementation of loaded hook but needs to be moved when this file is refactored
 do_action('quizmaster_loaded');
+
+// logging
+function quizmasterLog ( $log )  {
+	if ( true === WP_DEBUG ) {
+		if ( is_array( $log ) || is_object( $log ) ) {
+			error_log( print_r( $log, true ) );
+		} else {
+			error_log( $log );
+		}
+	}
+}

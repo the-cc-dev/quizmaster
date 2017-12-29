@@ -1,6 +1,27 @@
 jQuery(document).ready(function ($) {
 
+	// do init
 	initTabs();
+	initAnswerHandler()
+
+	/*
+	 * Answer Data
+	 */
+	function initAnswerHandler() {
+
+		var questionSettings = $('.qm-tab-qmqe_settings')
+		if( !questionSettings.length ) {
+			return // not in question editor
+		}
+
+		var answerMultiple = $('qmqe_multiple_choice_answer')
+		var answerMultipleCorrect = $('qmqe_single_choice_correct')
+
+		
+
+	}
+
+
 
 	// init
 	function initTabs() {

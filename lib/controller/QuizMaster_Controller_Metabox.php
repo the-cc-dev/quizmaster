@@ -38,7 +38,10 @@ class QuizMaster_Controller_Metabox {
 
 		foreach( $fieldGroup['fields'] as $field ) {
 
-
+			// skip saving fields if save defined as false
+			if( isset( $field['save'] ) && !$field['save'] ) {
+				continue;
+			}
 
 			$key   = $field['key'];
 			$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
@@ -61,8 +64,25 @@ class QuizMaster_Controller_Metabox {
 
 		foreach( $fieldGroup['fields'] as $field ) {
 
-			$key   = $field['key'];
-			$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
+			$key = $field['key'];
+
+			// skip saving fields if save defined as false
+			if( isset( $field['save'] ) && !$field['save'] ) {
+				continue;
+			}
+
+			// special handling for repeater fields
+			if( $field['type'] == 'repeater' ) {
+				$value = $this->getRepeaterValue( $field );
+			} else {
+				// default get value
+				$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
+			}
+
+			if( $field['key'] == 'qmqe_multiple_choice_answers' ) {
+				var_dump($value);
+			}
+
 
 			if ( $value ) {
 				update_post_meta( $postId, $key, $value );
@@ -72,6 +92,31 @@ class QuizMaster_Controller_Metabox {
 			}
 
 		}
+
+		//die();
+
+	}
+
+	public function getRepeaterValue( $repeaterField ) {
+
+		$values = array();
+
+		$rowValue = array();
+		foreach( $repeaterField['sub_fields'] as $field ) {
+
+			// skip saving fields if save defined as false
+			if( isset( $field['save'] ) && !$field['save'] ) {
+				continue;
+			}
+
+			$rowValue[ $field['key'] ] = filter_input( INPUT_POST, $field['key'], FILTER_SANITIZE_STRING );
+
+		}
+
+		// later $values will have multiple rows
+		$values = $rowValue;
+
+		return $values;
 
 	}
 

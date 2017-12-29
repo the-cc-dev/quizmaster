@@ -135,14 +135,16 @@ class QuizMaster_Controller_Fields {
 
 	public function renderField( $field, $template = false ) {
 
-
-		//var_dump($field);
-
 		$content = '';
 
 		// load value
 		global $post_id;
-		$field['value'] = get_post_meta( $post_id, $field['key'], true );
+
+		if( $field['type'] == 'repeater' ) {
+			$field['value'] = get_post_meta( $post_id, $field['key'], false );
+		} else {
+			$field['value'] = get_post_meta( $post_id, $field['key'], true );
+		}
 
 		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,
