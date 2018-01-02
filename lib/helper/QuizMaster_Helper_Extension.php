@@ -80,10 +80,16 @@ class QuizMaster_Helper_Extension {
 	}
 
 	// provide onActivation hook
-
 	public function register() {
 
 		$registeredExtensions = array();
+
+		// check if pro version
+		if( defined( QUIZMASTER_PRO ) && QUIZMASTER_PRO == 1 ) {
+			require_once( QUIZMASTER_PATH . '/pro/extensions/extension.php');
+			$registeredExtensions = quizmasterProExtensionDefinitions();
+		}
+
 		return apply_filters( 'quizmaster_extension_registry', $registeredExtensions );
 
 	}
