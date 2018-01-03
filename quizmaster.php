@@ -893,7 +893,7 @@ function setStudentReportPageOption( $post_id ) {
 }
 
 function getStudentReportPageOption() {
-  return quizmaster_get_field('qm_student_report_page', 'option');
+  return quizmaster_get_field( 'setting', 'qm_student_report_page' );
 }
 
 function quizMasterAddAdminCaps() {
@@ -998,7 +998,7 @@ function quizmaster_field() {
 
 function quizmaster_get_field( $postId, $key = false ) {
 
-	return QuizMaster_Field::value( $postId, $key );
+	return QuizMaster_Field::getFieldValues( $postId, $key );
 
 }
 

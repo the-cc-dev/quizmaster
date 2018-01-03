@@ -7,8 +7,12 @@ class QuizMaster_Field {
 	}
 
 	public static function value( $postId, $key ) {
+		return get_post_meta( $postId, $key, 1 );
+	}
 
-		$value = '';
+	public static function getFieldValues( $postId, $key ) {
+
+		$values = array();
 		$fieldObj = new QuizMaster_Field;
 		$fieldGroup = $fieldObj->loadFieldGroupByPostId( $postId );
 		if( $key ) {
@@ -17,8 +21,10 @@ class QuizMaster_Field {
 			foreach( $fieldGroup['fields'] as $fieldArray ) {
 				if( $fieldArray['key'] == $key ) {
 
-					$fieldClass = $fieldObj->getFieldClassByType( $type );
-					$value = $fieldClass->value( $postId );
+
+
+					$fieldClass = $fieldObj->getFieldClassByType( $fieldArray['type'] );
+					$values = $fieldClass->value( $postId, $fieldArray['key'] );
 
 				}
 			}
@@ -28,21 +34,41 @@ class QuizMaster_Field {
 			// return all field values for given post
 			foreach( $fieldGroup['fields'] as $fieldArray ) {
 
-				$fieldClass = $fieldObj->getFieldClassByType( $type );
-				$value[] = $fieldClass->value( $postId );
+				if( $fieldArray['type'] == 'tab' || $fieldArray['type'] == 'repeater' ) {
+					continue;
+				}
+
+				$fieldClass = $fieldObj->getFieldClassByType( $fieldArray['type'] );
+				$values[ $fieldArray['key'] ] = $fieldClass->value( $postId, $fieldArray['key'] );
 
 			}
 
 		}
 
-		return $value;
+		return $values;
 
 	}
 
 	public function getFieldClassByType( $type ) {
 		switch( $type ) {
+			case 'hidden':
+				return new QuizMaster_Field_Hidden;
+			case 'number':
+				return new QuizMaster_Field_Number;
+			case 'radio':
+				return new QuizMaster_Field_Radio;
 			case 'relationship':
 				return new QuizMaster_Field_Relationship;
+			case 'taxonomy':
+				return new QuizMaster_Field_Taxonomy;
+			case 'text':
+				return new QuizMaster_Field_Text;
+			case 'textarea':
+				return new QuizMaster_Field_Textarea;
+			case 'true_false':
+				return new QuizMaster_Field_TrueFalse;
+			case 'wysiwyg':
+				return new QuizMaster_Field_Wysiwyg;
 		}
 	}
 
@@ -57,13 +83,7 @@ class QuizMaster_Field {
 		global $quizmaster;
 		$postType = get_post_type( $postId );
 
-var_dump( $postId  );
-		var_dump( $postType );
-
 		$fieldGroupKey = str_replace( 'quizmaster_', '', $postType );
-
-		var_dump( $fieldGroupKey );
-
 		return $quizmaster->fields->getFieldGroup( $fieldGroupKey );
 
 	}

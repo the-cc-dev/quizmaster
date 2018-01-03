@@ -151,7 +151,7 @@ $fieldGroup = array (
 		array (
 			'placement' => 'left',
 			'endpoint' => 0,
-			'key' => 'qmqu_questions',
+			'key' => 'qmqu_questions_tab',
 			'label' => 'Questions',
 			'type' => 'tab',
 			'instructions' => '',

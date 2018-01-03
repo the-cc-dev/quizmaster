@@ -34,7 +34,6 @@ class QuizMaster_Controller_Fields {
 	}
 
 	public function getFieldGroup( $key ) {
-		var_dump($key);
 		return $this->fieldGroups[ $key ];
 	}
 

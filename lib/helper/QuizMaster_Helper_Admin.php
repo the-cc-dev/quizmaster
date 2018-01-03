@@ -29,7 +29,6 @@ class QuizMaster_Helper_Admin {
 
 		// data setup
 		$questionId = $postId;
-		// $newQuizzes = $_POST[ quizmaster_quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
 		$currentQuizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
@@ -84,7 +83,7 @@ class QuizMaster_Helper_Admin {
 
 		// data setup
 		$quizId = $postId;
-		$currentQuestions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		$currentQuestions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
 		if( empty($newQuestions) && empty($currentQuestions)) {
