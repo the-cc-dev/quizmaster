@@ -14,7 +14,8 @@ class QuizMaster_Helper_Extension {
 
 	public static function autoload( $class, $dir ) {
 
-		$registeredExtensions = $this->register();
+		$helper = new QuizMaster_Helper_Extension;
+		$registeredExtensions = $helper->register();
 		foreach( $registeredExtensions as $ext => $extSettings ) {
 			if( $extSettings['type'] == 'pro' ) {
 
