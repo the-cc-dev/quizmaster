@@ -38,6 +38,7 @@ register_activation_hook( __FILE__, 'quizMasterActivation' );
 register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
 
 add_filter( 'the_content', 'templateContentLoading' );
+
 function templateContentLoading( $content ) {
 
 	if( !is_single() ) {
@@ -77,6 +78,9 @@ class quizmaster {
 
 		// register global
 		$GLOBALS['quizmaster'] = new quizmaster();
+
+		// include fields module
+		require_once( QUIZMASTER_PATH . '/lib/module/field/loader.php' );
 
 	}
 
@@ -995,34 +999,16 @@ function quizmaster_field() {
 	return array();
 }
 
-function quizmaster_get_field( $key, $postId ) {
+function quizmaster_get_field( $postId, $key = false ) {
 
-	// use helper, check field definition first, adjust loading based on type
-	// repeater stores as serialized array
+	$fieldValue = QuizMaster_Field::value( $postId, $key );
 
-	if( $key == 'qmqe_multiple_choice_answers' ) {
-		$value = get_post_meta( $postId, $key, 0 );
-	} else {
-		$value = get_post_meta( $postId, $key, 1 );
-	}
+	var_dump($fieldValue);
 
-
+	$value = "QuizMaster Rocks!";
+	//$value = get_post_meta( $postId, $key, 1 );
 	return $value;
 
-}
-
-function quizmaster_get_fields( $postId ) {
-	$metas = get_post_meta( $postId );
-
-	var_dump($metas);
-	var_dump( get_post_meta( $postId, 'qmqe_sorting_choice_answers' ) );
-
-	foreach( $metas as $index => $meta ) {
-		if( count( $meta ) == 1 ) {
-			$metas[ $index ] = $meta[0];
-		}
-	}
-	return $metas;
 }
 
 add_action('admin_init', 'quizmasterMetaboxes', 15);

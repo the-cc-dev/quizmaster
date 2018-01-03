@@ -270,7 +270,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     private function loadAnswerData() {
 
-      $fields = quizmaster_get_fields( $this->getId() );
+      $fields = quizmaster_get_field( $this->getId() );
       $answer_type = $fields[ QUIZMASTER_ANSWER_TYPE_FIELD ];
 
       // set answer data

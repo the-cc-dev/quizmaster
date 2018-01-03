@@ -13,7 +13,6 @@ class QuizMaster_Controller_Fields {
 			$this->openTab = $_GET['qm-tab'];
 		}
 
-
   }
 
 	public function init() {
@@ -32,6 +31,10 @@ class QuizMaster_Controller_Fields {
 
 	public function getFieldGroups() {
 		return $this->fieldGroups;
+	}
+
+	public function getFieldGroup( $key ) {
+		return $this->fieldGroups[ $key ];
 	}
 
 	public function setActiveFieldGroup( $key ) {
