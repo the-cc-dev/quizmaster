@@ -840,9 +840,6 @@ function revisionTest( $post_id, $post, $update ) {
     return;
   }
 
-	// $copyPostMetaFunc = quizmaster_quizmaster_get_fields_prefix() . '_copy_postmeta';
-  // $copyPostMetaFunc( $post_id, $revision_id );
-
   return $post_id;
 
 }
@@ -1001,13 +998,7 @@ function quizmaster_field() {
 
 function quizmaster_get_field( $postId, $key = false ) {
 
-	$fieldValue = QuizMaster_Field::value( $postId, $key );
-
-	var_dump($fieldValue);
-
-	$value = "QuizMaster Rocks!";
-	//$value = get_post_meta( $postId, $key, 1 );
-	return $value;
+	return QuizMaster_Field::value( $postId, $key );
 
 }
 

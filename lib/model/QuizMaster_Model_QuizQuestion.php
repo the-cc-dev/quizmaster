@@ -20,12 +20,12 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		}
 
 		// adds question to end of quiz
-		$questions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$questions[] = $questionId;
 		update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions, $quizId );
 
 		// adds quiz to list of selected quizzes associated from question editor
-		$quizzes = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questionId );
+		$quizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$quizzes[] = $quizId;
 		update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizzes, $questionId );
 
@@ -37,7 +37,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, array(), $questionId );
 		} else {
 			// selective approach: remove one quiz
-			$quizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+			$quizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
 
 			if( empty( $quizzes )) {
 				return;
@@ -61,7 +61,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		} else {
 
 			// selective approach: remove one quiz
-			$questions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+			$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 			if( ( $key = array_search( $questionId, $questions )) !== false ) {
 				unset($questions[$key]);
 			}
@@ -90,7 +90,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		}
 
 		// adds question to quiz
-		$questions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		if( !in_array( $questionId, $questions )) {
 			$questions[] = $questionId;
 			update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions, $quizId );
@@ -113,16 +113,12 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		}
 
 		// adds quiz to list of selected quizzes associated from question editor
-<<<<<<< HEAD
-		$quizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
-=======
-		$quizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+		$quizzes = get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
 
 		if( empty( $quizzes )) {
 			return;
 		}
 
->>>>>>> master
 		if( !in_array( $quizId, $quizzes )) {
 			$quizzes[] = $quizId;
 			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes, $questionId );

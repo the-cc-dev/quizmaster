@@ -30,7 +30,7 @@ class QuizMaster_Helper_Admin {
 		// data setup
 		$questionId = $postId;
 		// $newQuizzes = $_POST[ quizmaster_quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
-		$currentQuizzes = quizmaster_get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+		$currentQuizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
 		// nothing to do if old and new are both empty
@@ -84,7 +84,6 @@ class QuizMaster_Helper_Admin {
 
 		// data setup
 		$quizId = $postId;
-		//$newQuestions = $_POST[ quizmaster_quizmaster_get_fields_prefix() ][ QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD ];
 		$currentQuestions = quizmaster_get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
@@ -188,11 +187,11 @@ class QuizMaster_Helper_Admin {
 
 	  switch ( $column ) {
 	    case 'quiz' :
-	      $quizRevisionId = quizmaster_get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
+	      $quizRevisionId = quizmaster_get_field( $post_id, $score->getFieldPrefix() . 'quiz_revision' );
 	      print get_the_title( $quizRevisionId );
 	      break;
 	    case 'user' :
-	      $user = quizmaster_get_field( $score->getFieldPrefix() . 'user', $post_id );
+	      $user = quizmaster_get_field( $post_id, $score->getFieldPrefix() . 'user' );
 				if( is_array( $user )) {
 					print $user['display_name'];
 				} else {

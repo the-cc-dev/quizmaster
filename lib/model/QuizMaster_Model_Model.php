@@ -192,7 +192,7 @@ class QuizMaster_Model_Model {
 		public function __get( $name ) {
 
 			$fieldKey = $this->fieldKeyByPropertyName( $name );
-			return quizmaster_get_field( $this->getFieldPrefix() . $fieldKey, $this->getId() );
+			return quizmaster_get_field( $this->getId(), $this->getFieldPrefix() . $fieldKey );
 
 		}
 
