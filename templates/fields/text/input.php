@@ -3,5 +3,5 @@
 </label>
 
 <div class="qm-field-text-input">
-	<input type="text" name="<?php print $field->key; ?>" value="<?php print $field->value; ?>" />
+	<input type="text" name="<?php print $field->key; ?>" value="<?php $field->renderValue(); ?>" />
 </div>

@@ -13,7 +13,7 @@ foreach( $posts as $post ) {
 
 <div class="qm-field qm-field-relationship-wrap">
 
-	<input class="qm-relationship-data" type="hidden" id="<?php print $field->key; ?>" name="<?php print $field->key; ?>" value='<?php print $field->value; ?>' />
+	<input class="qm-relationship-data" type="hidden" id="<?php print $field->key; ?>" name="<?php print $field->key; ?>" value='<?php $field->renderValue(); ?>' />
 
 	<div class="quizmaster-row">
 		<div class="quizmaster-col-12">

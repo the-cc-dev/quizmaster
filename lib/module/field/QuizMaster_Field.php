@@ -12,15 +12,21 @@ class QuizMaster_Field {
 		$field->setDefinition( $fieldDefinition );
 		$field->setKey( $fieldDefinition['key'] );
 		$field->setLabel( $fieldDefinition['label'] );
+		$field->setValue( null );
 		return $field;
 	}
 
 	public static function loadFieldInstanceByDefinition( $fieldDefinition, $postId ) {
 		$field = self::loadFieldByDefinition( $fieldDefinition );
-
 		$field->setPostId( $postId );
 		$field->loadValue( $postId );
 		return $field;
+	}
+
+	public function renderValue() {
+		if( isset( $this->value )) {
+			print $this->value;
+		}
 	}
 
 	public function setType( $type ) {
