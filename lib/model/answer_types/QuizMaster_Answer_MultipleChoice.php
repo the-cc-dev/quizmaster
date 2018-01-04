@@ -1,14 +1,18 @@
 <?php
 class QuizMaster_Answer_MultipleChoice extends QuizMaster_Model_Answer {
-  public function getKey() {
+
+	public function getKey() {
     return 'multiple';
   }
+
   public function getName() {
     return 'Multiple Choice';
   }
+	
   public function load( $data ) {
-		var_dump($data);
-    $fieldAnswerData = $data['qmqe_multiple_choice_answers'];
+
+    $fieldAnswerData = $data['qmqe_answer_data'];
+
     $answerData = array();
     foreach( $fieldAnswerData as $fieldAnswer ) {
       $answer['answer'] = $fieldAnswer['qmqe_multiple_choice_answer'];

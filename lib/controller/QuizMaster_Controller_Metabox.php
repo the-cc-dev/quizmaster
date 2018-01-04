@@ -61,15 +61,11 @@ class QuizMaster_Controller_Metabox {
 
 		$fieldCtr = new QuizMaster_Controller_Fields();
 		$fieldGroup = $fieldCtr->loadFieldGroup( $fieldGroupKey );
+		$values = array();
 
 		foreach( $fieldGroup['fields'] as $field ) {
 
 			$key = $field['key'];
-
-			// skip saving fields if save defined as false
-			if( isset( $field['save'] ) && !$field['save'] ) {
-				continue;
-			}
 
 			// special handling for repeater fields
 			if( $field['type'] == 'repeater' ) {
@@ -79,21 +75,29 @@ class QuizMaster_Controller_Metabox {
 				$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
 			}
 
-			if( $field['key'] == 'qmqe_multiple_choice_answers' ) {
-				var_dump($value);
+			// save meta unless field defined save false
+			if( !isset( $field['save'] ) || $field['save'] ) {
+
+				if ( $value ) {
+					update_post_meta( $postId, $key, $value );
+				}
+				else {
+					delete_post_meta( $postId, $key );
+				}
+
 			}
 
-
-			if ( $value ) {
-				update_post_meta( $postId, $key, $value );
-			}
-			else {
-				delete_post_meta( $postId, $key );
-			}
+			// stash values of each field for additional processing
+			$values[ $key ] = $value;
 
 		}
 
-		//die();
+		// process answer data
+		switch( $values['qmqe_answer_type'] ) {
+			case 'multiple':
+				$values['qmqe_answer_data'] = array( $values['qmqe_multiple_choice_answers'] );
+		}
+		update_post_meta( $postId, 'qmqe_answer_data', $values['qmqe_answer_data'] );
 
 	}
 

@@ -47,7 +47,7 @@ $fieldGroup = array (
 		 'label' => 'Answer Data',
 		 'key' => 'qmqe_answer_data',
 		 'type' => 'hidden',
-	 ),
+	  ),
 
 		/*
      * answer tab fields
