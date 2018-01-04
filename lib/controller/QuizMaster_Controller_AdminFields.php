@@ -136,26 +136,26 @@ class QuizMaster_Controller_AdminFields {
 
 	}
 
-	public function renderField( $field, $template = false ) {
+	public function renderField( $field, $loadValue = true ) {
 
 		$content = '';
 
 		// load value
 		global $post_id;
 
-		$field['value'] = quizmaster_get_field( $post_id, $field['key'] );
+		if( $loadValue ) {
+			$field['value'] = quizmaster_get_field( $post_id, $field['key'] );
+		}
 
 		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,
 			'tab' => $this->activeTab,
 		));
 
-		if( !$template ) {
-			$content .= quizmaster_parse_template( 'fields/' . $field['type'] . '/input.php', array(
-				'field' => $field,
-				'fieldCtr' => $this,
-			));
-		}
+		$content .= quizmaster_parse_template( 'fields/' . $field['type'] . '/input.php', array(
+			'field' => $field,
+			'fieldCtr' => $this,
+		));
 
 		$content .= quizmaster_parse_template( 'fields/field-wrap-after.php', array(
 			'field' => $field,

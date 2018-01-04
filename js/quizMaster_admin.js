@@ -137,7 +137,7 @@ console.log(answerType);
 
 });
 
-var quizmasterRepeater {
+var quizmasterRepeater = {
 
 
 
