@@ -128,7 +128,7 @@ class QuizMaster_Model_Model {
         return;
       }
 
-      $fieldCtr = new QuizMaster_Controller_Fields();
+      $fieldCtr = new QuizMaster_Controller_AdminFields();
       return $fieldCtr->loadFieldGroup( $this->fieldGroupKey() );
 
     }

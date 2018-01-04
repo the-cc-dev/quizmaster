@@ -1,6 +1,6 @@
 <?php
 
-class QuizMaster_Controller_Fields {
+class QuizMaster_Controller_AdminFields {
 
 	private $fieldGroups = array();
 	private $activeFieldGroup = false;
@@ -20,7 +20,7 @@ class QuizMaster_Controller_Fields {
 		global $quizmaster;
 		$fieldGroups = $this->loadFieldGroups();
 
-		$quizmaster->fields = new QuizMaster_Controller_Fields();
+		$quizmaster->fields = new QuizMaster_Controller_AdminFields();
 		$quizmaster->fields->setFieldGroups( $fieldGroups );
 
 	}

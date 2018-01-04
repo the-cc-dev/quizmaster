@@ -19,7 +19,7 @@ class QuizMaster_Controller_Front {
       $emailCtr = new QuizMaster_Controller_Email();
 
 			// init and load fields
-			$fieldCtr = new QuizMaster_Controller_Fields();
+			$fieldCtr = new QuizMaster_Controller_AdminFields();
 			$fieldCtr->init();
 
     }

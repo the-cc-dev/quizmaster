@@ -33,7 +33,7 @@ class QuizMaster_Controller_Metabox {
 
 	public function saveMetaQuiz( $postId, $fieldGroupKey = 'quiz' ) {
 
-		$fieldCtr = new QuizMaster_Controller_Fields();
+		$fieldCtr = new QuizMaster_Controller_AdminFields();
 		$fieldGroup = $fieldCtr->loadFieldGroup( $fieldGroupKey );
 
 		foreach( $fieldGroup['fields'] as $field ) {
@@ -59,7 +59,7 @@ class QuizMaster_Controller_Metabox {
 
 	public function saveMetaQuestion( $postId, $fieldGroupKey = 'question' ) {
 
-		$fieldCtr = new QuizMaster_Controller_Fields();
+		$fieldCtr = new QuizMaster_Controller_AdminFields();
 		$fieldGroup = $fieldCtr->loadFieldGroup( $fieldGroupKey );
 		$values = array();
 

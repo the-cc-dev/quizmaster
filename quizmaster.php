@@ -616,7 +616,7 @@ function quizMasterInit() {
 
 	quizMasterAddOptionsPages();
 
-	$fieldCtr = new QuizMaster_Controller_Fields();
+	$fieldCtr = new QuizMaster_Controller_AdminFields();
 	$fieldCtr->loadFieldGroups();
 
 }
@@ -1009,7 +1009,7 @@ function quizmasterMetaboxes() {
 
 add_action('admin_init', 'quizmasterFields', 10);
 function quizmasterFields() {
-	$fields = new QuizMaster_Controller_Fields();
+	$fields = new QuizMaster_Controller_AdminFields();
 	$fields->init();
 }
 
