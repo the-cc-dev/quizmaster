@@ -143,11 +143,7 @@ class QuizMaster_Controller_Fields {
 		// load value
 		global $post_id;
 
-		if( $field['type'] == 'repeater' ) {
-			$field['value'] = get_post_meta( $post_id, $field['key'], false );
-		} else {
-			$field['value'] = get_post_meta( $post_id, $field['key'], true );
-		}
+		$field['value'] = quizmaster_get_field( $post_id, $field['key'] );
 
 		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,

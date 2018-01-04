@@ -21,8 +21,6 @@ class QuizMaster_Field {
 			foreach( $fieldGroup['fields'] as $fieldArray ) {
 				if( $fieldArray['key'] == $key ) {
 
-
-
 					$fieldClass = $fieldObj->getFieldClassByType( $fieldArray['type'] );
 					$values = $fieldClass->value( $postId, $fieldArray['key'] );
 
@@ -59,6 +57,8 @@ class QuizMaster_Field {
 				return new QuizMaster_Field_Radio;
 			case 'relationship':
 				return new QuizMaster_Field_Relationship;
+			case 'repeater':
+				return new QuizMaster_Field_Repeater;
 			case 'taxonomy':
 				return new QuizMaster_Field_Taxonomy;
 			case 'text':

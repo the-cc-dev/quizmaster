@@ -11,23 +11,6 @@ $fieldGroup = array (
 			'type' => 'tab',
 		),
 		array (
-			'layout' => 'horizontal',
-			'choices' => array (
-				'single' => 'Single Choice',
-				'multiple' => 'Multiple Choice',
-				'free_answer' => 'Free Choice',
-				'sort_answer' => 'Sorting',
-				'fill_blank' => 'Fill in the Blank',
-			),
-			'default_value' => 'single',
-			'return_format' => 'value',
-			'key' => 'qmqe_answer_type',
-			'label' => 'Question Type',
-			'type' => 'radio',
-			'instructions' => '',
-			'required' => 0,
-		),
-		array (
 			'tabs' => 'all',
 			'toolbar' => 'basic',
 			'media_upload' => 1,
@@ -52,6 +35,23 @@ $fieldGroup = array (
 		/*
      * answer tab fields
 		 */
+		 array (
+ 			'layout' => 'horizontal',
+ 			'choices' => array (
+ 				'single' => 'Single Choice',
+ 				'multiple' => 'Multiple Choice',
+ 				'free_answer' => 'Free Choice',
+ 				'sort_answer' => 'Sorting',
+ 				'fill_blank' => 'Fill in the Blank',
+ 			),
+ 			'default_value' => 'single',
+ 			'return_format' => 'value',
+ 			'key' => 'qmqe_answer_type',
+ 			'label' => 'Answer Type',
+ 			'type' => 'radio',
+ 			'instructions' => '',
+ 			'required' => 0,
+ 		),
 
 
 		// single choice

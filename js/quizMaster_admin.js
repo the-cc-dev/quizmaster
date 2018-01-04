@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
 	initTabs();
 	initAnswerHandler()
 
+
 	/*
 	 * Answer Data
 	 */
@@ -14,11 +15,80 @@ jQuery(document).ready(function ($) {
 			return // not in question editor
 		}
 
-		var answerMultiple = $('qmqe_multiple_choice_answer')
-		var answerMultipleCorrect = $('qmqe_single_choice_correct')
+		// init answer type fields
+		var answerType = $('.qm-field-qmqe_answer_type input:checked').val()
 
-		
+console.log(answerType);
 
+		qmAnswerFieldsetHideAll()
+		qmAnswerFieldsetShow( answerType )
+
+		// attach click handler
+		$('.qm-field-qmqe_answer_type li input').on( 'click.selection', function() {
+
+			var answerType = $( this ).val()
+			qmAnswerFieldsetHideAll()
+			qmAnswerFieldsetShow( answerType )
+
+		})
+
+		// open tab event
+		$( document ).on( 'quizmasterOpenTab', function( e ) {
+
+			console.log(e);
+
+			if( e.tabKey == 'answers' ) {
+
+				var answerType = $('.qm-field-qmqe_answer_type input:checked').val()
+
+				console.log(answerType);
+
+				qmAnswerFieldsetHideAll()
+				qmAnswerFieldsetShow( answerType )
+
+			}
+		})
+
+	}
+
+	function qmAnswerFieldsetShow( answerType ) {
+		var fields = qmAnswerFieldsets()
+		switch( answerType ) {
+			case 'single':
+				fields.single.show()
+				break;
+			case 'multiple':
+				fields.multiple.show()
+				break;
+			case 'sort_answer':
+				fields.sorting.show()
+				break;
+			case 'free_answer':
+				fields.free.show()
+				break;
+			case 'fill_blank':
+				fields.fillBlank.show()
+				break;
+		}
+	}
+
+	function qmAnswerFieldsetHideAll() {
+		var fields = qmAnswerFieldsets()
+		fields.single.hide()
+		fields.multiple.hide()
+		fields.sorting.hide()
+		fields.free.hide()
+		fields.fillBlank.hide()
+	}
+
+	function qmAnswerFieldsets() {
+		return {
+			single: $('.qm-field-qmqe_single_choice_answers'),
+			multiple: $('.qm-field-qmqe_multiple_choice_answers'),
+			sorting: $('.qm-field-qmqe_sorting_choice_answers'),
+			free: $('.qm-field-qmqe_free_choice_answers'),
+			fillBlank: $('.qm-field-qmqe_fill_blanks'),
+		}
 	}
 
 
@@ -58,6 +128,17 @@ jQuery(document).ready(function ($) {
 
 		var tabFields = $('.qm-field-wrap[data-tab=' + tabKey + ']');
 
+		$( document ).trigger({
+			type: 'quizmasterOpenTab',
+			tabKey: tabKey
+		})
+
 	}
 
 });
+
+var quizmasterRepeater {
+
+
+
+}
