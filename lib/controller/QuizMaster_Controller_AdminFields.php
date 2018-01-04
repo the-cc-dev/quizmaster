@@ -60,6 +60,9 @@ class QuizMaster_Controller_AdminFields {
 	}
 
 	public function renderFieldGroup() {
+
+		global $post_id;
+
 		$fg = $this->activeFieldGroup;
 		$render = '';
 
@@ -76,16 +79,18 @@ class QuizMaster_Controller_AdminFields {
 		$render .= $this->renderFieldFormWrapOpen();
 
 		// loop through fields
-		foreach( $fg['fields'] as $field ) {
+		foreach( $fg['fields'] as $fieldDefinition ) {
 
-			if( $field['type'] == 'tab' ) {
+			$field = QuizMaster_Field::loadFieldInstanceByDefinition( $fieldDefinition, $post_id );
+
+			if( $fieldDefinition['type'] == 'tab' ) {
 
 				if( !empty( $this->activeTab )) {
 					$render .= $this->renderTabClose();
 				}
 
-				$render .= $this->renderTabOpen( $field['key'] );
-				$this->setActiveTab( $field );
+				$render .= $this->renderTabOpen( $fieldDefinition['key'] );
+				$this->setActiveTab( $fieldDefinition );
 
 				continue;
 
@@ -138,21 +143,12 @@ class QuizMaster_Controller_AdminFields {
 
 	public function renderField( $field, $loadValue = true ) {
 
-		$content = '';
-
-		// load value
-		global $post_id;
-
-		if( $loadValue ) {
-			$field['value'] = quizmaster_get_field( $post_id, $field['key'] );
-		}
-
-		$content .= quizmaster_parse_template( 'fields/field-wrap-before.php', array(
+		$content = quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,
 			'tab' => $this->activeTab,
 		));
 
-		$content .= quizmaster_parse_template( 'fields/' . $field['type'] . '/input.php', array(
+		$content .= quizmaster_parse_template( 'fields/' . $field->type . '/input.php', array(
 			'field' => $field,
 			'fieldCtr' => $this,
 		));

@@ -1,9 +1,6 @@
-
 <?php
 
-// var_dump($field);
-
-$post_type = $field['post_type'][0];
+$post_type = $field->definition['post_type'][0];
 $posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => 10 ));
 
 $choices = array();
@@ -16,12 +13,12 @@ foreach( $posts as $post ) {
 
 <div class="qm-field qm-field-relationship-wrap">
 
-	<input class="qm-relationship-data" type="hidden" id="<?php print $field['key']; ?>" name="<?php print $field['key']; ?>" value='<?php print $field['value']; ?>' />
+	<input class="qm-relationship-data" type="hidden" id="<?php print $field->key; ?>" name="<?php print $field->key; ?>" value='<?php print $field->value; ?>' />
 
 	<div class="quizmaster-row">
 		<div class="quizmaster-col-12">
 
-			<label class="qm-field-label"><?php print $field['label']; ?></label>
+			<label class="qm-field-label"><?php print $field->label; ?></label>
 
 			<div>
 				<h3>Search Bar</h3>
@@ -34,7 +31,7 @@ foreach( $posts as $post ) {
 
 		<div class="quizmaster-col-6 qm-field-relationship-left qm-relationship-pool">
 
-			<h2><?php print $field['selection_title']; ?></h2>
+			<h2><?php print $field->definition['selection_title']; ?></h2>
 
 			<?php
 				foreach( $choices as $choiceKey => $choice ) : ?>
@@ -46,7 +43,7 @@ foreach( $posts as $post ) {
 
 		<div class="quizmaster-col-6 qm-field-relationship-right">
 
-			<h2><?php print $field['selected_title']; ?></h2>
+			<h2><?php print $field->definition['selected_title']; ?></h2>
 
 			<div class="qm-relationship-selections">
 				<ul></ul>

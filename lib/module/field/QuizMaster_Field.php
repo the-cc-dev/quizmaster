@@ -6,6 +6,52 @@ class QuizMaster_Field {
 
 	}
 
+	public static function loadFieldByDefinition( $fieldDefinition ) {
+		$field = self::getFieldClassByType( $fieldDefinition['type'] );
+		$field->setType( $fieldDefinition['type'] );
+		$field->setDefinition( $fieldDefinition );
+		$field->setKey( $fieldDefinition['key'] );
+		$field->setLabel( $fieldDefinition['label'] );
+		return $field;
+	}
+
+	public static function loadFieldInstanceByDefinition( $fieldDefinition, $postId ) {
+		$field = self::loadFieldByDefinition( $fieldDefinition );
+
+		$field->setPostId( $postId );
+		$field->loadValue( $postId );
+		return $field;
+	}
+
+	public function setType( $type ) {
+		$this->type = $type;
+	}
+
+	public function setLabel( $label ) {
+		$this->label = $label;
+	}
+
+	public function setPostId( $postId ) {
+		$this->postId = $postId;
+	}
+
+	public function setDefinition( $fieldDefinition ) {
+		$this->definition = $fieldDefinition;
+	}
+
+	public function setKey( $fieldKey ) {
+		$this->key = $fieldKey;
+	}
+
+	public function setValue( $value ) {
+		$this->value = $value;
+	}
+
+	public function loadValue( $postId ) {
+		$value = $this->value( $postId, $this->key );
+		$this->setValue( $value );
+	}
+
 	public static function value( $postId, $key ) {
 		return get_post_meta( $postId, $key, 1 );
 	}
@@ -21,7 +67,7 @@ class QuizMaster_Field {
 			foreach( $fieldGroup['fields'] as $fieldArray ) {
 				if( $fieldArray['key'] == $key ) {
 
-					$fieldClass = $fieldObj->getFieldClassByType( $fieldArray['type'] );
+					$fieldClass = self::getFieldClassByType( $fieldArray['type'] );
 					$values = $fieldClass->value( $postId, $fieldArray['key'] );
 
 				}
@@ -36,7 +82,7 @@ class QuizMaster_Field {
 					continue;
 				}
 
-				$fieldClass = $fieldObj->getFieldClassByType( $fieldArray['type'] );
+				$fieldClass = self::getFieldClassByType( $fieldArray['type'] );
 				$values[ $fieldArray['key'] ] = $fieldClass->value( $postId, $fieldArray['key'] );
 
 			}
@@ -47,7 +93,7 @@ class QuizMaster_Field {
 
 	}
 
-	public function getFieldClassByType( $type ) {
+	public static function getFieldClassByType( $type ) {
 		switch( $type ) {
 			case 'hidden':
 				return new QuizMaster_Field_Hidden;
@@ -61,6 +107,8 @@ class QuizMaster_Field {
 				return new QuizMaster_Field_Repeater;
 			case 'taxonomy':
 				return new QuizMaster_Field_Taxonomy;
+			case 'tab':
+				return new QuizMaster_Field_Tab;
 			case 'text':
 				return new QuizMaster_Field_Text;
 			case 'textarea':
