@@ -18,8 +18,6 @@ jQuery(document).ready(function ($) {
 		// init answer type fields
 		var answerType = $('.qm-field-qmqe_answer_type input:checked').val()
 
-console.log(answerType);
-
 		qmAnswerFieldsetHideAll()
 		qmAnswerFieldsetShow( answerType )
 
@@ -34,8 +32,6 @@ console.log(answerType);
 
 		// open tab event
 		$( document ).on( 'quizmasterOpenTab', function( e ) {
-
-			console.log(e);
 
 			if( e.tabKey == 'answers' ) {
 
@@ -121,10 +117,11 @@ console.log(answerType);
 	// open tab
 	function openTab( tabKey ) {
 
-		console.log('openTab')
+		console.log('openTab: ' + tabKey)
 
-		$('.qm-field-wrap').hide();
-		$('.qm-field-wrap[data-tab=' + tabKey + ']').show();
+		$('.qm-tab').hide()
+		var tabClass = '.qm-tab-' + tabKey
+		$( tabClass ).show();
 
 		var tabFields = $('.qm-field-wrap[data-tab=' + tabKey + ']');
 
@@ -135,10 +132,19 @@ console.log(answerType);
 
 	}
 
+	/* Repeater */
+	$('.repeater').repeater({
+    initEmpty: true,
+    defaultValues: {
+      'text-input': 'foo'
+    },
+    ready: function (setIndexes) {
+        // $dragAndDrop.on('drop', setIndexes);
+    },
+		show: function () {
+      $(this).show();
+    },
+    isFirstItemUndeletable: true
+  })
+
 });
-
-var quizmasterRepeater = {
-
-
-
-}

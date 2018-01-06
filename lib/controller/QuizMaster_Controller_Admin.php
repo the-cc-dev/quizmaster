@@ -36,12 +36,22 @@ class QuizMaster_Controller_Admin {
 				return;
 			}
 
+			// repeater
+			wp_enqueue_script(
+				'quizMaster_repeater_js',
+				plugins_url('js/jquery.repeater.js', QUIZMASTER_FILE),
+				array('jquery', 'jquery-ui-sortable'),
+				QUIZMASTER_VERSION
+			);
+
       wp_enqueue_script(
           'quizmaster_admin_js',
           plugins_url('js/quizmaster_admin.js', QUIZMASTER_FILE),
-          array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
+          array('jquery', 'quizMaster_repeater_js', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
           QUIZMASTER_VERSION
       );
+
+
 
 			// conditional load question editor script
 			if( $post->post_type == 'quizmaster_question' ) {
