@@ -1,5 +1,5 @@
 <div class="repeater">
-<div data-repeater-list="outer-list">
+<div data-repeater-list="<?php print $field->key; ?>">
 	<div data-repeater-item>
 		<?php
 

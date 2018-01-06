@@ -94,33 +94,22 @@ class QuizMaster_Controller_Metabox {
 
 		// process answer data
 		switch( $values['qmqe_answer_type'] ) {
+			case 'single':
+				$values['qmqe_answer_data'] = $values['qmqe_single_choice_answers'];
+				break;
 			case 'multiple':
-				$values['qmqe_answer_data'] = array( $values['qmqe_multiple_choice_answers'] );
+				$values['qmqe_answer_data'] = $values['qmqe_multiple_choice_answers'];
+				break;
 		}
+
 		update_post_meta( $postId, 'qmqe_answer_data', $values['qmqe_answer_data'] );
 
 	}
 
 	public function getRepeaterValue( $repeaterField ) {
 
-		$values = array();
-
-		$rowValue = array();
-		foreach( $repeaterField['sub_fields'] as $field ) {
-
-			// skip saving fields if save defined as false
-			if( isset( $field['save'] ) && !$field['save'] ) {
-				continue;
-			}
-
-			$rowValue[ $field['key'] ] = filter_input( INPUT_POST, $field['key'], FILTER_SANITIZE_STRING );
-
-		}
-
-		// later $values will have multiple rows
-		$values = $rowValue;
-
-		return $values;
+		$value = filter_input( INPUT_POST, $repeaterField['key'], FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		return $value;
 
 	}
 

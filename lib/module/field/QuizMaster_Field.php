@@ -24,8 +24,13 @@ class QuizMaster_Field {
 	}
 
 	public function renderValue() {
+
 		if( isset( $this->value )) {
-			print $this->value;
+			if( is_array( $this->value )) {
+				print htmlentities( json_encode( $this->value ) );
+			} else {
+				print $this->value;
+			}
 		}
 	}
 

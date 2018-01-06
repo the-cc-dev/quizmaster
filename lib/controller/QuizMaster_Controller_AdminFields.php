@@ -141,7 +141,7 @@ class QuizMaster_Controller_AdminFields {
 
 	}
 
-	public function renderField( $field, $loadValue = true ) {
+	public function renderField( $field ) {
 
 		$content = quizmaster_parse_template( 'fields/field-wrap-before.php', array(
 			'field' => $field,
