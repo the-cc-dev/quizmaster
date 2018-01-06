@@ -134,7 +134,7 @@ jQuery(document).ready(function ($) {
 
 	/* Repeater */
 	$('.repeater').repeater({
-    initEmpty: true,
+    initEmpty: false,
     defaultValues: {
       'text-input': 'foo'
     },

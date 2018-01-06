@@ -4,5 +4,5 @@
 </label>
 
 <div class="qm-field-textarea-input">
-	<textarea type="number" name="<?php print $field->key; ?>"><?php $field->renderValue(); ?></textarea>
+	<textarea name="<?php print $field->key; ?>"><?php $field->renderValue(); ?></textarea>
 </div>
