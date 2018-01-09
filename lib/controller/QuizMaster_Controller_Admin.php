@@ -36,6 +36,8 @@ class QuizMaster_Controller_Admin {
 				return;
 			}
 
+			wp_enqueue_script( array( 'jquery-ui-core', 'jquery-ui-sortable') );
+
 			// repeater
 			wp_enqueue_script(
 				'quizMaster_repeater_js',

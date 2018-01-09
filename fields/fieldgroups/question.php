@@ -58,27 +58,14 @@ $fieldGroup = array (
 		array (
 			'sub_fields' => array (
 				array (
-					'default_value' => '',
-					'new_lines' => '',
-					'maxlength' => '',
-					'placeholder' => '',
-					'rows' => 4,
 					'key' => 'qmqe_single_choice_answer',
-					'label' => 'Single Choice Answer',
-					'type' => 'textarea',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
+					'label' => 'Answer',
+					'type' => 'text',
 				),
 				array (
-					'default_value' => 0,
-					'message' => '',
 					'label' => 'Correct',
 					'key' => 'qmqe_single_choice_correct',
 					'type' => 'true_false',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
 				),
 			),
 			'min' => 1,
@@ -89,8 +76,6 @@ $fieldGroup = array (
 			'label' => 'Single Choice Answers',
 			'key' => 'qmqe_single_choice_answers',
 			'type' => 'repeater',
-			'instructions' => '',
-			'required' => 0,
 			'conditional_logic' => array (
 				array (
 					array (
@@ -106,29 +91,14 @@ $fieldGroup = array (
 		array (
 			'sub_fields' => array (
 				array (
-					'default_value' => '',
-					'new_lines' => '',
-					'maxlength' => '',
-					'placeholder' => '',
-					'rows' => 4,
 					'key' => 'qmqe_multiple_choice_answer',
-					'label' => 'Multiple Choice Answer',
-					'type' => 'textarea',
-					'instructions' => '',
-					'save' => 1,
+					'label' => 'Answer',
+					'type' => 'text',
 				),
 				array (
-					'default_value' => 0,
-					'message' => '',
-					'ui' => 0,
-					'ui_on_text' => '',
-					'ui_off_text' => '',
 					'label' => 'Correct',
 					'key' => 'qmqe_multiple_choice_correct',
 					'type' => 'true_false',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
 				),
 			),
 			'min' => 0,
@@ -154,30 +124,14 @@ $fieldGroup = array (
 		array (
 			'sub_fields' => array (
 				array (
-					'tabs' => 'all',
-					'toolbar' => 'basic',
-					'media_upload' => 1,
-					'default_value' => '',
-					'delay' => 0,
-					'key' => 'field_588a878e635dc',
-					'label' => 'Sorting Choice Answer',
+					'label' => 'Answer',
 					'key' => 'qmqe_sorting_choice_answer',
-					'type' => 'wysiwyg',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
+					'type' => 'text',
 				),
 			),
-			'min' => 1,
-			'max' => 0,
-			'layout' => 'table',
-			'button_label' => '',
-			'collapsed' => '',
 			'label' => 'Sorting Choice Answers',
 			'key' => 'qmqe_sorting_choice_answers',
 			'type' => 'repeater',
-			'instructions' => '',
-			'required' => 0,
 			'conditional_logic' => array (
 				array (
 					array (
@@ -186,11 +140,6 @@ $fieldGroup = array (
 						'value' => 'sort_answer',
 					),
 				),
-			),
-			'wrapper' => array (
-				'width' => '',
-				'class' => '',
-				'id' => '',
 			),
 		),
 		array (

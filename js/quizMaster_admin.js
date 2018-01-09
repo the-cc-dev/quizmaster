@@ -133,18 +133,7 @@ jQuery(document).ready(function ($) {
 	}
 
 	/* Repeater */
-	$('.repeater').repeater({
-    initEmpty: false,
-    defaultValues: {
-      'text-input': 'foo'
-    },
-    ready: function (setIndexes) {
-        // $dragAndDrop.on('drop', setIndexes);
-    },
-		show: function () {
-      $(this).show();
-    },
-    isFirstItemUndeletable: true
-  })
+	// don't initiate here because we can only call repeater() once when using setList
+	// $('.repeater').repeater()
 
 });

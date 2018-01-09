@@ -100,6 +100,15 @@ class QuizMaster_Controller_Metabox {
 			case 'multiple':
 				$values['qmqe_answer_data'] = $values['qmqe_multiple_choice_answers'];
 				break;
+			case 'sort_answer':
+				$values['qmqe_answer_data'] = $values['qmqe_sorting_choice_answers'];
+				break;
+			case 'free_choice':
+				$values['qmqe_answer_data'] = $values['qmqe_free_choice_answers'];
+				break;
+			case 'fill_blanks':
+				$values['qmqe_answer_data'] = $values['qmqe_fill_blanks'];
+				break;
 		}
 
 		update_post_meta( $postId, 'qmqe_answer_data', $values['qmqe_answer_data'] );

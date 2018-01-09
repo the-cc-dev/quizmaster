@@ -201,6 +201,10 @@
 	display: inline-block;
 }
 
+.qm-field-repeater .qm-field-wrap {
+	display: inline-block;
+}
+
 
 /* Basic grid system based on http://j4n.co/blog/Creating-your-own-css-grid-system */
 @media (min-width: 1200px) {

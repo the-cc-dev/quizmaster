@@ -3,32 +3,42 @@ jQuery(document).ready(function( $ ) {
 	// get the correct repeater (or none) based on answer type
 	var answerType = $('.qm-field-qmqe_answer_type input:checked').val();
 
-	console.log(answerType)
+	// repeater settings
+	var repeaterSettings = {
+		initEmpty: false,
+		defaultValues: {
 
-	var repeater = false
+		},
+		ready: function (setIndexes) {
+				// $dragAndDrop.on('drop', setIndexes);
+		},
+		show: function () {
+			$(this).show();
+		},
+		isFirstItemUndeletable: false
+	}
+
+	// init repeaters
+	repeaterSingle = $('.qm-field-qmqe_single_choice_answers .repeater').repeater()
+	repeaterMultiple = $('.qm-field-qmqe_multiple_choice_answers .repeater').repeater()
+	repeaterSorting = $('.qm-field-qmqe_sorting_choice_answers .repeater').repeater()
+
+	// set list on active repeater
+	var answerDataJson = $('.qm-field-qmqe_answer_data input').val()
+	var answerData = $.parseJSON( answerDataJson )
 	switch( answerType ) {
 		case 'single':
-			repeater = $('.qm-field-qmqe_single_choice_answers .repeater').repeater()
+			repeaterSingle.setList( answerData );
 			break;
 		case 'multiple':
-			repeater = $('.qm-field-qmqe_multiple_choice_answers .repeater').repeater()
+			repeaterMultiple.setList( answerData );
 			break;
 		case 'sort_answer':
-			repeater = $('.qm-field-qmqe_sorting_choice_answers .repeater').repeater()
+			repeaterSorting.setList( answerData );
 			break;
 	}
 
-	console.log(repeater);
-
-	if( repeater ) {
-		var answerDataJson = $('.qm-field-qmqe_answer_data input').val()
-
-		var answerData = $.parseJSON( answerDataJson )
-		console.log( answerData );
-
-
-		repeater.setList( answerData );
-
-	}
+	// add sorting
+	$('body').find('[data-repeater-list]').sortable();
 
 });
