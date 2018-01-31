@@ -208,7 +208,7 @@ $fieldGroup = array (
 			'label' => 'Hide correct and incorrect messages',
 			'key' => 'qmqu_hide_answer_message_box',
 			'type' => 'true_false',
-			'instructions' => 'If you enable this option, the correct or incorrect message will be displayed.',
+			'instructions' => 'If you enable this option, the correct or incorrect message will not be displayed.',
 			'required' => 0,
 			'conditional_logic' => 0,
 		),
