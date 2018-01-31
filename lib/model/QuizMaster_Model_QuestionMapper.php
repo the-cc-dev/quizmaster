@@ -19,8 +19,6 @@ class QuizMaster_Model_QuestionMapper extends QuizMaster_Model_Mapper {
 			return wp_error( 'Question Model could not be loaded for ' . $qId );
 		}
 
-    $q->loadAnswerData();
-
     return $q;
   }
 

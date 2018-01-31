@@ -247,6 +247,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
     public function setQuizJson( $questions ) {
       $json = array();
       foreach ($questions as $question) {
+
         $answerArray = $question->getAnswerData();
 
         $json[$question->getId()]['type'] = $question->getAnswerType();
@@ -271,6 +272,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 				$json[$question->getId()]['incorrectMessage'] = $question->getIncorrectMsg();
 
         $answer_index = 0;
+
         foreach ($answerArray as $v) {
           if ($question->isAnswerPointsActivated()) {
             $json[$question->getId()]['points'][] = $v->getPoints();

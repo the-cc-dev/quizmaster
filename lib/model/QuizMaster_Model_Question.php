@@ -293,6 +293,7 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
       }
 
       $this->setAnswerData( $answerData );
+			return $this->getAnswerData();
 
     }
 
@@ -302,12 +303,8 @@ class QuizMaster_Model_Question extends QuizMaster_Model_Model {
 
     public function processFieldsDuringModelSet( $fields ) {
 
-
-
       // load the answer data based on answer type
-      $this->loadAnswerData();
-
-			return $fields; // temporary workaround
+			$fields['answerData'] = $this->loadAnswerData();
 
       $scoreCategoryID = $fields[ 'score_category' ];
       $scoreCategory = get_term( $scoreCategoryID );

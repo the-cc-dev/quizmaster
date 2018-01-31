@@ -992,10 +992,6 @@ function quizmasterLoadExtensions() {
 	QuizMaster_Extension::loadAll();
 }
 
-function quizmaster_field() {
-	return array();
-}
-
 function quizmaster_get_field( $postId, $key = false ) {
 
 	return QuizMaster_Field::getFieldValues( $postId, $key );
