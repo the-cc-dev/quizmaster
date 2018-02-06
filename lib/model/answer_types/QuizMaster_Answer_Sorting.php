@@ -15,12 +15,11 @@ class QuizMaster_Answer_Sorting extends QuizMaster_Model_Answer {
 
   public function load( $data ) {
 
-    $fieldAnswerData = $data['qmqe_sorting_choice_answers'];
+    $fieldAnswerData = $data['qmqe_answer_data'];
     $answerData = array();
 
     foreach( $fieldAnswerData as $fieldAnswer ) {
       $answer['answer'] = $fieldAnswer['qmqe_sorting_choice_answer'];
-			$answer['answer_id'] = $fieldAnswer['qmqe_sorting_choice_answer_id'];
       $answerData[] = new self( $answer );
     }
 
