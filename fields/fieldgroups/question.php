@@ -40,9 +40,6 @@ $fieldGroup = array (
  			'choices' => array (
  				'single' => 'Single Choice',
  				'multiple' => 'Multiple Choice',
- 				'free_answer' => 'Free Choice',
- 				'sort_answer' => 'Sorting',
- 				'fill_blank' => 'Fill in the Blank',
  			),
  			'default_value' => 'single',
  			'return_format' => 'value',
@@ -117,74 +114,6 @@ $fieldGroup = array (
 						'field' => 'field_5885e9f669c6f',
 						'operator' => '==',
 						'value' => 'multiple',
-					),
-				),
-			),
-		),
-		array (
-			'sub_fields' => array (
-				array (
-					'label' => 'Answer',
-					'key' => 'qmqe_sorting_choice_answer',
-					'type' => 'text',
-				),
-			),
-			'label' => 'Sorting Choice Answers',
-			'key' => 'qmqe_sorting_choice_answers',
-			'type' => 'repeater',
-			'conditional_logic' => array (
-				array (
-					array (
-						'field' => 'field_5885e9f669c6f',
-						'operator' => '==',
-						'value' => 'sort_answer',
-					),
-				),
-			),
-		),
-		array (
-			'default_value' => '',
-			'new_lines' => '',
-			'maxlength' => '',
-			'placeholder' => '',
-			'rows' => 4,
-			'key' => 'field_588a7ea280d53',
-			'label' => 'Free Choice Answers',
-			'key' => 'qmqe_free_choice_answers',
-			'type' => 'textarea',
-			'instructions' => 'Correct answers (one per line) (answers will be converted to lower case).',
-			'required' => 0,
-			'conditional_logic' => array (
-				array (
-					array (
-						'field' => 'field_5885e9f669c6f',
-						'operator' => '==',
-						'value' => 'free_answer',
-					),
-				),
-			),
-		),
-		array (
-			'default_value' => '',
-			'new_lines' => '',
-			'maxlength' => '',
-			'placeholder' => '',
-			'rows' => '',
-			'key' => 'field_588a8e01fbde9',
-			'label' => 'Fill in the Blank Answer',
-			'key' => 'qmqe_fill_blanks',
-			'type' => 'textarea',
-			'instructions' => 'Enclose the searched words with { } e.g. "I {play} soccer". Capital and small letters will be ignored.
-You can specify multiple options for a search word. Enclose the word with [ ] e.g. "I {[play][love][hate]} soccer" . In this case answers play, love OR hate are correct.
-If mode "Different points for every answer" is activated, you can assign points with |POINTS. Otherwise 1 point will be awarded for every answer.
-e.g. "I {play} soccer, with a {ball|3}" - "play" gives 1 point and "ball" 3 points.',
-			'required' => 0,
-			'conditional_logic' => array (
-				array (
-					array (
-						'field' => 'field_5885e9f669c6f',
-						'operator' => '==',
-						'value' => 'fill_blank',
 					),
 				),
 			),
