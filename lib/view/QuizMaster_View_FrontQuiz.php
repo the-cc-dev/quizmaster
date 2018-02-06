@@ -237,16 +237,25 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     public function setGlobalPoints( $questions ) {
       $globalPoints = 0;
-      foreach ($questions as $question) {
-        $answerArray = $question->getAnswerData();
-        $globalPoints += $question->getPoints();
-      }
+			if( !empty( $questions )) {
+				foreach ($questions as $question) {
+	        $answerArray = $question->getAnswerData();
+	        $globalPoints += $question->getPoints();
+	      }
+			}
       return $globalPoints;
     }
 
     public function setQuizJson( $questions ) {
       $json = array();
+
+			// no questions in quiz
+			if( empty( $questions )) {
+				return $json;
+			}
+
       foreach ($questions as $question) {
+
         $answerArray = $question->getAnswerData();
 
         $json[$question->getId()]['type'] = $question->getAnswerType();
@@ -271,6 +280,7 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 				$json[$question->getId()]['incorrectMessage'] = $question->getIncorrectMsg();
 
         $answer_index = 0;
+
         foreach ($answerArray as $v) {
           if ($question->isAnswerPointsActivated()) {
             $json[$question->getId()]['points'][] = $v->getPoints();

@@ -1434,11 +1434,21 @@ jQuery(document).ready(function( $ ) {
 			/*
   		 * Maybe start quiz or show start page
 			 */
-			if( plugin.config.options.isAutostart ) {
-				$( document ).on( 'quizmaster.quizDataLoaded', plugin.startQuiz )
+			console.log( quizmaster.questionCount() );
+			if( quizmaster.questionCount() == 0 ) {
+				// no questions in quiz
+				quizmaster.startPageShow();
+				quizmaster.elements.startButton.hide()
+				$('.qm-quiz-start-box').html('No questions in quiz.')
 			} else {
-				$( document ).on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
+				if( quizmaster.config.options.isAutostart ) {
+					quizmaster.on( 'quizmaster.quizDataLoaded', quizmaster.startQuiz )
+				} else {
+					quizmaster.startPageShow();
+				}
 			}
+
+
 
 			// quiz setup functions
 			plugin.element.on( 'quizmaster.startQuiz', plugin.modeHandler );

@@ -17,26 +17,20 @@ class QuizMaster_Helper_Admin {
 		add_filter('manage_quizmaster_score_posts_custom_column', array( get_class(), 'score_column_content' ), 10, 2);
 		add_filter('manage_edit-quizmaster_score_sortable_columns', array( get_class(), 'score_sortable_column' ));
 
-		/* ACF Save Hooks to Associate Quiz Questions */
-		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'quiz_associate_questions'), 5 );
-		add_action( quizmaster_get_fields_prefix() . '/save_post', array( get_class(), 'question_associate_quizzes'), 5 );
-
+		// do question and quiz association on save_post
+		add_action( 'quizmaster_question_save', array( get_class(), 'question_associate_quizzes'), 5 );
+		add_action( 'quizmaster_quiz_save', array( get_class(), 'quiz_associate_questions'), 5 );
 
 	}
 
 
-	public static function question_associate_quizzes( $postId ) {
-
-		// bail early if no ACF data
-    if( 'quizmaster_question' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
-      return;
-    }
+	public static function question_associate_quizzes( $questionId ) {
 
 		// data setup
-		$questionId = $postId;
-		$newQuizzes = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD ];
-		$currentQuizzes = get_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $questionId );
+		$currentQuizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
+
+		$currentQuizzes = json_decode( $currentQuizzes );
 
 		// nothing to do if old and new are both empty
 		if( empty($newQuizzes) && empty($currentQuizzes)) {
@@ -45,7 +39,6 @@ class QuizMaster_Helper_Admin {
 
 		// disassociate questions removed from quiz question list
 		if( !empty( $currentQuizzes )) {
-
 			if( empty( $newQuizzes )) {
 				$quizzesRemoved = $currentQuizzes;
 			} else {
@@ -80,17 +73,10 @@ class QuizMaster_Helper_Admin {
 	}
 
 
-	public static function quiz_associate_questions( $postId ) {
-
-		// bail early if no ACF data
-    if( 'quizmaster_quiz' != get_post_type( $postId ) || empty($_POST[ quizmaster_get_fields_prefix() ]) ) {
-      return;
-    }
+	public static function quiz_associate_questions( $quizId ) {
 
 		// data setup
-		$quizId = $postId;
-		$newQuestions = $_POST[ quizmaster_get_fields_prefix() ][ QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD ];
-		$currentQuestions = get_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizId );
+		$currentQuestions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$quizQuestion = new QuizMaster_Model_QuizQuestion;
 
 		if( empty($newQuestions) && empty($currentQuestions)) {
@@ -103,7 +89,7 @@ class QuizMaster_Helper_Admin {
 			if( !empty( $newQuestions )) {
 				$questionsRemoved = array_diff( $currentQuestions, $newQuestions );
 			} else {
-				$questionsRemoved = $currentQuestions;
+				$questionsRemoved = json_decode( $currentQuestions );
 			}
 
 			foreach( $questionsRemoved as $questionId ) {
@@ -193,11 +179,11 @@ class QuizMaster_Helper_Admin {
 
 	  switch ( $column ) {
 	    case 'quiz' :
-	      $quizRevisionId = get_field( $score->getFieldPrefix() . 'quiz_revision', $post_id );
+	      $quizRevisionId = quizmaster_get_field( $post_id, $score->getFieldPrefix() . 'quiz_revision' );
 	      print get_the_title( $quizRevisionId );
 	      break;
 	    case 'user' :
-	      $user = get_field( $score->getFieldPrefix() . 'user', $post_id );
+	      $user = quizmaster_get_field( $post_id, $score->getFieldPrefix() . 'user' );
 				if( is_array( $user )) {
 					print $user['display_name'];
 				} else {

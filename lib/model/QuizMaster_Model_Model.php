@@ -18,7 +18,7 @@ class QuizMaster_Model_Model {
     }
 
     public function setModelByID( $id ) {
-      $fields = get_fields( $id );
+      $fields = quizmaster_get_field( $id );
       if( !empty( $fields )) {
         $fields = $this->stripFieldPrefixes( $fields );
       }
@@ -128,7 +128,7 @@ class QuizMaster_Model_Model {
         return;
       }
 
-      $fieldCtr = new QuizMaster_Controller_Fields();
+      $fieldCtr = new QuizMaster_Controller_AdminFields();
       return $fieldCtr->loadFieldGroup( $this->fieldGroupKey() );
 
     }
@@ -192,7 +192,7 @@ class QuizMaster_Model_Model {
 		public function __get( $name ) {
 
 			$fieldKey = $this->fieldKeyByPropertyName( $name );
-			return get_field( $this->getFieldPrefix() . $fieldKey, $this->getId() );
+			return quizmaster_get_field( $this->getId(), $this->getFieldPrefix() . $fieldKey );
 
 		}
 

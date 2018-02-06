@@ -30,19 +30,48 @@ class QuizMaster_Controller_Admin {
     }
 
     public function enqueueScript() {
-        wp_enqueue_script(
-            'quizMaster_admin_javascript',
-            plugins_url('js/quizMaster_admin' . (QUIZMASTER_DEV ? '' : '.min') . '.js', QUIZMASTER_FILE),
-            array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
-            QUIZMASTER_VERSION
-        );
 
-        wp_enqueue_style('jquery-ui',
-            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+			global $post;
+			if( !$post ) {
+				return;
+			}
 
-				wp_enqueue_style( 'quizmaster-admin-css', plugins_url('css/quizmaster-admin.css', QUIZMASTER_FILE), array(), QUIZMASTER_VERSION );
+			wp_enqueue_script( array( 'jquery-ui-core', 'jquery-ui-sortable') );
 
-        $this->localizeScript();
+			// repeater
+			wp_enqueue_script(
+				'quizMaster_repeater_js',
+				plugins_url('js/jquery.repeater.js', QUIZMASTER_FILE),
+				array('jquery', 'jquery-ui-sortable'),
+				QUIZMASTER_VERSION
+			);
+
+      wp_enqueue_script(
+          'quizmaster_admin_js',
+          plugins_url('js/quizmaster_admin.js', QUIZMASTER_FILE),
+          array('jquery', 'quizMaster_repeater_js', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
+          QUIZMASTER_VERSION
+      );
+
+
+
+			// conditional load question editor script
+			if( $post->post_type == 'quizmaster_question' ) {
+				wp_enqueue_script(
+						'quizMaster_question_editor_js',
+						plugins_url('js/quizmaster_question_editor.js', QUIZMASTER_FILE),
+						array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
+						QUIZMASTER_VERSION
+				);
+			}
+
+      wp_enqueue_style('jquery-ui',
+          'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
+			wp_enqueue_style( 'quizmaster-admin-css', plugins_url('css/quizmaster-admin.css', QUIZMASTER_FILE), array(), QUIZMASTER_VERSION );
+
+      $this->localizeScript();
+
     }
 
     public function menuItemSort() {

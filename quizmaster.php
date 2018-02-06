@@ -5,8 +5,8 @@ Plugin URI: http://wordpress.org/extend/plugins/quizmaster
 Description: Best free quiz plugin for WordPress.
 Version: 0.8.7
 Author: GoldHat Group
-Author URI: https://wpquizmaster.com
-Copyright: GoldHat Group (https://goldhat.ca), Julius Fischer (WP Pro Quiz)
+Author URI: https://goldhat.ca
+Copyright: GoldHat Group, Julius Fischer (WP Pro Quiz)
 Text Domain: quizmaster
 Domain Path: /languages
 */
@@ -39,6 +39,7 @@ register_activation_hook( __FILE__, 'quizMasterActivation' );
 register_deactivation_hook( __FILE__, 'quizMasterDeactivation' );
 
 add_filter( 'the_content', 'templateContentLoading' );
+
 function templateContentLoading( $content ) {
 
 	if( !is_single() ) {
@@ -69,14 +70,19 @@ function templateContentLoading( $content ) {
 class quizmaster {
 
 	public function __construct() {
-		$this->init();
+
 	}
 
 	public function init() {
 		$enableCopyPosts = array( 'quizmaster_quiz', 'quizmaster_question' );
 		new QuizMaster_Helper_CopyPost( $enableCopyPosts );
 
-		add_filter( quizmaster_get_fields_prefix() . '/load_value/name=qmqe_sorting_choice_answer_id', array( $this, 'makeSortingChoiceAnswerId' ), 10, 3 );
+		// register global
+		$GLOBALS['quizmaster'] = new quizmaster();
+
+		// include fields module
+		require_once( QUIZMASTER_PATH . '/lib/module/field/loader.php' );
+
 	}
 
 	public function makeSortingChoiceAnswerId( $value ) {
@@ -92,7 +98,8 @@ class quizmaster {
 }
 
 // initiate quizmaster
-new quizmaster();
+$quizmaster = new quizmaster();
+$quizmaster->init();
 
 /* remove stuff at deactivation */
 function quizMasterDeactivation() {
@@ -100,7 +107,6 @@ function quizMasterDeactivation() {
 }
 
 function quizMasterActivation() {
-  quizmasterFieldsApiTest();
 
 	// create post types and flush rewrite rules
 	quizmasterAddPostTypes();
@@ -111,24 +117,6 @@ function quizMasterActivation() {
   quizmasterCreateStudentReportPage();
 
 	QuizMaster_Extension::doActivation();
-}
-
-function quizmasterFieldsApiTest() {
-  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  $isAcfActive = is_plugin_active('advanced-custom-fields-pro/acf.php');
-	$isFieldMasterActive = is_plugin_active('fieldmaster/fieldmaster.php');
-  if( !$isAcfActive && !$isFieldMasterActive ) {
-    deactivate_plugins( plugin_basename( __FILE__ ) );
-		$activationMsg = __( 'QuizMaster requires either FieldMaster (Free Fields Plugin, download latest release at' , 'quizmaster');
-		$activationMsg .= '<a href="https://github.com/goldhat/fieldmaster/releases/latest/">https://github.com/goldhat/fieldmaster/releases/tag/</a>';
-		$activationMsg .= __( 'or ACF (Advanced Custom Fields) Pro! Visit ', 'quizmaster' );
-		$activationMsg .= '<a href="https://www.advancedcustomfields.com/">https://www.advancedcustomfields.com/</a>';
-		$activationMsg .= __( 'to purchase or return to ', 'quizmaster' );
-		$activationMsg .= '<a href="' . get_admin_url( null, 'plugins.php' ) . '">';
-		$activationMsg .= __( 'Manage Plugins', 'quizmaster' );
-		$activationMsg .= '</a>.';
-    wp_die( $activationMsg );
-  }
 }
 
 add_action('init', 'quizmasterPluginsLoaded', 5);
@@ -620,7 +608,6 @@ function quizMasterInit() {
 
   // add fieldgroups and option pages
   if( !QUIZMASTER_DEV ) {
-    add_filter( quizmaster_get_fields_prefix() . '/settings/show_admin', '__return_false');
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/email.php' );
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/question.php' );
     include_once( QUIZMASTER_PATH . '/fields/fieldgroups/quiz.php' );
@@ -630,15 +617,16 @@ function quizMasterInit() {
 
 	quizMasterAddOptionsPages();
 
-	$fieldCtr = new QuizMaster_Controller_Fields();
+	$fieldCtr = new QuizMaster_Controller_AdminFields();
 	$fieldCtr->loadFieldGroups();
 
 }
 
 function quizMasterAddOptionsPages() {
 
+	return false;
+
   /* Options Pages */
-	$addOptionsPageFunc = quizmaster_get_fields_prefix() . '_add_options_page';
   $option_page = $addOptionsPageFunc(array(
 		'page_title' 	=> 'QuizMaster Settings',
 		'menu_title' 	=> 'Settings',
@@ -853,9 +841,6 @@ function revisionTest( $post_id, $post, $update ) {
     return;
   }
 
-	$copyPostMetaFunc = quizmaster_get_fields_prefix() . '_copy_postmeta';
-  $copyPostMetaFunc( $post_id, $revision_id );
-
   return $post_id;
 
 }
@@ -909,7 +894,7 @@ function setStudentReportPageOption( $post_id ) {
 }
 
 function getStudentReportPageOption() {
-  return get_field('qm_student_report_page', 'option');
+  return quizmaster_get_field( 'setting', 'qm_student_report_page' );
 }
 
 function quizMasterAddAdminCaps() {
@@ -1008,10 +993,40 @@ function quizmasterLoadExtensions() {
 	QuizMaster_Extension::loadAll();
 }
 
-// convenience function to get the fields prefix
-function quizmaster_get_fields_prefix() {
-	return QuizMaster_Helper_Fields::getFieldApiPrefix();
+function quizmaster_get_field( $postId, $key = false ) {
+
+	return QuizMaster_Field::getFieldValues( $postId, $key );
+
+}
+
+add_action('admin_init', 'quizmasterMetaboxes', 15);
+function quizmasterMetaboxes() {
+	$metaboxes = new QuizMaster_Controller_Metabox();
+}
+
+add_action('admin_init', 'quizmasterFields', 10);
+function quizmasterFields() {
+	$fields = new QuizMaster_Controller_AdminFields();
+	$fields->init();
 }
 
 // basic implementation of loaded hook but needs to be moved when this file is refactored
 do_action('quizmaster_loaded');
+
+// logging
+function quizmasterLog ( $log )  {
+	if ( true === WP_DEBUG ) {
+		if ( is_array( $log ) || is_object( $log ) ) {
+			error_log( print_r( $log, true ) );
+		} else {
+			error_log( $log );
+		}
+	}
+}
+
+function quizmasterEnsureArray( $value ) {
+	if( !is_array($value)) {
+		return json_decode( $value );
+	}
+	return $value;
+}

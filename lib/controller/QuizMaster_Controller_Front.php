@@ -18,6 +18,10 @@ class QuizMaster_Controller_Front {
       // init controller email
       $emailCtr = new QuizMaster_Controller_Email();
 
+			// init and load fields
+			$fieldCtr = new QuizMaster_Controller_AdminFields();
+			$fieldCtr->init();
+
     }
 
     public function getSetQuizId() {
