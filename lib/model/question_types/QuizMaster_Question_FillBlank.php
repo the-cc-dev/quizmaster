@@ -54,8 +54,6 @@ class QuizMaster_Question_FillBlank extends QuizMaster_Model_Question {
 
       $data['replace'] = preg_replace('#\{(.*?)(?:\|(\d+))?(?:[\s]+)?\}#im', '@@quizMasterCloze@@', $answer_text);
 
-      quizmaster_log( $data );
-
       return $data;
   }
 

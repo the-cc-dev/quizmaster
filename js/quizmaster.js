@@ -54,6 +54,9 @@ jQuery(document).ready(function( $ ) {
 
 		plugin.startPageShow = function() {
 
+			console.log( plugin.config )
+			console.log(JSON.stringify( plugin.config.lock ));
+
 			if( plugin.config.lock.locked == false ) {
 				plugin.elements.startPage.show();
 			}
@@ -504,9 +507,6 @@ jQuery(document).ready(function( $ ) {
 
 				if ( plugin.config.options.forcingQuestionSolve && !plugin.data.quizSolved[ plugin.getCurrentQuestion().index() ]
 					&& ( plugin.config.options.quizSummeryHide || !plugin.config.options.reviewQustion )) {
-
-						console.log('returning false on next');
-
 					return false;
 				}
 
@@ -576,8 +576,6 @@ jQuery(document).ready(function( $ ) {
 		}
 
 		plugin.startQuiz = function() {
-
-			console.log('startQuiz');
 
 			plugin.startPageHide();
 
@@ -1156,9 +1154,6 @@ jQuery(document).ready(function( $ ) {
 
 		plugin.loadQuizData = function () {
 
-			console.log('loadQuizData');
-			console.log(plugin.config);
-
 			plugin.ajax({
 					action: 'quizmaster_admin_ajax',
 					func: 'quizLoadData',
@@ -1167,14 +1162,10 @@ jQuery(document).ready(function( $ ) {
 					}
 			}, function (json) {
 
-				console.log(json);
-
 				plugin.config.globalPoints = json.globalPoints;
 				plugin.config.catPoints = json.catPoints;
 				plugin.config.json = json.json;
 				plugin.element.find('.quizMaster_quizAnker').after(json.content);
-
-				console.log('fire quizDataLoaded');
 
 				// quiz data loaded event
 				$( document ).trigger({
@@ -1294,8 +1285,6 @@ jQuery(document).ready(function( $ ) {
 
 		plugin.startQuizShowQuestion = function() {
 
-			console.log('startQuizShowQuestion');
-
 			if( plugin.config.mode != 2 ) {
 
 				// get first question object and show
@@ -1393,9 +1382,6 @@ jQuery(document).ready(function( $ ) {
 
 		plugin.init = function( options ) {
 
-			console.log('init 1386');
-			console.log(options);
-
 			/*
  			 * Set initial status
 			 */
@@ -1434,21 +1420,18 @@ jQuery(document).ready(function( $ ) {
 			/*
   		 * Maybe start quiz or show start page
 			 */
-			console.log( quizmaster.questionCount() );
-			if( quizmaster.questionCount() == 0 ) {
+			if( plugin.questionCount() == 0 ) {
 				// no questions in quiz
-				quizmaster.startPageShow();
-				quizmaster.elements.startButton.hide()
+				plugin.elements.startButton.hide()
 				$('.qm-quiz-start-box').html('No questions in quiz.')
+				plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
 			} else {
-				if( quizmaster.config.options.isAutostart ) {
-					quizmaster.on( 'quizmaster.quizDataLoaded', quizmaster.startQuiz )
+				if( plugin.config.options.isAutostart ) {
+					plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startQuiz )
 				} else {
-					quizmaster.startPageShow();
+					plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
 				}
 			}
-
-
 
 			// quiz setup functions
 			plugin.element.on( 'quizmaster.startQuiz', plugin.modeHandler );
@@ -1508,8 +1491,6 @@ jQuery(document).ready(function( $ ) {
 
 			// bind to questionAnswered event
 			plugin.element.on( 'quizmaster.questionAnswered', function() {
-
-				console.log('checkQuestion');
 				plugin.checkQuestion()
 			});
 
@@ -1523,12 +1504,8 @@ jQuery(document).ready(function( $ ) {
 
 	$.fn.quizmaster = function( options ) {
 
-		console.log('1492');
-
         // iterate through the DOM elements we are attaching the plugin to
         return this.each(function() {
-
-						console.log($(this));
 
             // if plugin has not already been attached to the element
             if (undefined == $(this).data('quizmaster')) {

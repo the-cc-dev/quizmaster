@@ -307,6 +307,9 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
           // cloze
           if ($question->getAnswerType() === 'fill_blank') {
             $clozeData = $question->fetchCloze($v->getAnswer());
+
+						var_dump( $clozeData );
+
             $json[$question->getId()]['correct'] = $clozeData['correct'];
             if ($question->isAnswerPointsActivated()) {
               $json[$question->getId()]['points'] = $clozeData['points'];

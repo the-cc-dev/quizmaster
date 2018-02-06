@@ -94,8 +94,6 @@ class QuizMaster_Controller_Email {
 
   public function send() {
 
-    quizmaster_log($this->email);
-
     $send = wp_mail(
       $this->email->getRecipients(),
       $this->email->getSubject(),
@@ -128,14 +126,6 @@ class QuizMaster_Controller_Email {
 
     $trigger = 'quizmaster_completed_quiz';
     $emailPosts = $this->getEmailsByTrigger( $trigger );
-
-    // log send details
-    quizmaster_log( array(
-      'class'   => 'QuizMaster_Controller_Email',
-      'method'  => 'sendEmailCompletedQuiz',
-      'line'    => 124,
-      'score'   => $score
-    ));
 
     foreach( $emailPosts as $emailPost ) {
       $this->email  = new QuizMaster_Model_Email( $emailPost->ID );
