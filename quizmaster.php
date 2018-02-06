@@ -1022,3 +1022,10 @@ function quizmasterLog ( $log )  {
 		}
 	}
 }
+
+function quizmasterEnsureArray( $value ) {
+	if( !is_array($value)) {
+		return json_decode( $value );
+	}
+	return $value;
+}

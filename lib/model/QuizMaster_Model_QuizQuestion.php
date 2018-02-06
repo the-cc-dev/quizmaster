@@ -22,22 +22,23 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		// adds question to end of quiz
 		$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$questions[] = $questionId;
-		update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions, $quizId );
+		update_post_meta( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions );
 
 		// adds quiz to list of selected quizzes associated from question editor
 		$quizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		$quizzes[] = $quizId;
-		update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizzes, $questionId );
+		update_post_meta( $questionId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $quizzes );
 
 	}
 
 	public function clearAssociatedQuizzesFromQuestion( $questionId, $quizId = false ) {
 
 		if( $quizId == false ) {
-			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, array(), $questionId );
+			update_post_meta( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, array() );
 		} else {
 			// selective approach: remove one quiz
 			$quizzes = quizmaster_get_field( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD );
+			$quizzes = quizmasterEnsureArray( $quizzes );
 
 			if( empty( $quizzes )) {
 				return;
@@ -46,7 +47,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 			if( ( $key = array_search( $quizId, $quizzes )) !== false ) {
 				unset($quizzes[$key]);
 			}
-			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes, $questionId );
+			update_post_meta( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes );
 		}
 
 	}
@@ -57,15 +58,24 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 	public function clearAssociatedQuestionsFromQuiz( $quizId, $questionId = false ) {
 
 		if( $questionId == false ) {
-			update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, array(), $quizId );
+			update_post_meta( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, array() );
 		} else {
 
 			// selective approach: remove one quiz
 			$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
+
+			if( !$questions ) {
+				return;
+			}
+
+			if( !is_array( $questions )) {
+				$questions = json_decode( $questions );
+			}
+
 			if( ( $key = array_search( $questionId, $questions )) !== false ) {
 				unset($questions[$key]);
 			}
-			update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions, $quizId );
+			update_post_meta( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions );
 
 		}
 
@@ -93,7 +103,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 		$questions = quizmaster_get_field( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD );
 		if( !in_array( $questionId, $questions )) {
 			$questions[] = $questionId;
-			update_field( QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions, $quizId );
+			update_post_meta( $quizId, QUIZMASTER_QUIZ_QUESTION_SELECTOR_FIELD, $questions );
 		}
 
 	}
@@ -121,7 +131,7 @@ class QuizMaster_Model_QuizQuestion extends QuizMaster_Model_Model {
 
 		if( !in_array( $quizId, $quizzes )) {
 			$quizzes[] = $quizId;
-			update_field( QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes, $questionId );
+			update_post_meta( $questionId, QUIZMASTER_QUESTION_QUIZ_SELECTOR_FIELD, $quizzes );
 		}
 
 	}

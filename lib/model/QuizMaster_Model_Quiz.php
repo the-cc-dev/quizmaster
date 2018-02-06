@@ -564,6 +564,8 @@ class QuizMaster_Model_Quiz extends QuizMaster_Model_Model {
       // save meta
       $this->saveMeta();
 
+			do_action( 'quizmaster_quiz_save', $this->getId() );
+
     }
 
     /*

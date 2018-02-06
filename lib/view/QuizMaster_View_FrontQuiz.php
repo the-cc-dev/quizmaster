@@ -237,15 +237,23 @@ class QuizMaster_View_FrontQuiz extends QuizMaster_View_View {
 
     public function setGlobalPoints( $questions ) {
       $globalPoints = 0;
-      foreach ($questions as $question) {
-        $answerArray = $question->getAnswerData();
-        $globalPoints += $question->getPoints();
-      }
+			if( !empty( $questions )) {
+				foreach ($questions as $question) {
+	        $answerArray = $question->getAnswerData();
+	        $globalPoints += $question->getPoints();
+	      }
+			}
       return $globalPoints;
     }
 
     public function setQuizJson( $questions ) {
       $json = array();
+
+			// no questions in quiz
+			if( empty( $questions )) {
+				return $json;
+			}
+
       foreach ($questions as $question) {
 
         $answerArray = $question->getAnswerData();

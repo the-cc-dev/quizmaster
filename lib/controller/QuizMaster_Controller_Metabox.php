@@ -55,6 +55,9 @@ class QuizMaster_Controller_Metabox {
 
 		}
 
+		quizmasterLog('before quizmaster_quiz_save 58');
+		do_action( 'quizmaster_quiz_save', $postId );
+
 	}
 
 	public function saveMetaQuestion( $postId, $fieldGroupKey = 'question' ) {
@@ -112,6 +115,9 @@ class QuizMaster_Controller_Metabox {
 		}
 
 		update_post_meta( $postId, 'qmqe_answer_data', $values['qmqe_answer_data'] );
+
+		quizmasterLog('before quizmaster_question_save 58');
+		do_action( 'quizmaster_question_save', $postId );
 
 	}
 
