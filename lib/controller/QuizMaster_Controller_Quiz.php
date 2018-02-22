@@ -8,44 +8,60 @@ class QuizMaster_Controller_Quiz extends QuizMaster_Controller_Controller
 
     public function isLockQuiz() {
 
-        $quizId = (int)$this->_post['quizId'];
-        $userId = get_current_user_id();
-        $data = array();
+			// default lock return
+			$data = array(
+				'locked' => 0,
+				'type' => false
+			);
 
-        $lockMapper = new QuizMaster_Model_LockMapper();
-        $quizMapper = new QuizMaster_Model_QuizMapper();
+      $quizId = (int)$this->_post['quizId'];
+      $userId = get_current_user_id();
 
-        $quiz = $quizMapper->fetch($this->_post['quizId']);
+      $lockMapper = new QuizMaster_Model_LockMapper();
+      $quizMapper = new QuizMaster_Model_QuizMapper();
 
-        if ($quiz === null || $quiz->getId() <= 0) {
-            return null;
-        }
+      $quiz = $quizMapper->fetch($this->_post['quizId']);
+
+      if ($quiz === null || $quiz->getId() <= 0) {
+        return null;
+      }
 
         if ($this->isPreLockQuiz($quiz)) {
-            $lockIp = $lockMapper->isLock($this->_post['quizId'], $this->getIp(), $userId,
-                QuizMaster_Model_Lock::TYPE_QUIZ);
-            $lockCookie = false;
-            $cookieTime = $quiz->getQuizRunOnceTime();
+          $lockIp = $lockMapper->isLock($this->_post['quizId'], $this->getIp(), $userId, QuizMaster_Model_Lock::TYPE_QUIZ);
+          $lockCookie = false;
+          $cookieTime = $quiz->getQuizRunOnceTime();
 
-            if (isset($this->_cookie['qm-locked']) && $userId == 0 && $quiz->isQuizRunOnceCookie()) {
-                $cookieJson = json_decode($this->_cookie['qm-locked'], true);
+          if (isset($this->_cookie['qm-locked']) && $userId == 0 && $quiz->isQuizRunOnceCookie()) {
+            $cookieJson = json_decode($this->_cookie['qm-locked'], true);
 
-                if ($cookieJson !== false) {
-                    if (isset($cookieJson[$this->_post['quizId']]) && $cookieJson[$this->_post['quizId']] == $cookieTime) {
-                        $lockCookie = true;
-                    }
-                }
+            if ($cookieJson !== false) {
+              if (isset($cookieJson[$this->_post['quizId']]) && $cookieJson[$this->_post['quizId']] == $cookieTime) {
+                $lockCookie = true;
+              }
             }
+          }
 
-            $data['lock'] = array(
-                'is' => ($lockIp || $lockCookie),
-                'pre' => true
-            );
+					if( $lockCookie ) {
+
+						$data = array(
+	            'locked' => 1,
+							'type' => 'quiz_start_once'
+	          );
+
+					}
+
         }
 
         // lock quiz if user not logged in
         if ($quiz->isStartOnlyRegisteredUser()) {
-            $data['startUserLock'] = (int)!is_user_logged_in();
+
+					if( (int)!is_user_logged_in() ) {
+						$data = array(
+							'locked' => 1,
+							'type' => 'registered_user_only'
+						);
+					}
+
         }
 
 				// enable extensions to filter quiz lock result

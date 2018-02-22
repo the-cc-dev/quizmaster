@@ -54,10 +54,12 @@ jQuery(document).ready(function( $ ) {
 
 		plugin.startPageShow = function() {
 
-			console.log( plugin.config )
-			console.log(JSON.stringify( plugin.config.lock ));
+			console.log( 'startPageShow()' )
+			console.log( 'quiz lock: ')
+			console.log( plugin.config.lock );
+			console.log( 'status: ' + plugin.getStatus());
 
-			if( plugin.config.lock.locked == false ) {
+			if( plugin.getStatus() != 'locked' ) {
 				plugin.elements.startPage.show();
 			}
 
@@ -752,7 +754,7 @@ jQuery(document).ready(function( $ ) {
 			var correctAnswerEl = plugin.element.find('.quizMaster_correct_answer');
 			correctAnswerEl.text( plugin.data.results.comp.correctQuestions )
 
-			var $pointFields = plugin.element.find('.quizMaster_points span');
+			var $pointFields = plugin.element.find('.qm-points span');
 
 			$pointFields.eq(0).text(plugin.data.results.comp.points);
 			$pointFields.eq(1).text(plugin.config.globalPoints);
@@ -1155,17 +1157,19 @@ jQuery(document).ready(function( $ ) {
 		plugin.loadQuizData = function () {
 
 			plugin.ajax({
-					action: 'quizmaster_admin_ajax',
-					func: 'quizLoadData',
-					data: {
-						quizId: plugin.config.quizId
-					}
+				action: 'quizmaster_admin_ajax',
+				func: 'quizLoadData',
+				data: {
+					quizId: plugin.config.quizId
+				}
 			}, function (json) {
 
 				plugin.config.globalPoints = json.globalPoints;
 				plugin.config.catPoints = json.catPoints;
 				plugin.config.json = json.json;
 				plugin.element.find('.quizMaster_quizAnker').after(json.content);
+
+				console.log('before trigger quizmaster.quizDataLoaded');
 
 				// quiz data loaded event
 				$( document ).trigger({
@@ -1367,10 +1371,19 @@ jQuery(document).ready(function( $ ) {
           }
       }, function (json) {
 
+				console.log( 'quizCheckLock ajax call return:');
+				console.log( json );
+
 				if (json != undefined) {
 
-					var lock = json
-          plugin.config.lock = lock
+					var lockStatus = 0;
+
+					// no lock handling
+					if( lockStatus != '' ) {
+						plugin.config.lock = json
+					} else {
+						plugin.config.lock = 0
+					}
 
 					if( json.lock == true ) {
 						plugin.setStatus('locked')
@@ -1381,6 +1394,8 @@ jQuery(document).ready(function( $ ) {
 		}
 
 		plugin.init = function( options ) {
+
+			console.log('plugin.init()')
 
 			/*
  			 * Set initial status
@@ -1396,9 +1411,34 @@ jQuery(document).ready(function( $ ) {
 				},
 	      options: {
 					catPoints: []
-				}
+				},
+				locked: []
 
 	    }, options );
+
+			console.log( 'plugin.config:')
+			console.log( plugin.config )
+
+			/*
+			 * Starting Routine
+			 * hook quizDataLoaded event to either start quiz or show start page
+			 * handler option for no questions
+			 */
+			if( plugin.questionCount() == 0 ) {
+				// no questions in quiz
+				plugin.elements.startButton.hide()
+				$('.qm-quiz-start-box').html('No questions in quiz.')
+				plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
+			} else {
+
+				console.log( 'is autoStart set: ' + plugin.config.options.isAutostart );
+
+				if( plugin.config.options.isAutostart ) {
+					plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startQuiz )
+				} else {
+					$( document ).on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
+				}
+			}
 
 			// convert the time limit set in seconds to ms
 			plugin.timer.convertTimeLimitMs();
@@ -1412,6 +1452,8 @@ jQuery(document).ready(function( $ ) {
 			plugin.hintInit();
 			plugin.sortableInit();
 
+			console.log('after sortableInit() is called, plugin.config');
+
 			/*
 			 * Check quiz lock
 			 */
@@ -1420,18 +1462,12 @@ jQuery(document).ready(function( $ ) {
 			/*
   		 * Maybe start quiz or show start page
 			 */
-			if( plugin.questionCount() == 0 ) {
-				// no questions in quiz
-				plugin.elements.startButton.hide()
-				$('.qm-quiz-start-box').html('No questions in quiz.')
-				plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
-			} else {
-				if( plugin.config.options.isAutostart ) {
-					plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startQuiz )
-				} else {
-					plugin.element.on( 'quizmaster.quizDataLoaded', plugin.startPageShow )
-				}
-			}
+
+			 console.log('before start quiz check, plugin.config')
+
+			 console.log('questionCount: ' + plugin.questionCount() );
+
+
 
 			// quiz setup functions
 			plugin.element.on( 'quizmaster.startQuiz', plugin.modeHandler );

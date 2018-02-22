@@ -256,7 +256,7 @@ h4.qm-check-question-points {
     vertical-align: middle;
 }
 
-.quizMaster_points {
+.qm-points {
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;

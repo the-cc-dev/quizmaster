@@ -20,7 +20,7 @@
 							<?php _e('Time has elapsed', 'quizmaster'); ?>
 					</p>
 					<?php if (!$view->quiz->isHideResultPoints()) { ?>
-							<p class="quizMaster_points">
+							<p class="qm-points">
 									<?php printf(__('You have reached %s of %s points, (%s)', 'quizmaster'), '<span>0</span>',
 											'<span>0</span>', '<span>0</span>'); ?>
 							</p>
