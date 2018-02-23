@@ -745,6 +745,21 @@ jQuery(document).ready(function( $ ) {
 
 		};
 
+		plugin.reportPointsEarned = function() {
+
+			console.log('reportPointsEarned')
+			console.log('points earned:')
+			console.log( plugin.data.results.comp )
+			console.log( plugin.data.results.comp.points )
+
+			var $pointFields = plugin.element.find('.qm-points span');
+
+			$pointFields.eq(0).text(plugin.data.results.comp.points);
+			$pointFields.eq(1).text(plugin.config.globalPoints);
+			$pointFields.eq(2).text(plugin.data.results.comp.result + '%');
+
+		};
+
 		plugin.afterQuizFinish = function() {
 
 			plugin.elements.reviewBox.hide();
@@ -754,11 +769,8 @@ jQuery(document).ready(function( $ ) {
 			var correctAnswerEl = plugin.element.find('.quizMaster_correct_answer');
 			correctAnswerEl.text( plugin.data.results.comp.correctQuestions )
 
-			var $pointFields = plugin.element.find('.qm-points span');
-
-			$pointFields.eq(0).text(plugin.data.results.comp.points);
-			$pointFields.eq(1).text(plugin.config.globalPoints);
-			$pointFields.eq(2).text(plugin.data.results.comp.result + '%');
+			// report points earned
+			plugin.reportPointsEarned()
 
 			// hide buttons and elements
 			plugin.elements.nextButton.hide()

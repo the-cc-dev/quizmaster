@@ -12,6 +12,13 @@ class QuizMaster_Field {
 		$field->setDefinition( $fieldDefinition );
 		$field->setKey( $fieldDefinition['key'] );
 		$field->setLabel( $fieldDefinition['label'] );
+
+		// set default value
+		$field->setDefaultValue( false );
+		if( array_key_exists('default_value', $fieldDefinition)) {
+			$field->setDefaultValue( $fieldDefinition['default_value'] );
+		}
+
 		$field->setValue( null );
 		return $field;
 	}
@@ -25,13 +32,16 @@ class QuizMaster_Field {
 
 	public function renderValue() {
 
-		if( isset( $this->value )) {
+		if( isset( $this->value ) && $this->value !== false ) {
 			if( is_array( $this->value )) {
 				print htmlentities( json_encode( $this->value ) );
 			} else {
 				print $this->value;
 			}
+		} elseif( isset( $this->default ) && $this->default !== false ) {
+			print $this->default;
 		}
+
 	}
 
 	public function setType( $type ) {
@@ -40,6 +50,10 @@ class QuizMaster_Field {
 
 	public function setLabel( $label ) {
 		$this->label = $label;
+	}
+
+	public function setDefaultValue( $defaultValue ) {
+		$this->default = $defaultValue;
 	}
 
 	public function setPostId( $postId ) {
