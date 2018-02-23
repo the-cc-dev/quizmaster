@@ -3,7 +3,7 @@
 	<?php foreach( $field->definition['choices'] as $value => $choice ) : ?>
 		<li>
 			<label title="<?php if( array_key_exists( 'instructions', $field->definition )) { print $field->definition['instructions']; } ?>">
-				<input<?php if( $field->value == $value ) { print ' checked'; } ?> type="radio" name="<?php print $field->key ?>" value="<?php print $value; ?>">
+				<input<?php if( $field->getValue() == $value ) { print ' checked'; } ?> type="radio" name="<?php print $field->key ?>" value="<?php print $value; ?>">
 					<?php print $choice; ?>
 				</input>
 			</label>

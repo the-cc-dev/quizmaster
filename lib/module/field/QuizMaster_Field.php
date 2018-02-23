@@ -32,14 +32,20 @@ class QuizMaster_Field {
 
 	public function renderValue() {
 
+		print $this->getValue();
+
+	}
+
+	public function getValue() {
+
 		if( isset( $this->value ) && $this->value !== false ) {
 			if( is_array( $this->value )) {
-				print htmlentities( json_encode( $this->value ) );
+				return htmlentities( json_encode( $this->value ) );
 			} else {
-				print $this->value;
+				return $this->value;
 			}
 		} elseif( isset( $this->default ) && $this->default !== false ) {
-			print $this->default;
+			return $this->default;
 		}
 
 	}
