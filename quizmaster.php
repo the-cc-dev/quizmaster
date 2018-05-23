@@ -11,7 +11,7 @@ Text Domain: quizmaster
 Domain Path: /languages
 */
 
-define('QUIZMASTER_VERSION', '0.8.7');
+define('QUIZMASTER_VERSION', '0.9.0');
 define('QUIZMASTER_PRO', false);
 define('QUIZMASTER_DEV', true);
 define('QUIZMASTER_PATH', dirname(__FILE__));
@@ -862,14 +862,16 @@ function quizmasterCreateDefaultEmailstudentCompletion() {
     'post_status'   => 'publish',
     'post_author'   => 1,
   );
+	
   $post_id = wp_insert_post( $post );
-  update_field('qm_email_key', 'student_completion', $post_id);
-  update_field('qm_email_enabled', 1, $post_id);
-  update_field('qm_email_trigger', 'completed_quiz', $post_id);
-  update_field('qm_email_from', get_option('admin_email'), $post_id);
-  update_field('qm_email_recipients', '[quiztaker_email]', $post_id);
-  update_field('qm_email_subject', 'You Completed a Quiz', $post_id);
-  update_field('qm_email_type', 'html', $post_id);
+	update_post_meta( $post_id, 'qm_email_key', 'student_completion' );
+	update_post_meta( $post_id, 'qm_email_enabled', 1 );
+	update_post_meta( $post_id, 'qm_email_trigger', 'completed_quiz' );
+	update_post_meta( $post_id, 'qm_email_from', get_option('admin_email') );
+	update_post_meta( $post_id, 'qm_email_recipients', '[quiztaker_email]' );
+	update_post_meta( $post_id, 'qm_email_subject', 'You Completed a Quiz' );
+	update_post_meta( $post_id, 'qm_email_type', 'html' );
+
 }
 
 function quizmasterCreateStudentReportPage() {
