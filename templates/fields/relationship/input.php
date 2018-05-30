@@ -79,11 +79,15 @@ jQuery(document).ready(function( $ ) {
 		if ( $( '.qm-relationship-data' ).val == '' ){
 
 		  return []
+
 		} else {
+
 			var value = $('.qm-relationship-data').val()
+
 			try {
 				return JSON.parse( value )
 			}
+
 			catch (e) {
 				return []
 			}
@@ -131,11 +135,7 @@ jQuery(document).ready(function( $ ) {
 		var itemCopy = item.clone()
 		var selectedItem = selectedRelationshipHolder.append( itemCopy )
 		selectedItem.find( itemCopy ).append('<span class="remove">Remove</span>')
-
-		// save value
-		var value = getRelationshipValue();
-		value.push( item.data('key') )
-		saveRelationshipValue( value )
+		syncData()
 
 	}
 
@@ -153,18 +153,8 @@ jQuery(document).ready(function( $ ) {
 		var itemKey = item.data('key')
 		var itemSelector = $('.qm-relationship-pool li[data-key="' + itemKey + '"]')
 		itemSelector.removeClass('selected')
-
-		// remove from stored relationship data
-		var value = getRelationshipValue()
-		var index = value.indexOf( itemKey );
-
-    if (index > -1) {
-    	value.splice(index, 1);
-    }
-
-		saveRelationshipValue( value )
-
 		item.remove()
+		syncData()
 
 	}
 
@@ -176,6 +166,31 @@ jQuery(document).ready(function( $ ) {
 		$( 'span.remove', this ).hide()
 		$(this).removeClass('hover')
 	});
+
+	function syncData() {
+
+		var value = [];
+
+		$('.qm-relationship-selections li').each( function( index ) {
+
+			console.log('syncData loop:')
+			console.log( index )
+			console.log( $( this ).data('key') )
+
+			value.push( $( this ).data('key') )
+
+		})
+
+		saveRelationshipValue( value )
+
+	}
+
+	// add sorting
+	$('.qm-relationship-selections ul').sortable({
+		stop: function( event, ui ) {
+			syncData()
+		}
+	})
 
 });
 
