@@ -53,7 +53,15 @@ class QuizMaster_Controller_Admin {
           QUIZMASTER_VERSION
       );
 
-
+      // conditional load quiz editor script
+			if( $post->post_type == 'quizmaster_quiz' ) {
+				wp_enqueue_script(
+						'quizMaster_quiz_editor_js',
+						plugins_url('js/quizmaster_quiz_editor.js', QUIZMASTER_FILE),
+						array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'),
+						QUIZMASTER_VERSION
+				);
+			}
 
 			// conditional load question editor script
 			if( $post->post_type == 'quizmaster_question' ) {
